@@ -1,0 +1,17 @@
+[
+  "index",
+  {
+    "type": "dir",
+    "name": "browser-extension",
+    "label": "Browser Extension",
+    "collapsible": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "cli",
+    "label": "CLI",
+    "collapsible": true,
+    "collapsed": true
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "type": "dir",
+    "name": "getting-started",
+    "label": "Getting Started",
+    "collapsible": true,
+    "collapsed": false
+  },
+  {
+    "type": "dir",
+    "name": "features",
+    "label": "Features",
+    "collapsible": true,
+    "collapsed": false
+  },
+  {
+    "type": "dir",
+    "name": "concepts",
+    "label": "Concepts",
+    "collapsible": true,
+    "collapsed": false
+  },
+  {
+    "type": "dir",
+    "name": "recipes",
+    "label": "Recipes",
+    "collapsible": true,
+    "collapsed": false
+  }
+]

@@ -1,22 +1,11 @@
 [
   {
-    "text": "Getting Started",
-    "link": "/getting-started/",
-    "activeMatch": "/getting-started/"
+    "text": "Guide",
+    "link": "/guide/getting-started/intro-to-zephyr-cloud",
+    "activeMatch": "/guide/"
   },
   {
-    "text": "Features",
-    "link": "/features/",
-    "activeMatch": "/features/"
-  },
-  {
-    "text": "Concepts",
-    "link": "/concepts/",
-    "activeMatch": "/concepts/"
-  },
-  {
-    "text": "Recipes",
-    "link": "/recipes/",
-    "activeMatch": "/recipes/"
+    "text": "App",
+    "link": "https://app.zephyr-cloud.io"
   }
 ]
