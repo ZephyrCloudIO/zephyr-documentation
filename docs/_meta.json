@@ -1,0 +1,22 @@
+[
+  {
+    "text": "Getting Started",
+    "link": "/getting-started/",
+    "activeMatch": "/getting-started/"
+  },
+  {
+    "text": "Features",
+    "link": "/features/",
+    "activeMatch": "/features/"
+  },
+  {
+    "text": "Concepts",
+    "link": "/concepts/",
+    "activeMatch": "/concepts/"
+  },
+  {
+    "text": "Recipes",
+    "link": "/recipes/",
+    "activeMatch": "/recipes/"
+  }
+]
