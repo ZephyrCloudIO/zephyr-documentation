@@ -8,6 +8,7 @@ export default defineConfig({
   icon: '/rspress-icon.png',
   // TODO: We need a Zephyr Cloud Icon
   logo: {
+    // TODO: We need to create a logo with "Zephyr Cloud Docs" or some text
     light: '/zephyr-logo.png',
     dark: '/zephyr-logo.png',
   },
