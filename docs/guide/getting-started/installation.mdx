@@ -2,7 +2,7 @@
 
 import {Tabs, Tab} from '@theme';
 
-## Generating a new project
+## Generating a new standalone project
 When we started Zephyr Cloud we wanted it to be incredibly easy to get started.
 
 If you do not already have a project to start with we suggest generating a new React project with [Nx](https://nx.dev/) and [Rspack](https://rspack.dev/).
@@ -24,14 +24,7 @@ If you do not already have a project to start with we suggest generating a new R
   </Tab>
 </Tabs>
 
-## Installing and Logging into Zephyr
-The first step in getting started is to install the Zephyr Cloud Cli.
-
-```sh filename="Terminal"
-npx zephyr-cli login
-```
-
-## Modifying build configuration
+### Modifying build configuration
 
 <Tabs values={[{ label: 'Rspack' }, { label: 'webpack' }]}>
   <Tab>
@@ -40,7 +33,7 @@ npx zephyr-cli login
     const {withZephyr} = require('zephyr-webpack-plugin');
     module.exports = composePlugins(withNx(), withReact(), withZephyr(), (config) => {
     return config;
-    });
+  });
     ```
 
   </Tab>
@@ -56,3 +49,17 @@ npx zephyr-cli login
 
   </Tab>
 </Tabs>
+
+## Generating a new federated project
+```sh filename="Terminal"
+npx create-mf-app
+```
+### Modifying build configuration
+To be updated
+
+## Installing and Logging into Zephyr
+The first step in getting started is to install the Zephyr Cloud Cli.
+
+```sh filename="Terminal"
+npx zephyr-cli login
+```

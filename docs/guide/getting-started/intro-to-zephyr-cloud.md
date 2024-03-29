@@ -2,6 +2,10 @@
 
 Zephyr Cloud is a companion that accelerates the software development lifecycle (SDLC). 
 
+## Public Alpha
+Zephyr Cloud is currently in public alpha stage. As you evaluate Zephyr Cloud please do not hesitate to reach out to us 
+on [Discord](https://discord.gg/EqFbSSt8Hx) and provide your feedback.
+
 ## Core Features
 * Accelerate your CI/CD pipeline
 * Accelerate local development
