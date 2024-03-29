@@ -1,9 +1,58 @@
 # Installation
 
-import {PackageManagerTabs} from '@theme';
+import {Tabs, Tab} from '@theme';
 
-Adding Zephyr Cloud to a new project using the following command:
-<PackageManagerTabs command="install @zephyr-cloud/cli"/>
+## Generating a new project
+When we started Zephyr Cloud we wanted it to be incredibly easy to get started.
 
-This will guide you through the setup, asking if you are logged in, and which cloud provider you are using.
+If you do not already have a project to start with we suggest generating a new React project with [Nx](https://nx.dev/) and [Rspack](https://rspack.dev/).
+<Tabs values={[{ label: 'Rspack' }, { label: 'webpack' }]}>
+  <Tab>
 
+    ```sh
+    npx create-nx-workspace@latest --preset=@nx/rspack
+    ```
+
+  </Tab>
+
+  <Tab>
+
+    ```sh
+    npx create-nx-workspace@latest
+    ```
+
+  </Tab>
+</Tabs>
+
+## Installing and Logging into Zephyr
+The first step in getting started is to install the Zephyr Cloud Cli.
+
+```sh filename="Terminal"
+npx zephyr-cli login
+```
+
+## Modifying build configuration
+
+<Tabs values={[{ label: 'Rspack' }, { label: 'webpack' }]}>
+  <Tab>
+
+    ```js filename="rspack.config.js"
+    const {withZephyr} = require('zephyr-webpack-plugin');
+    module.exports = composePlugins(withNx(), withReact(), withZephyr(), (config) => {
+    return config;
+    });
+    ```
+
+  </Tab>
+
+  <Tab>
+
+    ```js filename="webpack.config.js"
+    const {withZephyr} = require('zephyr-webpack-plugin');
+    module.exports = withZephyr()(
+    // existing config
+    )
+    ```
+
+  </Tab>
+</Tabs>
