@@ -32,6 +32,13 @@ export default defineConfig({
         },
         {
           tag: 'script',
+          attrs: {
+            async: true,
+            src: 'https://buttons.github.io/buttons.js',
+          },
+        },
+        {
+          tag: 'script',
           children:
             `
               window.dataLayer = window.dataLayer || [];
