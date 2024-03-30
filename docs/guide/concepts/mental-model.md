@@ -1,7 +1,8 @@
 # Mental Model
 
-Rspress supports not only Markdown but also [MDX](https://mdxjs.com/), a powerful way to develop content.
+The simplest way to think of Zephyr Cloud is like [Kubernetes](https://kubernetes.io/) for the frontend. While this is not
+a perfect analogy it is close.
 
-## Environment Preview
+## Instant gratification
 
-
+## Incremental Snapshots

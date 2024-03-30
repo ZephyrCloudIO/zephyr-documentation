@@ -4,7 +4,7 @@ pageType: home
 hero:
   name: Zephyr Cloud Docs
   text: Documentation site for Zephyr Cloud
-  tagline: Zephyr Cloud Docs tagline
+  tagline: From code to global scale in seconds!
   actions:
     - theme: brand
       text: Quick Start

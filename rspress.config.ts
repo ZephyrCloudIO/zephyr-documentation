@@ -5,7 +5,7 @@ export default defineConfig({
   root: path.join(__dirname, 'docs'),
   title: 'Zephyr Cloud Docs',
   description: 'Documentation site for Zephyr Cloud',
-  icon: '/rspress-icon.png',
+  icon: '/favicon.ico',
   // TODO: We need a Zephyr Cloud Icon
   logo: {
     // TODO: We need to create a logo with "Zephyr Cloud Docs" or some text
