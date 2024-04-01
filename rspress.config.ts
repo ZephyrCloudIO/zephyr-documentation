@@ -10,6 +10,7 @@ export default defineConfig({
     light: '/logo-light.webp',
     dark: '/logo-dark.webp',
   },
+  globalStyles: path.join(__dirname, 'styles/index.css'),
   themeConfig: {
     socialLinks: [
       {icon: 'github', mode: 'link', content: 'https://github.com/zephyrcloudio'},
