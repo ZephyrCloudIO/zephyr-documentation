@@ -1,1 +1,16 @@
-["cloudflare-static"]
+[
+  {
+    "type": "dir",
+    "name": "react",
+    "label": "React",
+    "collapsible": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "cloudflare",
+    "label": "Cloudflare",
+    "collapsible": true,
+    "collapsed": true
+  }
+]

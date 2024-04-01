@@ -13,7 +13,7 @@ hero:
       text: Github
       link: https://github.com/zephyrcloudio
   image:
-    src: /rspress-icon.png
+    src: /docs-logo-1x.webp
     alt: Zephyr Cloud Docs Logo
 features:
   - title: Easy to configure
