@@ -6,11 +6,9 @@ export default defineConfig({
   title: 'Zephyr Cloud Docs',
   description: 'Documentation site for Zephyr Cloud',
   icon: '/favicon.ico',
-  // TODO: We need a Zephyr Cloud Icon
   logo: {
-    // TODO: We need to create a logo with "Zephyr Cloud Docs" or some text
-    light: '/zephyr-logo.png',
-    dark: '/zephyr-logo.png',
+    light: '/logo-light.webp',
+    dark: '/logo-dark.webp',
   },
   themeConfig: {
     socialLinks: [
