@@ -1,0 +1,124 @@
+# Create MF App
+Created by Module Federation [author](https://module-federation.myshopify.com/products/practical-module-federation) and technology [YouTuber](https://www.youtube.com/@jherr),
+[Jack Herrington](https://twitter.com/jherr) `create-mf-app` is one of the quickest ways to get started with Module Federation.
+<SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/examples/create-mf-app-rspack" />
+# Generating Application
+
+```bash filename="Terminal"
+npx create-mf-app
+```
+## Naming
+Choose an application name. You will need one host and at least one remote so please choose names accordingly.
+```bash filename="Terminal"
+? Pick the name of your app: (host)
+```
+## Project Type
+Choose type of Application.
+```bash filename="Terminal"
+? Project Type: (Use arrow keys)
+❯ Application
+  API Server
+  Library
+```
+## Port
+Default port option is acceptable.
+```bash filename="Terminal"
+? Port number: (8080)
+```
+
+## Framework
+We tested with React, however other options may work.
+```bash filename="Terminal"
+? Framework: (Use arrow keys)
+lit-html
+preact
+❯ react
+react-esm
+solid-js
+svelte
+vanilla
+(Move up and down to reveal more choices)
+```
+## Language
+We prefer TypeScript, however Zephyr works with either.
+```bash filename="Terminal"
+? Language:
+❯ typescript
+javascript
+```
+## Styles
+Either option works for styles.
+```bash filename="Terminal"
+? CSS: (Use arrow keys)
+❯ CSS
+Tailwind
+```
+## Packer
+Either option works for packer, however we have a strong preference towards Rspack because of its performance.
+```bash filename="Terminal"
+? Packer: (Use arrow keys)
+Webpack
+❯ Rspack
+```
+## Post Setup
+The instructions state to switch to the director and do an npm install, however before we do this we will need to add Zephyr.
+```bash filename="Terminal"
+Next steps:
+
+▶️ cd create-mf-app-rspack-host
+▶️ npm install
+▶️ npm start
+```
+### Installing Zephyr
+Install the `zephyr-edge-contract` and `zephyr-webpack-plugin`.
+
+:::warning
+In the future these two packages will be available via NPM however during Alpha 1 testing they are located in the Zephyr Examples [repo](https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/_zephyr_pack)
+:::
+
+Add both packages as a dependency to your `package.json`.
+The file path for our examples repo is different than the one below due to the examples repo sharing the packages across multiple examples.
+```json filename="package.json"
+"zephyr-edge-contract": "file:_zephyr_pack\\zephyr-edge-contract-0.0.2.tgz",
+"zephyr-webpack-plugin": "file:_zephyr_pack\\zephyr-webpack-plugin-0.0.2.tgz"
+```
+
+Run an install.
+```bash filename="Terminal"
+npm install
+```
+### Configure Zephyr
+Wrap the existing configuration with Zephyr.
+```js filename="rspack.config.js"
+module.exports = withZephyr()({"existing config"});
+```
+
+## Enjoy
+Because Zephyr is a side effect of the build you can run the build in watch mode.
+```bash filename="Terminal"
+npm run build -- --watch
+```
+:::info
+The first time you run a build with Zephyr it will prompt you to log in by opening the Zephyr Website. After the first time you will not be prompted again.
+:::
+
+### Build Output
+Three URIs will be generated:
+1) the individual snapshot of the build
+1) the current tag
+1) the current environment
+
+To better understand these build outputs please review our [versioning](/guide/concepts/versioning) docs.
+```bash filename="terminal"
+deployed to https://valorkin_2912-create-mf-app-rspack-zephyr-examples-ze-a8db12-ze.valorkin.dev
+deployed to https://t_main_zack_zephyr-cloud_io-create-mf-app-rspack-zeph-14ea68-ze.valorkin.dev
+deployed to https://create-mf-app-rspack-zephyr-examples-zephyrcloudio-ze.valorkin.dev
+```
+:::info
+The live reload functionality on remotes is currently broken and will be fixed in the near future.
+:::
+
+# Next Steps
+From here you can add remotes and begin to build your federated application as expected.
+
+Jack has a fantastic [video](https://www.youtube.com/watch?v=32_EikGKESk) on building mico frontends with Rspack and Create Mf App

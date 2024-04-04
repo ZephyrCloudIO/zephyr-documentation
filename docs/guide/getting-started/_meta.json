@@ -2,6 +2,7 @@
   "why-zephyr-cloud",
   "intro-to-zephyr-cloud",
   "installation",
+  "create-mf-app",
   "migrating-from-vanilla-module-federation",
   "migrating-from-medusa"
 ]
