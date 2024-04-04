@@ -24,13 +24,16 @@ const mfConfig = {
 module.exports = composePlugins(
   withNx(),
   withReact(),
-  withZephyr(),
   withModuleFederation(mfConfig),
+  withZephyr(),
   (config) => {
     return config;
   }
 );
 ```
+:::info
+It is important that Zephyr is the last plugin in the composition.
+:::
 
 ## Team Blue Configuration
 
@@ -79,7 +82,7 @@ module.exports = composePlugins(
   withReact(),
   withModuleFederation(mfConfig),
   withZephyr(),
-  (config, ctx) => {
+  (config) => {
     return config;
   }
 );
@@ -99,12 +102,6 @@ const mfConfig = {
   exposes: {
     './TeamRedLayout': './src/app/team-red-layout',
   },
-  // remotes:  {
-  //   'team-blue': '^2.0.1',
-  //   'team-green': 'latest',
-  //   'team-green': 'env:latest',
-  // }
-  // dependency resolution and app version
   remotes: ['team-green', 'team-blue'],
 };
 
@@ -114,22 +111,9 @@ export default composePlugins(
   withModuleFederation(mfConfig),
   withZephyr(),
   (config) => {
-    return patch_import_issue(config);
+    return config;
   }
 );
-
-function patch_import_issue(config: any) {
-    config.plugins
-    ?.filter((plugin) => plugin?.constructor.name === 'ModuleFederationPlugin')
-    ?.forEach(mfConfig => {
-      Object.keys(mfConfig._options.remotes)
-      .forEach(remoteName => {
-        mfConfig._options.remotes[remoteName] = mfConfig._options.remotes[remoteName]
-        .replace(`__import__`, `import`)
-      });
-    });
-    return config;
-}
 ```
 
 :::info
