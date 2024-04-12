@@ -6,17 +6,17 @@ import { SourceCode } from '@theme';
 Created by the co-author of "Pracitical Module Federation" [book](https://module-federation.myshopify.com/products/practical-module-federation) and technology [YouTuber](https://www.youtube.com/@jherr),
 [Jack Herrington](https://twitter.com/jherr) `create-mf-app` is one of the quickest ways to get started with Module Federation.
 
-# Generating Application
+## Generating Application
 
 ```bash filename="Terminal"
 npx create-mf-app
 ```
-## Naming
+### Naming
 Choose an application name. You will need one host and at least one remote so please choose names accordingly.
 ```bash filename="Terminal"
 ? Pick the name of your app: (host)
 ```
-## Project Type
+### Project Type
 Choose type of Application.
 ```bash filename="Terminal"
 ? Project Type: (Use arrow keys)
@@ -24,13 +24,13 @@ Choose type of Application.
   API Server
   Library
 ```
-## Port
+### Port
 Default port option is acceptable.
 ```bash filename="Terminal"
 ? Port number: (8080)
 ```
 
-## Framework
+### Framework
 We tested with React, however other options may work.
 ```bash filename="Terminal"
 ? Framework: (Use arrow keys)
@@ -43,29 +43,34 @@ svelte
 vanilla
 (Move up and down to reveal more choices)
 ```
-## Language
+### Language
 We prefer TypeScript, however Zephyr works with either.
 ```bash filename="Terminal"
 ? Language:
 ❯ typescript
 javascript
 ```
-## Styles
+### Styles
 Either option works for styles.
 ```bash filename="Terminal"
 ? CSS: (Use arrow keys)
 ❯ CSS
 Tailwind
 ```
-## Packer
+### Packer
 Either option works for packer, however we have a strong preference towards Rspack because of its performance.
 ```bash filename="Terminal"
 ? Packer: (Use arrow keys)
 Webpack
 ❯ Rspack
 ```
-## Post Setup
+### Post Setup
 The instructions state to switch to the director and do an npm install, however before we do this we will need to add Zephyr.
+
+:::info
+You can skip the `npm install` and `npm start` steps at this point we will install later.
+:::
+
 ```bash filename="Terminal"
 Next steps:
 
@@ -73,56 +78,92 @@ Next steps:
 ▶️ npm install
 ▶️ npm start
 ```
-### Installing Zephyr
-Install the `zephyr-edge-contract` and `zephyr-webpack-plugin` by copying them from the Zephyr examples [repo](https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/_zephyr_pack).
 
-:::warning
-In the future these two packages will be available via NPM however during Alpha 1 testing they are located in the Zephyr Examples [repo](https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/_zephyr_pack)
+#### Installing Zephyr
+Add Zephyr to your application.
+```bash filename="Terminal"
+npm install zephyr-webpack-plugin --save
+```
+
+#### Configure Zephyr
+Wrap the existing configuration with Zephyr.
+```diff filename="rspack.config.js"
+- module.exports = {/* the existing config object */};
++ const {withZephyr} = require('zephyr-webpack-plugin');
++ module.exports = withZephyr()({/* the existing config object */});
+```
+
+#### Set a Git origin
+Initialize the git repo
+```bash filename="Terminal"
+git init
+```
+Add the files for commit.
+```bash filename="Terminal"
+git add --all
+```
+Make an initial commit
+```bash filename="Terminal"
+git commit -m "first commit with Zephyr"
+```
+Set the branch name
+```bash filename="Terminal"
+git branch -M main
+```
+Zephyr requires a git origin in order to create a unique project, application, version combination.
+Replace `User` and `UserRepo` with appropriate values.
+```bash filename="Terminal"
+git remote add origin https://github.com/User/UserRepo.git
+```
+Optionally push your code to GitHub
+```bash filename="Terminal"
+git push -u origin main
+```
+:::info
+If you did not set an origin you will have the below error.
+```bash filename="Terminal"
+[ConfigurationError: [zephyr]: git is not configured properly
+
+    - please set git user.name and user.email
+
+    - please set valid 'git remote origin'
+
+    ]
+```
 :::
 
-Add both Zephyr packages as a dependency to your `package.json`.
-The file path for our examples repo is different than the one below due to the examples repo sharing the packages across multiple examples.
-```json filename="package.json"
-"zephyr-edge-contract": "file:_zephyr_pack\\zephyr-edge-contract-0.0.2.tgz",
-"zephyr-webpack-plugin": "file:_zephyr_pack\\zephyr-webpack-plugin-0.0.2.tgz"
-```
-
-Run an install.
-```bash filename="Terminal"
-npm install
-```
-### Configure Zephyr
-Wrap the existing configuration with Zephyr.
-```js filename="rspack.config.js"
-module.exports = withZephyr()({/* the existing config object */});
-```
-
-## Enjoy
+### Enjoy
 Because Zephyr is a side effect of the build you can run the build in watch mode.
+
+:::info
+Until we release Alpha 1 to production you will need to use our dev environment with the below env variable.
+:::
+
 ```bash filename="Terminal"
-npm run build -- --watch
+ZE_API=https://api-dev.zephyr-cloud.io npm run build -- --watch
 ```
+
 :::info
 The first time you run a build with Zephyr it will prompt you to log in by opening the Zephyr Website. After the first time you will not be prompted again.
 :::
 
-### Build Output
-Three URIs will be generated:
+#### Build Output
+Three URIs will be generated similar to the ones below:
 1) the individual snapshot of the build
 1) the current tag
 1) the current environment
 
 To better understand these build outputs please review our [versioning](/guide/concepts/versioning) docs.
 ```bash filename="terminal"
-deployed to https://valorkin_2912-create-mf-app-rspack-zephyr-examples-ze-a8db12-ze.valorkin.dev
-deployed to https://t_main_zack_zephyr-cloud_io-create-mf-app-rspack-zeph-14ea68-ze.valorkin.dev
-deployed to https://create-mf-app-rspack-zephyr-examples-zephyrcloudio-ze.valorkin.dev
+[zephyr]: [zephyr-2.zephyr-2.zackarychapple](zack_zephyr-cloud_io)[10]: deploying to https://zack_zephyr-cloud_io_10-zephyr-2-zephyr-2-zackarychapple-ze.valorkin.dev
+[zephyr]: [zephyr-2.zephyr-2.zackarychapple](zack_zephyr-cloud_io)[10]: deploying to https://zephyr-2-zephyr-2-zackarychapple-ze.valorkin.dev
+[zephyr]: [zephyr-2.zephyr-2.zackarychapple](zack_zephyr-cloud_io)[10]: deploying to https://t_main_zack_zephyr-cloud_io-zephyr-2-zephyr-2-zackary-5c1b61-ze.valorkin.dev
 ```
 :::info
 The live reload functionality on remotes is currently broken and will be fixed in the near future.
 :::
 
-# Next Steps
+## Next Steps
 From here you can add remotes and begin to build your federated application as expected.
 
 Jack has a fantastic [video](https://www.youtube.com/watch?v=32_EikGKESk) on building mico frontends with Rspack and Create Mf App

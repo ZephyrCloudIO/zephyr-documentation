@@ -12,6 +12,10 @@ This example starts by creating an empty Nx workspace.
 ```bash filename="Terminal"
 npx create-nx-workspace@latest myorg
 ```
+If you want to use Rspack you can use this command instead.
+```bash filename="Terminal"
+npx create-nx-workspace@latest myorg --preset=@nx/rspack
+```
 
 ### Frontend Framework
 At this time we do not want to select a frontend framework so select `None`.
@@ -76,6 +80,11 @@ The file path for our examples repo is different than the one below due to the e
 Use Nx to generate the host and shell applications using the below commands.
 ```bash filename="Terminal"
 npx nx g @nx/react:host shell --remotes=remote1,remote2 --directory=apps/shell
+```
+
+If you want to use Rspack you can use this command instead.
+```bash filename="Terminal"
+npx nx g @nx/react:host shell --remotes=remote1,remote2 --directory=apps/shell --preset=@nx/rspack
 ```
 
 ### Styles
