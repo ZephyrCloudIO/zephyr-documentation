@@ -3,8 +3,8 @@ import { SourceCode } from '@theme';
 # Create MF App
 <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/examples/create-mf-app-rspack" />
 
-Created by the co-author of "Pracitical Module Federation" [book](https://module-federation.myshopify.com/products/practical-module-federation) and technology [YouTuber](https://www.youtube.com/@jherr),
-[Jack Herrington](https://twitter.com/jherr) `create-mf-app` is one of the quickest ways to get started with Module Federation.
+
+Developed by [Jack Herrington](https://twitter.com/jherr) , co-author of the "Practical Module Federation" [book](https://module-federation.myshopify.com/products/practical-module-federation) and technology-focused [YouTuber](https://www.youtube.com/@jherr), the `create-mf-app` tool offers one of the fastest methods to start using Module Federation.
 
 ## Generating Application
 
@@ -12,12 +12,17 @@ Created by the co-author of "Pracitical Module Federation" [book](https://module
 npx create-mf-app
 ```
 ### Naming
-Choose an application name. You will need one host and at least one remote so please choose names accordingly.
+
+Choose a name for your application. Ensure you designate one host and at least one remote, choosing names that reflect their roles accordingly.
+
 ```bash filename="Terminal"
 ? Pick the name of your app: (host)
 ```
+
 ### Project Type
-Choose type of Application.
+
+Select the type of application:
+
 ```bash filename="Terminal"
 ? Project Type: (Use arrow keys)
 ❯ Application
@@ -25,13 +30,17 @@ Choose type of Application.
   Library
 ```
 ### Port
-Default port option is acceptable.
+
+You may use the default port option:
+
 ```bash filename="Terminal"
 ? Port number: (8080)
 ```
 
 ### Framework
-We tested with React, however other options may work.
+
+We conducted tests using React, but other frameworks may also be compatible.
+
 ```bash filename="Terminal"
 ? Framework: (Use arrow keys)
 lit-html
@@ -44,31 +53,40 @@ vanilla
 (Move up and down to reveal more choices)
 ```
 ### Language
-We prefer TypeScript, however Zephyr works with either.
+
+We prefer TypeScript, but Zephyr is compatible with both TypeScript and JavaScript.
+
 ```bash filename="Terminal"
 ? Language:
 ❯ typescript
 javascript
 ```
 ### Styles
-Either option works for styles.
+
+Both CSS and Tailwind are viable options for styling:
+
 ```bash filename="Terminal"
 ? CSS: (Use arrow keys)
 ❯ CSS
 Tailwind
 ```
+
 ### Packer
-Either option works for packer, however we have a strong preference towards Rspack because of its performance.
+
+While both packing options are viable, we strongly prefer Rspack due to its superior performance.
+
 ```bash filename="Terminal"
 ? Packer: (Use arrow keys)
 Webpack
 ❯ Rspack
 ```
+
 ### Post Setup
-The instructions state to switch to the director and do an npm install, however before we do this we will need to add Zephyr.
+
+The instructions initially suggest switching to the directory and running `npm install`. However, before proceeding, you should first add Zephyr.
 
 :::info
-You can skip the `npm install` and `npm start` steps at this point we will install later.
+You may omit the `npm install` and `npm start` steps for now; we will perform the installation later.
 :::
 
 ```bash filename="Terminal"
@@ -80,47 +98,76 @@ Next steps:
 ```
 
 #### Installing Zephyr
-Add Zephyr to your application.
+
+Add Zephyr to your application:
+
 ```bash filename="Terminal"
 npm install zephyr-webpack-plugin --save
 ```
 
-#### Configure Zephyr
-Wrap the existing configuration with Zephyr.
+#### Configuring Zephyr
+
+Wrap the existing configuration with Zephyr:
 ```diff filename="rspack.config.js"
 - module.exports = {/* the existing config object */};
 + const {withZephyr} = require('zephyr-webpack-plugin');
 + module.exports = withZephyr()({/* the existing config object */});
 ```
 
-#### Set a Git origin
-Initialize the git repo
+#### Setting a Git Origin
+
+#### Setting a Git Origin
+
+1. **Initialize the Git Repository:**
+
+Initialize the Git repository to start tracking your project:
+
 ```bash filename="Terminal"
 git init
 ```
-Add the files for commit.
+
+2. **Stage Files for Commit:**
+
+Add all files to the staging area in preparation for the initial commit:
+
 ```bash filename="Terminal"
 git add --all
 ```
-Make an initial commit
+
+3. **Create an Initial Commit:**
+
+Commit the staged files to your repository with a descriptive message:
+
 ```bash filename="Terminal"
-git commit -m "first commit with Zephyr"
+git commit -m "Initial commit with Zephyr"
 ```
-Set the branch name
+
+4. **Set the Default Branch Name:**
+
+Define 'main' as the default branch for your repository:
+
 ```bash filename="Terminal"
 git branch -M main
 ```
-Zephyr requires a git origin in order to create a unique project, application, version combination.
-Replace `User` and `UserRepo` with appropriate values.
+
+5. **Add a Remote Origin:**
+Zephyr requires a Git origin to establish a unique project, application, and version combination. Replace `User` and `UserRepo` with your GitHub username and repository name:
+
 ```bash filename="Terminal"
 git remote add origin https://github.com/User/UserRepo.git
 ```
-Optionally push your code to GitHub
+
+6. **Push to GitHub (Optional):**
+
+Optionally, you can push your code to GitHub to store your changes remotely:
+
 ```bash filename="Terminal"
 git push -u origin main
 ```
+
 :::info
-If you did not set an origin you will have the below error.
+**Error Handling:**
+If you encounter errors due to unset Git configurations, ensure you have set both your Git `user.name` and `user.email`, and that you have a valid 'git remote origin' set up.
 ```bash filename="Terminal"
 [ConfigurationError: [zephyr]: git is not configured properly
 
@@ -128,15 +175,16 @@ If you did not set an origin you will have the below error.
 
     - please set valid 'git remote origin'
 
-    ]
+]
 ```
 :::
 
-### Enjoy
-Because Zephyr is a side effect of the build you can run the build in watch mode.
+### Using Zephyr
+
+Zephyr operates as a side effect of the build process, allowing you to execute the build in watch mode for continuous updates.
 
 :::info
-Until we release Alpha 1 to production you will need to use our dev environment with the below env variable.
+Please note that until Alpha 1 is released to production, you will need to operate within our development environment using the following environment variable:
 :::
 
 ```bash filename="Terminal"
@@ -144,26 +192,31 @@ npm run build -- --watch
 ```
 
 :::info
-The first time you run a build with Zephyr it will prompt you to log in by opening the Zephyr Website. After the first time you will not be prompted again.
+The first time you initiate a build with Zephyr, it will prompt you to log in by directing you to the Zephyr website. This login is required only on your first build; subsequent builds will not require a login.
 :::
 
-#### Build Output
-Three URIs will be generated similar to the ones below:
-1) the individual snapshot of the build
-1) the current tag
-1) the current environment
+#### Understanding Build Outputs
 
-To better understand these build outputs please review our [versioning](/guide/concepts/versioning) docs.
+#### Understanding Build Outputs
+
+During the build process, three distinct URIs are generated as follows:
+1) An individual snapshot of the build.
+2) The current tag.
+3) The current environment.
+
+For a detailed explanation of these outputs, please refer to our [versioning documentation](/guide/concepts/versioning).
+
 ```bash filename="terminal"
 [zephyr]: [zephyr-2.zephyr-2.zackarychapple](zack_zephyr-cloud_io)[10]: deploying to https://zack_zephyr-cloud_io_10-zephyr-2-zephyr-2-zackarychapple-ze.valorkin.dev
 [zephyr]: [zephyr-2.zephyr-2.zackarychapple](zack_zephyr-cloud_io)[10]: deploying to https://zephyr-2-zephyr-2-zackarychapple-ze.valorkin.dev
 [zephyr]: [zephyr-2.zephyr-2.zackarychapple](zack_zephyr-cloud_io)[10]: deploying to https://t_main_zack_zephyr-cloud_io-zephyr-2-zephyr-2-zackary-5c1b61-ze.valorkin.dev
 ```
+
 :::info
-The live reload functionality on remotes is currently broken and will be fixed in the near future.
+Please note that the live reload functionality on remotes is currently unavailable and will be addressed shortly.
 :::
 
 ## Next Steps
-From here you can add remotes and begin to build your federated application as expected.
+You can now proceed to add remotes and start building your federated application as planned.
 
-Jack has a fantastic [video](https://www.youtube.com/watch?v=32_EikGKESk) on building mico frontends with Rspack and Create Mf App
+For insights on building micro-frontends with Rspack and Create MF App, Jack offers an informative [video tutorial](https://www.youtube.com/watch?v=32_EikGKESk).

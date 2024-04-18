@@ -1,21 +1,20 @@
 # Build with Zephyr
-One of the initial design goals of Zephyr Cloud was to make it possible to incrementally adopt. When you first install the
-Zephyr package it will operate in an "observe" only mode. Without changing your CI/CD pipeline or extensive configuration
-Zephyr will begin to build the graph of your federated applications. 
+
+A key initial design goal for Zephyr Cloud was to enable incremental adoption. Upon installing the Zephyr package, it operates in an "observe only" mode. This means it starts to build a graph of your federated applications without requiring changes to your CI/CD pipeline or extensive configuration efforts.
 
 :::tip
-When first getting started Zephyr Cloud is a side effect of your build.
+Initially, Zephyr Cloud acts as a side effect of your build process.
 :::
 
 ## Dependency Graph
-Zephyr requires that you build the furthest remote first in order to properly build the graph.
-If you don't you will see the following error. 
+
+Zephyr necessitates that you build the most distant remote first to accurately construct the dependency graph. Failing to do so will result in the following error:
+
 ```bash filename="Terminal"
 [ConfigurationError: [zephyr]: Could not resolve remote entry points for urls:
 
         - remote1.zephyr-examples.zackarychapple
         - remote2.zephyr-examples.zackarychapple
-
 
         Please build them with Zephyr first or add as Unmanaged applications.
 
@@ -24,6 +23,6 @@ If you don't you will see the following error.
                  - zephyr-examples - git repository name
                  - zackarychapple - git organization name
 
-        Or join and ask question in our discord: https://discord.gg/EqFbSSt8Hx
+        Or join and ask a question in our discord: https://discord.gg/EqFbSSt8Hx
       ]
 ```

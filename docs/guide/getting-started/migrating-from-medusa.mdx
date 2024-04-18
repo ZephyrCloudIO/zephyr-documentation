@@ -1,20 +1,21 @@
 import { SourceCode } from '@theme';
 
 # Migrating from Medusa
-[Medusa](https://medusa.codes/) was the first iteration Zephyr Cloud. When we created Medusa we believed that one of the biggest
-things needed in a distributed frontend environment was observability. As users began to provide us with feedback on Medusa
-we found that some of the biggest problems working in federated environments was actually the developer experience and devops complexities.
 
-We created Zephyr Cloud to look at the entire distributed software development lifecycle.
+[Medusa](https://medusa.codes/) was the first iteration Zephyr Cloud. When we developed Medusa, we identified observability as a critical need within distributed frontend environments. However, as feedback from users of Medusa began to accumulate, it became clear that the major challenges in federated environments related more to developer experience and the complexities of devops.
 
-## Zephyr Install
+In response, we developed Zephyr Cloud to address the broader aspects of the distributed software development lifecycle.
+
+## Installing Zephyr
+
 ```sh filename="Terminal"
 npm install zephyr-webpack-plugin
 ```
 
 ## Medusa Config
-In the default Medusa example <SourceCode href="https://github.com/module-federation/module-federation-examples/tree/master/medusa-example" /> there
-are several remotes. Below is the default configuration for the `dls`.
+
+In the default Medusa example <SourceCode href="https://github.com/module-federation/module-federation-examples/tree/master/medusa-example" /> there are multiple remotes are configured. The following is the default configuration for the `dls`.
+
 ```ts filename="dsl/webpack.config.js"
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');

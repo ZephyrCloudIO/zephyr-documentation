@@ -1,12 +1,19 @@
 # Versioning
-Rather than try to re-invent the wheel Zephyr builds on concepts that are already known to most developers. 
-For this reason we chose [SemVer](https://semver.org/) for our versioning methodology. 
+
+Zephyr leverages familiar concepts rather than reinventing the wheel. Accordingly, we have adopted [SemVer](https://semver.org/) as our versioning methodology.
 
 ## Calculating Versions
+
 ### Application Name
-Package json name
+
+- Derived from the `name` field in `package.json`.
+
 ### Versions
-package.json version
-branch
-formatted username
+
+- Based on the `version` in `package.json`.
+- Includes the current branch name.
+- Incorporates a formatted username.
+
 ## Updating Tags
+
+Updates to tags are managed systematically to reflect changes in versions and ensure traceability.

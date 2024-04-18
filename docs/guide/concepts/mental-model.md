@@ -1,15 +1,11 @@
 # Mental Model
 
-The simplest way to think of Zephyr Cloud is like [Kubernetes](https://kubernetes.io/) for the frontend. While this is not
-a perfect analogy it is close.
+Think of Zephyr Cloud as the [Kubernetes](https://kubernetes.io/) for front-end development. Although not a perfect comparison, it closely aligns with its functionality.
 
-## Instant gratification
-Many organizations use tools to expedite the ability to share the local development environment
-with other team members. Some of these tools include [ngrok](https://ngrok.com/) and [zrok](https://zrok.io/). 
-These applications work by creating opening a tunnel from the developers machine to the consumer.
+## Instant Gratification
 
-Zephyr on the other hand publishes a snapshot on every save to the cloud provider. This gives consumer the ability to
-continue to see the code after the developer shuts down their local development environment. Additionally, with Zephyr
-snapshots it is now possible to see how software evolves with each iteration. 
+Organizations frequently use tools like [ngrok](https://ngrok.com/) and [zrok](https://zrok.io/) to quickly share a local development environment with team members. These tools create a tunnel from the developer's machine to the end user, facilitating real-time collaboration.
+
+In contrast, Zephyr Cloud takes a different approach by publishing a snapshot of the development to the cloud with every save. This allows end users to access the code even after the developer has closed their local environment. Moreover, with Zephyr snapshots, it's possible to observe the evolution of software across each iteration.
 
 ## Incremental Snapshots

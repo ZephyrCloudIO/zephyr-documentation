@@ -3,26 +3,31 @@ import {Tabs, Tab} from '@theme';
 # Installation
 
 ## Quick Start Examples
-For new applications we have two quick examples that can be used for getting started.
-* [create mf app](/guide/getting-started/create-mf-app)
-* [nx generated app](/guide/getting-started/nx-mf-app)
 
-## Adding Zephyr to an existing application
-When we started Zephyr Cloud we wanted it to be incredibly easy to get started.
+To begin developing new applications, consider exploring these two introductory examples:
 
-### Add Zephyr as a dependency
-Add the package from NPM.
+* [Create MF App](/guide/getting-started/create-mf-app)
+* [Nx Generate Module Federation](/guide/getting-started/nx-mf-app)
+
+## Integrating Zephyr into an Existing Application
+
+Our objective for Zephyr Cloud was to ensure an easy and straightforward setup process. Let's examine how this approach has been implemented:
+
+### 1. Add Zephyr as a dependency
+
+Install the package via NPM:
+
 ```sh filename="Terminal"
 npm i zephyr-webpack-plugin --save
 ```
 
-### Setting Up
+### 2. Setting Up
+
 Wrap your existing configuration
 
 <Tabs values={[{label: 'With Nx'}, {label: 'Without Nx'}]}>
   <Tab>
-  For Nx projects that are using compose plugins adding Zephyr is as easy as adding one more plugin.
-  Zephyr must be the last plugin in the compose in order to work as expected.
+  For Nx projects that utilize compose plugins, integrating Zephyr is straightforward and requires adding just one more plugin. To ensure proper functionality, Zephyr should be positioned as the last plugin in the composition.
     ```diff filename="webpack.config.js"
     + const {withZephyr} = require('zephyr-webpack-plugin');
     export default composePlugins(
@@ -39,8 +44,7 @@ Wrap your existing configuration
   </Tab>
 
   <Tab>
-  You will need to modify the webpack or rspack configuration for your project and add to your existing
-  configuration the `withZephyr` function.
+  Modify your project's Webpack or Rspack configuration by adding the withZephyr function to the existing setup.
 
       ```diff filename="webpack.config.js"
       - module.exports = {/* the existing config object */};
@@ -51,7 +55,8 @@ Wrap your existing configuration
   </Tab>
 </Tabs>
 
-### Build the application
-When you build your application Zephyr will open your browser and ask you to log in.
+### Building the Application
 
-You're now ready to develop with Zephyr.
+When you build your application, Zephyr will launch your browser and prompt you to log in.
+
+You are now set to develop using Zephyr.
