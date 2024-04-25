@@ -4,9 +4,15 @@ import { SourceCode } from '@theme';
 <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/examples/create-mf-app-rspack" />
 
 
-Developed by [Jack Herrington](https://twitter.com/jherr) , co-author of the "Practical Module Federation" [book](https://module-federation.myshopify.com/products/practical-module-federation) and technology-focused [YouTuber](https://www.youtube.com/@jherr), the `create-mf-app` tool offers one of the fastest methods to start using Module Federation.
+Developed by [Jack Herrington](https://twitter.com/jherr) , co-author of the "Practical Module Federation" [book](https://module-federation.myshopify.com/products/practical-module-federation) and technology-focused [YouTuber](https://www.youtube.com/@jherr).
+
+`create-mf-app` is a tool that creates a Module Federation application, API server, or library based on one of multiple different templates.
 
 ## Generating Application
+
+This guide provides a comprehensive walkthrough on how to use the `create-mf-app` tool to create a Module Federation application and integrate it with Zephyr. 
+
+To execute `npm` package binaries, use the `npx` command as follows:
 
 ```bash filename="Terminal"
 npx create-mf-app
@@ -81,42 +87,28 @@ Webpack
 ❯ Rspack
 ```
 
-### Post Setup
+## Adding Zephyr to Your Module Federation App
 
-The instructions initially suggest switching to the directory and running `npm install`. However, before proceeding, you should first add Zephyr.
-
-:::info
-You may omit the `npm install` and `npm start` steps for now; we will perform the installation later.
-:::
-
-```bash filename="Terminal"
-Next steps:
-
-▶️ cd create-mf-app-rspack-host
-▶️ npm install
-▶️ npm start
-```
-
-#### Installing Zephyr
+### Installing Zephyr
 
 Add Zephyr to your application:
 
 ```bash filename="Terminal"
+cd create-mf-app-rspack-host
 npm install zephyr-webpack-plugin --save
 ```
 
-#### Configuring Zephyr
+### Zephyr Configuration Integration
 
-Wrap the existing configuration with Zephyr:
+Incorporate the Zephyr configuration into your existing setup by wrapping the current configuration object with Zephyr's functionality. This enhancement is performed using the `zephyr-webpack-plugin`, as demonstrated below:
+
 ```diff filename="rspack.config.js"
 - module.exports = {/* the existing config object */};
-+ const {withZephyr} = require('zephyr-webpack-plugin');
++ const { withZephyr } = require('zephyr-webpack-plugin');
 + module.exports = withZephyr()({/* the existing config object */});
 ```
 
-#### Setting a Git Origin
-
-#### Setting a Git Origin
+### Setting a Git Origin
 
 1. **Initialize the Git Repository:**
 
@@ -179,7 +171,7 @@ If you encounter errors due to unset Git configurations, ensure you have set bot
 ```
 :::
 
-### Using Zephyr
+## Using Zephyr
 
 Zephyr operates as a side effect of the build process, allowing you to execute the build in watch mode for continuous updates.
 
@@ -188,21 +180,20 @@ Please note that until Alpha 1 is released to production, you will need to opera
 :::
 
 ```bash filename="Terminal"
-npm run build -- --watch
+npm run build --watch
 ```
 
 :::info
 The first time you initiate a build with Zephyr, it will prompt you to log in by directing you to the Zephyr website. This login is required only on your first build; subsequent builds will not require a login.
 :::
 
-#### Understanding Build Outputs
-
-#### Understanding Build Outputs
+### Understanding Build Outputs
 
 During the build process, three distinct URIs are generated as follows:
-1) An individual snapshot of the build.
-2) The current tag.
-3) The current environment.
+
+1. An individual snapshot of the build.
+2. The current tag.
+3. The current environment.
 
 For a detailed explanation of these outputs, please refer to our [versioning documentation](/guide/concepts/versioning).
 
@@ -217,6 +208,7 @@ Please note that the live reload functionality on remotes is currently unavailab
 :::
 
 ## Next Steps
+
 You can now proceed to add remotes and start building your federated application as planned.
 
 For insights on building micro-frontends with Rspack and Create MF App, Jack offers an informative [video tutorial](https://www.youtube.com/watch?v=32_EikGKESk).

@@ -4,14 +4,14 @@ import {Tabs, Tab} from '@theme';
 
 ## Quick Start Examples
 
-To begin developing new applications, consider exploring these two introductory examples:
+For developers initiating new applications, we recommend starting with the following introductory examples:
 
-* [Create MF App](/guide/getting-started/create-mf-app)
-* [Nx Generate Module Federation](/guide/getting-started/nx-mf-app)
+* [Create MF App](/guide/getting-started/create-mf-app): A streamlined tool for quickly setting up Module Federation projects.
+* [Nx Generate Module Federation](/guide/getting-started/nx-mf-app): Leverage Nx to scaffold Module Federation capabilities into your development environment.
 
 ## Integrating Zephyr into an Existing Application
 
-Our objective for Zephyr Cloud was to ensure an easy and straightforward setup process. Let's examine how this approach has been implemented:
+If you already have an application and wish to enhance it with Zephyr Cloud, we have designed the integration process to be as straightforward as possible. Here's how you can seamlessly incorporate Zephyr into your existing setup:
 
 ### 1. Add Zephyr as a dependency
 
@@ -23,11 +23,14 @@ npm i zephyr-webpack-plugin --save
 
 ### 2. Setting Up
 
-Wrap your existing configuration
+Wrap your existing configuration settings with the necessary modifications.
 
 <Tabs values={[{label: 'With Nx'}, {label: 'Without Nx'}]}>
   <Tab>
   For Nx projects that utilize compose plugins, integrating Zephyr is straightforward and requires adding just one more plugin. To ensure proper functionality, Zephyr should be positioned as the last plugin in the composition.
+
+  Here is how you can configure it in your `webpack.config.js`:
+
     ```diff filename="webpack.config.js"
     + const {withZephyr} = require('zephyr-webpack-plugin');
     export default composePlugins(
@@ -44,7 +47,7 @@ Wrap your existing configuration
   </Tab>
 
   <Tab>
-  Modify your project's Webpack or Rspack configuration by adding the withZephyr function to the existing setup.
+   To integrate Zephyr into projects not using Nx, modify your Webpack or Rspack configuration file by incorporating the `withZephyr` function. This addition should be placed within your existing configuration object. Adjust your `webpack.config.js` as shown below:
 
       ```diff filename="webpack.config.js"
       - module.exports = {/* the existing config object */};
@@ -57,6 +60,6 @@ Wrap your existing configuration
 
 ### Building the Application
 
-When you build your application, Zephyr will launch your browser and prompt you to log in.
+Initiate the build process for your application to activate Zephyr. This action will automatically launch your default browser and prompt you for login credentials.
 
-You are now set to develop using Zephyr.
+Once logged in, you can begin developing with Zephyr.

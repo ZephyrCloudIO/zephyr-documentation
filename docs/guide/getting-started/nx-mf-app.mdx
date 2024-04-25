@@ -78,17 +78,20 @@ npx nx add @nx/react
 
 ### Installing Zephyr
 
-Install the `zephyr-edge-contract` and `zephyr-webpack-plugin` by copying them from the Zephyr examples repository.
+Install the `zephyr-edge-contract` and `zephyr-webpack-plugin` using npm with the following commands:
 
-:::warning
-Currently, these packages are only available in the Zephyr Examples repository during the Alpha 1 testing phase and are expected to be accessible via NPM in the future. For more details, visit the [Zephyr Examples repository](https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/_zephyr_pack).
-:::
+```bash
+npm install zephyr-edge-contract@latest
+npm install zephyr-webpack-plugin@latest
+```
 
-To add these packages to your project, include them as dependencies in your `package.json`. Note that the file path used below is specific to our examples repository, which distributes the packages across multiple examples.
+Once installed, ensure these packages are listed in your `package.json` under dependencies:
 
 ```json filename="package.json"
-"zephyr-edge-contract": "file:_zephyr_pack\\zephyr-edge-contract-0.0.2.tgz",
-"zephyr-webpack-plugin": "file:_zephyr_pack\\zephyr-webpack-plugin-0.0.2.tgz"
+"dependencies": {
+  "zephyr-edge-contract": "^0.0.2",
+  "zephyr-webpack-plugin": "^0.0.2"
+}
 ```
 
 ### Generate Module Federation Shell and Remotes
@@ -112,9 +115,9 @@ When prompted, choose your preferred stylesheet format. Options include CSS, SAS
 ```bash filename="Terminal"
 ? Which stylesheet format would you like to use? …
 CSS
-SASS(.scss)       [ https://sass-lang.com                     ]
-LESS              [ https://lesscss.org                       ]
-tailwind [ https://tailwindcss.com/            ]
+SASS(.scss)       [ https://sass-lang.com                    ]
+LESS              [ https://lesscss.org                      ]
+tailwind          [ https://tailwindcss.com/                 ]
 styled-components [ https://styled-components.com            ]
 emotion           [ https://emotion.sh                       ]
 styled-jsx        [ https://www.npmjs.com/package/styled-jsx ]
@@ -153,19 +156,19 @@ To accommodate Zephyr Cloud support, we need to make certain modifications to th
 
 Zephyr Cloud requires a `package.json` file in each application to resolve names. Create a `package.json` for each application, specifying a unique name for each:
 
-```bash filename="myorg/shell/package.json"
+```bash filename="myorg/apps/shell/package.json"
 {
 "name": "shell"
 }
 ```
 
-```bash filename="myorg/remote1/package.json"
+```bash filename="myorg/apps/remote1/package.json"
 {
 "name": "remote1"
 }
 ```
 
-```bash filename="myorg/remote2/package.json"
+```bash filename="myorg/apps/remote2/package.json"
 {
 "name": "remote2"
 }
