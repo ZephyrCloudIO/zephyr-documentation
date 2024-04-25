@@ -46,9 +46,9 @@ Integrated Monorepo:        Nx creates a monorepo that contains multiple project
 Standalone:                 Nx creates a single project and makes it fast.
 ```
 
-### Nx Cloud Setup
+### Nx Setup
 
-While any Nx Cloud setup option is valid, skipping for now is chosen in our example, though activating Nx Cloud can significantly enhance local and CI build speeds:
+While any Nx Cloud setup option is valid, "Skipping for Now" is chosen in our example, though activating Nx Cloud can significantly enhance local and CI build speeds:
 
 ```bash filename="Terminal"
 ? Do you want Nx Cloud to make your CI fast? …
@@ -273,6 +273,7 @@ export default composePlugins(
   }
 );
 ```
+
 ```ts filename="remote2/webpack.config.prod.ts"
 import { composePlugins, withNx } from '@nx/webpack';
 import { withReact } from '@nx/react';
@@ -376,7 +377,7 @@ The build process generates a series of URLs for each deployment. For a comprehe
 ### Remote 1 Build
 
 ```bash filename="Terminal"
-npx nx build remote1 -- --watch
+npx nx build remote1 --watch
 ```
 
 ### Remote 1 Build Output
