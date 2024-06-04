@@ -1,10 +1,5 @@
 [
   {
-    "text": "Guide",
-    "link": "/guide/getting-started/intro-to-zephyr-cloud",
-    "activeMatch": "/guide/"
-  },
-  {
     "text": "App",
     "link": "https://app.zephyr-cloud.io"
   }
