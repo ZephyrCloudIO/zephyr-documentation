@@ -23,7 +23,7 @@ export const HomeCard = ({ item }: { item: CardItemProps }) => {
         <a
           href={item.href}
           className={cn(
-            "z-10 lg:px-5 lg:py-4 relative lg:hover:ring ring-cyan-950/50 rounded-md  bg-slate-700/20 flex flex-col transition-all p-4   gap-3 lg:gap-5 md:gap-4 lg:hover:!opacity-100 lg:hover:bg-zinc-800 "
+            "z-10 lg:px-5 lg:py-4 relative lg:hover:ring ring-cyan-950/50 rounded-md  bg-slate-700/20 grid  transition-all p-4   sm:gap-8 lg:gap-4 md:gap-2 lg:hover:!opacity-100 lg:hover:bg-zinc-800 "
           )}
         >
           <h2>{item.title}</h2>

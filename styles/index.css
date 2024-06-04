@@ -82,6 +82,12 @@
   /*--rp-shadow-5: 0 18px 56px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.16);*/
 }
 
+a {
+  h2 {
+    font-weight: 600;
+  }
+}
+
 .spotlight {
   background: radial-gradient(
     600px at 517px 480px,
@@ -113,14 +119,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@layer base {
-  a {
-    h2 {
-      @apply lg:text-lg text-base font-bold tracking-tight;
-    }
-    p {
-      @apply text-sm tracking-tight;
-    }
-  }
-}
