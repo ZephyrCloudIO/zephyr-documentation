@@ -1,9 +1,8 @@
 [
   "why-zephyr-cloud",
-  "intro-to-zephyr-cloud",
-  "installation",
+  "existing-app",
   "create-mf-app",
   "nx-mf-app",
-  "migrating-from-vanilla-module-federation",
+  "vanilla-mf",
   "migrating-from-medusa"
 ]
