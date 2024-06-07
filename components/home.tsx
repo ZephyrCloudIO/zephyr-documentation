@@ -1,10 +1,10 @@
-import { CardItemProps, HomeConfig } from "../utils/home.config";
+import { CardItemProps, SiteConfig } from "../utils/site.config";
 import { HomeCard } from "./home.card";
 
 export const HomeStart = () => {
   return (
     <>
-      {HomeConfig.start.map((item, i) => {
+      {SiteConfig.start.map((item, i) => {
         return <HomeCard key={i} item={item} />;
       })}
     </>
@@ -14,7 +14,7 @@ export const HomeStart = () => {
 export const HomeConfigure = () => {
   return (
     <>
-      {HomeConfig.configure.map((item, i) => {
+      {SiteConfig.configure.map((item, i) => {
         return <HomeCard key={i} item={item} />;
       })}
     </>
@@ -24,9 +24,21 @@ export const HomeConfigure = () => {
 export const HomeConcept = () => {
   return (
     <>
-      {HomeConfig.receipes.map((item, i) => {
+      {SiteConfig.concepts.map((item, i) => {
         return <HomeCard key={i} item={item} />;
       })}
     </>
   );
 };
+
+export const HomeRecipes = () => {
+    return (
+        <>
+        {SiteConfig.recipes.map((item, i) => {
+            return <HomeCard key={i} item={item} />;
+        })}
+        </>
+    );
+}
+
+

@@ -1,5 +1,5 @@
 import { cn } from "../utils/cn";
-import { CardItemProps } from "../utils/home.config";
+import { CardItemProps } from "../utils/site.config";
 export const HomeCard = ({ item }: { item: CardItemProps }) => {
   return (
     <li
@@ -23,9 +23,16 @@ export const HomeCard = ({ item }: { item: CardItemProps }) => {
         <a
           href={item.href}
           className={cn(
-            "z-10 lg:px-5 lg:py-4 relative lg:hover:ring ring-cyan-950/50 rounded-md  bg-slate-700/20 flex flex-col transition-all p-4   gap-3 lg:gap-5 md:gap-4 lg:hover:!opacity-100 lg:hover:bg-zinc-800 "
+            "z-5 lg:px-5 lg:py-4 relative md:min-h-48 min-h-32 xl:min-h-48 max-h-52 lg:hover:ring ring-cyan-950/50 rounded-md  bg-slate-700/20 flex flex-col transition-all p-4   gap-2 lg:gap-5 md:gap-4 lg:hover:!opacity-100 lg:hover:bg-zinc-800 "
           )}
         >
+          {item.icons &&
+              <div className="flex items-center gap-2">
+            {item.icons.map((Icon, index) => (
+                  <span>{Icon} </span>
+              ))}
+            </div>
+          }
           <h2>{item.title}</h2>
           <p>{item.description && item.description}</p>
         </a>
