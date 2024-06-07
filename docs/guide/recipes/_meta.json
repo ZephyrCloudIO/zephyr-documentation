@@ -1,4 +1,9 @@
 [
+  "react-vite",
+  "react-vite-nx",
+  "vanilla-mf",
+  "existing-app",
+  "nx-mf-app",
   {
     "type": "dir",
     "name": "react",
