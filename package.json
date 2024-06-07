@@ -10,6 +10,7 @@
   "dependencies": {
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "react-wrap-balancer": "^1.1.1",
     "rspress": "^1.18.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"
