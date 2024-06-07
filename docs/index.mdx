@@ -30,26 +30,54 @@ pageType: doc
 #     icon: 🔥
 
 ---
-import { HomeStart, HomeConcept, HomeConfigure } from "../components/home"
+import { HomeStart, HomeConcept, HomeConfigure, HomeRecipes } from "../components/home"
 import { HomeCardLayout } from "../components/home.card-layout"
-
+import { Separator } from "../components/ui/separator"
+import { FeatureTable } from "../components/feature-table"
 
 # Zephyr Documentation
+Zephyr Cloud is a platform accelerate your development workflow by providing a simple way to deploy and manage your applications - cloud agnostic, framework agnostic and bundler agnostic.
+
+Under the hood, Zephyr takes a snapshot of your application and deploy it to the edge in sub-seconds<sup><a href="#footnote-1">1</a></sup>, allowing you to preview and test your application in a real-world environment before deploying it to production - make "testing in production" a reality. Whenever the version of your application is ready for production, you can promote it to production with a single click.
+
+Whether you're are a small team or a large enterprise, Zephyr Cloud is designed to remove the ambiguity between different cloud providers, helping you build with speed and freedom.
+
+Zephyr Cloud is now in public alpha. If you experience any issues, do jump in our [Discord](https://discord.gg/8Q5vz6Q) and let us know (we hang out here!).
+
+<Separator/>
 ## Start
+
 <HomeCardLayout>
 <HomeStart />
 </HomeCardLayout>
 
+## Main Features
+Some of Zephyr Cloud's features include:
+<FeatureTable/>
 
-## Configure
+<sub className={"py-4"}><i>Details subject to change.</i> </sub>
 
-<HomeCardLayout>
-<HomeConfigure/>
-</HomeCardLayout>
 
+## Pre-Requisite Knowledge
+We don't assume you know everything about cloud or edge. Whenever we mention a concept or a piece of software, we aim to provide relevant links wherever possible. Our documentation site is Open Sourced, if you wish to contribute, do check out our [Github](https://github.com/ZephyrCloudIO/docs) and open any issues/pull requests.
+
+At the same time, it'd be useful to have a basic understanding of modern frontend frameworks such as [React](https://react.dev), running commands in terminals, [node](https://nodejs.org/en), package management solutions such as [npm](https://docs.npmjs.com/cli/v10/configuring-npm/install) and the concept (or usage) of [monorepo](https://monorepo.tools/). If you're new to web development, we recommend checking out [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web) for a comprehensive guide.
 
 ## Recipes
 
 <HomeCardLayout>
-<HomeConcept/>
+<HomeRecipes/>
 </HomeCardLayout>
+
+<Separator/>
+
+## Concepts
+
+<HomeCardLayout>
+<HomeConcept/>
+
+</HomeCardLayout>
+<br/>
+
+
+<sub id="footnote-1">1. Based on internal benchmarks. Initial deployment time may vary.</sub>
