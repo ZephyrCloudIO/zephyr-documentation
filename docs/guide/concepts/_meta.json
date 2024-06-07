@@ -1,6 +1,5 @@
 [
+  "micro-frontend",
   "module-federation",
-  "mental-model",
-  "build",
-  "versioning"
+  "edge"
 ]
