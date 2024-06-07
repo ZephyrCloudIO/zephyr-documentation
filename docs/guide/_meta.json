@@ -6,10 +6,11 @@
     "collapsible": true,
     "collapsed": false
   },
+  "features",
   {
     "type": "dir",
-    "name": "features",
-    "label": "Features",
+    "name": "recipes",
+    "label": "Recipes",
     "collapsible": true,
     "collapsed": false
   },
@@ -19,12 +20,6 @@
     "label": "Concepts",
     "collapsible": true,
     "collapsed": false
-  },
-  {
-    "type": "dir",
-    "name": "recipes",
-    "label": "Recipes",
-    "collapsible": true,
-    "collapsed": false
   }
+
 ]

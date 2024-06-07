@@ -1,8 +1,7 @@
 [
   "why-zephyr-cloud",
-  "existing-app",
+  "installation",
+  "mental-model",
   "create-mf-app",
-  "nx-mf-app",
-  "vanilla-mf",
-  "migrating-from-medusa"
+  "roadmap"
 ]
