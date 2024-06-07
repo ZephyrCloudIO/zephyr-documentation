@@ -12,6 +12,7 @@ export default defineConfig({
   },
   globalStyles: path.join(__dirname, 'styles/index.css'),
   themeConfig: {
+    enableContentAnimation: true,
     socialLinks: [
       { icon: 'github', mode: 'link', content: 'https://github.com/zephyrcloudio' },
       { icon: 'discord', mode: 'link', content: 'https://discord.gg/EqFbSSt8Hx' },
