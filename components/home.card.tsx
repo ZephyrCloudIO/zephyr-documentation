@@ -29,7 +29,7 @@ export const HomeCard = ({ item }: { item: CardItemProps }) => {
           {item.icons &&
               <div className="flex items-center gap-2">
             {item.icons.map((Icon, index) => (
-                  <span>{Icon} </span>
+                  <span key={index}>{Icon} </span>
               ))}
             </div>
           }
