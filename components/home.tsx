@@ -1,4 +1,4 @@
-import { CardItemProps, SiteConfig } from "../utils/site.config";
+import {  SiteConfig } from "../utils/site.config";
 import { HomeCard } from "./home.card";
 
 export const HomeStart = () => {
