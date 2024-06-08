@@ -1,12 +1,12 @@
-import {TailwindIndicator} from "./tailwind-indicator";
+import { TailwindIndicator } from "./tailwind-indicator";
 
 export const Footer = () => {
   return (
     <div id="footer-copyright">
       {" "}
-        <TailwindIndicator />
+      {/* <TailwindIndicator /> */}
       <p>
-        Join our <a href="#">Discord Server</a> for support.
+        <a href="#">Discord Server</a>.
       </p>
       <p>
         <a href="https://github.com/ZephyrCloudIO/docs">Edit this page</a>.
