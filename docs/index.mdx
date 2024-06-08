@@ -30,15 +30,15 @@ pageType: doc
 #     icon: 🔥
 
 ---
-import { HomeStart, HomeConcept, HomeConfigure, HomeRecipes } from "../components/home"
+import { HomeStart, HomeConcept,  HomeRecipes } from "../components/home"
 import { HomeCardLayout } from "../components/home.card-layout"
 import { Separator } from "../components/ui/separator"
 import { FeatureTable } from "../components/feature-table"
 
 # Zephyr Documentation
-Zephyr Cloud is a platform accelerate your development workflow by providing a simple way to deploy and manage your applications - cloud agnostic, framework agnostic and bundler agnostic.
+Zephyr Cloud is a platform accelerate your development workflow by providing a simple way to deploy and manage your applications - cloud agnostic, framework agnostic and bundler agnostic<sup><a href="#footnote-1">1</a></sup>.
 
-Under the hood, Zephyr takes a snapshot of your application and deploy it to the edge in sub-seconds<sup><a href="#footnote-1">1</a></sup>, allowing you to preview and test your application in a real-world environment before deploying it to production - make "testing in production" a reality. Whenever the version of your application is ready for production, you can promote it to production with a single click.
+Under the hood, Zephyr takes a snapshot of your application and deploy it to the edge in sub-seconds<sup><a href="#footnote-2">2</a></sup>, allowing you to preview and test your application in a real-world environment before deploying it to production - make "testing in production" a reality. Whenever the version of your application is ready for production, you can promote it to production with a single click.
 
 Whether you're are a small team or a large enterprise, Zephyr Cloud is designed to remove the ambiguity between different cloud providers, helping you build with speed and freedom.
 
@@ -79,5 +79,7 @@ At the same time, it'd be useful to have a basic understanding of modern fronten
 </HomeCardLayout>
 <br/>
 
-
-<sub id="footnote-1">1. Based on internal benchmarks. Initial deployment time may vary.</sub>
+<div className="flex flex-col gap-4">
+<sub id="footnote-1">1. Additional functionalities are currently under development</sub>
+<sub id="footnote-2">2. Based on internal benchmarks. Initial deployment time may vary.</sub>
+</div>
