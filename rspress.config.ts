@@ -1,5 +1,7 @@
 import * as path from 'path';
 import { defineConfig } from 'rspress/config';
+// import { withZephyr } from 'zephyr-webpack-plugin';
+import { pluginShiki, createTransformerDiff, createTransformerLineNumber, createTransformerHighlight, createTransformerFocus } from '@rspress/plugin-shiki';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
@@ -19,6 +21,10 @@ export default defineConfig({
       { icon: 'twitter', mode: 'link', content: 'https://twitter.com/ZephyrCloudIO' },
       { icon: 'linkedin', mode: 'link', content: 'https://www.linkedin.com/company/zephyr-cloud' },
     ],
+  },
+
+  markdown: {
+    defaultWrapCode: true,
   },
   builderConfig: {
     html: {
@@ -42,4 +48,18 @@ export default defineConfig({
       ],
     },
   },
+  plugins: [
+    pluginShiki({
+      transformers: [
+        // Add as needed
+        createTransformerDiff(),
+        createTransformerLineNumber(),
+        // createTransformerErrorLevel(),
+        createTransformerHighlight(),
+        // createTransformerFocus(),
+      ],
+    }),
+  ],
+
 });
+
