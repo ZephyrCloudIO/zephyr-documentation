@@ -82,12 +82,8 @@
   /*--rp-shadow-5: 0 18px 56px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.16);*/
 }
 
-.spotlight {
-  background: radial-gradient(
-    600px at 517px 480px,
-    rgba(29, 78, 216, 0.15),
-    transparent 80%
-  );
+html {
+  scroll-behavior: smooth;
 }
 
 .glow {
@@ -96,6 +92,18 @@
   offset-path: rect(0% auto 100% auto);
 }
 
+.keyboard-shortcut {
+  font-family: "Inter", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.015rem;
+  border: 1px solid var(--rp-c-text-2);
+  border-radius: 3px;
+  box-shadow: 0 1px 0 0 var(--rp-c-text-2);
+  padding: 0.8px 6px;
+  color: var(--rp-c-text-1);
+}
 
 @keyframes move {
   0% {
@@ -116,8 +124,6 @@
 @tailwind utilities;
 
 @layer base {
-
-
   hr {
     @apply border-b-[0.4px] items-center w-full opacity-20 !py-4 flex;
   }
@@ -138,9 +144,12 @@
       @apply !py-4;
     }
   }
+  sup {
+    @apply text-xs text-[var(--rp-c-brand)];
+  }
 
   #footer-copyright {
-    @apply container mx-auto flex flex-col lg:gap-2 gap-1 lg:mx-64 xl:mx-80  py-4 px-6 lg:px-12 lg:py-8;
+    @apply container mx-auto  flex flex-col lg:gap-2 gap-1 pb-6 items-center justify-center;
     & p {
       @apply text-xs tracking-tight;
     }
@@ -164,5 +173,3 @@
     @apply underline decoration-[var(--rp-c-brand)] hover:brightness-125 hover:text-[var(--rp-c-brand)]  transition-all underline-offset-4 decoration-dashed;
   }
 }
-
-
