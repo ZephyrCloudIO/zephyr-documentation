@@ -2,10 +2,13 @@ import SupportedBrowser from "../../../components/browser-table"
 import { DrawingPinIcon } from '@radix-ui/react-icons';
 import { Image } from "../../../components/ui/image"
 import { Keyboard } from "../../../components/ui/keyboard"
+import { SourceCode } from '@theme';
 
 # Get Started 
 
-In this section we will walk you through what you will need to start using Zephyr and enjoy its benefits. If you are curious to read more before about us, you can dive into our [recipes](/#recipes) and [features](/guide/features). Below guide is written based on Google chrome thus other browser's behavior might differ.
+In this section we will walk you through what you will need to start using Zephyr and enjoy its benefits by deploying an application through Zephyr and modifying configuration. We will start with installing and creating your account, then create a standalone React app. At the end of this guide, you will have your first [React](https://react.dev/) app deployed to Zephyr with [Rspack](https://rspress.dev/) and use our [version control] feature to rollback your application. 
+
+If you are curious to read more before about us, you can dive into our [recipes](/#recipes) (for more frameworks and bundlers) and [features](/guide/features). Below guide is written based on Google chrome thus other browser's behavior might differ. 
 
 ## Installation and setup
 #### 1. Install Chrome Extension 
@@ -22,7 +25,7 @@ Once you click on <img src="/logo.png" className="inline h-5 w-5 brightness-[3]"
 
 <Image src={"/log-in.png"} />
 
-:::details
+:::details{title="What happens when you log in?"}
 While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory and run: 
 ```sh 
 rm rf ~/.zephyr 
@@ -33,7 +36,7 @@ Now you have created an account and the side panel is empty - hold up! We will g
 
 #### 3. Create a react app
 
-:::tip title="Prerequisites"
+:::tip{title="Prerequisites"}
 - npm >=10
 - node >=20 
 
@@ -98,6 +101,8 @@ Choose `Skip for now` when you are asked for remote caching option
 Yes
 Skip for now
 ```
+You can see the code up to this stage here: <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/examples/create-mf-app-rspack" />
+
 
 #### 4. Adding Zephyr
 Open the project folder we created with code editor of your choice. Within current working directory, install Zephyr's plugin by running: 
@@ -233,7 +238,7 @@ For more information, see https://nx.dev/more-concepts/global-nx
 [zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[70]: uploaded missing assets to zephyr (1 assets in 144ms, 236.95kb)
 [zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[70]: deploying to https://userName_69-_my-first-mf-app_source-my-f-53eac2-ze.valorkin.dev
 [zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[70]: deploying to https://userName_70-_my-first-mf-app_source-my-f-38438b-ze.valorkin.dev
-[zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[70]: deploying to https://_my-first-mf-app_source-my-first-mf-app-zmzlois-ze.valorkin.dev
+[zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[70]: deploying to https://_my-first-mf-app_source-my-first-mf-app-username-ze.valorkin.dev
 ●  ━━━━━━━━━━━━━━━━━━━━━━━━━ (98%) emitting emit                                                                                                        
 [zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[70]: build deployed in 774ms
 ●  ━━━━━━━━━━━━━━━━━━━━━━━━━ (100%) emitting after emit                                                                                                 
@@ -249,8 +254,125 @@ Rspack 0.6.5 compiled successfully in 1.35 s (036ed42385758a40269f)
 
  NX   Successfully ran target build for project my-first-mf-app (2s)
 ```
-Press <Keyboard shortcuts={["Command"]}/> and left click on the URL at the same time to open your deployed URL in your default browser. Meanwhile **open your side panel**. 
-<Image src="/deploy-v1.png"/>
+Press <Keyboard shortcuts={["Command"]}/> and left click on the URL at the same time to open your deployed URL in your default browser. Meanwhile **open your side panel**. Note that this URL is alive as long you don't delete your account and you can share it with anyone to preview it. 
+
+<Image src="/side-panel-1.png"/>
+
+Every application you have deployed on Zephyr (under the same account) will be displayed under **Name**, categorized by repository name and their package name. Click on the dropdown menue under **Version** you will only the initial version of your app. 
+
+<Image src="/my-first-mf-app-1.png" size="large"/>
+
+#### 5. Deploy a new version
+
+Now you have deployed the first version, let's add modify the app and deploy a new version. First serve Tailwind Open the file `src/app/app.tsx` and change the content of your home page:
+
+```tsx title="src/app/app.tsx"
+import NxWelcome from './nx-welcome'; // [!code --]
+
+export function App() { 
+  return ( 
+    <div> // [!code --]
+      <NxWelcome title="my-first-mf-app" /> // [!code --]
+    </div> // [!code --]
+    <div className="min-w-screen h-screen flex items-center justify-center bg-black "> // [!code ++]
+      <a // [!code ++]
+        href="https://zephyr-cloud.io" // [!code ++]
+        target="_blank" // [!code ++]
+        rel="noreferrer" // [!code ++]
+        className="py-8 px-8 absolute bg-gradient-to-r z-20 w-[400px] flex justify-center rounded-lg from-[#111830] via-sky-950 to-teal-950" // [!code ++]
+      > // [!code ++]
+        <p className="text-white z-10 text-xl font-semibold tracking-wide"> // [!code ++]
+          My First App deployed to Zephyr! // [!code ++]
+        </p>{' '} // [!code ++]
+      </a> // [!code ++]
+    </div> // [!code ++]
+  ); 
+} 
+
+export default App; 
+
+```
+If the styling is acting weird let's do a quick fix by serving Tailwind from CDN. 
+```html title="src/index.html"
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>MyFirstMfApp</title>
+  <base href="/" />
+  <script src="https://cdn.tailwindcss.com"></script> // [!code ++]
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>
+```
+
+If you run a `nx serve` you will see your app changed to: 
+
+<Image src="/my-first-mf-app-2.png" size="large"/>
+
+Save the file and go back to the terminal to deploy the new version of your application - run:
+```sh title="Terminal"
+nx build
+```
+
+You will see similar output as before, but this time you will see the new version of your app both in the console output and under **Version** dropdown in on Chrome Extension.
+
+```sh title="Terminal" {16-18}
+
+❯ nx build
+
+ NX   Its time to update Nx 🎉
+
+Your repository uses a higher version of Nx (19.2.2) than your global CLI version (18.1.2)
+For more information, see https://nx.dev/more-concepts/global-nx
+
+
+> nx run my-first-mf-app:build:production
+
+[zephyr] You are logged in
+●  ━━━━━━━━━━━━━━━━━━━━━━━━━ (62%) building builtin:swc-loader??ruleSet[1].rules[2].use[0]!/username/my-first-mf-app/node_modules/scheduler/
+[zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[71]: uploading missing assets to zephyr (queued 2 out of 2)
+[zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[71]: uploaded local snapshot in 217ms
+[zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[71]: uploaded missing assets to zephyr (2 assets in 342ms, 212.50kb)
+[zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[71]: deploying to https://account_71-_my-first-mf-app_source-my-f-4b579f-ze.valorkin.dev
+[zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[71]: deploying to https://account_70-_my-first-mf-app_source-my-f-38438b-ze.valorkin.dev
+[zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[71]: deploying to https://_my-first-mf-app_source-my-first-mf-app-username-ze.valorkin.dev
+●  ━━━━━━━━━━━━━━━━━━━━━━━━━ (98%) emitting emit                                                                                                               
+[zephyr]: [_my-first-mf-app_source.my-first-mf-app.username](account)[71]: build deployed in 1033ms
+●  ━━━━━━━━━━━━━━━━━━━━━━━━━ (100%) emitting after emit                                                                                                        
+PublicPath: auto
+asset index.html 398 bytes [emitted]
+asset main.js 212 KiB [emitted] (name: main)
+Entrypoint main 212 KiB = main.js
+runtime modules 6 modules
++ 23 modules
+Rspack 0.6.5 compiled successfully in 5.60 s (ecb32c555d4d1978eae7)
+
+—————————————————————————————————————————————————————————————————————————————————
+
+NX   Successfully ran target build for project my-first-mf-app (6s)
+```
+<Image src="/side-panel-2.png" />
+
+Now the latest version of your app is deployed.
+:::details{title="Version name"}
+The names of your versions are generated by Zephyr. The first part of the name is the branch name, serialised version of your email, followed by the version number.
+:::
+
+
+#### 6. Rollback to previous version 
+
+The first option in the dropdown menu under **Version** is the latest deployment of your app. In the dropdown menu you will see more previous version of your app. 
+
+But if you want to rollback to the previous version of your deployed application, you can click on one of the options, first to preview it in your browser. 
+
 ## Deleting your account and uninstallation 
 
 1. 
@@ -261,6 +383,6 @@ Press <Keyboard shortcuts={["Command"]}/> and left click on the URL at the same 
 
 
 
-### Browser Support 
+## Browser Support 
 
 <SupportedBrowser/>
