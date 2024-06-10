@@ -1,0 +1,121 @@
+import { SourceCode } from '@theme';
+
+# Basic Federated Application with Nx
+
+<SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/examples/react-18" />
+
+This basic federated application example has five applications: Home, DSL, Nav, Search and Utils. In this example the Home
+application is the `host`.
+
+## Host Configuration
+
+```ts
+import { withReact } from '@nx/react';
+import { withModuleFederation } from '@nx/react/module-federation';
+import { composePlugins, withNx } from '@nx/webpack';
+import { withZephyr } from 'zephyr-webpack-plugin';
+
+const mfConfig = {
+  name: 'host',
+  remotes: ['team-red'],
+  additionalShared: ['react', 'react-dom'],
+};
+
+module.exports = composePlugins(
+  withNx(),
+  withReact(),
+  withModuleFederation(mfConfig),
+  withZephyr(),
+  (config) => {
+    return config;
+  }
+);
+```
+:::info
+It is important that Zephyr is the last plugin in the composition.
+:::
+
+## Team Blue Configuration
+
+```ts
+import { withReact } from '@nx/react';
+import { withModuleFederation } from '@nx/react/module-federation';
+import { composePlugins, withNx } from '@nx/webpack';
+import { withZephyr } from 'zephyr-webpack-plugin';
+
+const mfConfig = {
+  name: 'team-blue',
+  exposes: {
+    './BlueBasket': './src/app/team-blue-basket.tsx',
+    './BlueBuy': './src/app/team-blue-buy.tsx',
+  },
+};
+
+module.exports = composePlugins(
+  withNx(),
+  withReact(),
+  withModuleFederation(mfConfig),
+  withZephyr(),
+  (config) => {
+    return config;
+  },
+);
+
+```
+## Team Green Configuration
+
+```ts
+import { withReact } from '@nx/react';
+import { withModuleFederation } from '@nx/react/module-federation';
+import { composePlugins, withNx } from '@nx/webpack';
+import { withZephyr } from 'zephyr-webpack-plugin';
+
+const mfConfig = {
+  name: 'team-green',
+  exposes: {
+    './GreenRecos': './src/app/team-green-recos.tsx',
+  },
+};
+
+module.exports = composePlugins(
+  withNx(),
+  withReact(),
+  withModuleFederation(mfConfig),
+  withZephyr(),
+  (config) => {
+    return config;
+  }
+);
+
+```
+
+## Team Red Configuration
+
+```ts
+import { withReact } from '@nx/react';
+import { withModuleFederation } from '@nx/react/module-federation';
+import { composePlugins, withNx } from '@nx/webpack';
+import { withZephyr } from 'zephyr-webpack-plugin';
+
+const mfConfig = {
+  name: 'team-red',
+  exposes: {
+    './TeamRedLayout': './src/app/team-red-layout',
+  },
+  remotes: ['team-green', 'team-blue'],
+};
+
+export default composePlugins(
+  withNx(),
+  withReact(),
+  withModuleFederation(mfConfig),
+  withZephyr(),
+  (config) => {
+    return config;
+  }
+);
+```
+
+:::info
+We are using semver versioning in this one
+:::
