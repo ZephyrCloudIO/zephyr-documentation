@@ -1,4 +1,4 @@
-import { cn } from "../../utils/cn";
+import { cn } from "../../lib/cn";
 
 export const Image = ({ src, size }: { src?: string, size?: "medium" | "large" }) => {
 

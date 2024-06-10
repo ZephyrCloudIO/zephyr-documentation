@@ -1,4 +1,4 @@
-import { supportedBrowser } from "../utils/site.config";
+import { supportedBrowser } from "../lib/site.config";
 import {
   Table,
   TableBody,
