@@ -31,7 +31,7 @@ pageType: doc
 
 ---
 import { HomeStart, HomeConcept,  HomeRecipes } from "../components/home"
-import { HomeCardLayout } from "../components/home.card-layout"
+import { CardLayout } from "../components/ui/card-layout"
 import { Separator } from "../components/ui/separator"
 import { FeatureTable } from "../components/feature-table"
 
@@ -47,9 +47,11 @@ Zephyr Cloud is now in public alpha. If you experience any issues, do jump in ou
 <Separator/>
 ## Start
 
-<HomeCardLayout>
+<CardLayout>
 <HomeStart />
-</HomeCardLayout>
+</CardLayout>
+
+<Separator/>
 
 ## Main Features
 Some of Zephyr Cloud's features include:
@@ -57,29 +59,37 @@ Some of Zephyr Cloud's features include:
 
 <sub className={"py-4"}><i>Details subject to change.</i> </sub>
 
-
+<Separator/>
 ## Pre-Requisite Knowledge
 We don't assume you know everything about cloud or edge. Whenever we mention a concept or a piece of software, we aim to provide relevant links wherever possible. Our documentation site is Open Sourced, if you wish to contribute, do check out our [Github](https://github.com/ZephyrCloudIO/docs) and open any issues/pull requests.
 
 At the same time, it'd be useful to have a basic understanding of modern frontend frameworks such as [React](https://react.dev), running commands in terminals, [node](https://nodejs.org/en), package management solutions such as [npm](https://docs.npmjs.com/cli/v10/configuring-npm/install) and the concept (or usage) of [monorepo](https://monorepo.tools/). If you're new to web development, we recommend checking out [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web) for a comprehensive guide.
 
-## Recipes
-
-<HomeCardLayout>
-<HomeRecipes/>
-</HomeCardLayout>
-
 <Separator/>
 
-## Concepts
+## Recipes
 
-<HomeCardLayout>
+<CardLayout>
+<HomeRecipes/>
+</CardLayout>
+
+[See more recipes](/recipes)
+<Separator/>
+
+{/* ## Concepts */}
+
+{/* <CardLayout>
 <HomeConcept/>
 
-</HomeCardLayout>
-<br/>
+</CardLayout>
+<br/> */}
 
-<div className="flex flex-col gap-4">
-<sub id="footnote-1">1. Additional functionalities are currently under development</sub>
-<sub id="footnote-2">2. Based on internal benchmarks. Initial deployment time may vary.</sub>
+<div className="flex flex-col">
+
+<sub id="footnote-1">
+1. Additional functionalities are currently under development.
+</sub>
+<sub id="footnote-2">
+2. Based on internal benchmarks. Initial deployment time may vary.
+</sub>
 </div>
