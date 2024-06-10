@@ -91,7 +91,7 @@ export const SiteConfig: CardProps = {
       title: "React + Vite",
       framework: "react",
       description: "Use Zephyr with React and Vite.",
-      href: "/recipes/react-vite",
+      href: "/guide/recipes/react-vite",
       variant: "small",
       icons: [<ReactIcon />, <ViteIcon />],
     },
@@ -107,7 +107,7 @@ export const SiteConfig: CardProps = {
       title: "React + Vite + Nx",
       framework: "react",
       description: "Use Zephyr with React, Vite and Nx.",
-      href: "/recipes/react-nx",
+      href: "/guide/recipes/react-vite-nx",
       variant: "small",
       icons: [<ReactIcon />, <NxIcon />, <ViteIcon />],
     },
@@ -117,78 +117,78 @@ export const SiteConfig: CardProps = {
     //     href: "/recipes/react-nx-rspack",
     //     variant: "small"
     // },
-    {
-      title: "Migrate from vanilla module federation",
-      description: "Migrate from vanilla module federation to Zephyr.",
-      href: "/guide/getting-started/vanilla-mf",
-      variant: "small",
-      icons: [<ModuleFederationIcon />],
-    },
+    // {
+    //   title: "Migrate from vanilla module federation",
+    //   description: "Migrate from vanilla module federation to Zephyr.",
+    //   href: "/guide/getting-started/vanilla-mf",
+    //   variant: "small",
+    //   icons: [<ModuleFederationIcon />],
+    // },
     {
       // create-mf-app-rspack
-      title: "React + Rspack + Module Federation",
-      description: "Use Zephyr with React, Rspack and Module Federation.",
-      href: "/recipes/react-mf-rspack",
-      variant: "small",
+      title: "React + Rspack",
+      description: "Use Zephyr with React and Rspack",
+      href: "/guide/general/get-started#3-create-a-react-app",
+      // variant: "small",
       icons: [<ReactIcon />, <RspackIcon />, <ModuleFederationIcon />],
     },
-    {
-      // create-nx-rspack-workpace-mf
-      title: "React + Nx + Rspack + Module Federation",
-      description: "Use Zephyr with React, Nx, Rspack and Module Federation.",
-      href: "/recipes/react-nx-mf-rspack",
-      variant: "small",
-      icons: [
-        <ReactIcon />,
-        <NxIcon />,
-        <RspackIcon />,
-        <ModuleFederationIcon />,
-      ],
-    },
-    {
-      // create-nx-workspace-mf + react-tractor-sample
-      title: "React + Webpack + Nx + Module Federation",
-      description: "Use Zephyr with React, Nx and Module Federation.",
-      href: "/recipes/react-nx-mf",
-      variant: "small",
-      icons: [
-        <ReactIcon />,
-        <WebpackIcon />,
-        <NxIcon />,
-        <ModuleFederationIcon />,
-      ],
-    },
-    {
-      // create-default-webpack-mf
-      title: "React + Webpack + Lerna + Module Federation",
-      description: "Use Zephyr with React and Module Federation.",
-      href: "/recipes/react-mf",
-      variant: "small",
-      icons: [
-        <ReactIcon />,
-        <WebpackIcon />,
-        <LernaIcon />,
-        <ModuleFederationIcon />,
-      ],
-    },
+    // {
+    //   // create-nx-rspack-workpace-mf
+    //   title: "React + Nx + Rspack + Module Federation",
+    //   description: "Use Zephyr with React, Nx, Rspack and Module Federation.",
+    //   href: "/recipes/react-nx-mf-rspack",
+    //   variant: "small",
+    //   icons: [
+    //     <ReactIcon />,
+    //     <NxIcon />,
+    //     <RspackIcon />,
+    //     <ModuleFederationIcon />,
+    //   ],
+    // },
+    // {
+    //   // create-nx-workspace-mf + react-tractor-sample
+    //   title: "React + Webpack + Nx + Module Federation",
+    //   description: "Use Zephyr with React, Nx and Module Federation.",
+    //   href: "/recipes/react-nx-mf",
+    //   variant: "small",
+    //   icons: [
+    //     <ReactIcon />,
+    //     <WebpackIcon />,
+    //     <NxIcon />,
+    //     <ModuleFederationIcon />,
+    //   ],
+    // },
+    // {
+    //   // create-default-webpack-mf
+    //   title: "React + Webpack + Lerna + Module Federation",
+    //   description: "Use Zephyr with React and Module Federation.",
+    //   href: "/recipes/react-mf",
+    //   variant: "small",
+    //   icons: [
+    //     <ReactIcon />,
+    //     <WebpackIcon />,
+    //     <LernaIcon />,
+    //     <ModuleFederationIcon />,
+    //   ],
+    // },
 
-    {
-      // qwik-1.5
-      title: "Qwik + Netlify",
-      description:
-        "Adding Zephyr to Vite config in a Qwik app scaffolded by Qwik city - deploy to Netlify.",
-      href: "/recipes/qwik/deploy",
-      variant: "small",
-      icons: [<QwikIcon />, <NetlifyIcon />],
-    },
-    {
-      // ng-nx-webpack
-      title: "Angular + Nx + Webpack",
-      description: "Use Zephyr with Angular 15 in an Nx workspace.",
-      href: "/recipes/angular-nx",
-      variant: "small",
-      icons: [<AngularIcon />, <NxIcon />, <WebpackIcon />],
-    },
+    // {
+    //   // qwik-1.5
+    //   title: "Qwik + Netlify",
+    //   description:
+    //     "Adding Zephyr to Vite config in a Qwik app scaffolded by Qwik city - deploy to Netlify.",
+    //   href: "/recipes/qwik/deploy",
+    //   variant: "small",
+    //   icons: [<QwikIcon />, <NetlifyIcon />],
+    // },
+    // {
+    //   // ng-nx-webpack
+    //   title: "Angular + Nx + Webpack",
+    //   description: "Use Zephyr with Angular 15 in an Nx workspace.",
+    //   href: "/recipes/angular-nx",
+    //   variant: "small",
+    //   icons: [<AngularIcon />, <NxIcon />, <WebpackIcon />],
+    // },
 
     // {
     //     title: "Cloudflare",
