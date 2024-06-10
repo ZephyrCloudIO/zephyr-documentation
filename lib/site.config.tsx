@@ -1,13 +1,13 @@
-import ModuleFederationIcon from "../components/icons/module-federation";
-import { NxIcon } from "../components/icons/nx";
-import { ReactIcon } from "../components/icons/react";
-import { RspackIcon } from "../components/icons/rspack";
-import { ViteIcon } from "../components/icons/vite";
-import { WebpackIcon } from "../components/icons/webpack";
-import { QwikIcon } from "../components/icons/qwik";
-import { AngularIcon } from "../components/icons/angular";
-import { LernaIcon } from "../components/icons/lerna";
-import { NetlifyIcon } from "../components/icons/netlify";
+import ModuleFederationIcon from '../components/icons/module-federation';
+import { NxIcon } from '../components/icons/nx';
+import { ReactIcon } from '../components/icons/react';
+import { RspackIcon } from '../components/icons/rspack';
+import { ViteIcon } from '../components/icons/vite';
+import { WebpackIcon } from '../components/icons/webpack';
+import { QwikIcon } from '../components/icons/qwik';
+import { AngularIcon } from '../components/icons/angular';
+import { LernaIcon } from '../components/icons/lerna';
+import { NetlifyIcon } from '../components/icons/netlify';
 export interface CardItemProps {
   title: string;
   href: string;
@@ -15,36 +15,35 @@ export interface CardItemProps {
   description?: string;
   className?: string;
   icons?: JSX.Element[];
-  variant?: "small" | "default" | "large";
+  variant?: 'small' | 'default' | 'large';
 }
 
 export type CardProps = Record<string, CardItemProps[]>;
 
 export const Links = {
-  github: "https://github.com/ZephyrCloudIO/docs",
-}
+  github: 'https://github.com/ZephyrCloudIO/docs',
+};
 export const SiteConfig: CardProps = {
-
   start: [
     {
-      title: "Why Zephyr", // TODO: shouldn't introduction and "Why" be on the same page?
+      title: 'Why Zephyr', // TODO: shouldn't introduction and "Why" be on the same page?
       description:
         "Have an overview of modern application's development complexity and how Zephyr can speed up the process.",
-      href: "/guide/general/why-zephyr-cloud",
+      href: '/guide/general/why-zephyr-cloud',
     },
     {
-      title: "Get Started",
+      title: 'Get Started',
       description:
-        "The quickest way to get you started with our chrome extension, dashboard and npm package. Use Webpack as an example. ",
-      href: "/guide/general/get-started",
-      variant: "small",
+        'The quickest way to get you started with our chrome extension, dashboard and npm package. Use Webpack as an example. ',
+      href: '/guide/general/get-started',
+      variant: 'small',
     },
     {
-      title: "Adding Zephyr to existing application",
+      title: 'Adding Zephyr to existing application',
       description:
-        "One line of code to add Zephyr to your existing application. Use Nx + React + Webpack as an example.",
-      href: "/guide/recipes/existing-app",
-      variant: "small",
+        'One line of code to add Zephyr to your existing application. Use Nx + React + Webpack as an example.',
+      href: '/guide/recipes/existing-app',
+      variant: 'small',
     },
     // {
     //     "title": "Module Federation Application",
@@ -55,44 +54,44 @@ export const SiteConfig: CardProps = {
   ] as CardItemProps[],
   features: [
     {
-      title: "Version control",
+      title: 'Version control',
       description:
-        "Zephyr provides version control for your application and enabling your application to rollback and forward on chrome extension.",
-      href: "/features/version-control",
+        'Zephyr provides version control for your application and enabling your application to rollback and forward on chrome extension.',
+      href: '/features/version-control',
     },
     {
-      title: "Rollback and forward",
+      title: 'Rollback and forward',
       description:
-        "Zephyr provides rollback and forward features for your application.",
-      href: "/features/rollback-forward",
+        'Zephyr provides rollback and forward features for your application.',
+      href: '/features/rollback-forward',
     },
     {
-      title: "Sub-second deploy",
-      description: "Zephyr provides sub-second deploy for your application.",
-      href: "/features/sub-second-deploy",
+      title: 'Sub-second deploy',
+      description: 'Zephyr provides sub-second deploy for your application.',
+      href: '/features/sub-second-deploy',
     },
     {
-      title: "Long-lived preview links",
+      title: 'Long-lived preview links',
       description:
-        "Zephyr provides long-lived preview links for your application.",
-      href: "/features/long-lived-preview-links",
+        'Zephyr provides long-lived preview links for your application.',
+      href: '/features/long-lived-preview-links',
     },
     {
-      title: "Dependency management",
+      title: 'Dependency management',
       description:
-        "Zephyr provides dependency management for your application.",
-      href: "/features/dependency-management",
+        'Zephyr provides dependency management for your application.',
+      href: '/features/dependency-management',
     },
   ] as CardItemProps[],
 
   recipes: [
     {
       // react-vite-ts
-      title: "React + Vite",
-      framework: "react",
-      description: "Use Zephyr with React and Vite.",
-      href: "/guide/recipes/react-vite",
-      variant: "small",
+      title: 'React + Vite',
+      framework: 'react',
+      description: 'Use Zephyr with React and Vite.',
+      href: '/guide/recipes/react-vite',
+      variant: 'small',
       icons: [<ReactIcon />, <ViteIcon />],
     },
 
@@ -102,15 +101,15 @@ export const SiteConfig: CardProps = {
     //     href: "/recipes/react-rspack",
     //     variant: "small"
     // },
-    {
-      // react-vite-nx
-      title: "React + Vite + Nx",
-      framework: "react",
-      description: "Use Zephyr with React, Vite and Nx.",
-      href: "/guide/recipes/react-vite-nx",
-      variant: "small",
-      icons: [<ReactIcon />, <NxIcon />, <ViteIcon />],
-    },
+    // {
+    //   // react-vite-nx
+    //   title: "React + Vite + Nx",
+    //   framework: "react",
+    //   description: "Use Zephyr with React, Vite and Nx.",
+    //   href: "/guide/recipes/react-vite-nx",
+    //   variant: "small",
+    //   icons: [<ReactIcon />, <NxIcon />, <ViteIcon />],
+    // },
     // {
     //     title: "React + Rspack + Nx",
     //     description: "Use Zephyr with React, Nx and Rspack.",
@@ -126,10 +125,10 @@ export const SiteConfig: CardProps = {
     // },
     {
       // create-mf-app-rspack
-      title: "React + Rspack",
-      description: "Use Zephyr with React and Rspack",
-      href: "/guide/general/get-started#3-create-a-react-app",
-      // variant: "small",
+      title: 'React + Rspack',
+      description: 'Use Zephyr with React and Rspack',
+      href: '/guide/general/get-started#3-create-a-react-app',
+      variant: 'small',
       icons: [<ReactIcon />, <RspackIcon />, <ModuleFederationIcon />],
     },
     // {
@@ -145,19 +144,19 @@ export const SiteConfig: CardProps = {
     //     <ModuleFederationIcon />,
     //   ],
     // },
-    // {
-    //   // create-nx-workspace-mf + react-tractor-sample
-    //   title: "React + Webpack + Nx + Module Federation",
-    //   description: "Use Zephyr with React, Nx and Module Federation.",
-    //   href: "/recipes/react-nx-mf",
-    //   variant: "small",
-    //   icons: [
-    //     <ReactIcon />,
-    //     <WebpackIcon />,
-    //     <NxIcon />,
-    //     <ModuleFederationIcon />,
-    //   ],
-    // },
+    {
+      // create-nx-workspace-mf + react-tractor-sample
+      title: 'React + Webpack + Nx + Module Federation',
+      description: 'Use Zephyr with React, Nx and Module Federation.',
+      href: '/guide/recipes/nx-mf-app',
+      variant: 'small',
+      icons: [
+        <ReactIcon />,
+        <WebpackIcon />,
+        <NxIcon />,
+        <ModuleFederationIcon />,
+      ],
+    },
     // {
     //   // create-default-webpack-mf
     //   title: "React + Webpack + Lerna + Module Federation",
@@ -199,54 +198,54 @@ export const SiteConfig: CardProps = {
   ] as CardItemProps[],
   concepts: [
     {
-      title: "Module Federation",
-      description: "Learn about module federation and how Zephyr enhances it.",
-      href: "/guide/concepts/module-federation",
-      variant: "small",
+      title: 'Module Federation',
+      description: 'Learn about module federation and how Zephyr enhances it.',
+      href: '/guide/concepts/module-federation',
+      variant: 'small',
     },
     {
-      title: "Edge",
-      description: "What does edge mean? How does it benefit us?",
-      href: "/guide/concepts/edge",
-      variant: "small",
+      title: 'Edge',
+      description: 'What does edge mean? How does it benefit us?',
+      href: '/guide/concepts/edge',
+      variant: 'small',
     },
     {
-      title: "Micro Frontend",
+      title: 'Micro Frontend',
       description:
         "What's Micro Frontend? What are the use cases? When is a good time to implement it?",
-      href: "/guide/concepts/micro-frontend",
+      href: '/guide/concepts/micro-frontend',
     },
   ] as CardItemProps[],
 };
 
 export const supportedBrowser = [
   {
-    name: "Google Chrome",
-    icon: "",
+    name: 'Google Chrome',
+    icon: '',
     supported: true,
   },
   {
-    name: "Arc",
+    name: 'Arc',
     supported: false,
   },
   {
-    name: "Opera",
-    icon: "",
+    name: 'Opera',
+    icon: '',
     supported: true,
   },
   {
-    name: "Microsoft Edge",
-    icon: "",
+    name: 'Microsoft Edge',
+    icon: '',
     supported: true,
   },
   {
-    name: "Firefox",
-    icon: "",
+    name: 'Firefox',
+    icon: '',
     supported: false,
   },
   {
-    name: "Safari",
-    icon: "",
+    name: 'Safari',
+    icon: '',
     supported: false,
   },
 ];
