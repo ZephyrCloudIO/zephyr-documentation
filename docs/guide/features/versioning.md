@@ -1,4 +1,4 @@
-# Versioning in Zephyr
+# Versioning 
 
 Zephyr utilizes familiar versioning concepts by adopting [SemVer](https://semver.org/) (Semantic Versioning) as its foundational versioning methodology, ensuring a systematic and meaningful progression of project versions.
 
