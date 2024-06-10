@@ -1,9 +1,0 @@
-[
-  {
-    "type": "dir",
-    "name": "browser-extension",
-    "label": "Browser Extension",
-    "collapsible": true,
-    "collapsed": true
-  }
-]
