@@ -4,10 +4,10 @@ import { ReactIcon } from '../components/icons/react';
 import { RspackIcon } from '../components/icons/rspack';
 import { ViteIcon } from '../components/icons/vite';
 import { WebpackIcon } from '../components/icons/webpack';
-import { QwikIcon } from '../components/icons/qwik';
-import { AngularIcon } from '../components/icons/angular';
-import { LernaIcon } from '../components/icons/lerna';
-import { NetlifyIcon } from '../components/icons/netlify';
+// import { QwikIcon } from '../components/icons/qwik';
+// import { AngularIcon } from '../components/icons/angular';
+// import { LernaIcon } from '../components/icons/lerna';
+// import { NetlifyIcon } from '../components/icons/netlify';
 export interface CardItemProps {
   title: string;
   href: string;

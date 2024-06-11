@@ -8,6 +8,7 @@ module.exports = {
     "./components/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    ...theme,
     container: {
       center: true,
       padding: "2rem",

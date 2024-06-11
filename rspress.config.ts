@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { defineConfig } from 'rspress/config';
-import { pluginShiki, createTransformerDiff, createTransformerLineNumber, createTransformerHighlight, createTransformerFocus } from '@rspress/plugin-shiki';
+import { pluginShiki, createTransformerDiff, createTransformerLineNumber, createTransformerHighlight } from '@rspress/plugin-shiki';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
