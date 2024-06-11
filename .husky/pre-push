@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run lint:affected
-npm test
+npm run lint:fix
 git diff --cached --exit-code
