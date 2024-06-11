@@ -116,13 +116,13 @@ export const SiteConfig: CardProps = {
     //     href: "/recipes/react-nx-rspack",
     //     variant: "small"
     // },
-    // {
-    //   title: "Migrate from vanilla module federation",
-    //   description: "Migrate from vanilla module federation to Zephyr.",
-    //   href: "/guide/getting-started/vanilla-mf",
-    //   variant: "small",
-    //   icons: [<ModuleFederationIcon />],
-    // },
+    {
+      title: 'Migrate from vanilla module federation',
+      description: 'Migrate from vanilla module federation to Zephyr.',
+      href: '/guide/recipes/existing-app',
+      variant: 'small',
+      icons: [<ModuleFederationIcon />],
+    },
     {
       // create-mf-app-rspack
       title: 'React + Rspack',
