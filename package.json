@@ -37,6 +37,7 @@
     "typescript-eslint": "^7.13.0"
   },
   "optionalDependencies": {
+    "@rspack/binding-linux-x64-gnu": "^0.7.1",
     "@rspress/mdx-rs-linux-x64-gnu": "^0.5.7"
   }
 }
