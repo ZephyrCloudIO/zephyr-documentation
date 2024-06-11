@@ -1,6 +1,5 @@
 import * as path from 'path';
 import { defineConfig } from 'rspress/config';
-// import { withZephyr } from 'zephyr-webpack-plugin';
 import { pluginShiki, createTransformerDiff, createTransformerLineNumber, createTransformerHighlight, createTransformerFocus } from '@rspress/plugin-shiki';
 
 export default defineConfig({
