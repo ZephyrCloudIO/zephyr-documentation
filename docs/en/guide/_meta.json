@@ -8,8 +8,8 @@
   },
   {
     "type": "dir",
-    "name": "features",
-    "label": "Features",
+    "name": "usage",
+    "label": "Usage",
     "collapsible": true,
     "collapsed": false
   },
@@ -20,6 +20,5 @@
     "collapsible": true,
     "collapsed": false
   },
-  
   "resources"
 ]

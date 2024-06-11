@@ -1,7 +1,7 @@
 [
   "react-vite",
-  "existing-app",
   "nx-mf-app",
+  "existing-app",
   "basic-federated-application",
   "basic-federated-application-nx"
 ]
