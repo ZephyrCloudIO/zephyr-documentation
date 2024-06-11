@@ -17,37 +17,32 @@ To execute `npm` package binaries, use the `npx` command as follows:
 ```bash filename="Terminal"
 npx create-mf-app
 ```
-### Naming
+
 
 Choose a name for your application. Ensure you designate one host and at least one remote, choosing names that reflect their roles accordingly.
 
-```bash filename="Terminal"
+```bash
 ? Pick the name of your app: (host)
 ```
 
-### Project Type
-
 Select the type of application:
 
-```bash filename="Terminal"
+```bash
 ? Project Type: (Use arrow keys)
 ❯ Application
   API Server
   Library
 ```
-### Port
 
 You may use the default port option:
 
-```bash filename="Terminal"
+```bash
 ? Port number: (8080)
 ```
 
-### Framework
+We conducted tests using React, but other frameworks may also be compatible. See a list of tested framework [here](/guide/recipes#frameworks)
 
-We conducted tests using React, but other frameworks may also be compatible.
-
-```bash filename="Terminal"
+```bash
 ? Framework: (Use arrow keys)
 lit-html
 preact
@@ -58,30 +53,25 @@ svelte
 vanilla
 (Move up and down to reveal more choices)
 ```
-### Language
 
 We prefer TypeScript, but Zephyr is compatible with both TypeScript and JavaScript.
 
-```bash filename="Terminal"
+```bash 
 ? Language:
 ❯ typescript
 javascript
 ```
-### Styles
-
 Both CSS and Tailwind are viable options for styling:
 
-```bash filename="Terminal"
+```bash 
 ? CSS: (Use arrow keys)
 ❯ CSS
 Tailwind
 ```
 
-### Bundler
+While both packing options are viable, we strongly recommend **Rspack** for its performance. See [benchmark of Rspack](https://www.rspack.dev/).
 
-While both packing options are viable, we strongly prefer Rspack due to its superior performance.
-
-```bash filename="Terminal"
+```bash 
 ? Bundler: (Use arrow keys)
 Webpack
 ❯ Rspack
@@ -89,9 +79,7 @@ Webpack
 
 ## Adding Zephyr to Your Module Federation App
 
-### Installing Zephyr
-
-Add Zephyr to your application:
+Installing Zephyr plugin:
 
 ```bash filename="Terminal"
 cd create-mf-app-rspack-host
@@ -103,9 +91,9 @@ npm install zephyr-webpack-plugin --save
 Incorporate the Zephyr configuration into your existing setup by wrapping the current configuration object with Zephyr's functionality. This enhancement is performed using the `zephyr-webpack-plugin`, as demonstrated below:
 
 ```diff filename="rspack.config.js"
-- module.exports = {/* the existing config object */};
-+ const { withZephyr } = require('zephyr-webpack-plugin');
-+ module.exports = withZephyr()({/* the existing config object */});
+module.exports = {/* the existing config object */}; // [!code --]
+const { withZephyr } = require('zephyr-webpack-plugin'); // [!code ++]
+module.exports = withZephyr()({/* the existing config object */}); // [!code ++]
 ```
 
 ### Setting a Git Origin
@@ -160,7 +148,7 @@ git push -u origin main
 :::info
 **Error Handling:**
 If you encounter errors due to unset Git configurations, ensure you have set both your Git `user.name` and `user.email`, and that you have a valid 'git remote origin' set up.
-```bash filename="Terminal"
+```bash 
 [ConfigurationError: [zephyr]: git is not configured properly
 
     - please set git user.name and user.email
@@ -168,6 +156,10 @@ If you encounter errors due to unset Git configurations, ensure you have set bot
     - please set valid 'git remote origin'
 
 ]
+```
+If this error show up - create a new repository and copy the link to that repository, do: 
+```bash filename="Terminal"
+git remote add origin git@github.com:User/UserRepo.git
 ```
 :::
 
@@ -211,4 +203,4 @@ Please note that the live reload functionality on remotes is currently unavailab
 
 You can now proceed to add remotes and start building your federated application as planned.
 
-For insights on building micro-frontends with Rspack and Create MF App, Jack offers an informative [video tutorial](https://www.youtube.com/watch?v=32_EikGKESk).
+For insights on building micro-frontends with Rspack and Create MF App, Jack offers an informative [video tutorial](https://www.youtube.com/watch?v=32_EikGKESk). We have also curated a resource page related to micro-frontend and module federation [here](/guide/resources).

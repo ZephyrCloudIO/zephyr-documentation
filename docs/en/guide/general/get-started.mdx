@@ -1,23 +1,24 @@
-import SupportedBrowser from "../../../components/browser-table"
+import SupportedBrowser from "../../../../components/browser-table"
 import { DrawingPinIcon } from '@radix-ui/react-icons';
-import { Image } from "../../../components/ui/image"
-import { Keyboard } from "../../../components/ui/keyboard"
+import { Image } from "../../../../components/ui/image"
+import { Keyboard } from "../../../../components/ui/keyboard"
 import { SourceCode } from '@theme';
 
 # Get started
 
-In this section we will walk you through what you will need to start using Zephyr and enjoy its benefits by deploying an application through Zephyr and modifying configuration. We will start with installing and creating your account, then create a standalone React app. At the end of this guide, you will have your first [React](https://react.dev/) app deployed to Zephyr with [Rspack](https://rspress.dev/) and use our [version control] feature to rollback your application. 
+In this section we will walk you through what you will need to start using Zephyr and enjoy its benefits by deploying an application through Zephyr and modifying configuration. We will start with installing and creating your account, then create a standalone React app. At the end of this guide, you will have your first [React](https://react.dev/) app deployed to Zephyr with [Rspack](https://rspress.dev/) as bundler and use our [version control](/guide/features/versioning) feature to rollback your application. 
 
 If you are curious to read more before about us, you can dive into our [recipes](/#recipes) (for more frameworks and bundlers) and [features](/guide/features). Below guide is written based on Google chrome thus other browser's behavior might differ. 
+
+:::info
+Our chrome extension is only supported on Chromium based browsers. See a list of supported browser [below](#browser-support).
+:::
 
 ## Installation and setup
 #### 1. Install Chrome Extension 
 
 Head to Chrome Web Store to install our chrome extension - [Zephyr Mission Control](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn). Click on **Add to Chrome** and confirm with **Add extension**. After you finish remember to **pin** the extension by clicking on <DrawingPinIcon className="inline -rotate-45"/> on extension management tab to provide you a quicker access to Zephyr's side panel.
 
-:::info
-Our chrome extension is only supported on Chromium based browsers. See a list of supported browser [below](#browser-support).
-:::
 
 #### 2. Log in 
 
@@ -26,7 +27,7 @@ Once you click on <img src="/logo.png" className="inline h-5 w-5 brightness-[3]"
 <Image src={"/log-in.png"} />
 
 :::details{title="What happens when you log in?"}
-While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory and run: 
+While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run: 
 ```sh 
 rm rf ~/.zephyr 
 ```
@@ -47,10 +48,14 @@ nvm use 20
 :::
 
 
-Let's have a standalone react app for simplification. At the end of this walk-through we will have a react app, using [Nx](https://nx.dev/) as workspace manager and [Rspack](https://www.rspack.dev/) as bundler. 
+Once the prerequisites are fulfilled, we can follow [Nx guide to create a standalone React app](https://nx.dev/getting-started/tutorials/react-standalone-tutorial):
 
 ```sh title="Terminal"
 npx create-nx-workspace@latest my-first-mf-app --preset=react-standalone
+```
+
+The creation process will ask you: 
+```sh 
 Need to install the following packages:
 create-nx-workspace@19.2.2
 Ok to proceed? (y) 
@@ -58,7 +63,7 @@ Ok to proceed? (y)
 Press <Keyboard shortcuts={["y", "Enter"]}/> and then choose the following highlighted options.
 
 Choose `Rspack` as bundler option.
-```sh title="Terminal" {6}
+```sh  {6}
 NX   Let's create a new workspace [https://nx.dev/getting-started/intro]
 
 ? Which bundler would you like to use? …
@@ -67,16 +72,15 @@ Webpack [ https://webpack.js.org/ ]
 Rspack  [ https://www.rspack.dev/ ]
 ```
 Choose `None`.
-```sh title="Terminal" {5}
-
+```sh  {5}
 ✔ Which bundler would you like to use? · rspack
 ? Test runner to use for end to end (E2E) tests …
 Playwright [ https://playwright.dev/ ]
 Cypress [ https://www.cypress.io/ ]
 None
 ```
-When you are prompted to choose styling solution - choose "Tailwind".
-```sh title="Terminal" {5}
+When you are prompted to choose styling solution - choose `Tailwind`.
+```sh {5}
 ? Default stylesheet format …
 CSS
 SASS(.scss)       [ https://sass-lang.com   ]
@@ -87,7 +91,7 @@ emotion           [ https://emotion.sh                       ]
 styled-jsx        [ https://www.npmjs.com/package/styled-jsx ]
 ```
 Choose `Skip for now` when you are asked to choose CI. 
-```sh title="Terminal" {5}
+```sh {5}
 ? Set up CI with caching, distribution and test deflaking …
 (it's free and can be disabled any time)
 Yes, for GitHub Actions with Nx Cloud
@@ -95,13 +99,17 @@ Yes, for CircleCI with Nx Cloud
 Skip for now
 ```
 Choose `Skip for now` when you are asked for remote caching option
-```sh title="Terminal" {4}
+```sh {4}
 ? Would you like remote caching to make your build faster? …
 (it's free and can be disabled any time)
 Yes
 Skip for now
 ```
-You can see the code up to this stage here: <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/examples/create-mf-app-rspack" />
+You can see the code up to this stage here: <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/my-first-mf-app/after/examples/my-first-mf-app" />. If you want to use our examples to try a deployment, remember to **fork** it. 
+
+:::warning{title="Why fork it"}
+When you are trying to deploy an application, Zephyr will figure out if you have write_access based on which organization the repository belong to. Thus if you fork it, it will be under your organization and you will be able to deploy.  
+:::
 
 
 #### 4. Adding Zephyr
@@ -254,17 +262,17 @@ Rspack 0.6.5 compiled successfully in 1.35 s (036ed42385758a40269f)
 
  NX   Successfully ran target build for project my-first-mf-app (2s)
 ```
-Press <Keyboard shortcuts={["Command"]}/> and left click on the URL at the same time to open your deployed URL in your default browser. Meanwhile **open your side panel**. Note that this URL is alive as long you don't delete your account and you can share it with anyone to preview it. 
+Press <Keyboard shortcuts={["Command"]}/> and left click on the URL at the same time to open your deployed URL in your default browser. Meanwhile **open your side panel** by clicking on <img src="/logo.png" className="inline h-5 w-5 brightness-[3]"/>. Note that this URL is alive as long you don't delete your account and you can share it with anyone to preview it. 
 
 <Image src="/side-panel-1.png"/>
 
-Every application you have deployed on Zephyr (under the same account) will be displayed under **Name**, categorized by repository name and their package name. Click on the dropdown menue under **Version** you will only the initial version of your app. 
+Every application you have deployed on Zephyr (under the same account) will be displayed under **Name**, categorized by repository name and their package name. Click on the dropdown menu under **Version** you will only the initial version of your app. 
 
 <Image src="/my-first-mf-app-1.png" size="large"/>
 
 #### 5. Deploy a new version
 
-Now you have deployed the first version, let's add modify the app and deploy a new version. First serve Tailwind Open the file `src/app/app.tsx` and change the content of your home page:
+Now you have deployed the first version, let's add modify the app and deploy a new version. Open the file `src/app/app.tsx` and change the content of your home page:
 
 ```tsx title="src/app/app.tsx"
 import NxWelcome from './nx-welcome'; // [!code --]
@@ -322,7 +330,7 @@ Save the file and go back to the terminal to deploy the new version of your appl
 nx build
 ```
 
-You will see similar output as before, but this time you will see the new version of your app both in the console output and under **Version** dropdown in on Chrome Extension.
+You will see the new version of your app both in the console output and under **Version** dropdown in on Chrome Extension.
 
 ```sh title="Terminal" {16-18}
 
@@ -361,7 +369,7 @@ NX   Successfully ran target build for project my-first-mf-app (6s)
 ```
 <Image src="/side-panel-2.png" />
 
-Now the latest version of your app is deployed.
+Now the latest version of your app is deployed. You can check the source code till this stage here: <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/my-first-mf-app/before/examples/my-first-mf-app" />
 
 :::details{title="Version name"}
 The names of your versions are generated by Zephyr. The first part of the name is the branch name, serialised version of your email, followed by the version number.
@@ -383,7 +391,7 @@ If you want to see all your projects and their versions, sign in on [dashboard](
 
 <Image src="/dashboard-main.png" size="large"/>
 
-To read more about how to use our dashboard, head to our [dashboard documentation](/guide/dashboard).
+
 
 
 

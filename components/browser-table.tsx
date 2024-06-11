@@ -1,4 +1,4 @@
-import { supportedBrowser } from "../lib/site.config";
+import { supportedBrowser } from '../lib/site.config';
 import {
   Table,
   TableBody,
@@ -7,14 +7,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
-import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
+} from './ui/table';
+import { CheckCircledIcon, CrossCircledIcon } from '@radix-ui/react-icons';
 
 export default function SupportedBrowser() {
   return (
     <div className="px-10 py-4">
       <Table>
-        <TableCaption>We support Chromium based browsers.</TableCaption>
+        <TableCaption className="text-start">
+          While the extension may also function on other Chromium-based browsers
+          such as Microsoft Edge, Brave, Vivaldi, and Opera, please be aware
+          that these are not officially supported.{' '}
+          <i>
+            <strong>
+              For best user experience, we highly recommend you to use Google
+              Chrome.
+            </strong>
+          </i>{' '}
+          We are not responsible for any issues that may arise, and currently,
+          we do not provide support for these platforms.
+        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[400px]">Browser</TableHead>

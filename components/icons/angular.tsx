@@ -1,6 +1,6 @@
-import React from "react";
-import type { SVGProps } from "react";
-import { PinTopIcon } from "@radix-ui/react-icons";
+import React from 'react';
+import type { SVGProps } from 'react';
+import { PinTopIcon } from '@radix-ui/react-icons';
 export function AngularIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg

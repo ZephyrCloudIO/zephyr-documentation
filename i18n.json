@@ -1,0 +1,18 @@
+{
+    "general": {
+        "zh": "概括",
+        "en": "General"
+    },
+    "features": {
+        "zh": "功能",
+        "en": "Features"
+    },
+    "recipes": {
+        "zh": "方案",
+        "en": "Recipes"
+    },
+    "concepts": {
+        "zh": "概念",
+        "en": "Concepts"
+    }
+}

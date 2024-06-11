@@ -1,9 +1,9 @@
-import { TailwindIndicator } from "./tailwind-indicator";
+import { TailwindIndicator } from './tailwind-indicator';
 
 export const Footer = () => {
   return (
     <div id="footer-copyright">
-      {" "}
+      {' '}
       {/* <TailwindIndicator /> */}
       <p>
         <a href="#">Discord Server</a>.
