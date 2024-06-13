@@ -5,12 +5,48 @@
   "scripts": {
     "dev": "rspress dev",
     "build": "rspress build",
-    "preview": "rspress preview"
+    "preview": "rspress preview",
+    "prepare": "husky install",
+    "lint": "npx eslint . ",
+    "lint:fix": "npx eslint . --fix"
   },
   "dependencies": {
-    "rspress": "^1.18.1"
+    "@commitlint/config-conventional": "^19.2.2",
+    "@radix-ui/react-icons": "^1.3.0",
+    "@rspress/mdx-rs": "^0.5.7",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "commitlint": "^19.3.0",
+    "husky": "^9.0.11",
+    "react-wrap-balancer": "^1.1.1",
+    "rspress": "^1.18.1",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7"
-  }
+    "@eslint/js": "^9.4.0",
+    "@nx/eslint-plugin": "^19.2.3",
+    "@rspress/plugin-shiki": "^1.23.1",
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/node": "^20.12.7",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "globals": "^15.4.0",
+    "nx": "19.2.3",
+    "postcss": "^8.4.38",
+    "postcss-loader": "^8.1.1",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.13.0"
+  },
+  "optionalDependencies": {
+    "@rspack/binding-linux-x64-gnu": "^0.7.1",
+    "@rspress/mdx-rs-linux-x64-gnu": "^0.5.7"
+  },
+  "nx": {}
 }

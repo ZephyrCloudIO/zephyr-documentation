@@ -1,16 +1,5 @@
 [
-  {
-    "type": "dir",
-    "name": "react",
-    "label": "React",
-    "collapsible": true,
-    "collapsed": true
-  },
-  {
-    "type": "dir",
-    "name": "cloudflare",
-    "label": "Cloudflare",
-    "collapsible": true,
-    "collapsed": true
-  }
+  "react-vite",
+  "nx-mf-app",
+  "existing-app"
 ]

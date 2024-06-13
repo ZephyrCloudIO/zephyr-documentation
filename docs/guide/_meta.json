@@ -1,22 +1,15 @@
 [
   {
     "type": "dir",
-    "name": "getting-started",
-    "label": "Getting Started",
+    "name": "general",
+    "label": "General",
     "collapsible": true,
     "collapsed": false
   },
   {
     "type": "dir",
-    "name": "features",
-    "label": "Features",
-    "collapsible": true,
-    "collapsed": false
-  },
-  {
-    "type": "dir",
-    "name": "concepts",
-    "label": "Concepts",
+    "name": "usage",
+    "label": "Usage",
     "collapsible": true,
     "collapsed": false
   },
@@ -26,5 +19,6 @@
     "label": "Recipes",
     "collapsible": true,
     "collapsed": false
-  }
+  },
+  "resources"
 ]

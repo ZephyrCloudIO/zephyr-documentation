@@ -1,5 +1,5 @@
 [
-  "mental-model",
-  "build",
-  "versioning"
+  "micro-frontend",
+  "module-federation",
+  "edge"
 ]
