@@ -22,6 +22,7 @@ export type CardProps = Record<string, CardItemProps[]>;
 
 export const Links = {
   github: 'https://github.com/ZephyrCloudIO/docs',
+  discord: 'https://discord.gg/c28rAdS6HY',
 };
 export const SiteConfig: CardProps = {
   start: [
