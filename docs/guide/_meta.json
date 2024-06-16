@@ -9,15 +9,15 @@
   {
     "type": "dir",
     "name": "usage",
-    "label": "Usage",
-    "collapsible": true,
+    "label": "Features",
+    "collapsible": false,
     "collapsed": false
   },
   {
     "type": "dir",
     "name": "recipes",
     "label": "Recipes",
-    "collapsible": true,
+    "collapsible": false,
     "collapsed": false
   },
   "resources"
