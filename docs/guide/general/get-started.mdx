@@ -11,17 +11,17 @@ import { Card } from "../../../components/ui/card"
 
 ### What do you want to start with? 
 
-  <Tabs  className="w-[400px]">
+  <Tabs  className="w-[400px] py-8">
       <TabsList>
-        <TabsTrigger value="account">
-      <h3 className="text-lg">Account</h3>
-        </TabsTrigger>
-        <TabsTrigger value="password">Password</TabsTrigger>
+        <TabsTrigger value="empty">Start with an empty project</TabsTrigger>
+        <TabsTrigger value="fork">Use our examples</TabsTrigger>
+         <TabsTrigger value="existing">Add Zephyr to existing project</TabsTrigger>
       </TabsList>
-      <TabsContent value="account">
-        Make changes to your account here.
+      <TabsContent value="empty">
+       Start with empty project
+
       </TabsContent>
-      <TabsContent value="password">Change your password here.</TabsContent>
+      <TabsContent value="fork">Fork an example. </TabsContent>
     </Tabs>
 
 
