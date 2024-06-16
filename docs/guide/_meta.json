@@ -20,5 +20,10 @@
     "collapsible": false,
     "collapsed": false
   },
+  {"name": "error",
+    "label": "Trouble Shooting",
+    "collapsible": true,
+    "collapsed": "true"
+  },
   "resources"
 ]

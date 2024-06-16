@@ -25,6 +25,7 @@ export const Links = {
   github: 'https://github.com/ZephyrCloudIO/docs',
   extension:
     'https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn',
+  discord: 'https://discord.gg/c28rAdS6HY',
 };
 export const SiteConfig: CardProps = {
   start: [
