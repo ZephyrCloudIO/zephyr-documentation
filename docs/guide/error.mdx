@@ -1,12 +1,21 @@
 
-import { ErrorTable } from "../../components/error-table"
+import { BuildErrorTable, DeployErrorTable } from "../../components/error-tables"
+import { TableCaption } from "../../components/ui/table"
 
 # Error Encyclopedia
 
 ## Build Errors
 
-<ErrorTable/>
+<BuildErrorTable/>
 
+## Deploy Errors
+
+<DeployErrorTable/>
 
 ## Runtime Errors
 
+
+ <TableCaption className="text-start">
+        Not seeing the error you are looking for?{' '}
+        <a href={Links.discord}>Talk to us</a>.
+</TableCaption>
