@@ -1,6 +1,6 @@
 export const Keyboard = ({ shortcuts }: { shortcuts: string | string[] }) => {
   return (
-    <div>
+    <div className="flex gap-1">
       {!Array.isArray(shortcuts) ? (
         <span className="keyboard-shortcut">{shortcuts}</span>
       ) : (
