@@ -20,7 +20,9 @@
     "collapsible": false,
     "collapsed": false
   },
-  {"name": "error",
+  {
+    "type": "dir",
+    "name": "error",
     "label": "Trouble Shooting",
     "collapsible": true,
     "collapsed": "true"
