@@ -29,7 +29,7 @@ export const BuildErrorTable = () => {
             </TableCell>{' '}
             <TableCell className=" text-left items-start flex justify-start">
               <a
-                href={item.link}
+                href={`/guide/error/${item.code}`}
                 className="decoration-dashed decoration-[0.4px] underline underline-offset-4 hover:text-[var(--rp-c-brand)] hover:decoration-[var(--rp-c-brand)] transition-all w-full max-h-full"
               >
                 {' '}
@@ -61,7 +61,7 @@ export const DeployErrorTable = () => {
             </TableCell>{' '}
             <TableCell className=" text-left items-start flex justify-start">
               <a
-                href={item.link}
+                href={`/guide/error/${item.code}`}
                 className="decoration-dashed decoration-[0.4px] underline underline-offset-4 hover:text-[var(--rp-c-brand)] hover:decoration-[var(--rp-c-brand)] transition-all w-full max-h-full"
               >
                 {' '}
