@@ -13,3 +13,12 @@ head:
 # `package.json` must have a name and version 
 
 **Error code: `BU10013`**
+**Location: Terminal**
+**Related plugins: all**
+Related error: [BU10017 `application_uid missing`](/guide/error/bu10017)
+
+When you are running a build through Zephyr, we will verify your `package.json`'s fields to check whether you have the **name** and **version** fields. Later one we use those values to compose `application_uid`. Behind the scene we will be using your `applicaiton_uid` to deploy your application with related information as well as generating build id.  
+
+## Debugging the error
+
+Make sure the **name** and **version** fields have a value in your `package.json`!!!

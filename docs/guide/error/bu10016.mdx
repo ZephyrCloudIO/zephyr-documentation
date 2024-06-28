@@ -4,10 +4,34 @@ description: Zephyr Error - BU10016 - What's assets not found error and how to d
 head: 
   - - meta
     - name: og:title
-      content: Zephyr Error - BU10016 - Assets not found 
+      content: Zephyr Error - BU10016 - Could not get git info
   - - meta
     - name: og:url 
       content: https://docs.zephyr-cloud.io/guide/error/bu10016
 ---
 
 # Could not get git info
+
+**Error code: `BU10016`**
+**Location: Terminal**
+**Related plugins: all**
+
+
+Related errors: [BU10014 - Git remote origin is not configured properly](/guide/error/bu10014), [BU10015 - Git username or email is not configured](/guide/error/bu10015), [BU10017 - `application_uid` missing](/guide/error/bu10017)
+
+There could be several reason why this error shows up - it could be because remote origin wasn't configured for the project directory; it could be because you haven't set a username for git; or it could be because you don't have an email set to your git config. 
+
+All of these information will affect your build and deployment through Zephyr as we use them to both authenticate you and deploy your application. 
+
+## Debugging the error
+
+To make sure you have all the configuration set up correctly, you can do so by running this in your project directory (use arrow key to scroll down and check your remote origin's url)
+
+```
+git config --list
+```
+If you are missing username and email, please refer to [BU10015 - Git username or email is not configured](/guide/error/bu10015) to configure it correctly. 
+
+If you are missing `remote origin url`, refer to [BU10014 - Git remote origin is not configured properly](/guide/error/bu10014).
+
+
