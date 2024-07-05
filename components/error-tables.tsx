@@ -53,7 +53,7 @@ export const DeployErrorTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {Errors.build.map((item, index) => (
+        {Errors.deploy.map((item, index) => (
           <TableRow key={index}>
             {' '}
             <TableCell className="font-medium">

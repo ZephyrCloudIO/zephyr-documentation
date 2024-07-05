@@ -90,6 +90,7 @@ export const Errors = {
       name: "Failed to upload snapshots."
     },
 
+
     {
       code: "DE20019",
       name: "Snapshot uploads gave no results."
@@ -105,6 +106,14 @@ export const Errors = {
     {
       code: "DE20022",
       name: "`snapshot_id` not found."
+    },
+    {
+      code: "DE20023",
+      name: "Snapshot not found."
+    },
+    {
+      code: "DE20024",
+      name: "Could not get build id."
     }
 
   ]
