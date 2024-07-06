@@ -56,6 +56,27 @@ export const SiteConfig: CardProps = {
     //     "variant": "small"
     // },
   ] as CardItemProps[],
+  getStarted: [
+    {
+      title: 'Add Zephyr to your existing project',
+      description: 'Available for Webpack, Rspack and Vite',
+      href: '/guide/recipes/existing-app',
+      variant: 'small',
+    },
+    {
+      title: 'Fork our examples',
+      description:
+        'With pre-configured application, available in both standalone applications and micro-frontends.',
+      href: 'https://github.com/ZephyrCloudIO/zephyr-examples/fork',
+      variant: 'small',
+    },
+    {
+      title: 'Start from scratch',
+      description: 'Using React and Rspack',
+      href: '/guide/general/get-started#start-from-scratch',
+      variant: 'small',
+    },
+  ],
   features: [
     {
       title: 'Version control',
@@ -119,12 +140,12 @@ export const SiteConfig: CardProps = {
     //   variant: "small",
     //   icons: [<ReactIcon />, <NxIcon />, <ViteIcon />],
     // },
-    // {
-    //     title: "React + Rspack + Nx",
-    //     description: "Use Zephyr with React, Nx and Rspack.",
-    //     href: "/recipes/react-nx-rspack",
-    //     variant: "small"
-    // },
+    {
+      title: 'React + Rspack + Nx',
+      description: 'Use Zephyr with React, Nx and Rspack.',
+      href: '/recipes/react-nx-rspack',
+      variant: 'small',
+    },
     {
       title: 'Migrate from vanilla module federation',
       description: 'Migrate from vanilla module federation to Zephyr.',

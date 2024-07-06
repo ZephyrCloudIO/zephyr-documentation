@@ -12,70 +12,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui
 import { Card } from "../../../components/ui/card"
 
 # React + Rspack + Nx
+### Setup
 
 
-### What do you want to start with?
-
-  <Tabs  className="w-[400px] py-8">
-      <TabsList>
-        <TabsTrigger value="empty">Start with an empty project</TabsTrigger>
-        <TabsTrigger value="fork">Use our examples</TabsTrigger>
-         <TabsTrigger value="existing">Add Zephyr to existing project</TabsTrigger>
-      </TabsList>
-      <TabsContent value="empty">
-       Start with empty project
-
-      </TabsContent>
-      <TabsContent value="fork">Fork an example. </TabsContent>
-    </Tabs>
-
-
-In this section we will walk you through what you will need to start using Zephyr and enjoy its benefits by deploying an application through Zephyr and modifying configuration. We will start with installing and creating your account, then create a standalone React app. At the end of this guide, you will have your first [React](https://react.dev/) app deployed to Zephyr with [Rspack](https://rspress.dev/) as bundler and use our [version control](/guide/features/versioning) feature to rollback your application.
-
-If you are curious to read more before about us, you can dive into our [recipes](/#recipes) (for more frameworks and bundlers) and [features](/guide/features). Below guide is written based on Google chrome thus other browser's behavior might differ.
-
-# Get started
-
-In this section we will walk you through what you will need to start using Zephyr and enjoy its benefits by deploying an application through Zephyr and modifying configuration. We will start with installing and creating your account, then create a standalone React app. At the end of this guide, you will have your first [React](https://react.dev/) app deployed to Zephyr with [Rspack](https://rspress.dev/) as bundler and use our [version control](/guide/usage/versioning) feature to rollback your application.
-
-If you are curious to read more before about us, you can dive into our [recipes](/#recipes) (for more frameworks and bundlers) and [features](/guide/usage). Below guide is written based on Google chrome thus other browser's behavior might differ.
-
-
-
-## Pre-requisites
-- You have a Zephyr Cloud account registered either from our [dashboard](https://app.zephyr-cloud.io) or [Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
-- Node version: >20
-- npm version: >18
-- You have one of your [supported browser](/guide/supported) installed
-
-## Setup
-#### 1. Registration
-
-
-
-:::tips
-Head to Chrome Web Store to install our chrome extension - [Zephyr Mission Control](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn). Click on **Add to Chrome** and confirm with **Add extension**. After you finish remember to **pin** the extension by clicking on <DrawingPinIcon className="inline -rotate-45"/> on extension management tab to provide you a quicker access to Zephyr's side panel.
-:::
-
-:::info
-Our chrome extension is only supported on Chromium based browsers. See a list of supported browser [below](#browser-support).
-:::
-#### 2. Log in 
-
-Once you click on <img src="/logo.png" className="inline h-5 w-5 brightness-[3]"/> the side panel will pop up and prompt you to log in (if you are using Microsoft Edge you will need to click on **Open Side Panel**).
-
-<Image src={"/log-in.png"} />
-
-:::details{title="What happens when you log in?"}
-While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run: 
-```sh 
-rm rf ~/.zephyr 
-```
-:::
-
-Now you have created an account and the side panel is empty - hold up! We will get into how to use our dashboard in a bit. Let's deploy an app through Zephyr so you can see a live example of how to use our side panel.
-
-#### 3. Create a react app
+#### 1. Create a react app
 
 :::tip{title="Prerequisites"}
 - npm >=10
@@ -88,7 +28,7 @@ nvm use 20
 :::
 
 
-Once the prerequisites are fulfilled, we can follow [Nx guide to create a standalone React app](https://nx.dev/getting-started/tutorials/react-standalone-tutorial):
+Once the prerequisites are fulfilled, we can start in the terminal:
 
 ```sh title="Terminal"
 npx create-nx-workspace@latest my-first-mf-app --preset=react-standalone
@@ -157,111 +97,61 @@ Open the project folder we created with code editor of your choice. Within curre
 ```sh title="Terminal" 
 npm i zephyr-webpack-plugin 
 ``` 
-After install the plugin, open the file `rspack.config.ts` in project root and replace the original configuration as below
-```js title="rspack.config.js" 
-const { composePlugins, withNx, withReact } = require('@nx/rspack');  // [!code --]
-    // [!code --]
-module.exports = composePlugins(withNx(), withReact(), (config) => { // [!code --]
-  return config; // [!code --]
-}); // [!code --]
+After install the plugin, open the file `rspack.config.js` in project root and replace the original configuration as below:
 
-const rspack = require('@rspack/core') // [!code ++]
-const refreshPlugin = require('@rspack/plugin-react-refresh') // [!code ++]
-const { withZephyr } = require('zephyr-webpack-plugin'); // [!code ++]
-const isDev = process.env.NODE_ENV === 'development' // [!code ++]
-/** // [!code ++]
- * @type {import('@rspack/cli').Configuration} // [!code ++]
- */ // [!code ++]
-module.exports = withZephyr()({ // [!code ++]
-  context: __dirname, // [!code ++]
-  entry: { // [!code ++]
-    main: './src/main.tsx', // [!code ++]
-  }, // [!code ++]
-  // devServer: { // [!code ++]
-  //   historyApiFallback: true, // [!code ++]
-  //   port: 8080, // [!code ++]
-  // }, // [!code ++]
-  resolve: { // [!code ++]
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'] // [!code ++]
-  }, // [!code ++]
-  module: { // [!code ++]
-    rules: [ // [!code ++]
-      { // [!code ++]
-        test: /\.svg$/, // [!code ++]
-        type: 'asset', // [!code ++]
-      }, // [!code ++]
-      { // [!code ++]
-        test: /\.scss$/, // [!code ++]
-        use: [ // [!code ++]
-          { // [!code ++]
-            loader: 'postcss-loader', // [!code ++]
-            options: {  // [!code ++]
-              postcssOptions: { // [!code ++]
-                plugins: { // [!code ++]
-                  tailwindcss: {},  // [!code ++]
-                  autoprefixer: {}, // [!code ++]
-                },  // [!code ++]
-              },    // [!code ++]
-            },  // [!code ++]
-          },    // [!code ++]
-        ],  // [!code ++]
-        type: 'css',    // [!code ++]
-      },    // [!code ++]
-      { // [!code ++]
-        test: /\.(jsx?|tsx?)$/, // [!code ++]
-        use: [  // [!code ++]
-          { // [!code ++]
-            loader: 'builtin:swc-loader',   // [!code ++]
-            options: {  // [!code ++]
-              sourceMap: true,  // [!code ++]
-              jsc: {    // [!code ++]
-                parser: {   // [!code ++]
-                  syntax: 'typescript', // [!code ++]
-                  tsx: true,    // [!code ++]
-                },  // [!code ++]
-                transform: {    // [!code ++]
-                  react: {  // [!code ++]
-                    runtime: 'automatic',   // [!code ++]
-                    development: isDev, // [!code ++]
-                    refresh: isDev, // [!code ++]
-                  },    // [!code ++]
-                },  // [!code ++]
-              },    // [!code ++]
-              env: {    // [!code ++]
-                targets: [  // [!code ++]
-                  'chrome >= 87',   // [!code ++]
-                  'edge >= 88', // [!code ++]
-                  'firefox >= 78',  // [!code ++]
-                  'safari >= 14',   // [!code ++]
-                ],  // [!code ++]
-              },    // [!code ++]
-            },  // [!code ++]
-          },    // [!code ++]
-        ],  // [!code ++]
-      },    // [!code ++]
-    ],  // [!code ++]
-  },    // [!code ++]
-  plugins: [    // [!code ++]
-    new rspack.container.ModuleFederationPlugin({   // [!code ++]
-      name: 'create_mf_app_rspack', // [!code ++]
-      filename: 'remoteEntry.js',   // [!code ++]
-      exposes: {},  // [!code ++]
-      shared: { // [!code ++]
-        react: { eager: true }, // [!code ++]
-        'react-dom': { eager: true },   // [!code ++]
-        'react-router-dom': { eager: true },    // [!code ++]
-      },    // [!code ++]
-    }), // [!code ++]
-    new rspack.DefinePlugin({   // [!code ++]
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV), // [!code ++]
-    }), // [!code ++]
-    new rspack.ProgressPlugin({}),  // [!code ++]
-    new rspack.HtmlRspackPlugin({   // [!code ++]
-      template: './src/index.html', // [!code ++]
-    }), // [!code ++]
-    isDev ? new refreshPlugin() : null, // [!code ++]
-  ].filter(Boolean),    // [!code ++]
-})  // [!code ++]
+```js title="rspack.config.js" 
+// rspack.config.js
+// new rspack config
+const { composePlugins, withNx, withReact } = require('@nx/rspack');
+
+const rspack = require('@rspack/core');
+const refreshPlugin = require('@rspack/plugin-react-refresh');
+const { withZephyr } = require('zephyr-webpack-plugin');
+const {
+  ModuleFederationPlugin,
+} = require('@module-federation/enhanced/rspack');
+
+const isDev = process.env.NODE_ENV === 'development';
+
+/**
+ * @type {import('@rspack/cli').Configuration}
+ */
+const config = composePlugins(withNx(), withReact(), (config) => {
+  if (
+    !config.plugins ||
+    !Array.isArray(config.plugins) ||
+    !config.plugins.length
+  ) {
+    config.plugins = [];
+  }
+
+  config.plugins.push(
+    ...[
+      new ModuleFederationPlugin({
+        name: 'nx_rspack_react_mf_zephyr',
+        filename: 'remoteEntry.js',
+        exposes: {},
+        shared: {
+          react: { eager: true },
+          'react-dom': { eager: true },
+          'react-router-dom': { eager: true },
+        },
+      }),
+      new rspack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      }),
+      new rspack.ProgressPlugin({}),
+      new rspack.HtmlRspackPlugin({
+        template: './src/index.html',
+      }),
+      isDev ? new refreshPlugin() : null,
+    ].filter(Boolean)
+  );
+
+  return withZephyr()(config);
+});
+
+module.exports = config;
 ```
 Now you are all set! Go back to the terminal in current project and run 
 ```sh title="Terminal" 
@@ -424,20 +314,40 @@ But if you want to rollback to the previous version of your deployed application
 
 <Image src="/side-panel-3.png" />
 
+#### 6. Chrome Extension 
 
-#### 7. Check your projects on dashboard 
+You can check the application you just deployed in our chrome extension. 
+
+Head to Chrome Web Store to install our chrome extension - [Zephyr Mission Control](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn). Click on **Add to Chrome** and confirm with **Add extension**. After you finish remember to **pin** the extension by clicking on <DrawingPinIcon className="inline -rotate-45"/> on extension management tab to provide you a quicker access to Zephyr's side panel.
+
+
+
+Once you click on <img src="/logo.png" className="inline h-5 w-5 brightness-[3]"/> the side panel will pop up and prompt you to log in (if you are using Microsoft Edge you will need to click on **Open Side Panel**).
+
+<Image src={"/log-in.png"} />
+
+:::details{title="What happens when you log in?"}
+While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run: 
+```sh 
+rm rf ~/.zephyr 
+```
+:::
+
+Now you have created an account and the side panel is empty - hold up! We will get into how to use our dashboard in a bit. Let's deploy an app through Zephyr so you can see a live example of how to use our side panel.
+
+:::info
+Our chrome extension is only supported on Chromium based browsers. See a list of [supported browser](/guide/supported#browser-support).
+:::
+
+
+#### 7. Dashboard 
 
 If you want to see all your projects and their versions, sign in on [dashboard](https://app.zephyr-cloud.io) and you will see all your projects and their dependencies.
 
 <Image src="/dashboard-main.png" size="large"/>
 
+A more detailed explaination on how to use our dashboard is coming soon.
 
-
-
-
-## Browser Support 
-
-<SupportedBrowser/>
 
 
 
