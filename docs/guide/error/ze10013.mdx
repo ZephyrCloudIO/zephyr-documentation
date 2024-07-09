@@ -1,21 +1,21 @@
 ---
-title: BU10013 - package.json must have a name and version
-description: Zephyr Error - BU10013 - Why does package.json needs to have a name and version? What happens when we don't have one?
+title: ZE10013 - package.json must have a name and version
+description: Zephyr Error - ZE10013 - Why does package.json needs to have a name and version? What happens when we don't have one?
 # head: 
 #   - - meta
 #     - name: og:title
-#       content: Zephyr Error - BU10013 - package.json must have a name and version
+#       content: Zephyr Error - ZE10013 - package.json must have a name and version
 #   - - meta
 #     - name: og:url 
-#       content: https://docs.zephyr-cloud.io/guide/error/bu10013
+#       content: https://docs.zephyr-cloud.io/guide/error/ze10013
 ---
 
 # `package.json` must have a name and version 
 
-**Error code: `BU10013`**
+**Error code: `ZE10013`**
 **Location: Terminal**
 **Related plugins: all**
-Related error: [BU10017 `application_uid missing`](/guide/error/bu10017)
+Related error: [ZE10017 `application_uid missing`](/guide/error/ze10017)
 
 When you are running a build through Zephyr, we will verify your `package.json`'s fields to check whether you have the **name** and **version** fields. Later one we use those values to compose `application_uid`. Behind the scene we will be using your `applicaiton_uid` to deploy your application with related information as well as generating build id.  
 

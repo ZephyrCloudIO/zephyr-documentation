@@ -38,7 +38,7 @@ If you are curious to read more about us, you can dive into our [architecture](/
 #### 1. Create a react app
 
 :::tip{title="Prerequisites"}
-- npm >=10
+- pnpm >= 8
 - node >=20 
 - A registered account on [Zephyr Cloud](https://zephyr-cloud.io)
 
@@ -52,8 +52,11 @@ nvm use 20
 Once the prerequisites are fulfilled, we can start scaffolding our application in the terminal:
 
 <PackageManagerTabs command="create rspack@latest" />
+```sh 
+pnpm create rspack@latest 
+```
 
-The creation process will ask you for **project folder name** and **project template**, we will be choosing `react-ts` in this example: 
+The creation process will ask you for **project folder name** and **project template**, we will be choosing `react` in this example: 
 ```sh 
 .../Library/pnpm/store/v3/tmp/dlx-74427  |  +20 ++
 .../Library/pnpm/store/v3/tmp/dlx-74427  | Progress: resolved 20, reused 20, downloaded 0, added 20, done
@@ -64,15 +67,11 @@ The creation process will ask you for **project folder name** and **project temp
     vue
     vue-ts
 ```
-Press <Keyboard shortcuts={["Enter"]}/>, next we run:
+Press <Keyboard shortcuts={["Enter"]}/>, enter the project directory:
 
-```sh  
-cd rspack-project
 
-pnpm install
+<PackageManagerTabs command="install" />
 
-pnpm run dev
-```
 
 Follow the console output to open the app in browser running on localhost. 
 
