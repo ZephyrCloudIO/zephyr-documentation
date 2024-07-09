@@ -1,13 +1,41 @@
 ---
-title: ZE10020 - Could not initialize Zephyr Agent
-description: Zephyr Error - ZE10020 - Could not initialize Zephyr Agent
+- title: ZE10020 - Failed to get application hash list
+- description: Zephyr Error - ZE10020 - Workaround and debug error "failed to get application hash list\"
 # head: 
 #   - - meta
 #     - name: og:title
-#       content: Zephyr Error - ZE10020 - Could not initialize Zephyr Agent
+#       content: Zephyr Error - ZE10020 - Failed to get application hash list
 #   - - meta
 #     - name: og:url 
 #       content: https://docs.zephyr-cloud.io/guide/error/ze10020
 ---
 
-# Could not initialize Zephyr Agent
+# Failed to get application hash list
+
+- Error Code: `ZE10020`
+
+- Location: Terminal
+
+- Related plugins: all
+
+ 
+
+Whenever we are deploying your application, we save a hash of your application to your local cache, while also comparing your application's current hashed asset to previous build and updating your deployment based on the differences in Key-Value namespaces. 
+
+If your `application_ui` or `build_id` in your local configuration doesn't align with previous build, or you have network request issue, or the integrity of previous hash has been tainted (say you go inside your `~/.zephyr` folder and "accidently" edited some data), they are all plausible reason that you are unable to get application hash list during deployment. 
+
+
+## Debugging the error
+
+1. Network request error 
+
+If you are in an area have fickle internet connection (you can test it on [fast.com](https://fast.com/)), do make sure you deploy again while your internet connection gets better (minimum over 60Mbps).  
+
+
+2. Remove configuration file 
+
+If the hashed asset key-value pair are unmatched, the easiest way is to remove your `~/.zephyr` folder in root directory and run the build again. 
+
+
+
+

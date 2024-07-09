@@ -1,6 +1,6 @@
 export const Errors = {
   // Build specific errors
-  Build: [
+  build: [
     {
       code: "ZE10010",
       name: "Package.json not found.",
@@ -40,12 +40,14 @@ export const Errors = {
       code: "ZE10019",
       name: "Could not get ZEild id.",
     },
+
+    // This one only used in rollup plugin atm and rollup plugin is not ready. 
+    // {
+    //   code: "ZE10020",
+    //   name: "Could not initialize Zephyr Agent.",
+    // },
     {
       code: "ZE10020",
-      name: "Could not initialize Zephyr Agent.",
-    },
-    {
-      code: "ZE10021",
       name: "Failed to get application hash list.",
     },
 
