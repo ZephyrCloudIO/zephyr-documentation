@@ -12,6 +12,7 @@ export interface CardItemProps {
   title: string;
   href: string;
   framework?: string;
+  developed?: boolean;
   description?: string;
   className?: string;
   icons?: JSX.Element[];
@@ -22,6 +23,9 @@ export type CardProps = Record<string, CardItemProps[]>;
 
 export const Links = {
   github: 'https://github.com/ZephyrCloudIO/docs',
+  extension:
+    'https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn',
+  discord: 'https://discord.gg/c28rAdS6HY',
 };
 export const SiteConfig: CardProps = {
   start: [
@@ -52,35 +56,61 @@ export const SiteConfig: CardProps = {
     //     "variant": "small"
     // },
   ] as CardItemProps[],
+  getStarted: [
+    {
+      title: 'Add Zephyr to your existing project',
+      description: 'Available for Webpack, Rspack and Vite',
+      href: '/guide/recipes/existing-app',
+      variant: 'small',
+    },
+    {
+      title: 'Fork our examples',
+      description:
+        'With pre-configured application, available in both standalone applications and micro-frontends.',
+      href: 'https://github.com/ZephyrCloudIO/zephyr-examples/fork',
+      variant: 'small',
+    },
+    {
+      title: 'Start from scratch',
+      description: 'Using React and Rspack',
+      href: '/guide/general/get-started#start-from-scratch',
+      variant: 'small',
+    },
+  ],
   features: [
     {
       title: 'Version control',
       description:
-        'Zephyr provides version control for your application and enabling your application to rollback and forward on chrome extension.',
-      href: '/features/version-control',
+        'Enable you to deploy unlimited versions (depends on your cloud usage) of your application ever deployed on chrome extension and dashboard.',
+      href: '/guide/usage/versioning',
+      developed: true,
     },
     {
       title: 'Rollback and forward',
-      description:
-        'Zephyr provides rollback and forward features for your application.',
-      href: '/features/rollback-forward',
+      description: 'Rollback and forward your application.',
+      href: '/guide/usage/rollback-forward',
+      developed: false,
     },
     {
       title: 'Sub-second deploy',
-      description: 'Zephyr provides sub-second deploy for your application.',
-      href: '/features/sub-second-deploy',
+      description:
+        'Deploy production and preview version of your application in sub-seconds.',
+      href: '/guide/usage/sub-second-deploy',
+      developed: true,
     },
     {
       title: 'Long-lived preview links',
       description:
-        'Zephyr provides long-lived preview links for your application.',
-      href: '/features/long-lived-preview-links',
+        'Every versions that ever deployed will be live forever unless you delete the deployment.',
+      href: '/guide/usage/long-live-preview',
+      developed: true,
     },
     {
       title: 'Dependency management',
       description:
-        'Zephyr provides dependency management for your application.',
-      href: '/features/dependency-management',
+        'Monitor and visualize your dependency of your application - be it remote modules within a app utilizing module federation, or npm packages.',
+      href: '/guide/usage/dependency-management',
+      developed: true,
     },
   ] as CardItemProps[],
 
@@ -110,12 +140,12 @@ export const SiteConfig: CardProps = {
     //   variant: "small",
     //   icons: [<ReactIcon />, <NxIcon />, <ViteIcon />],
     // },
-    // {
-    //     title: "React + Rspack + Nx",
-    //     description: "Use Zephyr with React, Nx and Rspack.",
-    //     href: "/recipes/react-nx-rspack",
-    //     variant: "small"
-    // },
+    {
+      title: 'React + Rspack + Nx',
+      description: 'Use Zephyr with React, Nx and Rspack.',
+      href: '/recipes/react-nx-rspack',
+      variant: 'small',
+    },
     {
       title: 'Migrate from vanilla module federation',
       description: 'Migrate from vanilla module federation to Zephyr.',

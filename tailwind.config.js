@@ -59,13 +59,27 @@ module.exports = {
 
         // FIXME: this is not work yet not sure why
         background: {
-          DEFAULT: "hex(var(--rp-c-bg)/<alpha-value>)",
+          DEFAULT: "hsl(var(--rp-c-bg)/<alpha-value>)",
           dark: "#1a1a1a",
         },
-        "soft-background": {
-          DEFAULT: "#f9f9f9",
+        "background-soft": "hsl(var(--rp-c-bg-soft)/<alpha-value>)",
+        "background-muted": "hsl(var(--rp-c-bg-mute)/<alpha-value>)",
+        "divider": "hsl(var(--rp-c-divider)/<alpha-value>)",
+        "divider-light": "hsl(var(--rp-c-divider-light)/<alpha-value>)",
+        "text_1": "hsl(var(--rp-c-text-1)/<alpha-value>)",
+        "text_2": "hsl(var(--rp-c-text-2)/<alpha-value>)",
+        "text_3": "hsl(var(--rp-c-text-3)/<alpha-value>)",
+        "text_4": "hsl(var(--rp-c-text-4)/<alpha-value>)",
+        "text_code": "hsl(var(--rp-c-text-code)/<alpha-value>)",
+        "brand": "hsl(var(--rp-c-brand)/<alpha-value>)",
+        "brand-light": "hsl(var(--rp-c-brand-light)/<alpha-value>)",
+        "brand-lighter": "hsl(var(--rp-c-brand-lighter)/<alpha-value>)",
+        "brand-dark": "hsl(var(--rp-c-brand-dark)/<alpha-value>)",
+        "brand-darker": "hsl(var(--rp-c-brand-darker)/<alpha-value>)",
+        "brand-tint": "hsl(var(--rp-c-brand-tint)/<alpha-value>)",
+        "gray-light-1": "hsl(var(--rp-c-gray-light-1)/<alpha-value>)",
+        "gray-light-2": "hsl(var(--rp-c-gray-light-2)/<alpha-value>)"
 
-        }
       }
     },
   },
