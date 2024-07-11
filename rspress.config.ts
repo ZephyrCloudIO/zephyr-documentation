@@ -13,6 +13,9 @@ export default defineConfig({
   },
 
   globalStyles: path.join(__dirname, 'styles/index.css'),
+  mediumZoom: {
+    selector: '.rspress-doc img',
+  },
 
   themeConfig: {
     darkMode: true,
