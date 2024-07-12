@@ -26,7 +26,9 @@ We will talk about bundlers in this article to clear some confusions, answer the
 
 > Silence is a virtue
 
-For all the plugins we've built to support a framework for deployment, we follow a similar pattern: starting with gathering your application's details and entering a series of lifecycle events after initiating Zephyr Agent. Zephyr agent works on the bundler level, rather than a framework level, hence achieving _framework agnostic_ deployment is a much faster process when it comes to a bundler we are already supporting. You can see a list of currently supported [frameworks](/guide/supported#framework), [bundlers](/guide/supported#bundlers) and [what's under development](/guide/supported)
+For all the plugins we've built to support a framework for deployment, we follow a similar pattern: starting with gathering your application's details and entering a series of lifecycle events after initiating Zephyr Agent. 
+
+Zephyr agent works on the bundler level, rather than a framework level, hence achieving _framework agnostic_ deployment is a much faster process when it comes to a bundler we are already supporting. You can see a list of currently supported [frameworks](/guide/supported#framework), [bundlers](/guide/supported#bundlers) and [what's under development](/guide/supported)
 
 
 ![How Zephyr works](https://cdn.builder.io/api/v1/image/assets%2Fea8c8e416fd64171bc2ef9ac5ac226e6%2F7187039658714abd98089fec29739932)
@@ -52,17 +54,24 @@ After bundlers finish building, we will be able to understand different asset ty
 
 :::info{title="Why asset map is needed?"}
 
-Different bundlers has different methods in understanding file content to either use loaders or minify code further on.
+Different bundlers has different methods in understanding file content to either use loaders or minify code later on.
 
 Take Webpack as an examples, several source types will be detected in the overall build output and determine whether it needs to be cached for faster access, or it needs to be processed as raw source. 
 :::
 
-When you are building your application for the first time, we will hash your assets and save both the hash and assets once the asset map is constructed and mapped. After your first build, whenever you are building again we will be comparing your assets against what's previous build and update the hash results for a blazing fast deployment result.
+When you are building your application for the first time, we will hash your assets and save both the hash and assets once the asset map is constructed and mapped. After your first build, whenever you are building again we will be comparing your assets against what's previous build and  **only** update the hash results to create a snapshot of your application. 
 
 
 ### Deploying
 
-Whether you are deploying to our managed cloud, or on your own cloud, Zephyr will employ a series of capability providers to facilitate deployment, usually in the form of AWS Lambda function, or Cloudflare workers. 
+Whether you are deploying to our managed cloud, or on your own cloud, Zephyr will employ a series of capability providers to facilitate deployment, typically in the form of AWS Lambda function, or Cloudflare workers. 
 
-These capability providers will be deployed, and updated in our managed cloud as well as in your cloud. 
+These capability providers will be deployed, and updated in our managed cloud as well as in your cloud. They will analyze the file types, hashed assets and then further on handling the deployment. 
+
+The assets will be updated and deployed to the cloud's storage. 
+
+*Different cloud provider's implementation specific varies. 
+
+
+
 

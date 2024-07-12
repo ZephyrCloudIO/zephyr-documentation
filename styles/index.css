@@ -50,7 +50,7 @@
 }
 
 .dark {
-  --rp-c-bg: #23272f;
+  --rp-c-bg: #010101;
   --rp-c-bg-soft: #2f2f2f;
   --rp-c-bg-mute: #3a3a3a;
   --rp-c-bg-alt: #000;
@@ -88,7 +88,7 @@ html {
 
 .glow {
   animation: move 5s linear infinite;
-  background: radial-gradient(#67e8f9, #115e59, transparent);
+  background: radial-gradient(#6D9D9D, #FFFFFF, transparent);
   offset-path: rect(0% auto 100% auto);
 }
 

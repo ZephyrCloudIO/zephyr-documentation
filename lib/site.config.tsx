@@ -278,4 +278,76 @@ export const supportedBrowser = [
     icon: '',
     supported: false,
   },
+  {
+    name: 'Brave',
+    icon: '',
+    supported: false,
+  }
 ];
+
+
+export const supportedFramework = [
+  {
+    name: "React",
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Angular v15',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Qwik',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Solid.js',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Astro',
+    icon: '',
+    supported: 'backlog'
+  },
+  {
+    name: 'Remix',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Svelte',
+    icon: '',
+    supported: 'backlog',
+  }
+]
+
+export const supportedBundler = [
+  {
+    name: 'Rspack',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Webpack',
+    icon: '',
+    suppoorted: 'prod',
+  },
+  {
+    name: 'Vite',
+    icon: '',
+    supported: 'prod'
+  },
+  {
+    name: 'Rollup',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Esbuild',
+    icon: '',
+    supported: 'backlog'
+  }
+]
