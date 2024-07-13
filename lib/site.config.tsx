@@ -282,13 +282,12 @@ export const supportedBrowser = [
     name: 'Brave',
     icon: '',
     supported: false,
-  }
+  },
 ];
-
 
 export const supportedFramework = [
   {
-    name: "React",
+    name: 'React',
     icon: '',
     supported: 'prod',
   },
@@ -310,7 +309,7 @@ export const supportedFramework = [
   {
     name: 'Astro',
     icon: '',
-    supported: 'backlog'
+    supported: 'backlog',
   },
   {
     name: 'Remix',
@@ -321,8 +320,8 @@ export const supportedFramework = [
     name: 'Svelte',
     icon: '',
     supported: 'backlog',
-  }
-]
+  },
+];
 
 export const supportedBundler = [
   {
@@ -333,21 +332,21 @@ export const supportedBundler = [
   {
     name: 'Webpack',
     icon: '',
-    suppoorted: 'prod',
+    supported: 'prod',
   },
   {
     name: 'Vite',
     icon: '',
-    supported: 'prod'
+    supported: 'prod',
   },
   {
     name: 'Rollup',
     icon: '',
-    supported: 'backlog',
+    supported: 'prod',
   },
   {
     name: 'Esbuild',
     icon: '',
-    supported: 'backlog'
-  }
-]
+    supported: 'backlog',
+  },
+];

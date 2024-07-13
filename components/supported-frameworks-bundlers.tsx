@@ -11,16 +11,25 @@ import {
 import { CheckCircledIcon, CrossCircledIcon } from '@radix-ui/react-icons';
 import { HammerIcon } from './icons/hammer';
 
-export function Supported({ items }: { items: typeof supportedFramework | typeof supportedBundler }) {
+export function Supported({
+  items,
+}: {
+  items: typeof supportedFramework | typeof supportedBundler;
+}) {
   return (
     <div className="px-10 py-4">
       <Table>
         <TableCaption className="text-start">
-          <div className="flex gap-4">
-            <span><CheckCircledIcon className='text-emerald-500' />: Currently supported</span>
-            <span><HammerIcon className='text-red-500' />: Under development</span>
+          <div className="flex gap-4 items-center">
+            <span className="inline-flex items-center gap-2">
+              <CheckCircledIcon className="text-emerald-500 h-3 w-3" />
+              <p className="text-xs">Currently supported</p>
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <HammerIcon className="text-red-500 h-3 w-3" />
+              <p className="text-xs">Under development</p>
+            </span>
           </div>
-
         </TableCaption>
         <TableHeader>
           <TableRow>
@@ -34,9 +43,9 @@ export function Supported({ items }: { items: typeof supportedFramework | typeof
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell className="text-right items-center flex justify-center">
                 {item.supported === 'prod' ? (
-                  <CheckCircledIcon className="text-emerald-500" />
+                  <CheckCircledIcon className="text-emerald-500 h-4 w-4" />
                 ) : (
-                  <HammerIcon className="text-red-500" />
+                  <HammerIcon className="text-red-500 h-4 w-4" />
                 )}
               </TableCell>
             </TableRow>
@@ -48,13 +57,9 @@ export function Supported({ items }: { items: typeof supportedFramework | typeof
 }
 
 export const SupportedFramework = () => {
-  return (
-    <Supported items={supportedFramework} />
-  )
-}
+  return <Supported items={supportedFramework} />;
+};
 
 export const SupportedBundler = () => {
-  return (
-    <Supported items={supportedBundler} />
-  )
-}
+  return <Supported items={supportedBundler} />;
+};
