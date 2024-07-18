@@ -2,5 +2,9 @@
   {
     "text": "Dashboard",
     "link": "https://app.zephyr-cloud.io"
+  },
+  {
+    "text": "Examples",
+    "link": "https://github.com/ZephyrCloudIO/zephyr-examples"
   }
 ]

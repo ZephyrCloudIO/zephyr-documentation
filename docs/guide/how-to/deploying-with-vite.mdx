@@ -1,0 +1,39 @@
+import { Tabs, Tab, Steps, PackageManagerTabs } from '@theme';
+
+# Deploying with Vite
+You can deploy an existing Vite-bundled application to Zephyr Cloud.
+Support for Vite is facilitated via the `vite-plugin-zephyr` package.
+
+---
+
+<Steps>
+### Install the Vite plugin
+<PackageManagerTabs command="install vite-plugin-zephyr --save" />
+
+### Add the plugin to your Vite configuration
+Add the following import to your Vite configuration.
+
+<Tabs values={[{label: 'ES6 Import'}, {label: 'CommonJS Require'}]}>
+    <Tab>
+    ```js filename="vite.config.js"
+    import { withZephyr } from 'vite-plugin-zephyr';
+    ```
+    </Tab>
+    <Tab>
+    ```js filename="vite.config.js"
+    const { withZephyr } = require('vite-plugin-zephyr');
+    ```
+    </Tab>
+</Tabs>
+
+Call `withZephyr()` as the last plugin in your Vite configuration's `plugins` array.
+
+```js
+export default defineConfig({
+    plugins: [
+        ...
+        withZephyr()
+    ]
+});
+```
+</Steps>

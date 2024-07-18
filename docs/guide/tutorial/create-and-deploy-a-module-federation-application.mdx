@@ -1,0 +1,289 @@
+import { Steps, Button, PackageManagerTabs, SourceCode } from "@theme";
+import { Keyboard } from "../../../components/ui/keyboard"
+
+# Create and deploy a Module Federation application
+In this tutorial, we'll create a React application with Module Federation enabled, and deploy it to Zephyr Cloud.
+
+Before we start this tutorial, ensure that you have:
+
+*   A working installation of Node.js and npm.
+*   A working installation of pnpm.
+*   A GitHub account and a working Git installation.
+*   A working installation of Google Chrome.
+
+---
+
+<Steps>
+### Sign up for a Zephyr Cloud account
+
+<div class="rspress-directive note">
+    <div class="rspress-directive-title">NOTE</div>
+    <div class="rspress-directive-content">
+        <p>If you already have a Zephyr Cloud account, you can skip this step and continue with <strong><a href="#create-a-boilerplate-react-application-with-module-federation">Create a boilerplate React application with Module Federation</a></strong>.</p>
+    </div>
+</div>
+
+Before we create and deploy our application, we need to create a Zephyr Cloud account.
+
+<Button
+    text="Open the Zephyr Cloud Dashboard"
+    href="https://app.zephyr-cloud.io"
+    size="medium"
+    external="true"
+/>
+
+![A screenshot of the Zephyr Cloud Dashboard login page.](../../public/sign-up-screen.png)
+
+We can choose to create a Zephyr Cloud account by authenticating with Google, GitHub, or by email.
+To sign up using your email address, click **Sign up** and follow the instructions.
+
+### Create a boilerplate React application with Module Federation
+We'll use a generator utility to create a boilerplate React application with Module Federation enabled.
+
+Run this command to enter an interactive application
+
+```shell
+npx create-mf-app
+```
+
+If you're prompted to download any dependencies, Type "y" and press <Keyboard shortcuts="Enter"/>.
+Once the dependencies of `create-mf-app` are installed, npm will run the generator utility.
+
+The first piece of information we're prompted for is the application name.
+Enter `zephyr-cloud-mf-example` and press <Keyboard shortcuts="Enter"/>.
+
+```console
+? Pick the name of your app: zephyr-cloud-mf-example
+```
+
+Next, we need to choose our project template.
+Select **Application** and press <Keyboard shortcuts="Enter"/>.
+
+```console
+? Project Type: (Use arrow keys)
+❯ Application 
+  API Server 
+  Library 
+```
+
+Next, we're asked which port our application should listen on.
+Leave this value as the default by pressing <Keyboard shortcuts="Enter"/>.
+
+```console
+? Port number: (8080)
+```
+
+When asked for the framework, select **react** and press <Keyboard shortcuts="Enter"/>.
+
+```console
+? Framework: (Use arrow keys)
+  lit-html 
+  preact 
+❯ react 
+  react-esm 
+  solid-js 
+  svelte 
+  vanilla 
+```
+
+Next, we're asked to pick either JavaScript or TypeScript as the language for our application.
+Select **typescript** and press <Keyboard shortcuts="Enter"/>.
+
+```console
+? Language: (Use arrow keys)
+❯ typescript 
+  javascript 
+```
+
+Next, we're asked to pick between vanilla CSS or Tailwind as the means of styling our application.
+Select **CSS** and press <Keyboard shortcuts="Enter"/>.
+
+```console
+? CSS: (Use arrow keys)
+❯ CSS 
+  Tailwind 
+```
+
+Finally, we're asked to pick a bundler.
+Select **Rspack** and press <Keyboard shortcuts="Enter"/>.
+
+```console
+? Bundler: (Use arrow keys)
+  Webpack 
+❯ Rspack
+```
+
+Let's change directory to our new React application and pull it's dependencies from npm.
+
+```shell
+cd zephyr-cloud-mf-example && pnpm install
+```
+
+### Run a test build
+Finally, let's verify that our application runs locally.
+
+```shell
+pnpm start
+```
+
+After running the command, we'll see this line printed to our terminal.
+Open the URL to view our application.
+
+```console
+  Local:  http://localhost:8080
+```
+
+After visiting the URL in our web browser, we'll see the following page:
+
+![](../..//public/mf-first-run.png)
+
+After verifying that our application runs, switch back to our terminal and press <Keyboard shortcuts={["Ctrl", "C"]}/> to stop the server.
+
+### Install the Zephyr Cloud bundler plugin
+Zephyr Cloud deployment happens as part of our application's bundling process.
+As we're using Rspack in this tutorial, we can leverage the Zephyr Cloud Webpack plugin.
+
+Let's install the plugin and save it to our application's dependencies.
+
+```shell
+pnpm install zephyr-webpack-plugin --save
+```
+
+The next step is to add the Zephyr Cloud Webpack plugin to the end of Webpack's plugin chain.
+Let's start by importing the Webpack plugin in our application's `rspack.config.mjs`:
+
+```js filename="rspack.config.js"
+const rspack = require('@rspack/core')
+const refreshPlugin = require('@rspack/plugin-react-refresh')
+const isDev = process.env.NODE_ENV === 'development'
+const path = require('path');
+const { withZephyr } = require("zephyr-webpack-plugin"); // added
+```
+
+Lastly, let's add a call to `withZephyr()` to `rspack.config.mjs`.
+The default export should look like this, with the pre-existing Rspack configuration object passed through.
+
+```js filename="rspack.config.js"
+module.exports = withZephyr()({
+    context: __dirname,
+    entry: {
+        main: "./src/index.js"
+    },
+    // Remaining Rspack configuration
+});
+```
+
+### Push the application to a new GitHub repository
+Zephyr Cloud requires our application to have a Git repository.
+The platform uses Git metadata to identify our application and it's associated deployments.
+
+<Button
+    text="Create a GitHub repository"
+    href="https://github.com/new?name=zephyr-cloud-mf-example"
+    size="medium"
+    external="true"
+/>
+
+After creating the repository, we need to initialize a Git repository locally and push our application.
+
+```shell
+git init
+```
+
+After it's initialized, let's add all of our application's files to the repository and commit them to our local `main` branch.
+
+```shell
+git add . &&
+git commit -m "Initial commit" &&
+git branch -M main
+```
+
+Finally, let's add our GitHub repository as a remote and push our application.
+Replace `USERNAME` with your GitHub username.
+
+```shell
+git remote add origin git@github.com:USERNAME/zephyr-cloud-mf-example.git &&
+git push -u origin main
+```
+
+### Run the development server
+Let's run our development server again and observe what happens.
+
+```shell
+npm run build --watch
+```
+
+Our web browser will open with a Zephyr Cloud authorization page.
+Once authorized, switch back to our terminal.
+Notice that in addition to the local URLs we saw when we ran this command previously, there's additional output relating to Zephyr Cloud.
+
+The first line shows that a local snapshot of our application was successfully uploaded to Zephyr Cloud.
+
+```console
+[zephyr]: [zephyr-cloud-mf-example.zephyr-cloud-mf-example.GIT_USERNAME](ZC_USERNAME)[9]: uploaded local snapshot in 227ms
+```
+
+Later in the output, we'll notice four URLs are printed to the terminal.
+If we visit one of these URLs, we can see our build deployed live.
+
+Keep the development server running for the next step.
+
+### Modify and redeploy the application
+Now that we have a first build of our application deployed to Zephyr Cloud, let's see what happens when we modify our code.
+
+Locate the following line in `./src/App.tsx`.
+
+```tsx title="./src/App.tsx"
+<div className="container">
+```
+
+Let's add a heading after this line.
+
+```tsx title="./src/App.tsx"
+<h1>Hello, Zephyr Cloud!</h1>
+```
+
+Switch back to our terminal to check the output from the development server.
+We'll see that the server picked up on the changes, rebuilt our application, and deployed a new snapshot to Zephyr Cloud.
+
+When we visit a URL output by the Zephyr Cloud bundler plugin, we can observe that the heading changed as expected.
+
+### Explore deployments with Zephyr Mission Control
+Now that we've deployed our application twice to Zephyr Cloud, let's explore our deployments via the Zephyr Mission Control browser extension.
+
+Open a new tab in Google Chrome and open the [Zephyr Mission Control extension][extension] on the Chrome Web Store.
+Click the **Add to Chrome** button, and click **Add extension** when prompted.
+
+Click the **Extensions** button to the right of the address bar.
+In the dialog presented, click the Pin button next to Zephyr Mission Control.
+
+For the first run, we need to right click the Zephyr Mission Control button to the right of the address bar.
+In the context menu, click the **Open side panel** button.
+We'll see a new side panel containing a Login button.
+Click the button and authenticate with our Zephyr Cloud account.
+
+In the side panel, click the Applicatins dropdown and select `zephyr-cloud-mf-example`.
+Notice that the latest version of our deployment is automatically loaded in the current tab.
+
+In the side panel, let's try toggling between versions.
+Click the Versions dropdown menu and select a previous version of our application.
+
+We'll see that the deployment shown in the browser is reflective of the version we chose in the side panel.
+
+</Steps>
+
+Now that we have a better understanding of how the Zephyr Cloud platform works, we can start deploying other applications.
+To learn how to integrate Zephyr Cloud with your existing Module Federation applications, read:
+
+*   [Deploying with Rspack][howto-rspack]
+*   [Deploying with Webpack][howto-webpack]
+
+For more information about the browser extension, see:
+
+*   [Using the browser extension][howto-extension]
+
+[rspack]: https://www.rspack.dev/
+[extension]: https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn
+[howto-rspack]: /guide/how-to/deploying-with-rspack
+[howto-webpack]: /guide/how-to/deploying-with-webpack
+[howto-extension]: /guide/how-to/using-the-browser-extension

@@ -1,0 +1,53 @@
+# The deployment process
+Deployment begins via one of Zephyr Cloud's bundler plugins.
+When added to your bundler's plugin list, the plugin deploys your bundled applicatioon to a remote Zephyr Cloud instance.
+
+## Deployment lifecycle
+The deployment lifecycle can be split into three stages:
+
+*   [Initial bundling](#initial-bundling)
+*   [Fact gathering](#fact-gathering)
+*   [Snapshot upload and tagging](#snapshot-upload-and-tagging)
+
+### Initial bundling
+The application is bundled according to your bundler's configuration.
+The Zephyr Cloud bundler plugin runs as the last step in the bundling process, initiating the next stage of the process.
+
+### Fact gathering
+The bundler plugin first attempts to gather facts about the application.
+Deployments are identified by metadata relating to the application, including:
+
+*   Details extracted to the Git repository's `origin` remote URL:
+    *   The username/organization
+    *   The repository name
+*   The current Git branch
+*   [Whether the application has Module Federation enabled](#module-federation-and-micro-frontends)
+
+Once the details have been gathered, the plugin establishes a connection to the remote Zephyr Cloud instance.
+If not already authenticated, the plugin opens a browser window to authenticate.
+Otherwise, the plugin uses previously stored credentials located in `~/.zephyr` to authenticate.
+
+### Snapshot upload and tagging
+The snapshot created by the bundler is sent to Zephyr Cloud's API alongside the facts gathered in the previous stage.
+Zephyr Cloud's API stores the snapshot, updates cached assets, tags the deployment, and returns URLs where the deployment can be accessed.
+
+## Module Federation and micro frontends
+As part of the [fact gathering process](#fact-gathering), Zephyr Cloud detects if the application is a micro frontend before deploying it.
+
+When Module Federation is detected, Zephyr Cloud maps the relationships between providers and consumers in your application.
+Each component is deployed appropriately.
+
+## Tagging format
+Deployments are tagged using a combination of metadata obtained in the [fact gathering process](#fact-gathering).
+The tag format depends on whether a deployment is being made locally or via a CI/CD pipeline.
+
+When a local build triggers a deployment, Zephyr Cloud generates a tag based on the current branch and username.
+
+When a CI/CD pipeline triggers a deployment, Zephyr Cloud uses the following logic to determine the tag:
+
+*   If the branch is `main` or `master`, the deployment is tagged `latest`.
+*   If the branch is `development`, the deployment is tagged `next`.
+*   For all other branches, the tag is identical to the branch name.
+
+
+[semver]: https://semver.org

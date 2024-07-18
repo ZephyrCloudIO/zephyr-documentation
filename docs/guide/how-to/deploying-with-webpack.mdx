@@ -1,0 +1,73 @@
+import { Tabs, Tab, Steps, PackageManagerTabs } from '@theme';
+
+# Deploying with Webpack
+You can deploy an existing Webpack-bundled application to Zephyr Cloud.
+Support for Webpack is facilitated via the `zephyr-webpack-plugin` package.
+
+---
+
+<Steps>
+### Install the Webpack plugin
+<PackageManagerTabs command="install zephyr-webpack-plugin --save" />
+
+### Add the plugin to your Webpack configuration
+Add the following import to your Webpack configuration.
+
+<Tabs values={[{label: 'ES6 Module'}, {label: 'CommonJS'}]}>
+    <Tab>
+    ```js filename="webpack.config.mjs"
+    import { withZephyr } from 'zephyr-webpack-plugin';
+    ```
+    </Tab>
+    <Tab>
+    ```js filename="webpack.config.js"
+    const { withZephyr } = require('zephyr-webpack-plugin');
+    ```
+    </Tab>
+</Tabs>
+
+Export a valid Webpack configuration from `webpack.config.js` wrapped in a call to a function returned by `withZephyr()`.
+
+<Tabs values={[{label: 'ES6 Module'}, {label: 'CommonJS'}]}>
+<Tab>
+```js filename="webpack.config.mjs"
+export default withZephyr()({
+    // Webpack configuration here
+});
+```
+</Tab>
+<Tab>
+```js filename="webpack.config.js"
+module.exports = withZephyr()({
+    // Webpack configuration here
+});
+```
+</Tab>
+</Tabs>
+</Steps>
+
+When you next run Webpack, a snapshot of your application is deployed to Zephyr Cloud.
+
+## Using Webpack with Nx Composable Plugins
+If your project uses Webpack via Nx's Composable Plugins feature, you can enable Zephyr Cloud by adding a call to `withZephyr()` as the last argument to `composePlugins()`.
+
+<Tabs values={[{label: 'ES6 Module'}, {label: 'CommonJS'}]}>
+<Tab>
+```js filename="webpack.config.mjs"
+export default composePlugins(
+    withNx(),
+    // Additional Webpack plugins
+    withZephyr()
+);
+```
+</Tab>
+<Tab>
+```js filename="webpack.config.js"
+module.exports = composePlugins(
+    withNx(),
+    // Additional Webpack plugins
+    withZephyr()
+);
+```
+</Tab>
+</Tabs>

@@ -1,0 +1,10 @@
+[
+    "deploying-with-rspack",
+    "deploying-with-webpack",
+    "deploying-with-vite",
+    { "type": "divider" },
+    "using-the-browser-extension",
+    { "type": "divider" },
+    "managing-your-account",
+    "managing-organizations"
+]

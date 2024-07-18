@@ -1,0 +1,32 @@
+# Zephyr Cloud overview
+Zephyr Cloud is a cloud-based deployment platform for JavaScript/TypeScript frontend applications.
+Unlike traditional deployment platforms, Zephyr Cloud integrates directly with your application's bundler.
+This architecture allows for fast deployment of applications from your CI/CD or local machine.
+
+## Fast and flexible deployment
+Zephyr Cloud deploys a snapshot of your application as the last stage of the bundling process.
+You can deploy to Zephyr Cloud as part of your application's CI/CD pipeline or from your local machine—depending on the size of your application, Zephyr Cloud can deploy a new version in less than one second.
+
+Deployments can be managed via the [Zephyr Cloud Dashboard][dashboard] or the [Zephyr Mission Control][howto-zc-browser] browser extension.
+
+## Enterprise-grade management tools
+Zephyr Cloud provides a dashboard to manage applications and deployments across your organization.
+Teams allow fine-grained control over access to individual applications and configuration.
+
+## Framework neutral
+Applications written in any frontend framework can be deployed to Zephyr Cloud.
+Deployment happens at the bundler-level, integrating as an additional plugin in your bundler's configuration.
+
+## Module Federation compatibile
+Zephyr Cloud supports Module Federation out of the box when using [Rspack][howto-rspack] or [Webpack][howto-webpack].
+You can deploy complex micro frontend projects and monorepos to Zephyr Cloud without special configuration.
+
+## Easy bundler integration
+Zephyr Cloud has first-class support for applications bundled using [Rspack][howto-rspack], [Webpack][howto-webpack], and [Vite][howto-vite].
+Monorepo projects managed with Nx can be deployed with a bundler supported by Zephyr Cloud.
+
+[howto-rspack]: /guide/how-to/deploying-with-rspack
+[howto-webpack]: /guide/how-to/deploying-with-webpack
+[howto-vite]: /guide/how-to/deploying-with-vite
+[dashboard]: https://app.zephyr-cloud.io
+[howto-zc-browser]: /guide/how-to/using-the-browser-extension

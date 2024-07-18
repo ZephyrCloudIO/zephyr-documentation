@@ -1,32 +1,33 @@
 [
   {
     "type": "dir",
-    "name": "general",
-    "label": "General",
-    "collapsible": true,
-    "collapsed": false
-  },
-  {
-    "type": "dir",
-    "name": "usage",
-    "label": "Features",
+    "name": "explanation",
+    "label": "Explanation",
     "collapsible": false,
     "collapsed": false
   },
+  { "type": "divider" },
   {
     "type": "dir",
-    "name": "recipes",
-    "label": "Recipes",
+    "name": "tutorial",
+    "label": "Tutorial",
     "collapsible": false,
     "collapsed": false
   },
+  { "type": "divider" },
+  {
+    "type": "dir",
+    "name": "how-to",
+    "label": "How-to",
+    "collapsible": false,
+    "collapsed": false
+  },
+  { "type": "divider" },
   {
     "type": "dir",
     "name": "error",
-    "label": "Trouble Shooting",
+    "label": "Error Reference",
     "collapsible": true,
-    "collapsed": "true"
-  },
-  "resources",
-  "supported"
+    "collapsed": true
+  }
 ]
