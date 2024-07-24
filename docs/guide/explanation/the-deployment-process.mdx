@@ -1,20 +1,21 @@
 # The deployment process
-Deployment begins via one of Zephyr Cloud's bundler plugins.
-When added to your bundler's plugin list, the plugin deploys your bundled application to a remote Zephyr Cloud instance.
+Zephyr Cloud's bundler plugins handle the deployment process.
+The plugin's only responsibility is to deploy your application to a remote Zephyr Cloud instance;
+further modifications are not made to code or assets.
 
 ## Deployment lifecycle
 The deployment lifecycle can be split into three stages:
 
 *   [Initial bundling](#initial-bundling)
-*   [Fact gathering](#fact-gathering)
+*   [Environment assessment](#environment-assessment)
 *   [Snapshot upload and tagging](#snapshot-upload-and-tagging)
 
 ### Initial bundling
 The application is bundled according to your bundler's configuration.
-The Zephyr Cloud bundler plugin runs as the last step in the bundling process, initiating the next stage of the process.
+The Zephyr Cloud bundler plugin runs as the last step in the bundling process, initiating the [environment assessment](#environment-assessment) phase.
 
 ### Environment assessment
-The bundler plugin first attempts to assess the application and gather facts.
+The bundler plugin first attempts to assess the application's environment and gather facts.
 Deployments are identified by metadata relating to the application, including:
 
 *   Details extracted to the Git repository's `origin` remote URL:
@@ -25,20 +26,19 @@ Deployments are identified by metadata relating to the application, including:
 
 Once the details have been gathered, the plugin establishes a connection to the remote Zephyr Cloud instance.
 If not already authenticated, the plugin opens a browser window to authenticate.
-Otherwise, the plugin uses previously stored credentials located in `~/.zephyr` to authenticate.
 
 ### Snapshot upload and tagging
 The snapshot created by the bundler is sent to Zephyr Cloud's API alongside the facts gathered in the previous stage.
 Zephyr Cloud's API stores the snapshot, updates cached assets, tags the deployment, and returns URLs where the deployment can be accessed.
 
 ## Module Federation and micro frontends
-As part of the [fact gathering process](#fact-gathering), Zephyr Cloud detects if the application is a micro frontend before deploying it.
+As part of the [environment assessment process](#environment-assessment), Zephyr Cloud detects if the application is a micro frontend before deploying it.
 
 When Module Federation is detected, Zephyr Cloud maps the relationships between providers and consumers in your application.
 Each component is deployed appropriately.
 
 ## Tagging format
-Deployments are tagged using a combination of metadata obtained in the [fact gathering process](#fact-gathering).
+Deployments are tagged using a combination of metadata obtained in the [environment assessment process](#environment-assessment).
 The tag format depends on whether a deployment is being made locally or via a CI/CD pipeline.
 
 When a local build triggers a deployment, Zephyr Cloud generates a tag based on the current branch and username.
@@ -47,7 +47,5 @@ When a CI/CD pipeline triggers a deployment, Zephyr Cloud uses the following log
 
 *   If the branch is `main` or `master`, the deployment is tagged `latest`.
 *   If the branch is `development`, the deployment is tagged `next`.
-*   For all other branches, the tag is identical to the branch name.
-
 
 [semver]: https://semver.org
