@@ -38,7 +38,7 @@ We can choose to create a Zephyr Cloud account by authenticating with Google, Gi
 To sign up using your email address, click **Sign up** and follow the instructions.
 
 ### Create a boilerplate React application
-Rspack is a Webpack-compatible bundler supported by Zephyr Cloud.
+Rspack is a webpack-compatible bundler supported by Zephyr Cloud.
 We'll use.
 
 ```shell
@@ -93,7 +93,7 @@ After verifying that our application runs, switch back to our terminal and press
 
 ### Install the Zephyr Cloud bundler plugin
 Zephyr Cloud deployment happens as part of our application's bundling process.
-As we're using Rspack in this tutorial, we can leverage the Zephyr Cloud Webpack plugin.
+As we're using Rspack in this tutorial, we can leverage the Zephyr Cloud webpack plugin.
 
 Let's install the plugin and save it to our application's dependencies.
 
@@ -101,8 +101,8 @@ Let's install the plugin and save it to our application's dependencies.
 pnpm install zephyr-webpack-plugin --save
 ```
 
-The next step is to add the Zephyr Cloud Webpack plugin to the end of Webpack's plugin chain.
-Let's start by importing the Webpack plugin in our application's `rspack.config.mjs`:
+The next step is to add the Zephyr Cloud webpack plugin to the end of webpack's plugin chain.
+Let's start by importing the webpack plugin in our application's `rspack.config.mjs`:
 
 ```js filename="rspack.config.mjs"
 import { dirname } from "node:path";
@@ -160,6 +160,7 @@ git push -u origin main
 ```
 
 ### Run the development server
+Let's run our development server again and observe what happens.
 
 ```shell
 pnpm run dev
@@ -222,7 +223,7 @@ Now that we have a better understanding of how the Zephyr Cloud platform works, 
 To learn how to integrate Zephyr Cloud with your existing applications, read:
 
 *   [Deploying with Rspack][howto-rspack]
-*   [Deploying with Webpack][howto-webpack]
+*   [Deploying with webpack][howto-webpack]
 *   [Deploying with Vite][howto-vite]
 
 For more information about the browser extension, see:

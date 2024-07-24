@@ -1,17 +1,17 @@
 import { Tabs, Tab, Steps, PackageManagerTabs } from '@theme';
 
-# Deploying with Webpack
-You can deploy an existing Webpack-bundled application to Zephyr Cloud.
-Support for Webpack is facilitated via the `zephyr-webpack-plugin` package.
+# Deploying with webpack
+You can deploy an existing webpack-bundled application to Zephyr Cloud.
+Support for webpack is facilitated via the `zephyr-webpack-plugin` package.
 
 ---
 
 <Steps>
-### Install the Webpack plugin
+### Install the webpack plugin
 <PackageManagerTabs command="install zephyr-webpack-plugin --save" />
 
-### Add the plugin to your Webpack configuration
-Add the following import to your Webpack configuration.
+### Add the plugin to your webpack configuration
+Add the following import to your webpack configuration.
 
 <Tabs values={[{label: 'ES6 Module'}, {label: 'CommonJS'}]}>
     <Tab>
@@ -26,37 +26,37 @@ Add the following import to your Webpack configuration.
     </Tab>
 </Tabs>
 
-Export a valid Webpack configuration from `webpack.config.js` wrapped in a call to a function returned by `withZephyr()`.
+Export a valid webpack configuration from `webpack.config.js` wrapped in a call to a function returned by `withZephyr()`.
 
 <Tabs values={[{label: 'ES6 Module'}, {label: 'CommonJS'}]}>
 <Tab>
 ```js filename="webpack.config.mjs"
 export default withZephyr()({
-    // Webpack configuration here
+    // webpack configuration here
 });
 ```
 </Tab>
 <Tab>
 ```js filename="webpack.config.js"
 module.exports = withZephyr()({
-    // Webpack configuration here
+    // webpack configuration here
 });
 ```
 </Tab>
 </Tabs>
 </Steps>
 
-When you next run Webpack, a snapshot of your application is deployed to Zephyr Cloud.
+When you next run webpack, a snapshot of your application is deployed to Zephyr Cloud.
 
-## Using Webpack with Nx Composable Plugins
-If your project uses Webpack via Nx's Composable Plugins feature, you can enable Zephyr Cloud by adding a call to `withZephyr()` as the last argument to `composePlugins()`.
+## Using webpack with Nx Composable Plugins
+If your project uses webpack via Nx's Composable Plugins feature, you can enable Zephyr Cloud by adding a call to `withZephyr()` as the last argument to `composePlugins()`.
 
 <Tabs values={[{label: 'ES6 Module'}, {label: 'CommonJS'}]}>
 <Tab>
 ```js filename="webpack.config.mjs"
 export default composePlugins(
     withNx(),
-    // Additional Webpack plugins
+    // Additional webpack plugins
     withZephyr()
 );
 ```
@@ -65,7 +65,7 @@ export default composePlugins(
 ```js filename="webpack.config.js"
 module.exports = composePlugins(
     withNx(),
-    // Additional Webpack plugins
+    // Additional webpack plugins
     withZephyr()
 );
 ```
