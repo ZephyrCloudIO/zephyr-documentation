@@ -11,7 +11,6 @@ export const Footer = () => {
           >
             Discord Server
           </a>
-          .
         </p>
         <p>
           <a
@@ -21,7 +20,6 @@ export const Footer = () => {
           >
             Edit this page
           </a>
-          .
         </p>
         <p>
           <a
@@ -31,7 +29,6 @@ export const Footer = () => {
           >
             Email us
           </a>
-          .
         </p>
       </div>
 
