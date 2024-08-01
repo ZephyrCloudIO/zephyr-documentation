@@ -59,7 +59,7 @@
   --rp-c-divider-light: rgba(84, 84, 84, 0.48);
 
   --rp-c-text-1: rgba(255, 255, 255, 0.87);
-  --rp-c-text-2: rgba(235, 235, 235, 0.56);
+  --rp-c-text-2: rgba(235, 235, 235, 0.66);
   --rp-c-text-3: rgba(235, 235, 235, 0.38);
   --rp-c-text-4: rgba(235, 235, 235, 0.18);
 
@@ -84,6 +84,17 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+dt {
+  font-weight: bold;
+  color: var(--rp-c-text-1);
+}
+
+dd {
+  display: inline-block;
+  padding-left: 2em;
+  color: var(--rp-c-text-2);
 }
 
 .glow {
@@ -133,6 +144,7 @@ html {
       & h2 {
         @apply lg:text-lg text-base font-bold tracking-tight !my-0;
       }
+
       & p {
         @apply text-sm tracking-tight;
       }
@@ -144,32 +156,36 @@ html {
       @apply !py-4;
     }
   }
+
   sup {
     @apply text-xs text-[var(--rp-c-brand)];
   }
 
   #footer-copyright {
-    @apply container mx-auto  flex flex-col lg:gap-2 gap-1 pb-6 items-center justify-center;
+    @apply container mx-auto flex flex-col lg:gap-2 gap-1 pb-6 items-center justify-center;
+
     & p {
       @apply text-xs tracking-tight;
     }
 
     & a {
-      @apply underline decoration-[var(--rp-c-brand)] hover:brightness-125 hover:text-[var(--rp-c-brand)]  transition-all underline-offset-4 decoration-dashed;
+      @apply underline decoration-[var(--rp-c-brand)] hover:brightness-125 hover:text-[var(--rp-c-brand)] transition-all underline-offset-4 decoration-dashed;
     }
   }
 
   .h1 {
     @apply lg:text-4xl text-2xl text-center py-10 font-bold;
   }
+
   .h2 {
     @apply lg:text-3xl text-xl text-center py-4 lg:py-8 font-bold;
   }
+
   .h3 {
     @apply lg:text-2xl text-xl text-center py-6 font-semibold;
   }
 
   .link {
-    @apply underline decoration-[var(--rp-c-brand)] hover:brightness-125 hover:text-[var(--rp-c-brand)]  transition-all underline-offset-4 decoration-dashed;
+    @apply underline decoration-[var(--rp-c-brand)] hover:brightness-125 hover:text-[var(--rp-c-brand)] transition-all underline-offset-4 decoration-dashed;
   }
 }

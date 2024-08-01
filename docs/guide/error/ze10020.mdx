@@ -1,6 +1,6 @@
 ---
-title: ZE10020 - Failed to get application hash list
-description: Zephyr Error - ZE10020 - Workaround and debug error "failed to get application hash list\"
+title: ZE10020 - Could not initlialize Zephyr Agent
+description: Zephyr Error - ZE10020 - Workaround and debug error "Could not initlialize Zephyr Agent"
 # head: 
 #   - - meta
 #     - name: og:title
@@ -10,32 +10,83 @@ description: Zephyr Error - ZE10020 - Workaround and debug error "failed to get 
 #       content: https://docs.zephyr-cloud.io/guide/error/ze10020
 ---
 
-# Failed to get application hash list
+# Could not initialize Zephyr Agent
 
 - Error Code: `ZE10020`
 
 - Location: Terminal
 
-- Related plugins: all
+- Related plugins: Rollup
 
- 
+On your build start, there are a list of actions we run through. If any of these actions failed, Zephyr agent will fail to initialize in the Rollup plugin.
 
-Whenever we are deploying your application, we save a hash of your application to your local cache, while also comparing your application's current hashed asset to previous build and updating your deployment based on the differences in Key-Value namespaces. 
+<dt>1. Understanding environment</dt>
+<dd>Git info, package.json's information.</dd>
+<dt>2. Application configuration</dt>
+<dd>Application configuration including your remote modules, build id and assets.</dd>
 
-If your `application_ui` or `build_id` in your local configuration doesn't align with previous build, or you have network request issue, or the integrity of previous hash has been tainted (say you go inside your `~/.zephyr` folder and "accidently" edited some data), they are all plausible reason that you are unable to get application hash list during deployment. 
+## Debugging the error (Possible resolutions)
 
+1. Make sure you have a valid `package.json` file
 
-## Debugging the error
+Package.json should be in json format, include name and version) sits in the same directory as your bundler configuration. A typical project structure Zephyr would understand would be similar to below set up, where each application has their unique name in package.json.
 
-1. Network request error 
+```txt
+- HostAppDir
+  - package.json 
+    - name: "host-app"
+    - version: "1.0.0"
+  - webpack.config.js
+- RemoteAppDir
+  - package.json
+    - name: "remote-app"
+    - version: "1.0.0"
+  - webpack.config.js
+```
 
-If you are in an area have fickle internet connection (you can test it on [fast.com](https://fast.com/)), do make sure you deploy again while your internet connection gets better (minimum over 60Mbps).  
+Related error and potential resolution:
 
+- [ZE10010 - `package.json` not found](/guide/error/ze10010)
+- [ZE10011 - `package.json` is not a valid json format](/guide/error/ze10011)
+- [ZE10012 - `package.json` must have a name and version field](/guide/error/ze10012)
 
-2. Remove configuration file 
+2. Make sure you have git remote origin url, git username, email configured.
 
-If the hashed asset key-value pair are unmatched, the easiest way is to remove your `~/.zephyr` folder in root directory and run the build again. 
+Related error and potential resolution:
 
+- [ZE10014 - Git remote origin is not configured properly](/guide/error/ze10014)
+- [ZE10015 - Git username or email is not configured](/guide/error/ze10015)
+- [ZE10016 - Could not get git info](/guide/error/ze10016)
 
+3. Build tool configuration
 
+Your remote modules' configuration should be in a typical format Zephyr understands. For example:
 
+```ts
+  plugins: [
+    new CopyRspackPlugin({
+      patterns: [{
+        from: './src/index.html',
+        to: './index.html'
+      }]
+    }),
+    new ModuleFederationPluginV1({
+      name: 'app_04',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './App': './src/main.js',
+        './loadApp': './src/loadApp.js',
+      },
+      shared: [],
+    }),
+  ],
+```
+
+4. Remove your local configuration file
+
+Remove `~/.zephyr` by running below commands and login from either [dashboard](https://app.zephyr-cloud.io) or [sidepanel on Chrome](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) again.
+
+```
+
+rm -rf ~/.zephyr
+```

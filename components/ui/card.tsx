@@ -16,10 +16,7 @@ export const Card = ({ item }: { item: CardItemProps }) => {
           'group relative rounded-md bg-[var(--rp-c-bg-muted)] overflow-hidden px-[0.6px] pb-[1.02px] pt-[1px] lg:hover:!opacity-100 transition-all lg:group-hover/list:opacity-30'
         )}
       >
-        <div
-          id="glow"
-          className="absolute glow rotate-45 inset-0 w-[100px] h-[100px] z-0 hidden transition lg:-inset-x-6 lg:hidden lg:group-hover:block lg:group-hover:bg-[var(--rp-c-bg-soft)] lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,143,124,0.1)] lg:group-hover:drop-shadow-lg"
-        />
+        <div className="absolute glow rotate-45 inset-0 w-[100px] h-[100px] z-0 hidden transition lg:-inset-x-6 lg:hidden lg:group-hover:block lg:group-hover:bg-[var(--rp-c-bg-soft)] lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,143,124,0.1)] lg:group-hover:drop-shadow-lg" />
         <a
           href={item.href}
           className={cn(
