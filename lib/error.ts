@@ -71,7 +71,7 @@ export const Errors = {
     },
     {
       code: "ZE20015",
-      name: "Failed to upload ZEild stats."
+      name: "Failed to upload build stats."
     },
     {
       code: "ZE20016",
@@ -107,11 +107,6 @@ export const Errors = {
       code: "ZE20023",
       name: "Snapshot not found."
     },
-    {
-      code: "ZE20024",
-      name: "Could not get build id."
-    }
-
   ]
 }
 
