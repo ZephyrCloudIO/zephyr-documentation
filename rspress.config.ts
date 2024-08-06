@@ -1,6 +1,11 @@
 import * as path from 'path';
+import * as fs from "fs"
 import { defineConfig } from 'rspress/config';
 import { pluginShiki, createTransformerDiff, createTransformerLineNumber, createTransformerHighlight } from '@rspress/plugin-shiki';
+
+
+const new_relic_script = fs.readFileSync('lib/new-relic.js', 'utf-8')
+
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
@@ -50,6 +55,13 @@ export default defineConfig({
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'G-B7G266JZDH');`
+        },
+        {
+          tag: 'script',
+          attrs: {
+            type: 'text/javascript'
+          },
+          children: `${new_relic_script}`
         }
       ],
     },

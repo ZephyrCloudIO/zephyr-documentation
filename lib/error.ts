@@ -105,8 +105,13 @@ export const Errors = {
     },
     {
       code: "ZE20023",
-      name: "Snapshot not found."
+      name: "Snapshot not found.",
+
     },
+    {
+      code: 'ZE20024',
+      name: 'Failed to deploy local build.'
+    }
   ]
 }
 
