@@ -4,7 +4,7 @@ import { defineConfig } from 'rspress/config';
 import { pluginShiki, createTransformerDiff, createTransformerLineNumber, createTransformerHighlight } from '@rspress/plugin-shiki';
 
 
-const new_relic_script = fs.readFileSync('lib/new-relic.js', 'utf-8')
+const new_relic_script = fs.readFileSync('lib/utils/new-relic.js', 'utf-8')
 
 
 export default defineConfig({
@@ -15,6 +15,9 @@ export default defineConfig({
   logo: {
     light: '/logo-light.webp',
     dark: '/logo-dark.webp',
+  },
+  search: {
+    searchHooks: path.join(__dirname, 'lib/utils/after-search.ts')
   },
 
   globalStyles: path.join(__dirname, 'styles/index.css'),
