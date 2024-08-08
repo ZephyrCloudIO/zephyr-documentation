@@ -44,6 +44,8 @@ func handler(ctx context.Context, req *events.APIGatewayProxyRequest) (*events.A
 
 	if req.HTTPMethod == "POST" {
 
+		an.SubmissionHandler(req.Body, req)
+
 		fmt.Println("request.Body.Post", req.Body)
 		return &events.APIGatewayProxyResponse{
 			StatusCode:      200,
