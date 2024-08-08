@@ -18,7 +18,18 @@ type Results struct {
 	UserIP    string // IP address of the user
 	RequestID string // request ID from API gateway
 	// TODO: we might not need this
-	GeoData *GeoData
+	City    string
+	Country struct {
+		Code string
+		Name string
+	}
+	Subdivision struct {
+		Code string
+		Name string
+	}
+	Timezone  string
+	Latitude  float64
+	Longitude float64
 }
 
 const (
@@ -28,16 +39,23 @@ const (
 
 func resultsToMap(r *Results) map[string]interface{} {
 	return map[string]interface{}{
-		"EventType": r.EventType,
-		"Name":      r.Name,
-		"Device":    r.Device,
-		"Origin":    r.Origin,
-		"Timestamp": r.Timestamp,
-		"Category":  r.Category,
-		"Query":     r.Query,
-		"UserIP":    r.UserIP,
-		"RequestID": r.RequestID,
-		"GeoData":   r.GeoData,
+		"EventType":        r.EventType,
+		"Name":             r.Name,
+		"Device":           r.Device,
+		"Origin":           r.Origin,
+		"Timestamp":        r.Timestamp,
+		"Category":         r.Category,
+		"Query":            r.Query,
+		"UserIP":           r.UserIP,
+		"RequestID":        r.RequestID,
+		"City":             r.City,
+		"Country.Code":     r.Country.Code,
+		"Country.Name":     r.Country.Name,
+		"Subdivision.Code": r.Subdivision.Code,
+		"Subdivision.Name": r.Subdivision.Name,
+		"Timezone":         r.Timezone,
+		"Latitude":         r.Latitude,
+		"Longitude":        r.Longitude,
 	}
 }
 
@@ -59,16 +77,21 @@ func ProcessData(query string, req *events.APIGatewayProxyRequest) map[string]in
 	}
 
 	result := &Results{
-		EventType: EventType,
-		Name:      Hashing(userAgent, ip),
-		Timestamp: time.Now().Format(time.RFC3339),
-		Device:    userAgent,
-		Origin:    req.RequestContext.ResourceID,
-		Category:  Category,
-		Query:     query,
-		UserIP:    ip,
-		RequestID: req.RequestContext.RequestID,
-		GeoData:   geoData,
+		EventType:   EventType,
+		Name:        Hashing(userAgent, ip),
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Device:      userAgent,
+		Origin:      req.RequestContext.ResourceID,
+		Category:    Category,
+		Query:       query,
+		UserIP:      ip,
+		RequestID:   req.RequestContext.RequestID,
+		City:        geoData.City,
+		Country:     geoData.Country,
+		Subdivision: geoData.Subdivision,
+		Timezone:    geoData.Timezone,
+		Latitude:    geoData.Latitude,
+		Longitude:   geoData.Longitude,
 	}
 
 	return resultsToMap(result)
