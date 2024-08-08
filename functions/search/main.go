@@ -16,10 +16,6 @@ import (
 
 func handler(ctx context.Context, req events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
 
-	return func(resp *events.APIGatewayProxyResponse) (*events.APIGatewayProxyResponse, error) {
-
-	}
-
 	nr := an.Init()
 
 	headers := map[string]string{
