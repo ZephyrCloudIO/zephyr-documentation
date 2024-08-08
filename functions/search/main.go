@@ -3,10 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
-	"log"
-	"net/http"
-	"strings"
 
 	an "github.com/ZephyrCloudIO/docs/search/analytics"
 	"github.com/aws/aws-lambda-go/events"
@@ -14,9 +10,7 @@ import (
 	"github.com/newrelic/go-agent/v3/integrations/nrlambda"
 )
 
-func handler(ctx context.Context, req events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
-
-	nr := an.Init()
+func handler(ctx context.Context, req *events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
 
 	headers := map[string]string{
 		"Access-Control-Allow-Origin":  "*",
@@ -25,7 +19,6 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (*events.AP
 	}
 
 	lc, ok := lambdacontext.FromContext(ctx)
-	fmt.Println("req:", req, "\n")
 
 	if !ok {
 		return &events.APIGatewayProxyResponse{
@@ -34,11 +27,13 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (*events.AP
 		}, nil
 	}
 
-	fmt.Println("lambdacontext", lc, "\n")
-
 	cc := lc.ClientContext
-
+	fmt.Println("request.Body.handler", req.Body)
 	if req.HTTPMethod == "OPTIONS" {
+
+		an.SubmissionHandler(req.Body, req)
+
+		fmt.Println("request.Body.OPTIONS", req.Body)
 		return &events.APIGatewayProxyResponse{
 			StatusCode:      200,
 			Headers:         headers,
@@ -49,34 +44,7 @@ func handler(ctx context.Context, req events.APIGatewayProxyRequest) (*events.AP
 
 	if req.HTTPMethod == "POST" {
 
-		client := &http.Client{}
-
-		data := strings.NewReader(`@-`)
-
-		newReq, err := http.NewRequest("POST", nr.EventEndpoint, data)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-		newReq.Header.Set("Content-Type", "application/json")
-		newReq.Header.Set("Api-Key", nr.LicenseKey)
-		newReq.Header.Set("Content-Encoding", "gzip")
-
-		resp, err := client.Do(newReq)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		defer resp.Body.Close()
-
-		bodyText, err := io.ReadAll(resp.Body)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		fmt.Printf("%s\n", bodyText)
+		fmt.Println("request.Body.Post", req.Body)
 		return &events.APIGatewayProxyResponse{
 			StatusCode:      200,
 			Headers:         headers,

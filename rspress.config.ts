@@ -46,6 +46,13 @@ export default defineConfig({
         {
           tag: 'script',
           attrs: {
+            type: 'text/javascript'
+          },
+          children: `${new_relic_script}`
+        },
+        {
+          tag: 'script',
+          attrs: {
             async: true,
             src: 'https://www.googletagmanager.com/gtag/js?id=G-B7G266JZDH',
           },
@@ -59,13 +66,7 @@ export default defineConfig({
               gtag('js', new Date());
               gtag('config', 'G-B7G266JZDH');`
         },
-        {
-          tag: 'script',
-          attrs: {
-            type: 'text/javascript'
-          },
-          children: `${new_relic_script}`
-        }
+
       ],
     },
   },

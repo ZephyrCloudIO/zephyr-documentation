@@ -18,7 +18,7 @@ type NewRelicClient struct {
 	LicenseKey    string
 	EventEndpoint string
 	// used for SDK
-	LambdaAppName string
+	AppName string
 }
 
 func Cred() *NewRelicClient {
@@ -26,7 +26,7 @@ func Cred() *NewRelicClient {
 		AccountId:     os.Getenv("NEW_RELIC_ACCOUNT_ID"),
 		LicenseKey:    os.Getenv("NEW_RELIC_LICENSE_KEY"),
 		EventEndpoint: os.Getenv("NEW_RELIC_EVENT_ENDPOINT"),
-		LambdaAppName: os.Getenv("NEW_RELIC_LAMBDA_APP_NAME"),
+		AppName:       os.Getenv("NEW_RELIC_APP_NAME"),
 	}
 
 	return cred
@@ -57,7 +57,7 @@ func (nrc *NewRelicClient) checkStructErrors() {
 		panic("New Relic Event Endpoint Error: invalid event endpoint in environment.")
 	}
 
-	if len(nrc.LambdaAppName) < 1 {
+	if len(nrc.AppName) < 1 {
 		panic("New Relic Lambda App Name Error: invalid app name in environment.")
 	}
 
@@ -100,15 +100,17 @@ func NewRelicGoTracingInit() *newrelic.Application {
 	cred := Cred()
 
 	app, err := newrelic.NewApplication(
-		newrelic.ConfigAppName(cred.LambdaAppName),
+		newrelic.ConfigAppName(cred.AppName),
 		newrelic.ConfigLicense(cred.LicenseKey),
 		nrlambda.ConfigOption(),
 		newrelic.ConfigAppLogForwardingEnabled(true),
 		newrelic.ConfigDistributedTracerEnabled(true),
 		newrelic.ConfigCustomInsightsEventsEnabled(true),
+
 		func(config *newrelic.Config) {
 			logrus.SetLevel(logrus.DebugLevel)
 			config.Logger = nrlogrus.StandardLogger()
+			config.RuntimeSampler.Enabled = true
 		},
 	)
 

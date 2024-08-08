@@ -5,9 +5,9 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
-	"net/http"
 	"strings"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/google/uuid"
 )
 
@@ -30,22 +30,22 @@ func Hashing(content ...string) string {
 }
 
 type GeoData struct {
-	City    string `json:"city"`
+	City    string
 	Country struct {
-		Code string `json:"code"`
-		Name string `json:"name"`
-	} `json:"country"`
+		Code string
+		Name string
+	}
 	Subdivision struct {
-		Code string `json:"code"`
-		Name string `json:"name"`
-	} `json:"subdivision"`
-	Timezone  string  `json:"timezone"`
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
+		Code string
+		Name string
+	}
+	Timezone  string
+	Latitude  float64
+	Longitude float64
 }
 
-func GetGeoDataFromHeader(r *http.Request) (*GeoData, error) {
-	geoHeader := r.Header.Get("x-nf-geo")
+func GetGeoDataFromHeader(r *events.APIGatewayProxyRequest) (*GeoData, error) {
+	geoHeader := r.Headers["x-nf-geo"]
 	if geoHeader == "" {
 		return nil, nil // No geo information available
 	}
