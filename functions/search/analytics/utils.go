@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var CookieName = "_ZE-SESSION"
+// var CookieName = "_ZE-SESSION"
 
 func GenerateSessionID() string {
 	return uuid.New().String()

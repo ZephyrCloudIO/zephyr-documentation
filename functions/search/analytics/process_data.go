@@ -2,6 +2,7 @@ package analytics
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
@@ -38,7 +39,7 @@ type ResultsJson struct {
 	Name            string  `json:"name"`       // hashed result of `ze-`, device and ip
 	Device          string  `json:"device"`     // Device type (parsed from User-Agent)
 	Origin          string  `json:"origin"`     // Origin of the request (e.g., referrer or source page)
-	Timestamp       int16   `json:"timestamp"`  // Unix timestamp for precise event timing
+	Timestamp       int64   `json:"timestamp"`  // Unix timestamp for precise event timing
 	Category        string  `json:"category"`   // Category of the query (e.g., documentation, tutorial)
 	Query           string  `json:"query"`      // The actual search query string
 	UserIP          string  `json:"user_ip"`    // IP address of the user
@@ -54,11 +55,12 @@ type ResultsJson struct {
 }
 
 const (
-	EventType = "DocSearch"
-	Category  = "docs"
+	EventType        = "DocSearch"
+	Category         = "docs"
+	FilePath  string = "output.json.gz"
 )
 
-func ProcessDataToJson(query string, req *events.APIGatewayProxyRequest) []byte {
+func ProcessDataToJson(query Query, req *events.APIGatewayProxyRequest) []byte {
 
 	userAgent := req.Headers["User-Agent"]
 
@@ -66,7 +68,15 @@ func ProcessDataToJson(query string, req *events.APIGatewayProxyRequest) []byte 
 		userAgent = req.RequestContext.Identity.UserAgent
 	}
 
+	if userAgent == "" {
+		userAgent = req.Headers["user-agent"]
+	}
+
 	ip := req.Headers["X-Forwarded-For"]
+
+	if ip == "" {
+		ip = req.Headers["client-ip"]
+	}
 
 	geoData, err := GetGeoDataFromHeader(req)
 
@@ -78,11 +88,11 @@ func ProcessDataToJson(query string, req *events.APIGatewayProxyRequest) []byte 
 	result := &ResultsJson{
 		EventType:       EventType,
 		Name:            Hashing(userAgent, ip),
-		Timestamp:       int16(time.Now().UnixMilli()),
+		Timestamp:       time.Now().UnixMilli(),
 		Device:          userAgent,
 		Origin:          req.RequestContext.ResourceID,
 		Category:        Category,
-		Query:           query,
+		Query:           query.Content,
 		UserIP:          ip,
 		RequestID:       req.RequestContext.RequestID,
 		City:            geoData.City,
@@ -94,6 +104,8 @@ func ProcessDataToJson(query string, req *events.APIGatewayProxyRequest) []byte 
 		Latitude:        geoData.Latitude,
 		Longitude:       geoData.Longitude,
 	}
+
+	fmt.Printf("Json Results: %v\n", result)
 
 	body, err := json.Marshal(result)
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 
 	an "github.com/ZephyrCloudIO/docs/search/analytics"
 	"github.com/aws/aws-lambda-go/events"
@@ -16,9 +17,13 @@ func handler(ctx context.Context, req *events.APIGatewayProxyRequest) (*events.A
 		"Content-Type":                 "application/json; text/html; charset=utf-8",
 	}
 
+	var query an.Query
+
+	json.Unmarshal([]byte(req.Body), &query)
+
 	if req.HTTPMethod == "OPTIONS" || req.HTTPMethod == "POST" {
 
-		_, err := an.SubmissionHandler(req.Body, ctx, req)
+		_, err := an.SubmissionHandler(query, ctx, req)
 
 		if err != nil {
 			return &events.APIGatewayProxyResponse{

@@ -1,34 +1,30 @@
 package analytics
 
 import (
+	"bytes"
 	"compress/gzip"
 	"context"
-	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
-	"strings"
+	"os"
 
 	"github.com/aws/aws-lambda-go/events"
 )
 
-func SubmissionHandler(query string, ctx context.Context, req *events.APIGatewayProxyRequest) (int, error) {
+type Query struct {
+	Content string `json:"content"`
+}
+
+func SubmissionHandler(query Query, ctx context.Context, req *events.APIGatewayProxyRequest) (int, error) {
 	//app := NewRelicGoTracingInit()
 
 	an := Init()
 
 	data := ProcessDataToJson(query, req)
 
-	var sdkData map[string]interface{}
-
-	err := json.Unmarshal(data, &sdkData)
-	if err != nil {
-		log.Printf("Error unmarshal data: %s", err)
-
-		return http.StatusInternalServerError, err
-	}
-
-	_, err = an.ApiSubmissionRequest(data, ctx)
+	_, err := an.ApiSubmissionRequest(data, ctx)
 
 	if err != nil {
 		return http.StatusInternalServerError, err
@@ -74,25 +70,42 @@ func (an *NewRelicClient) ApiSubmissionRequest(data []byte, ctx context.Context)
 
 func (an *NewRelicClient) CompressionRequest(body []byte, ctx context.Context) *http.Request {
 
-	pr, pw := io.Pipe()
+	var fileGZ bytes.Buffer
+	zipper := gzip.NewWriter(&fileGZ)
 
-	go func() {
-		gw := gzip.NewWriter(pw)
-		err := json.NewEncoder(gw).Encode(body)
-
-		defer gw.Close()
-		defer pw.CloseWithError(err)
-
-	}()
-
-	body, err := io.ReadAll(pr)
+	_, err := zipper.Write(body)
 	if err != nil {
-		log.Printf("Failed to read data from PipeReader: %s", err)
-		return nil
+		log.Fatalf("zipper.Write ERROR: %+v", err)
 	}
-	data := strings.NewReader(string(body))
+	zipper.Close() // call it explicitly
 
-	r, err := http.NewRequestWithContext(ctx, "POST", an.EventEndpoint, data)
+	// checking if this file output is correct
+	err = os.WriteFile(FilePath, fileGZ.Bytes(), 0644)
+	if err != nil {
+		fmt.Printf("WriteFileGZ ERROR: %+v", err)
+	}
+
+	file, err := os.Open(FilePath)
+	if err != nil {
+		fmt.Printf("failed to open file: %v", err)
+	}
+	defer file.Close()
+
+	var buf bytes.Buffer
+	gzipWriter := gzip.NewWriter(&buf)
+
+	// Copy the file content to the gzip writer
+	_, err = io.Copy(gzipWriter, file)
+	if err != nil {
+		fmt.Printf("failed to gzip file content: %v", err)
+	}
+
+	// Close the gzip writer to flush all data
+	if err := gzipWriter.Close(); err != nil {
+		fmt.Printf("failed to close gzip writer: %v", err)
+	}
+
+	r, err := http.NewRequest("POST", an.EventEndpoint, &buf)
 
 	if err != nil {
 		log.Printf("Creating new request with context failed while submitting events through API: %s", err)
