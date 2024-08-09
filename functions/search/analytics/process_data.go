@@ -1,6 +1,7 @@
 package analytics
 
 import (
+	"encoding/json"
 	"log"
 	"time"
 
@@ -32,34 +33,32 @@ type Results struct {
 	Longitude float64
 }
 
+type ResultsJson struct {
+	EventType       string  `json:"eventType"`  // Type of event, e.g., "search_query"
+	Name            string  `json:"name"`       // hashed result of `ze-`, device and ip
+	Device          string  `json:"device"`     // Device type (parsed from User-Agent)
+	Origin          string  `json:"origin"`     // Origin of the request (e.g., referrer or source page)
+	Timestamp       int16   `json:"timestamp"`  // Unix timestamp for precise event timing
+	Category        string  `json:"category"`   // Category of the query (e.g., documentation, tutorial)
+	Query           string  `json:"query"`      // The actual search query string
+	UserIP          string  `json:"user_ip"`    // IP address of the user
+	RequestID       string  `json:"request_id"` // request ID from API gateway
+	City            string  `json:"city"`       // TODO: we might not need this
+	CountryName     string  `json:"countryName"`
+	CountryCode     string  `json:"countryCode"`
+	SubdivisionName string  `json:"subdivisionName"`
+	SubdivisionCode string  `json:"subdivisionCode"`
+	Timezone        string  `json:"timezone"`
+	Latitude        float64 `json:"latitude"`
+	Longitude       float64 `json:"longitude"`
+}
+
 const (
-	EventType = "docs:search:query"
+	EventType = "DocSearch"
 	Category  = "docs"
 )
 
-func resultsToMap(r *Results) map[string]interface{} {
-	return map[string]interface{}{
-		"EventType":        r.EventType,
-		"Name":             r.Name,
-		"Device":           r.Device,
-		"Origin":           r.Origin,
-		"Timestamp":        r.Timestamp,
-		"Category":         r.Category,
-		"Query":            r.Query,
-		"UserIP":           r.UserIP,
-		"RequestID":        r.RequestID,
-		"City":             r.City,
-		"Country.Code":     r.Country.Code,
-		"Country.Name":     r.Country.Name,
-		"Subdivision.Code": r.Subdivision.Code,
-		"Subdivision.Name": r.Subdivision.Name,
-		"Timezone":         r.Timezone,
-		"Latitude":         r.Latitude,
-		"Longitude":        r.Longitude,
-	}
-}
-
-func ProcessData(query string, req *events.APIGatewayProxyRequest) map[string]interface{} {
+func ProcessDataToJson(query string, req *events.APIGatewayProxyRequest) []byte {
 
 	userAgent := req.Headers["User-Agent"]
 
@@ -76,23 +75,31 @@ func ProcessData(query string, req *events.APIGatewayProxyRequest) map[string]in
 		log.Println("Couldn't get Geo information")
 	}
 
-	result := &Results{
-		EventType:   EventType,
-		Name:        Hashing(userAgent, ip),
-		Timestamp:   time.Now().Format(time.RFC3339),
-		Device:      userAgent,
-		Origin:      req.RequestContext.ResourceID,
-		Category:    Category,
-		Query:       query,
-		UserIP:      ip,
-		RequestID:   req.RequestContext.RequestID,
-		City:        geoData.City,
-		Country:     geoData.Country,
-		Subdivision: geoData.Subdivision,
-		Timezone:    geoData.Timezone,
-		Latitude:    geoData.Latitude,
-		Longitude:   geoData.Longitude,
+	result := &ResultsJson{
+		EventType:       EventType,
+		Name:            Hashing(userAgent, ip),
+		Timestamp:       int16(time.Now().UnixMilli()),
+		Device:          userAgent,
+		Origin:          req.RequestContext.ResourceID,
+		Category:        Category,
+		Query:           query,
+		UserIP:          ip,
+		RequestID:       req.RequestContext.RequestID,
+		City:            geoData.City,
+		CountryName:     geoData.Country.Name,
+		CountryCode:     geoData.Country.Code,
+		SubdivisionName: geoData.Subdivision.Name,
+		SubdivisionCode: geoData.Subdivision.Code,
+		Timezone:        geoData.Timezone,
+		Latitude:        geoData.Latitude,
+		Longitude:       geoData.Longitude,
 	}
 
-	return resultsToMap(result)
+	body, err := json.Marshal(result)
+
+	if err != nil {
+		log.Printf("Processing json data failed: %s", err)
+	}
+
+	return body
 }
