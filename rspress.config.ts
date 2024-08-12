@@ -59,12 +59,14 @@ export default defineConfig({
         },
         {
           tag: 'script',
-          children:
-            `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-B7G266JZDH');`
+          children: /*js*/ `
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-B7G266JZDH');
+
+`.trim(),
         },
 
       ],
