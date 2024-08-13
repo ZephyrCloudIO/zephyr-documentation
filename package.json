@@ -11,13 +11,16 @@
     "lint:fix": "npx eslint . --fix"
   },
   "dependencies": {
+    "@code-hike/mdx": "^0.9.0",
     "@commitlint/config-conventional": "^19.2.2",
+    "@newrelic/browser-agent": "^1.264.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
     "@rspress/mdx-rs": "^0.5.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "codehike": "^1.0.0-beta.9",
     "commitlint": "^19.3.0",
     "husky": "^9.0.11",
     "react-wrap-balancer": "^1.1.1",

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import * as path from 'path';
 import * as fs from "fs"
 import { defineConfig } from 'rspress/config';
@@ -5,8 +6,10 @@ import { pluginShiki, createTransformerDiff, createTransformerLineNumber, create
 
 
 const new_relic_script = fs.readFileSync('lib/utils/new-relic.js', 'utf-8')
-
-
+/** @type {import('codehike/mdx').CodeHikeConfig} */
+const chConfig = {
+  components: { code: "Code" }
+}
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
   title: 'Zephyr Cloud Docs',
@@ -39,6 +42,14 @@ export default defineConfig({
 
   markdown: {
     defaultWrapCode: true,
+    remarkPlugins: [
+      require('codehike/mdx').remarkPlugins,
+      chConfig
+    ],
+    rehypePlugins: [
+      require('codehike/mdx').rehypePlugins,
+      chConfig
+    ]
   },
   builderConfig: {
     html: {
@@ -73,16 +84,6 @@ gtag('config', 'G-B7G266JZDH');
     },
   },
   plugins: [
-    pluginShiki({
-      transformers: [
-        // Add as needed
-        createTransformerDiff(),
-        createTransformerLineNumber(),
-        // createTransformerErrorLevel(),
-        createTransformerHighlight(),
-        // createTransformerFocus(),
-      ],
-    }),
   ],
 
 });
