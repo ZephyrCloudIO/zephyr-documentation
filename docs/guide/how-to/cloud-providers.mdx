@@ -1,0 +1,94 @@
+---
+title: Manage Cloud Providers on Zephyr
+description: With Zephyr's bring your own cloud feature, you can use Zephyr with your existing cloud infrastructure to manage your applications
+# head: 
+#   - - meta
+#     - name: og:title
+#       content: Zephyr Error - ZE20020 - Failed to get application hash list.
+#   - - meta
+#     - name: og:url 
+#       content: https://docs.zephyr-cloud.io/guide/error/ze20020
+---
+
+import { Button } from "../../../components/ui/button.tsx"
+import { Steps } from "@theme"
+
+#  Manage Cloud Providers on Zephyr
+
+Zephyr's Bring Your Own Cloud (BYOC) feature allows users to use their own cloud infrastructure instead of relying on Zephyr's managed cloud. User's applications deployed through Zephyr are usually deployed through user's own cloud providers. 
+
+With BYOC, users are able to _manage configuration_, _understand the underlying infrastruture_, _utilizing familiar features_ and _having a clear billing_ among cloud infrastructures. 
+
+Users belong to an organization can manage and configure cloud providers on Zephyr's [dashboard](https://app.zephyr-cloud.io), and user's organization gets connected with cloud provider account by creating an integration under **Deployment Integration** tab. 
+
+
+## Add Cloudflare as your cloud provider 
+
+
+<Steps> 
+### Log in to Zephyr dashboard 
+<a href="https://app.zephyr-cloud.io">
+<Button variant="outline" className=" hover:bg-zinc-100 hover:text-black">Dashboard</Button>
+</a>
+After sign in, click on your selected organization. 
+<br/>
+
+### Find Cloudflare under in **Deployment Integration**
+
+- Select **Settings** under organization on top navigation tabs. 
+- On the left side, select **Deployment Integration**. 
+- Choose **Available** to find Cloudflare and click on **Add integraiton**.
+
+
+### How to get credentials and configure Cloudflare 
+Before you move to the next step, you will need two details and one DNS configuration from Cloudflare: 
+
+
+**1. Zone ID**
+- You can configure your API token by selecting a domain on **Websites** once you sign into Cloudflare. 
+- On domain's **Overview** tab, scroll down until you can see **API** on the right side bar. 
+- You will find **Zone ID** under the API section. 
+
+**2. API token**
+- Under Zone ID and Account ID within the API section, _right click_ on **Get your API token** to _open it on a new tab_. 
+- Scroll down to the bottom and select **Create Custom Token** by clicking on "Get started".
+- Give your API token a meaningfull name (who created this, what's this for etc).
+- The configuration needed for API tokens are under **Permissions** (only these are _required_): 
+
+| Resource | Resource Type | Permission |
+| :----- | :-----:|:-----:| 
+| Account | Worker KV Storage | Edit | 
+| Account | Worker Scripts | Edit | 
+| Account | Cloudflare Pages | Edit | 
+| Zone | Worker Routes | Edit |
+- The rest of configuration details (Account resources, Client IP Address Filtering etc.) are not required by us and you can leave them as default.
+- Scroll to bottom to select **Continue to summary** to confirm if the configurations are correct and then **Create Token**, you will see your token on the next page.
+
+**3. Configure your DNS record**
+- Go back to your domain's home page (hope that **Overview** page is still opened at this point) and click on **DNS** on left side panel. 
+- Click on **Add record** on _Records_ page and add below details: 
+
+| Type | Name | IPv4 Address | Proxy status | TTL | 
+| --- | --- | --- | --- | --- |
+| A | *-ze | D.D.D.D | Proxied | Auto |
+- Note: The **Name** field should be a wild card record as that's needed for serverless workers. 
+
+### Configuration inputs 
+
+Additional details for each inputs after clicking on **Add integration**:
+
+
+<dt>Integration name</dt>
+<dd>A unique name within your organization. It will be used as a slug. </dd>
+<dt>Integration display name</dt>
+<dd>The name of integration shown on dashboard.</dd>
+<dt>API token</dt>
+<dd>Obtained from Cloudflare. The [instruction above](#how-to-get-credentials-from-cloudflare) should walk you through how to get your API token.</dd>
+<dt>Zone ID</dt>
+<dd>Obtained from Cloudflare. You will need a valid domain on Cloudlfare.</dd>
+<dt>Cloudflare project name</dt>
+<dd>This operation is idempotent, it will create a [cloudflare pages project](https://developers.cloudflare.com/pages) on Cloudflare.</dd>
+<dt>Set integration as default.</dt>
+<dd>Every repository deployed through Zephyr will attempt to deploy through this integration setting. This won't change until you delete this integration or add new integration.</dd>
+
+</Steps>

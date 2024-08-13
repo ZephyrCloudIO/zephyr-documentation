@@ -28,7 +28,7 @@ export default defineConfig({
   themeConfig: {
     darkMode: true,
     enableContentAnimation: true,
-
+    enableScrollToTop: true,
     socialLinks: [
       { icon: 'github', mode: 'link', content: 'https://github.com/zephyrcloudio' },
       { icon: 'discord', mode: 'link', content: 'https://discord.gg/EqFbSSt8Hx' },

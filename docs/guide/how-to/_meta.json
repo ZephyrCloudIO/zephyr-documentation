@@ -1,4 +1,5 @@
 [
+  "cloud-providers",
   "react-vite",
   "react-rspack-nx",
   "nx-mf-app",
