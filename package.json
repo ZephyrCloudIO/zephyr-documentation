@@ -6,7 +6,7 @@
     "dev": "rspress dev",
     "build": "rspress build",
     "preview": "rspress preview",
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint": "npx eslint . ",
     "lint:fix": "npx eslint . --fix"
   },
