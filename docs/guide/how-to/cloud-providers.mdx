@@ -24,7 +24,7 @@ Users belong to an organization can manage and configure cloud providers on Zeph
 
 ## Cloudflare
 
-In this section we will walk you through how to configure Cloudflare as your default cloud provider.
+In this section we will walk you through how to configure Cloudflare as your default cloud provider. 
 
 ### Add Cloudflare as cloud provider
 <Steps> 
@@ -76,7 +76,7 @@ Before you move to the next step, you will need two details and one DNS configur
 
 If you are unsure about the IP address of your domain, or you don't have a fix IP address from a machine, you can use below commands to find the IP address of your domain.
 ```sh title="Finding IP address"
-dig <domain>
+dig <domain.com>
 ```
 
 - Go back to your domain's home page (hope that **Overview** page is still opened at this point) and click on **DNS** on left side panel. 
@@ -107,4 +107,44 @@ Additional details for each inputs after clicking on **Add integration**:
 <dt>Set integration as default.</dt>
 <dd>Every repository deployed through Zephyr will attempt to deploy through this integration setting. This won't change until you delete this integration or add new integration.</dd>
 
+<br/>
+<br/>
+### How to test it 
+
+Navigate to our [recipes](/guide/recipes) to try one of the application, you should see your next deployment deployed through your designated domain! (if not come [talk to us](https://zephyr-cloud.io/discord))
+
+
 </Steps>
+
+:::details{title="What will be created on your Cloudflare account?"}
+
+After you add Cloudflare as your cloud provider on Zephyr, several properties will be modified and added on your Cloudflare account.  
+
+1. KV Namespaces 
+
+Three namespaces will be added: 
+- ze_snapshots
+- ze_files 
+- ze_env 
+
+2. Workers 
+- `ze-worker-for-static-upload` (used for uploading and serving assets)
+
+3. Worker routes 
+- `ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
+- `*-ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
+
+:::
+
+
+### Testing and inspecting assets
+
+Once you finish your first deployment on Cloudflare, On your cloudflare account's main dashboard page, you can click on **Workers & Pages** and then **KV** to inspect your assets by clicking on **View** next to `ze_files`. 
+
+:::info
+
+- `ze_files` stores your actual assets.
+- `ze_envs` stores you application's environment, access right etc. 
+- `ze_snapshot` stores your application's snapshots comparing against previous build.
+
+:::
