@@ -11,7 +11,7 @@ description: With Zephyr's bring your own cloud feature, you can use Zephyr with
 ---
 
 import { Button } from "../../../components/ui/button.tsx"
-import { Steps } from "@theme"
+import { Steps, Badge } from "@theme"
 
 #  Manage Cloud Providers on Zephyr
 
@@ -22,9 +22,11 @@ With BYOC, users are able to _manage configuration_, _understand the underlying 
 Users belong to an organization can manage and configure cloud providers on Zephyr's [dashboard](https://app.zephyr-cloud.io), and user's organization gets connected with cloud provider account by creating an integration under **Deployment Integration** tab. 
 
 
-## Add Cloudflare as your cloud provider 
+## Cloudflare
 
+In this section we will walk you through how to configure Cloudflare as your default cloud provider.
 
+### Add Cloudflare as cloud provider
 <Steps> 
 ### Log in to Zephyr dashboard 
 <a href="https://app.zephyr-cloud.io">
@@ -67,13 +69,24 @@ Before you move to the next step, you will need two details and one DNS configur
 - The rest of configuration details (Account resources, Client IP Address Filtering etc.) are not required by us and you can leave them as default.
 - Scroll to bottom to select **Continue to summary** to confirm if the configurations are correct and then **Create Token**, you will see your token on the next page.
 
+
 **3. Configure your DNS record**
+
+<Badge text="tips" type="warning"/>
+
+If you are unsure about the IP address of your domain, or you don't have a fix IP address from a machine, you can use below commands to find the IP address of your domain.
+```sh title="Finding IP address"
+dig <domain>
+```
+
 - Go back to your domain's home page (hope that **Overview** page is still opened at this point) and click on **DNS** on left side panel. 
 - Click on **Add record** on _Records_ page and add below details: 
 
 | Type | Name | IPv4 Address | Proxy status | TTL | 
-| --- | --- | --- | --- | --- |
-| A | *-ze | D.D.D.D | Proxied | Auto |
+| :---: | :---: | :---: | :---: | :---: |
+| A | * | `<ip-address>` | Proxied | Auto |
+| A | `<domain.com>` | `<ip-address>` | Proxied | Auto |
+
 - Note: The **Name** field should be a wild card record as that's needed for serverless workers. 
 
 ### Configuration inputs 

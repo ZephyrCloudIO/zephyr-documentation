@@ -2,7 +2,6 @@
 import * as path from 'path';
 import * as fs from "fs"
 import { defineConfig } from 'rspress/config';
-import { NewRelicPlugin } from './lib/utils/new-relic-plugin';
 
 
 const new_relic_script = fs.readFileSync('lib/utils/new-relic.js', 'utf-8')
@@ -84,7 +83,7 @@ gtag('config', 'G-B7G266JZDH');
     },
   },
   plugins: [
-    NewRelicPlugin()
+
   ],
 
 });
