@@ -79,8 +79,41 @@ const nav: UserConfig['themeConfig']['nav'] = [
 //   "supported"
 // ]
 
+[
+  'why-zephyr-cloud',
+  'get-started',
+  'architecture',
+  'create-mf-app',
+  'question',
+];
+
 const sidebar: UserConfig['themeConfig']['sidebar'] = {
   '/': [
+    {
+      text: 'General',
+      items: [
+        {
+          text: 'Why Zephyr Cloud',
+          link: '/general/why-zephyr-cloud',
+        },
+        {
+          text: 'Get Started',
+          link: '/general/get-started',
+        },
+        {
+          text: 'Architecture',
+          link: '/general/architecture',
+        },
+        {
+          text: 'Create MF App',
+          link: '/general/create-mf-app',
+        },
+        {
+          text: 'Question',
+          link: '/general/question',
+        },
+      ],
+    },
     {
       text: 'Resources',
       link: '/resources',
