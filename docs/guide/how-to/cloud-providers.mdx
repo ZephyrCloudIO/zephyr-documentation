@@ -1,5 +1,5 @@
 ---
-title: Manage Cloud Providers on Zephyr
+title: Manage Cloud Providers
 description: With Zephyr's bring your own cloud feature, you can use Zephyr with your existing cloud infrastructure to manage your applications
 # head: 
 #   - - meta
@@ -12,6 +12,7 @@ description: With Zephyr's bring your own cloud feature, you can use Zephyr with
 
 import { Button } from "../../../components/ui/button.tsx"
 import { Steps, Badge } from "@theme"
+import { Separator } from "../../../components/ui/separator"
 
 #  Manage Cloud Providers on Zephyr
 
@@ -21,12 +22,13 @@ With BYOC, users are able to _manage configuration_, _understand the underlying 
 
 Users belong to an organization can manage and configure cloud providers on Zephyr's [dashboard](https://app.zephyr-cloud.io), and user's organization gets connected with cloud provider account by creating an integration under **Deployment Integration** tab. 
 
-
+<Separator/>
 ## Cloudflare
 
 In this section we will walk you through how to configure Cloudflare as your default cloud provider. 
 
 ### Add Cloudflare as cloud provider
+<br/>
 <Steps> 
 ### Log in to Zephyr dashboard 
 <a href="https://app.zephyr-cloud.io">
@@ -150,3 +152,5 @@ Navigate to your cloudflare account's main dashboard page, you can click on **Wo
 - `ze_snapshot` stores your application's snapshots comparing against previous build.
 
 :::
+
+<Separator/>
