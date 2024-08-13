@@ -5,20 +5,11 @@ export const Footer = () => {
         {' '}
         <p>
           <a
-            href="https://discord.gg/c28rAdS6HY"
+            href="https://zephyr-cloud.io/discord"
             target="_blank"
             rel="noreferrer"
           >
             Discord Server
-          </a>
-        </p>
-        <p>
-          <a
-            href="https://github.com/ZephyrCloudIO/docs"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Edit this page
           </a>
         </p>
         <p>

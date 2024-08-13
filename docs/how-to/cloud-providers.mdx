@@ -1,0 +1,162 @@
+---
+title: Manage Cloud Providers
+description: With Zephyr's bring your own cloud feature, you can use Zephyr with your existing cloud infrastructure to manage your applications
+# head: 
+#   - - meta
+#     - name: og:title
+#       content: Zephyr Error - ZE20020 - Failed to get application hash list.
+#   - - meta
+#     - name: og:url 
+#       content: https://docs.zephyr-cloud.io/errors/ZE20020
+---
+
+import { Button } from "../../components/ui/button.tsx"
+import { Steps, Badge } from "@theme"
+import { Separator } from "../../../components/ui/separator"
+
+#  Manage Cloud Providers on Zephyr
+
+Zephyr's Bring Your Own Cloud (BYOC) feature allows users to use their own cloud infrastructure instead of relying on Zephyr's managed cloud. User's applications deployed through Zephyr are usually deployed through user's own cloud providers. 
+
+With BYOC, users are able to _manage configuration_, _understand the underlying infrastruture_, _utilizing familiar features_ and _having a clear billing_ among cloud infrastructures. 
+
+Users belong to an organization can manage and configure cloud providers on Zephyr's [dashboard](https://app.zephyr-cloud.io), and user's organization gets connected with cloud provider account by creating an integration under **Deployment Integration** tab. 
+
+<Separator/>
+## Cloudflare
+
+In this section we will walk you through how to configure Cloudflare as your default cloud provider. 
+
+### Add Cloudflare as cloud provider
+<br/>
+<Steps> 
+### Log in to Zephyr dashboard 
+<a href="https://app.zephyr-cloud.io">
+<Button variant="outline" className=" hover:bg-zinc-100 hover:text-black">Dashboard</Button>
+</a>
+After sign in, click on your selected organization. 
+<br/>
+
+### Find Cloudflare under Deployment Integration
+
+- Select **Settings** under organization on top navigation tabs. 
+- On the left side, select **Deployment Integration**. 
+- Choose **Available** to find Cloudflare and click on **Add integraiton**.
+
+
+### How to get credentials and configure Cloudflare 
+Before you move to the next step, you will need two details and one DNS configuration from Cloudflare: 
+
+
+**1. Zone ID**
+- You can configure your API token by selecting a **domain** on **Websites** tab once you sign into Cloudflare. 
+- On domain's **Overview** tab, scroll down until you can see **API** on the right side bar. 
+- You will find **Zone ID** under the API section. 
+
+**2. API token**
+- Under Zone ID and Account ID within the API section, _right click_ on **Get your API token** to _open it on a new tab_. 
+- Scroll down to the bottom and select **Create Custom Token** by clicking on "Get started".
+- Give your API token a meaningfull name (who created this, what's this for etc).
+- The configuration needed for API tokens are under **Permissions** (only these are _required_): 
+
+| Resource | Resource Type | Permission |
+| :----- | :-----:|:-----:| 
+| Account | Worker KV Storage | Edit | 
+| Account | Worker Scripts | Edit | 
+| Account | Cloudflare Pages | Edit | 
+| Zone | Worker Routes | Edit | 
+
+- **Zone Resources**: When asked to whether include a specific zone to this API token, you to **Include** a **Specific zone** under your **domain**.
+
+- The rest of configuration details (Account resources, Client IP Address Filtering etc.) are not required by us and you can leave them as default.
+- Scroll to bottom to select **Continue to summary** to confirm if the configurations are correct and then **Create Token**, you will see your token on the next page.
+
+
+**3. Configure your DNS record**
+
+<Badge text="tips" type="warning"/>
+
+If you are unsure about the IP address of your domain, or you don't have a fix IP address from a machine, you can use below commands to find the IP address of your domain.
+```sh title="Finding IP address"
+dig <domain.com>
+```
+
+- Go back to your domain's home page (hope that **Overview** page is still opened at this point) and click on **DNS** on left side panel. 
+- Click on **Add record** on _Records_ page and add below details: 
+
+| Type | Name | IPv4 Address | Proxy status | TTL | 
+| :---: | :---: | :---: | :---: | :---: |
+| A | * | `<ip-address>` | Proxied | Auto |
+| A | `<domain.com>` | `<ip-address>` | Proxied | Auto |
+
+- Note: The **Name** field should be a wild card record as that's needed for serverless workers. 
+
+### Configuration inputs 
+
+Additional details for each inputs after clicking on **Add integration**:
+
+
+<dt>Integration name</dt>
+<dd>A unique name within your organization. It will be used as a slug. </dd>
+<dt>Integration display name</dt>
+<dd>The name of integration shown on dashboard.</dd>
+<dt>API token</dt>
+<dd>Obtained from Cloudflare. The [instruction above](#how-to-get-credentials-and-configure-cloudflare) should walk you through how to get your API token.</dd>
+<dt>Zone ID</dt>
+<dd>Obtained from Cloudflare. You will need a valid domain on Cloudlfare.</dd>
+<dt>Cloudflare project name</dt>
+<dd>This operation is idempotent, it will create a [cloudflare pages project](https://developers.cloudflare.com/pages) on Cloudflare.</dd>
+<dt>Set integration as default.</dt>
+<dd>Every repository deployed through Zephyr will attempt to deploy through this integration setting. This won't change until you delete this integration or add new integration.</dd>
+
+<br/>
+<br/>
+### How to test it 
+
+Navigate to our [recipes](/guide/recipes) to try one of the application, you should see your next deployment deployed through your designated domain! (if not come [talk to us](https://zephyr-cloud.io/discord))
+
+
+</Steps>
+
+:::details{title="What will be created on your Cloudflare account?"}
+
+After you add Cloudflare as your cloud provider on Zephyr, several properties will be modified and added on your Cloudflare account.  
+
+1. KV Namespaces 
+
+Three namespaces will be added: 
+- ze_snapshots
+- ze_files 
+- ze_env 
+
+2. Workers 
+- `ze-worker-for-static-upload` (used for uploading and serving assets)
+
+3. Worker routes 
+- `ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
+- `*-ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
+
+:::
+
+
+### Testing and inspecting assets
+
+Once you finish your first deployment on Cloudflare, you can inspect your assets on your account. 
+
+1. Access them from Cloudflare dashboard
+
+Navigate to your cloudflare account's main dashboard page, you can click on **Workers & Pages** and then **KV** to inspect your assets by clicking on **View** next to `ze_files`. 
+
+:::info
+
+- `ze_files` stores your actual assets.
+- `ze_envs` stores you application's environment, access right etc. 
+- `ze_snapshot` stores your application's snapshots comparing against previous build.
+
+:::
+
+2. Programmatically access assets in Cloudflare 
+
+To find 
+
+<Separator/>

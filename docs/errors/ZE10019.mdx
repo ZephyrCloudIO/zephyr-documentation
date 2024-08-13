@@ -1,0 +1,45 @@
+---
+title: ZE10019 - Could not get build id
+description: Zephyr Error - ZE10019 - Why we couldn't get build id and the potential workaround
+# head: 
+# - - meta
+#   - name: og:title
+#     content: Zephyr Error - ZE10019 - Could not get build id
+# - - meta
+#   - name: og:url 
+#     content: https://docs.zephyr-cloud.io/errors/ZE10019
+---
+
+
+# Could not get build id
+- Error Code: `ZE10019`
+
+- Location: Terminal
+
+- Related plugins: all
+
+This is one of the most common error during build. 
+
+Once we find your `application_uid` (composed by your github organization's name, project name and the `name` field in package.json, refer to [ZE10017](/errors/ZE10017)), we will be collecting data from your local cache, verifying your JWT token and checking your write access to the related project. If we fail to find all the necessary configuration, we won't be able to obtain appropriate build id for you to continue with the deployment. 
+
+
+## Debugging the error
+
+1. You current logged in account on Zephyr dashboard might not have write access to this application
+
+You can log out either from our [Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) or from [dashboard](https://app.zephyr-cloud.io) and log in again with the correct account having write access. 
+
+
+2. Git configuration details for the project is different from previous build
+
+One of the plausible way to debug this error is to remove your local zephyr configuration by running: 
+
+
+```sh
+rm -rf ~/.zephyr 
+```
+And then try to run a build again. 
+
+
+
+

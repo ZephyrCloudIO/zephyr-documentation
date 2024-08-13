@@ -1,1 +1,5 @@
-node_modules
+dist
+coverage
+./.nx/cache
+./.nx/workspace-data
+./lib/scripts

@@ -1,10 +1,25 @@
 [
   {
-    "text": "Get Started",
-    "link": "./guide/general/get-started"
+    "type": "dir",
+    "name": "general",
+    "label": "General",
+    "collapsible": true,
+    "collapsed": false
   },
   {
-    "text": "Dashboard",
-    "link": "https://app.zephyr-cloud.io"
-  }
+    "type": "dir",
+    "name": "how-to",
+    "label": "How-to",
+    "collapsible": false,
+    "collapsed": false
+  },
+  {
+    "type": "dir",
+    "name": "error",
+    "label": "Trouble Shooting",
+    "collapsible": true,
+    "collapsed": "true"
+  },
+  "resources",
+  "supported"
 ]

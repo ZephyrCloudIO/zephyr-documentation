@@ -25,7 +25,7 @@ export const Links = {
   github: 'https://github.com/ZephyrCloudIO/docs',
   extension:
     'https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn',
-  discord: 'https://discord.gg/c28rAdS6HY',
+  discord: 'https://zephyr-cloud.io/discord',
 };
 export const SiteConfig: CardProps = {
   start: [
@@ -33,26 +33,26 @@ export const SiteConfig: CardProps = {
       title: 'Why Zephyr', // TODO: shouldn't introduction and "Why" be on the same page?
       description:
         "Have an overview of modern application's development complexity and how Zephyr can speed up the process.",
-      href: '/guide/general/why-zephyr-cloud',
+      href: '/general/why-zephyr-cloud',
     },
     {
       title: 'Get Started',
       description:
         'The quickest way to get you started with our chrome extension, dashboard and npm package. Use Webpack as an example. ',
-      href: '/guide/general/get-started',
+      href: '/general/get-started',
       variant: 'small',
     },
     {
       title: 'Adding Zephyr to existing application',
       description:
         'One line of code to add Zephyr to your existing application. Use Nx + React + Webpack as an example.',
-      href: '/guide/recipes/existing-app',
+      href: '/recipes/existing-app',
       variant: 'small',
     },
     // {
     //     "title": "Module Federation Application",
     //     "description": "Add Zephyr to applications built on module federation.",
-    //     "href": "/guide/getting-started/create-mf-app",
+    //     "href": "/getting-started/create-mf-app",
     //     "variant": "small"
     // },
   ] as CardItemProps[],
@@ -60,7 +60,7 @@ export const SiteConfig: CardProps = {
     {
       title: 'Add Zephyr to your existing project',
       description: 'Available for Webpack, Rspack and Vite',
-      href: '/guide/recipes/existing-app',
+      href: '/recipes/existing-app',
       variant: 'small',
     },
     {
@@ -73,7 +73,7 @@ export const SiteConfig: CardProps = {
     {
       title: 'Start from scratch',
       description: 'Using React and Rspack',
-      href: '/guide/general/get-started#start-from-scratch',
+      href: '/general/get-started#start-from-scratch',
       variant: 'small',
     },
   ],
@@ -82,34 +82,34 @@ export const SiteConfig: CardProps = {
       title: 'Version control',
       description:
         'Enable you to deploy unlimited versions (depends on your cloud usage) of your application ever deployed on chrome extension and dashboard.',
-      href: '/guide/usage/versioning',
+      href: '/usage/versioning',
       developed: true,
     },
     {
       title: 'Rollback and forward',
       description: 'Rollback and forward your application.',
-      href: '/guide/usage/rollback-forward',
+      href: '/usage/rollback-forward',
       developed: false,
     },
     {
       title: 'Sub-second deploy',
       description:
         'Deploy production and preview version of your application in sub-seconds.',
-      href: '/guide/usage/sub-second-deploy',
+      href: '/usage/sub-second-deploy',
       developed: true,
     },
     {
       title: 'Long-lived preview links',
       description:
         'Every versions that ever deployed will be live forever unless you delete the deployment.',
-      href: '/guide/usage/long-live-preview',
+      href: '/usage/long-live-preview',
       developed: true,
     },
     {
       title: 'Dependency management',
       description:
         'Monitor and visualize your dependency of your application - be it remote modules within a app utilizing module federation, or npm packages.',
-      href: '/guide/usage/dependency-management',
+      href: '/usage/dependency-management',
       developed: true,
     },
   ] as CardItemProps[],
@@ -120,7 +120,7 @@ export const SiteConfig: CardProps = {
       title: 'React + Vite',
       framework: 'react',
       description: 'Use Zephyr with React and Vite.',
-      href: '/guide/recipes/react-vite',
+      href: '/recipes/react-vite',
       variant: 'small',
       icons: [<ReactIcon />, <ViteIcon />],
     },
@@ -136,7 +136,7 @@ export const SiteConfig: CardProps = {
     //   title: "React + Vite + Nx",
     //   framework: "react",
     //   description: "Use Zephyr with React, Vite and Nx.",
-    //   href: "/guide/recipes/react-vite-nx",
+    //   href: "/recipes/react-vite-nx",
     //   variant: "small",
     //   icons: [<ReactIcon />, <NxIcon />, <ViteIcon />],
     // },
@@ -149,7 +149,7 @@ export const SiteConfig: CardProps = {
     {
       title: 'Migrate from vanilla module federation',
       description: 'Migrate from vanilla module federation to Zephyr.',
-      href: '/guide/recipes/existing-app',
+      href: '/recipes/existing-app',
       variant: 'small',
       icons: [<ModuleFederationIcon />],
     },
@@ -157,7 +157,7 @@ export const SiteConfig: CardProps = {
       // create-mf-app-rspack
       title: 'React + Rspack',
       description: 'Use Zephyr with React and Rspack',
-      href: '/guide/general/get-started#3-create-a-react-app',
+      href: '/general/get-started#3-create-a-react-app',
       variant: 'small',
       icons: [<ReactIcon />, <RspackIcon />, <ModuleFederationIcon />],
     },
@@ -178,7 +178,7 @@ export const SiteConfig: CardProps = {
       // create-nx-workspace-mf + react-tractor-sample
       title: 'React + Webpack + Nx + Module Federation',
       description: 'Use Zephyr with React, Nx and Module Federation.',
-      href: '/guide/recipes/nx-mf-app',
+      href: '/recipes/nx-mf-app',
       variant: 'small',
       icons: [
         <ReactIcon />,
@@ -230,20 +230,20 @@ export const SiteConfig: CardProps = {
     {
       title: 'Module Federation',
       description: 'Learn about module federation and how Zephyr enhances it.',
-      href: '/guide/concepts/module-federation',
+      href: '/concepts/module-federation',
       variant: 'small',
     },
     {
       title: 'Edge',
       description: 'What does edge mean? How does it benefit us?',
-      href: '/guide/concepts/edge',
+      href: '/concepts/edge',
       variant: 'small',
     },
     {
       title: 'Micro Frontend',
       description:
         "What's Micro Frontend? What are the use cases? When is a good time to implement it?",
-      href: '/guide/concepts/micro-frontend',
+      href: '/concepts/micro-frontend',
     },
   ] as CardItemProps[],
 };

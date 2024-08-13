@@ -1,0 +1,51 @@
+---
+title: ZE10017 - Application uid missing
+description: Zephyr Error - ZE10017 - Why is application_uid missing? How to debug it?
+# head: 
+#   - - meta
+#     - name: og:title
+#       content: Zephyr Error - ZE10017 - application_uid missing
+#   - - meta
+#     - name: og:url 
+#       content: https://docs.zephyr-cloud.io/errors/ZE10017
+---
+
+# `application_uid` missing
+
+- Error Code: `ZE10017`
+
+- Location: Terminal
+
+- Related plugins: all
+
+Related error: [ZE20012 - `application_uid` is required](/errors/ZE20012)
+
+
+After generating your `application_uid` based on your git config and `package.json`, we save them to your local disk in a folder named `~/.zephyr` and we utilize the information there to help you deploy your applications. Each one of your application has their own unique `application_uid`.
+
+Whenever your are using our plugins - be it [zephyr-webpack-plugin](https://www.npmjs.com/package/zephyr-webpack-plugin), [vite-plugin-zephyr](https://www.npmjs.com/package/vite-plugin-zephyr) or [rollup-plugin-zephyr](https://www.npmjs.com/package/rollup-plugin-zephyr), the first thing we do when you try to run a build is to check whether there is local configurations exists for thie project to run a build. Your project's unique `application_uid` is how we connect with edge URL and finishing your deployment process. 
+
+If the local configuration doesn't exists, we then won't be able to generate a `build id` unique to each of your build. Note that in some scenario you might still be able to run a build - but your deployed url might show you [DE20012 - `application_uid` is required](/errors/ZE20012).
+
+## Debugging the error
+
+1. Make sure you have a valid `package.json` file (by valid, we mean it fits json format, include name and version) sits in where your bundler configuration is. 
+
+Related error and potential resolution:
+- [ZE10010 - `package.json` not found](/errors/ZE10010)
+- [ZE10011 - `package.json` is not a valid json format](/errors/ZE10011)
+- [ZE10012 - `package.json` must have a name and version field](/errors/ZE10012)
+
+2. Make sure you have git remote origin url, git username, email configured. 
+
+Related error and potential resolution:
+- [ZE10014 - Git remote origin is not configured properly](/errors/ZE10014)
+- [ZE10015 - Git username or email is not configured](/errors/ZE10015)
+- [ZE10016 - Could not get git info](/errors/ZE10016)
+
+3. Remove your local configuration files `~/.zephyr` and login from either [dashboard](https://app.zephyr-cloud.io) or [sidepanel on Chrome](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) again. 
+
+```
+rm -rf ~/.zephyr
+```
+

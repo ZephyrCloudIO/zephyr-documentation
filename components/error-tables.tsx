@@ -1,17 +1,29 @@
-import { Errors } from '../lib/error';
-import { Links } from '../lib/site.config';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from './ui/table';
-import React from 'react';
+import { Categories, Errors } from '../lib/error-codes-messages';
+import { useNavigate } from 'rspress/runtime';
 
-export const BuildErrorTable = () => {
+export function ErrorTables({
+  category,
+}: {
+  category: keyof typeof Categories;
+}) {
+  if (!(category in Categories)) {
+    throw new Error(`Invalid category: ${category}`);
+  }
+
+  const navigate = useNavigate();
+
+  const errors = Object.entries(Errors).filter(
+    ([, error]) => error.kind === category
+  );
+
   return (
     <Table>
       <TableHeader>
@@ -21,56 +33,31 @@ export const BuildErrorTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {Errors.build.map((item, index) => (
-          <TableRow key={index}>
-            {' '}
+        {errors.map(([name, error]) => (
+          <TableRow
+            key={error.id}
+            className="hover:cursor-pointer hover:bg-[var(--rp-c-bg-soft)]"
+            onClick={() =>
+              navigate(`/errors/ZE${Categories[category]}${error.id}.html`)
+            }
+          >
             <TableCell className="font-medium">
-              <code>{item.code}</code>
-            </TableCell>{' '}
-            <TableCell className=" text-left items-start flex justify-start">
-              <a
-                href={`/guide/error/${item.code}`}
-                className="decoration-dashed decoration-[0.4px] underline underline-offset-4 hover:text-[var(--rp-c-brand)] hover:decoration-[var(--rp-c-brand)] transition-all w-full max-h-full"
-              >
-                {' '}
-                {item.name}{' '}
-              </a>{' '}
-            </TableCell>{' '}
+              <code>
+                ZE{Categories[category]}
+                {error.id}
+              </code>
+            </TableCell>
+            <TableCell className="text-left items-start flex justify-start">
+              <div>
+                <div className="mb-2 hover:text-[var(--rp-c-brand)] hover:decoration-[var(--rp-c-brand)] ">
+                  {name.replace(/_/g, ' ')}
+                </div>
+                <div>{error.message}</div>
+              </div>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
   );
-};
-
-export const DeployErrorTable = () => {
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[200px] pl-6">Code</TableHead>
-          <TableHead className="text-start">Name</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Errors.deploy.map((item, index) => (
-          <TableRow key={index}>
-            {' '}
-            <TableCell className="font-medium">
-              <code>{item.code}</code>
-            </TableCell>{' '}
-            <TableCell className=" text-left items-start flex justify-start">
-              <a
-                href={`/guide/error/${item.code}`}
-                className="decoration-dashed decoration-[0.4px] underline underline-offset-4 hover:text-[var(--rp-c-brand)] hover:decoration-[var(--rp-c-brand)] transition-all w-full max-h-full"
-              >
-                {' '}
-                {item.name}{' '}
-              </a>{' '}
-            </TableCell>{' '}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
+}
