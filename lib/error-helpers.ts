@@ -19,7 +19,6 @@ export function getErrorMessage(code: string) {
 
   for (const key in Errors) {
     if (Errors[key].id === errCode && Errors[key].kind === category) {
-      console.log(Errors[key]);
       return Errors[key].message;
     }
   }
