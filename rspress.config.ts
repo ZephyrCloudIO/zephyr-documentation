@@ -207,22 +207,22 @@ export default defineConfig({
             throw new Error(`Invalid error page found: ${match[1]}`);
           }
 
-          const content = `
+//           const content = `
 
-code: ${`ZE${Categories[error.kind]}${error.id}`}
-description: ${error.message}
-category: ${error.kind}
+// code: ${`ZE${Categories[error.kind]}${error.id}`}
+// description: ${error.message}
+// category: ${error.kind}
 
-`.trim()
+// `.trim()
 
 
-          row.frontmatter.__content = content;
-          row.frontmatter.code = `ZE${Categories[error.kind]}${error.id}`;
-          row.frontmatter.description = error.message;
-          row.frontmatter.category = error.kind;
-          // row.content += `\n\nZE${Categories[error.kind]}${error.id}\n${error.message}\n${error.kind}`;
+//           row.frontmatter.__content = content;
+//           row.frontmatter.code = `ZE${Categories[error.kind]}${error.id}`;
+//           row.frontmatter.description = error.message;
+//           row.frontmatter.category = error.kind;
+          row.content += `\n\nZE${Categories[error.kind]}${error.id}\n${error.message}\n${error.kind}`;
 
-          console.dir(row, { depth: null });
+          // console.dir(row, { depth: null });
         }
       },
     },
