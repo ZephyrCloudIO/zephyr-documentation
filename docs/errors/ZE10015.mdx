@@ -1,38 +1,24 @@
---- 
-title: ZE10015 - Git username or email is not configured
-description: Zephyr Error - ZE10015 - Why git username or email is not configured will cause an error and trouble shooting guide
-#head: 
-#  - - meta
-#    - name: og:title
-#      content: Zephyr Error - ZE10015 - Assets not found 
-#  - - meta
-#    - name: og:url 
- #     content: https://docs.zephyr-cloud.io/errors/ZE10015 
----
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
 
-# Git username or email is not configured
+# {getErrorMessage('ZE10015')}
 
-- Error code: `ZE10015`
+<ErrorInfo code="ZE10015" terminal />
 
-- Location: Terminal
+We store your user information at your local machine so when we are starting the build process we won't waste time on data transfer between your machine to data center. Each of your project's build, information, authentication to deployment platform (encrypted) are in a local folder called `~/.zephyr`.
 
-- Related plugins: all
-
-We store your user information at your local machine so when we are starting the build process we won't waste time on data transfer between your machine to data center. Each of your project's build, information, authentication to deployment platform (encrypted) are in a local folder called `~/.zephyr`. 
-
-If we are unable to extra your username or email in git, we won't be able to correlate them to other information such as `application_uid` or your authentication details to help you deploy. 
-
+If we are unable to extra your username or email in git, we won't be able to correlate them to other information such as `application_uid` or your authentication details to help you deploy.
 
 ## Debugging the error
 
-Configure your username in terminal by: 
+Configure your username in terminal by:
 
-```
+```bash
 git config --global user.name = "My Name"
 ```
-Configure your git email by: 
 
-```
+Configure your git email by:
+
+```bash
 git config --global user.email = "My email"
 ```
-

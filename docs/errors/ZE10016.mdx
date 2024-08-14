@@ -1,39 +1,23 @@
----
-title: ZE10016 - Could not get git info
-description: Zephyr Error - ZE10016 - What's assets not found error and how to debug it
-# head: 
-#   - - meta
-#     - name: og:title
-#       content: Zephyr Error - ZE10016 - Could not get git info
-#   - - meta
-#     - name: og:url 
-#       content: https://docs.zephyr-cloud.io/errors/ZE10016
----
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { ErrorLink } from '../../components/errors/link.tsx';
 
-# Could not get git info
+# {getErrorMessage('ZE10016')}
 
-- Error code: `ZE10016`
+<ErrorInfo code="ZE10016" terminal related="ZE10014,ZE10015,ZE10017" />
 
-- Location: Terminal
+There could be several reason why this error shows up - it could be because remote origin wasn't configured for the project directory; it could be because you haven't set a username for git; or it could be because you don't have an email set to your git config.
 
-- Related plugins: all
-
-
-Related errors: [ZE10014 - Git remote origin is not configured properly](/errors/ZE10014), [ZE10015 - Git username or email is not configured](/errors/ZE10015), [ZE10017 - `application_uid` missing](/errors/ZE10017)
-
-There could be several reason why this error shows up - it could be because remote origin wasn't configured for the project directory; it could be because you haven't set a username for git; or it could be because you don't have an email set to your git config. 
-
-All of these information will affect your build and deployment through Zephyr as we use them to both authenticate you and deploy your application. 
+All of these information will affect your build and deployment through Zephyr as we use them to both authenticate you and deploy your application.
 
 ## Debugging the error
 
 To make sure you have all the configuration set up correctly, you can do so by running this in your project directory (use arrow key to scroll down and check your remote origin's url)
 
-```
+```bash
 git config --list
 ```
-If you are missing username and email, please refer to [ZE10015 - Git username or email is not configured](/errors/ZE10015) to configure it correctly. 
 
-If you are missing `remote origin url`, refer to [ZE10014 - Git remote origin is not configured properly](/errors/ZE10014).
+If you are missing username and email, please refer to <ErrorLink code="ZE10015" /> to configure it correctly.
 
-
+If you are missing `remote origin url`, refer to <ErrorLink code="ZE10014" />.

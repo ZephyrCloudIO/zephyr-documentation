@@ -1,67 +1,72 @@
-import { ChromeExtension } from "../../components/extension"
-import { Image } from "../../components/ui/image"
+import { ChromeExtension } from '../../components/extension';
+import { Image } from '../../components/ui/image';
+import { SourceCode } from '@theme';
 
 # React + Vite
 
-import { SourceCode } from '@theme';
-
-
 <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/react-vite-ts" />
-In this React + Vite simple app, we will walk you from creating a simple react app with Vite till configure it with Zephyr plugin in `vite.config.ts`. 
 
+In this React + Vite simple app, we will walk you from creating a simple react app
+with Vite till configure it with Zephyr plugin in `vite.config.ts`.
 
-:::info{title="Pre-Requisite"}
+:::info Pre-Requisites
 
-- We expect you to have finish our [Get Started](/general/get-started) guide. 
+- We expect you to have finish our [Get Started](/general/get-started) guide.
 - Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
-- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io). 
+- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
 
 :::
 
+## Generating a Vite + React project
 
-## Generating a Vite + React project 
-
-```sh filename="Terminal"
+```bash filename="Terminal"
 # npm, in npm  7+ double dash is needed
 npm create vite@latest react-vite-ts -- --template react-ts
 ```
-and then run commands to make sure you have necessary dependencies installed. 
 
-```sh filename="Terminal"
+and then run commands to make sure you have necessary dependencies installed.
+
+```bash filename="Terminal"
 cd react-vite-ts
 npm install
 npm run dev
 ```
 
 ## Add Zephyr configuration
-You should see the website lives in localhost. Open the `vite.config.ts` in your editor and add below modification: 
 
-```sh filename="vite.config.ts"
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { withZephyr } from 'vite-plugin-zephyr' // [!code ++]
+You should see the website lives in localhost. Open the `vite.config.ts` in your editor and add below modification:
+
+```ts filename="vite.config.ts"
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr } from 'vite-plugin-zephyr'; // [!code ++]
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(),
-  withZephyr() // [!code ++]
+  plugins: [
+    react(),
+    withZephyr(), // [!code ++]
   ],
-})
+});
 ```
+
 :::warning
-Before you run a build to deploy your app, **remember to initialise a git repository in current folder**. 
+
+**Remember to initialize a git repository in current folder**, before you `npm run build` to deploy your app.
+
 :::
 
-With git config initialised, linked to remote origin and additional configuration, you are ready to deploy: 
+With git config initialized, linked to remote origin and additional configuration, you are ready to deploy:
 
-```sh filename="Terminal"
+```bash filename="Terminal"
 npm run build
 ```
 
-You will see the build output like so and the highlighted lines include your deployed URL: 
-```sh {16-18}
-> react-vite-ts@0.0.0 build
-> tsc && vite build
+You will see the build output like so and the highlighted lines include your deployed URL:
+
+```bash {16-18}
+$ react-vite-ts@0.0.0 build
+$ tsc && vite build
 
 The CJS build of Vite's Node API is deprecated. See https://vitejs.dev/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
 vite v5.2.13 building for production...
@@ -83,7 +88,7 @@ dist/assets/index-DVoHNO1Y.js   143.36 kB │ gzip: 46.09 kB
 
 ## Chrome Extension
 
-On your browser, click on <ChromeExtension/>, you can see your application is under the dropdown menu: 
+On your browser, click on <ChromeExtension/>, you can see your application is under the dropdown menu:
 
 <Image src="/react-vite-ts-side-panel.png" />
 

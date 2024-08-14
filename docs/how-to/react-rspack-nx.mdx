@@ -22,7 +22,7 @@ import { Card } from "../../components/ui/card"
 - node >=20 
 
 If you don't have `nvm` to manage your node version yet, head to [the official nvm guide](https://github.com/nvm-sh/nvm) to install it.
-```sh 
+```bash 
 nvm use 20 
 ```
 :::
@@ -30,12 +30,12 @@ nvm use 20
 
 Once the prerequisites are fulfilled, we can start in the terminal:
 
-```sh title="Terminal"
+```bash title="Terminal"
 npx create-nx-workspace@latest my-first-mf-app --preset=react-standalone
 ```
 
 The creation process will ask you: 
-```sh 
+```bash 
 Need to install the following packages:
 create-nx-workspace@19.2.2
 Ok to proceed? (y) 
@@ -43,7 +43,7 @@ Ok to proceed? (y)
 Press <Keyboard shortcuts={["y", "Enter"]}/> and then choose the following highlighted options.
 
 Choose `Rspack` as bundler option.
-```sh  {6}
+```bash  {6}
 NX   Let's create a new workspace [https://nx.dev/getting-started/intro]
 
 ? Which bundler would you like to use? …
@@ -52,7 +52,7 @@ Webpack [ https://webpack.js.org/ ]
 Rspack  [ https://www.rspack.dev/ ]
 ```
 Choose `None`.
-```sh  {5}
+```bash  {5}
 ✔ Which bundler would you like to use? · rspack
 ? Test runner to use for end to end (E2E) tests …
 Playwright [ https://playwright.dev/ ]
@@ -60,7 +60,7 @@ Cypress [ https://www.cypress.io/ ]
 None
 ```
 When you are prompted to choose styling solution - choose `Tailwind`.
-```sh {5}
+```bash {5}
 ? Default stylesheet format …
 CSS
 SASS(.scss)       [ https://sass-lang.com   ]
@@ -71,7 +71,7 @@ emotion           [ https://emotion.sh                       ]
 styled-jsx        [ https://www.npmjs.com/package/styled-jsx ]
 ```
 Choose `Skip for now` when you are asked to choose CI. 
-```sh {5}
+```bash {5}
 ? Set up CI with caching, distribution and test deflaking …
 (it's free and can be disabled any time)
 Yes, for GitHub Actions with Nx Cloud
@@ -79,7 +79,7 @@ Yes, for CircleCI with Nx Cloud
 Skip for now
 ```
 Choose `Skip for now` when you are asked for remote caching option
-```sh {4}
+```bash {4}
 ? Would you like remote caching to make your build faster? …
 (it's free and can be disabled any time)
 Yes
@@ -94,7 +94,7 @@ When you are trying to deploy an application, Zephyr will figure out if you have
 
 #### 4. Adding Zephyr
 Open the project folder we created with code editor of your choice. Within current working directory, install Zephyr's plugin by running: 
-```sh title="Terminal" 
+```bash title="Terminal" 
 npm i zephyr-webpack-plugin 
 ``` 
 After install the plugin, open the file `rspack.config.js` in project root and replace the original configuration as below:
@@ -154,11 +154,11 @@ const config = composePlugins(withNx(), withReact(), (config) => {
 module.exports = config;
 ```
 Now you are all set! Go back to the terminal in current project and run 
-```sh title="Terminal" 
+```bash title="Terminal" 
 nx build
 ```
 You will see the terminal output like so - your deployed URL is before the final emitting process:
-```sh title="Terminal" {16-18}
+```bash title="Terminal" {16-18}
 ❯ nx build
 
  NX   Its time to update Nx 🎉
@@ -256,13 +256,13 @@ If you run a `nx serve` you will see your app changed to:
 <Image src="/my-first-mf-app-2.png" size="large"/>
 
 Save the file and go back to the terminal to deploy the new version of your application - run:
-```sh title="Terminal"
+```bash title="Terminal"
 nx build
 ```
 
 You will see the new version of your app both in the console output and under **Version** dropdown in on Chrome Extension.
 
-```sh title="Terminal" {16-18}
+```bash title="Terminal" {16-18}
 
 ❯ nx build
 
@@ -328,7 +328,7 @@ Once you click on <img src="/logo.png" className="inline h-5 w-5 brightness-[3]"
 
 :::details{title="What happens when you log in?"}
 While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run: 
-```sh 
+```bash 
 rm rf ~/.zephyr 
 ```
 :::

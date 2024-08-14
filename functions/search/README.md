@@ -6,11 +6,11 @@ While rspress is great for building static sites, it's missing key functionality
 
 ### Through CLI 
 To dev environment: 
-```sh 
+```bash 
 netlify deploy
 ```
 To production: 
-```sh
+```bash
 netlify deploy --prod
 ```
 
@@ -18,7 +18,7 @@ netlify deploy --prod
 
 ### Through CLI
 
-```sh
+```bash
 netlify env:import .env
 ```
 

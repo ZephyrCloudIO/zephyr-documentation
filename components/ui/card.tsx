@@ -1,5 +1,6 @@
 import { cn } from '../../lib/cn';
-import { CardItemProps } from '../../lib/site.config';
+import type { CardItemProps } from '../../lib/site.config';
+
 export const Card = ({ item }: { item: CardItemProps }) => {
   return (
     <li

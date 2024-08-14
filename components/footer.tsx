@@ -2,7 +2,6 @@ export const Footer = () => {
   return (
     <div id="footer-copyright">
       <div className="flex gap-4">
-        {' '}
         <p>
           <a
             href="https://zephyr-cloud.io/discord"
@@ -10,6 +9,15 @@ export const Footer = () => {
             rel="noreferrer"
           >
             Discord Server
+          </a>
+        </p>
+        <p>
+          <a
+            href="https://www.linkedin.com/company/zephyr-cloud"
+            target="_blank"
+            rel="noreferrer"
+          >
+            LinkedIn
           </a>
         </p>
         <p>
@@ -23,7 +31,9 @@ export const Footer = () => {
         </p>
       </div>
 
-      <p> © 2024 Zephyr Cloud. All rights reserved.</p>
+      <p>
+        © {new Date().getFullYear()} <b>Zephyr Cloud</b>. All rights reserved.
+      </p>
     </div>
   );
 };

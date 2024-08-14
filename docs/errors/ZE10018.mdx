@@ -1,44 +1,34 @@
----
-title: ZE10018 - Auth error
-description: Zephyr Error - ZE10018 - Why auth error is happening and how to debug
-# head: 
-#   - - meta
-#     - name: og:title
-#       content: Zephyr Error - ZE10018 - Auth error
-#   - - meta
-#     - name: og:url 
-#       content: https://docs.zephyr-cloud.io/errors/ZE10018
----
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@theme';
 
-# Auth error
+# {getErrorMessage('ZE10018')}
 
-- Error Code: `ZE10018`
-- Location: Terminal
-- Related plugins: all
+<ErrorInfo code="ZE10018" terminal />
 
+This error might happen for several reasons when you are running a build.
+While you are running a build, we are creating a snapshot of your application, transmitting your application details to the edge and most importantly, confirm with server your identity - whether you have enabled cloud integration, or using our managed cloud.
 
-This error might happen for several reasons when you are running a build. 
-While you are running a build, we are creating a snapshot of your application, transmitting your application details to the edge and most importantly, confirm with server your identity - whether you have enabled cloud integration, or using our managed cloud. 
-
-If your local jwt token expired, or we couldn't locate your account (say you have deleted your account on your dashboard), or you don't access to an organization which manages the project you are trying to deploy to, or you they are all plausible reasons you are facing auth error. 
-
+If your local jwt token expired, or we couldn't locate your account (say you have deleted your account on your dashboard), or you don't access to an organization which manages the project you are trying to deploy to, or you they are all plausible reasons you are facing auth error.
 
 ## Debugging the error
 
-1. Remove local zephyr config 
+<Steps>
 
-If the reason is local JWT token expired, you can run below commands to remove your local configuration file: 
+### Remove local zephyr config
 
-```sh 
+If the reason is local JWT token expired, you can run below commands to remove your local configuration file:
+
+```bash
 rm -rf ~/.zephyr
 ```
 
-Try to run a build again - the browser will prompt you to log in to assign you new JWT token and your deployment will be successful. 
+Try to run a build again - the browser will prompt you to log in to assign you new JWT token and your deployment will be successful.
 
+### No account or no access
 
-2. No account or no access 
-
-This most likely happen when you **clone** a repository belong to an organization (note that organizations in zephyr is linked to Github's organization) and you are not a maintainer or have access level higher than **viewer** in that organization. 
+This most likely happen when you **clone** a repository belong to an organization (note that organizations in zephyr is linked to Github's organization) and you are not a maintainer or have access level higher than **viewer** in that organization.
 
 If that's the case, **fork** the repository instead should fix the issue.
 
+</Steps>

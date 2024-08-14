@@ -1,103 +1,70 @@
----
-pageType: doc
+import { HomeStart, HomeConcept, HomeRecipes } from '../components/home';
+import { CardLayout } from '../components/ui/card-layout';
+import { Separator } from '../components/ui/separator';
+import { FeatureTable } from '../components/feature-table';
 
-# hero:
-#   name: Zephyr Cloud Docs
-#   text: Documentation site for Zephyr Cloud
-#   tagline: From code to global scale in seconds!
-#   actions:
-#     - theme: brand
-#       text: Quick Start
-#       link: /getting-started/intro-to-zephyr-cloud
-#     - theme: alt
-#       text: Github
-#       link: https://github.com/zephyrcloudio
-#   image:
-#     src: /docs-logo-1x.webp
-#     alt: Zephyr Cloud Docs Logo
-# features:
-#   - title: Easy to configure
-#     details: Single line of code to start using Zephyr with your application.
-#     icon: 🏃🏻‍♀️
-#     link: '/getting-started/installation'
-#   - title: Instant Deployments
-#     details: Every build is now a versioned and deployable to the edge.  
-#     icon: 📦
-#     link: '/concepts/mental-model'
-#   - title: Previews made easy
-#     details: Previewing each version of your application and combinations of microfrontends is easy with the Zephyr browser extension
-#     link: '/features/browser-extension/basic-usage'
-#     icon: 🔥
+<img
+  src="https://cdn.prod.website-files.com/669061ee3adb95b628c3acda/66acd2a968324f3e610c1cae_zephyr%20logo.svg"
+  alt="Zephyr Cloud"
+  height="100"
+  className="w-1/2 mx-auto"
+/>
 
----
-import { HomeStart, HomeConcept,  HomeRecipes } from "../components/home"
-import { CardLayout } from "../components/ui/card-layout"
-import { Separator } from "../components/ui/separator"
-import { FeatureTable } from "../components/feature-table"
+<Separator />
+<br />
 
-# Zephyr Documentation
-Zephyr Cloud is a platform accelerate your development workflow by providing a simple way to deploy and manage your applications - cloud agnostic, framework agnostic and bundler agnostic<sup><a href="#footnote-1">1</a></sup>.
+**Zephyr Cloud** is a platform accelerate your development workflow by providing a simple way to deploy and manage your applications - cloud agnostic, framework agnostic and bundler agnostic<sup>[1](#footnote-1)</sup>.
 
-Under the hood, Zephyr takes a snapshot of your application and deploy it to the edge in sub-seconds<sup><a href="#footnote-2">2</a></sup>, allowing you to preview and test your application in a real-world environment before deploying it to production - make "testing in production" a reality. Whenever the version of your application is ready for production, you can promote it to production with a single click.<sup><a href="#footnote-3">3</a></sup>
+Under the hood, Zephyr takes a snapshot of your application and deploy it to the edge in sub-seconds<sup>[2](#footnote-2)</sup>, allowing you to preview and test your application in a real-world environment before deploying it to production - make "testing in production" a reality. Whenever the version of your application is ready for production, you can promote it to production with a single click.<sup>[3](#footnote-3)</sup>
 
 Whether you're are a small team or a large enterprise, Zephyr Cloud is designed to remove the ambiguity between different cloud providers, helping you build with speed and freedom.
 
 Zephyr Cloud is now in public alpha. If you experience any issues, do jump in our [Discord](https://zephyr-cloud.io/discord) and let us know (we hang out here!).
 
-<Separator/>
-
+<Separator />
 
 ## Start
 
 <CardLayout>
-<HomeStart />
+  <HomeStart />
 </CardLayout>
 
-<Separator/>
-
-
+<Separator />
 
 ## Main Features
+
 Some of Zephyr Cloud's features include:
-<FeatureTable/>
+
+<FeatureTable />
+
 See a list of frameworks, bundlers and cloud providers [here](/supported)
 
-
-<sub className={"py-4"}><i>Details subject to change or under development.</i> </sub>
+<sub className="py-4">
+  <i>Details subject to change or under development.</i>
+</sub>
 
 ## Pre-Requisite Knowledge
+
 We don't assume you know everything about cloud or edge. Whenever we mention a concept or a piece of software, we aim to provide relevant links wherever possible. Our documentation site is Open Sourced, if you wish to contribute, do check out our [Github](https://github.com/ZephyrCloudIO/docs) and open any issues/pull requests.
 
 At the same time, it'd be useful to have a basic understanding of modern frontend frameworks such as [React](https://react.dev), running commands in terminals, [node](https://nodejs.org/en), package management solutions such as [npm](https://docs.npmjs.com/cli/v10/configuring-npm/install) and the concept (or usage) of [monorepo](https://monorepo.tools/). If you're new to web development, we recommend checking out [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web) for a comprehensive guide.
 
-<Separator/>
+<Separator />
 
 ## Recipes
 
 <CardLayout>
-<HomeRecipes/>
+  <HomeRecipes />
 </CardLayout>
 
 [See more recipes](/recipes)
-<Separator/>
 
-{/* ## Concepts */}
+<Separator />
 
-{/* <CardLayout>
-<HomeConcept/>
-
-</CardLayout>
-<br/> */}
-
-<div className="flex flex-col">
-
-<sub id="footnote-1">
-1. Additional functionalities are currently under development.
-</sub>
-<sub id="footnote-2">
-2. Based on internal benchmarks. Initial deployment time may vary.
-</sub>
-<sub id="footnote-3">
-3. Under development.
-</sub>
+<div>
+  <ol className="list-decimal">
+    <li id="footnote-1">Additional functionalities are currently under development.</li>
+    <li id="footnote-2">Based on internal benchmarks.</li>
+    <li id="footnote-3">Initial deployment time may vary.</li>
+  </ol>
 </div>

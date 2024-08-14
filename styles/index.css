@@ -99,7 +99,7 @@ dd {
 
 .glow {
   animation: move 5s linear infinite;
-  background: radial-gradient(#6D9D9D, #FFFFFF, transparent);
+  background: radial-gradient(#6d9d9d, #ffffff, transparent);
   offset-path: rect(0% auto 100% auto);
 }
 

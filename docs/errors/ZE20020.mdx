@@ -1,33 +1,16 @@
----
-title: ZE20020 - Failed to get application hash list.
-description: Zephyr Error - ZE20020 - Workaround and debug for error "Failed to get application hash list".
-# head: 
-#   - - meta
-#     - name: og:title
-#       content: Zephyr Error - ZE20020 - Failed to get application hash list.
-#   - - meta
-#     - name: og:url 
-#       content: https://docs.zephyr-cloud.io/errors/ZE20020
----
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
 
-# Failed to get application hash list
+# {getErrorMessage('ZE20020')}
 
-- Error Code: `ZE10020`
+<ErrorInfo code="ZE20020" terminal />
 
-- Location: Terminal
+{/* TODO */}
 
-- Related plugins: all
+::: warning
 
-Whenever we are deploying your application, we save a hash of your application to your local cache, while also comparing your application's current hashed asset to previous build and updating your deployment based on the differences in Key-Value namespaces.
+Not documented yet. Had a problem and need help?
 
-If your `application_ui` or `build_id` in your local configuration doesn't align with previous build, or you have network request issue, or the integrity of previous hash has been tainted (say you go inside your `~/.zephyr` folder and "accidently" edited some data), they are all plausible reason that you are unable to get application hash list during deployment.
+Contact us in our [discord](https://zephyr-cloud.io/discord)!
 
-## Debugging the error
-
-1. Network request error
-
-If you are in an area have fickle internet connection (you can test it on [fast.com](https://fast.com/)), do make sure you deploy again while your internet connection gets better (minimum over 60Mbps).  
-
-2. Remove configuration file
-
-If the hashed asset key-value pair are unmatched, the easiest way is to remove your `~/.zephyr` folder in root directory and run the build again.
+:::

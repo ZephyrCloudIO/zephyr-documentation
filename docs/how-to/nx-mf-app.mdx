@@ -18,6 +18,7 @@ Special thanks to [Colum](https://github.com/Coly010) at Nx for his feedback on 
 ```bash filename="Terminal"
 npx create-nx-workspace@latest myorg
 ```
+
 For those preferring Rspack, replace the command with the following:
 
 ```bash filename="Terminal"
@@ -72,7 +73,6 @@ cd myorg
 ```
 
 ### Adding Framework / Library Support
-
 
 At this stage, we will use Nx to integrate React support. While our example specifically uses React, you may choose to use a different framework according to your project needs:
 
@@ -152,6 +152,7 @@ Select "As Provided" for project names, as no adjustments are necessary:
     Name: shell-shell
     Root: apps/shell/shell
 ```
+
 ## Final Adjustments
 
 To accommodate Zephyr Cloud support, we need to make certain modifications to the generated projects.
@@ -192,7 +193,7 @@ import { withReact } from '@nx/react';
 import { withModuleFederation } from '@nx/react/module-federation';
 
 import baseConfig from './module-federation.config';
-import {withZephyr} from "zephyr-webpack-plugin";
+import { withZephyr } from 'zephyr-webpack-plugin';
 
 const config: ModuleFederationConfig = {
   ...baseConfig,
@@ -204,11 +205,12 @@ export default composePlugins(
   withReact(),
   withModuleFederation(config),
   withZephyr(),
-  (config)=>{
+  (config) => {
     return config;
   }
 );
 ```
+
 ```ts filename="shell/webpack.config.prod.ts"
 import { composePlugins, withNx } from '@nx/webpack';
 import { withReact } from '@nx/react';
@@ -216,7 +218,7 @@ import { withModuleFederation } from '@nx/react/module-federation';
 import { ModuleFederationConfig } from '@nx/webpack';
 
 import baseConfig from './module-federation.config';
-import {withZephyr} from "zephyr-webpack-plugin";
+import { withZephyr } from 'zephyr-webpack-plugin';
 
 const prodConfig: ModuleFederationConfig = {
   ...baseConfig,
@@ -249,18 +251,19 @@ export default composePlugins(
   withReact(),
   withModuleFederation(prodConfig),
   withZephyr(),
-  (config)=>{
+  (config) => {
     return config;
   }
 );
 ```
+
 ```ts filename="remote1/webpack.config.ts"
 import { composePlugins, withNx } from '@nx/webpack';
 import { withReact } from '@nx/react';
 import { withModuleFederation } from '@nx/react/module-federation';
 
 import baseConfig from './module-federation.config';
-import {withZephyr} from "zephyr-webpack-plugin";
+import { withZephyr } from 'zephyr-webpack-plugin';
 
 const config = {
   ...baseConfig,
@@ -272,7 +275,7 @@ export default composePlugins(
   withReact(),
   withModuleFederation(config),
   withZephyr(),
-  (config)=>{
+  (config) => {
     return config;
   }
 );
@@ -284,7 +287,7 @@ import { withReact } from '@nx/react';
 import { withModuleFederation } from '@nx/react/module-federation';
 
 import baseConfig from './module-federation.config';
-import {withZephyr} from "zephyr-webpack-plugin";
+import { withZephyr } from 'zephyr-webpack-plugin';
 
 const config = {
   ...baseConfig,
@@ -296,7 +299,7 @@ export default composePlugins(
   withReact(),
   withModuleFederation(config),
   withZephyr(),
-  (config)=>{
+  (config) => {
     return config;
   }
 );
@@ -321,11 +324,12 @@ Ensure you have created `package.json` files in each project directory as outlin
 [zephyr] Could not resolve 'remote1.zephyr-examples.zephyrcloudio' with version 'http://localhost:4201/remoteEntry.js'
 [zephyr] Could not resolve 'remote2.zephyr-examples.zephyrcloudio' with version 'http://localhost:4202/remoteEntry.js'
 ```
+
 :::
 
 ### Shell Build Output
 
-```bash filename="Terminal">
+```bash filename="Terminal"
 nx run shell:build:production --watch
 
 ✔ You are already logged in
@@ -376,6 +380,7 @@ The build process generates a series of URLs for each deployment. For a comprehe
 [shell.zephyr-examples.zephyrcloudio](valorkin)[3016]: deployed to https://t_main_zack_zephyr-cloud_io-pe4ufnqhxd-shell-zephyr-e-80bb4d-ze.valorkin.dev
 [shell.zephyr-examples.zephyrcloudio](valorkin)[3016]: deployed to https://shell-zephyr-examples-zephyrcloudio-ze.valorkin.dev
 ```
+
 :::
 
 ### Remote 1 Build
@@ -434,6 +439,7 @@ webpack compiled successfully (6bdf66978d6c6278)
 ```bash filename="Terminal"
 npx nx build remote2 -- --watch
 ```
+
 ### Remote 2 Build Output
 
 ```bash filename="Terminal"
@@ -483,4 +489,4 @@ webpack compiled successfully (ba7bd784fa780a37)
 
 Now that the initial setup is complete, you can proceed to add remote modules and start developing your federated application as planned.
 
-[//]: # (Colum has a fantastic [video]&#40;&#41; )
+[//]: # 'Colum has a fantastic [video]() '

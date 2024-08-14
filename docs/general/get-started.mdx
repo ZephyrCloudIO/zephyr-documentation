@@ -43,7 +43,7 @@ If you are curious to read more about us, you can dive into our [architecture](/
 - A registered account on [Zephyr Cloud](https://zephyr-cloud.io)
 
 If you don't have `nvm` to manage your node version yet, head to [the official nvm guide](https://github.com/nvm-sh/nvm) to install it.
-```sh 
+```bash 
 nvm use 20 
 ```
 :::
@@ -52,12 +52,12 @@ nvm use 20
 Once the prerequisites are fulfilled, we can start scaffolding our application in the terminal:
 
 <PackageManagerTabs command="create rspack@latest" />
-```sh 
+```bash 
 pnpm create rspack@latest 
 ```
 
 The creation process will ask you for **project folder name** and **project template**, we will be choosing `react` in this example: 
-```sh 
+```bash 
 .../Library/pnpm/store/v3/tmp/dlx-74427  |  +20 ++
 .../Library/pnpm/store/v3/tmp/dlx-74427  | Progress: resolved 20, reused 20, downloaded 0, added 20, done
 ✔ Project folder … rspack-project
@@ -213,7 +213,7 @@ Once you click on <img src="/logo.png" className="inline h-5 w-5 brightness-[3]"
 
 :::details{title="What happens when you log in?"}
 While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run: 
-```sh 
+```bash 
 rm rf ~/.zephyr 
 ```
 :::

@@ -1,77 +1,67 @@
 ---
-- title: Architecture 
-- description: How Zephyr works under the hood 
+- title: Architecture
+- description: How Zephyr works under the hood
 ---
 
 # Architecture - How Zephyr works
 
-Zephyr integrate with your existing build process, finish deployment seamlessly upon build, and remove the need to setup proxy tunnel, or wait for deployment in order to share a preview URL. 
+Zephyr integrate with your existing build process, finish deployment seamlessly upon build, and remove the need to setup proxy tunnel, or wait for deployment in order to share a preview URL.
 
-But when we run a command `npm run build`, does it interfere with bundler's build process and influence build output? How did it able to return preview URLs once the build is finished on your local terminal? What happens when we have an one-liner config and how could this one line achieve so much? 
+But when we run a command `npm run build`, does it interfere with bundler's build process and influence build output? How did it able to return preview URLs once the build is finished on your local terminal? What happens when we have an one-liner config and how could this one line achieve so much?
 
-```ts title=rspack.config.ts 
+```ts title=rspack.config.ts
 // ...import statement
+
 export default withZephyr()({
   context: __dirname,
   entry: {
-    main: "./src/main.jsx"
+    main: './src/main.jsx',
   },
-//...rest of the code
+  //...rest of the code
+});
 ```
 
-We will talk about bundlers in this article to clear some confusions, answer the questions we get asked the most: **How Zephyr works?** and explaining how Zephyr build and deploy your application to the edge in millie-seconds. 
+We will talk about bundlers in this article to clear some confusions, answer the questions we get asked the most: **How Zephyr works?** and explaining how Zephyr build and deploy your application to the edge in millie-seconds.
 
-
-## Building without interfering 
+## Building without interfering
 
 > Silence is a virtue
 
-For all the plugins we've built to support a framework for deployment, we follow a similar pattern: starting with gathering your application's details and entering a series of lifecycle events after initiating Zephyr Agent. 
+For all the plugins we've built to support a framework for deployment, we follow a similar pattern: starting with gathering your application's details and entering a series of lifecycle events after initiating Zephyr Agent.
 
 Zephyr agent works on the bundler level, rather than a framework level, hence achieving _framework agnostic_ deployment is a much faster process when it comes to a bundler we are already supporting. You can see a list of currently supported [frameworks](/supported#framework), [bundlers](/supported#bundlers) and [what's under development](/supported)
 
-
 ![How Zephyr works](https://cdn.builder.io/api/v1/image/assets%2Fea8c8e416fd64171bc2ef9ac5ac226e6%2F7187039658714abd98089fec29739932)
-
 
 ### Lifecycle Events
 
+Zephyr agent starts here.
 
-Zephyr agent starts here. 
-
-When we are collecting your application's details, we are understanding your github's organization, repository name and branch name to see if you have the correct access on Zephyr Cloud to deploy this application through our platform. We are also understanding your bundler's configuration details, applications' dependencies, name and versions. 
+When we are collecting your application's details, we are understanding your github's organization, repository name and branch name to see if you have the correct access on Zephyr Cloud to deploy this application through our platform. We are also understanding your bundler's configuration details, applications' dependencies, name and versions.
 
 We also aim understand whether this is an application using **micro-frontend**: is it a **provider** (in other words: **remotes**) to provide sub-modules for host app, or a **consumer** (in other word, a **shell** or a **host**) to consume remotes, or they are both. If they are, we move to the next to understand the relationships between your providers and consumers.
 
-
-
-
 ### Bundling
 
-The next step is letting bundlers build your application and Zephyr joins the bundler at a later stage after build process is finished. 
+The next step is letting bundlers build your application and Zephyr joins the bundler at a later stage after build process is finished.
 
-After bundlers finish building, we will be able to understand different asset types of your applications and construct a correct asset map for deployment. 
+After bundlers finish building, we will be able to understand different asset types of your applications and construct a correct asset map for deployment.
 
-:::info{title="Why asset map is needed?"}
+:::info Why asset map is needed?
 
 Different bundlers has different methods in understanding file content to either use loaders or minify code later on.
 
-Take Webpack as an examples, several source types will be detected in the overall build output and determine whether it needs to be cached for faster access, or it needs to be processed as raw source. 
+Take Webpack as an examples, several source types will be detected in the overall build output and determine whether it needs to be cached for faster access, or it needs to be processed as raw source.
 :::
 
-When you are building your application for the first time, we will hash your assets and save both the hash and assets once the asset map is constructed and mapped. After your first build, whenever you are building again we will be comparing your assets against what's previous build and  **only** update the hash results to create a snapshot of your application. 
-
+When you are building your application for the first time, we will hash your assets and save both the hash and assets once the asset map is constructed and mapped. After your first build, whenever you are building again we will be comparing your assets against what's previous build and **only** update the hash results to create a snapshot of your application.
 
 ### Deploying
 
-Whether you are deploying to our managed cloud, or on your own cloud, Zephyr will employ a series of capability providers to facilitate deployment, typically in the form of AWS Lambda function, or Cloudflare workers. 
+Whether you are deploying to our managed cloud, or on your own cloud, Zephyr will employ a series of capability providers to facilitate deployment, typically in the form of AWS Lambda function, or Cloudflare workers.
 
-These capability providers will be deployed, and updated in our managed cloud as well as in your cloud. They will analyze the file types, hashed assets and then further on handling the deployment. 
+These capability providers will be deployed, and updated in our managed cloud as well as in your cloud. They will analyze the file types, hashed assets and then further on handling the deployment.
 
-The assets will be updated and deployed to the cloud's storage. 
+The assets will be updated and deployed to the cloud's storage.
 
-*Different cloud provider's implementation specific varies. 
-
-
-
-
+_Different cloud provider's implementation specific varies._
