@@ -9,6 +9,7 @@ import { defineConfig } from 'rspress/config';
 import type { UserConfig } from 'rspress/config';
 import { Categories, Errors } from './lib/error-codes-messages';
 import { capitalizeFirstLetter } from './lib/utils/casing';
+import { getError } from './lib/error-helpers';
 
 const newRelicScript = fs.readFileSync('lib/scripts/new-relic.js', 'utf-8');
 
@@ -190,5 +191,27 @@ export default defineConfig({
     ga({
       id: 'G-B7G266JZDH',
     }),
+    {
+      name: 'zephyr-add-error-codes',
+      modifySearchIndexData(rows) {
+        const errorPathRegex = /\/errors\/(ze\d{2}\d{3})/;
+
+        for (const row of rows) {
+          const match = errorPathRegex.exec(row.routePath);
+
+          if (match) {
+            const error = getError(match[1]);
+
+            if (!error) {
+              throw new Error(`Invalid error page found: ${match[1]}`);
+            }
+
+            row.frontmatter.code = `ZE${error.kind}${error.id}`;
+            row.frontmatter.description = error.message;
+            row.frontmatter.category = error.kind;
+          }
+        }
+      },
+    },
   ],
 });
