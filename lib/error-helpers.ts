@@ -1,4 +1,4 @@
-const ERR_REGEX = /ZE(\d{2})(\d{3})/i;
+const ERR_REGEX = /ze(\d{2})(\d{3})/i;
 
 import { Categories, Errors } from './error-codes-messages';
 

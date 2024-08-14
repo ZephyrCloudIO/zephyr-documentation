@@ -36,7 +36,7 @@ export function ErrorInfo({
         <meta property="og:type" content="article" />
         <meta
           property="og:url"
-          content={`https://docs.zephyr-cloud.io/errors/${code}`}
+          content={`https://docs.zephyr-cloud.io/errors/${code.toLowerCase()}`}
         />
         <title>
           {code} - {message}

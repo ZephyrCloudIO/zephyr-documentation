@@ -38,7 +38,7 @@ export function ErrorTables({
             key={error.id}
             className="hover:cursor-pointer hover:bg-[var(--rp-c-bg-soft)]"
             onClick={() =>
-              navigate(`/errors/ZE${Categories[category]}${error.id}`)
+              navigate(`/errors/ze${Categories[category]}${error.id}`)
             }
           >
             <TableCell className="font-medium">

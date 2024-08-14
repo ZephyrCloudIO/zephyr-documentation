@@ -121,7 +121,7 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
             .filter((error) => error.kind === category)
             .map((error) => ({
               text: `ZE${value}${error.id}`,
-              link: `/errors/ZE${value}${error.id}`,
+              link: `/errors/ze${value}${error.id}`,
               description: error.message,
               label: error.message,
             })),

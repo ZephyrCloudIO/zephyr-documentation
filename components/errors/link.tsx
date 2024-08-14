@@ -13,14 +13,14 @@ export function ErrorLink({ code }: { code: string }) {
   return (
     <code>
       <a
-        href={`/errors/${code}`}
+        href={`/errors/${code.toLowerCase()}`}
         className="hover:text-[var(--rp-c-brand)] hover:decoration-[var(--rp-c-brand)]"
         title={getErrorMessage(code)}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onClick={(e) => {
           e.preventDefault();
-          navigate(`/errors/${code}`);
+          navigate(`/errors/${code.toLowerCase()}`);
         }}
       >
         {hover ? getErrorMessage(code) : code}
