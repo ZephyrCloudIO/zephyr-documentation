@@ -3,8 +3,8 @@
  */
 export const Categories = {
   unknown: '00',
-  deploy: '10',
-  build: '20',
+  build: '10',
+  deploy: '20',
   browser: '30',
 } as const satisfies {
   [name: string]: `${Digit}${Digit}`;
