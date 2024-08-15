@@ -9,7 +9,7 @@ import { defineConfig } from 'rspress/config';
 import type { UserConfig } from 'rspress/config';
 import { Categories, Errors } from './lib/error-codes-messages';
 import { capitalizeFirstLetter } from './lib/utils/casing';
-import { getError, PAGE_CODE_REGEX } from './lib/error-helpers';
+import { getError as getZeError, PAGE_CODE_REGEX } from './lib/error-helpers';
 
 const newRelicScript = fs.readFileSync('lib/scripts/new-relic.js', 'utf-8');
 
@@ -201,28 +201,21 @@ export default defineConfig({
             continue;
           }
 
-          const error = getError(match[1]);
+          const error = getZeError(match[1]);
 
           if (!error) {
             throw new Error(`Invalid error page found: ${match[1]}`);
           }
 
-//           const content = `
-
-// code: ${`ZE${Categories[error.kind]}${error.id}`}
-// description: ${error.message}
-// category: ${error.kind}
-
-// `.trim()
-
-
-//           row.frontmatter.__content = content;
-//           row.frontmatter.code = `ZE${Categories[error.kind]}${error.id}`;
-//           row.frontmatter.description = error.message;
-//           row.frontmatter.category = error.kind;
-          row.content += `\n\nZE${Categories[error.kind]}${error.id}\n${error.message}\n${error.kind}`;
-
-          // console.dir(row, { depth: null });
+          // Adds to content because the indexer is not configured to
+          // lookup the frontmatter data
+          // https://github.com/web-infra-dev/rspress/blob/d16b4b625c586e8d10385c792ade2a5d356834f3/packages/theme-default/src/components/Search/logic/providers/LocalProvider.ts#L78
+          row.content += '\n';
+          row.content += `ZE${Categories[error.kind]}${error.id}`;
+          row.content += '\n';
+          row.content += error.message;
+          row.content += '\n';
+          row.content += error.kind;
         }
       },
     },
