@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { getErrorMessage } from '../../lib/error-helpers';
 import { useNavigate } from 'rspress/runtime';
+import { getErrorMessage } from '../../lib/error-helpers';
 
 export function ErrorLink({ code }: { code: string }) {
   const [hover, setHover] = useState(false);

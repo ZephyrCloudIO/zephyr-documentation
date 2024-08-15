@@ -1,3 +1,5 @@
+import { useNavigate } from 'rspress/runtime';
+import { Categories, Errors } from '../../lib/error-codes-messages';
 import {
   Table,
   TableBody,
@@ -6,8 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table';
-import { Categories, Errors } from '../../lib/error-codes-messages';
-import { useNavigate } from 'rspress/runtime';
 
 export function ErrorTables({
   category,
