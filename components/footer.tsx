@@ -8,7 +8,7 @@ export const Footer = () => {
             target="_blank"
             rel="noreferrer"
           >
-            Discord Server
+            Discord
           </a>
         </p>
         <p>
@@ -20,18 +20,55 @@ export const Footer = () => {
             LinkedIn
           </a>
         </p>
+      </div>
+      <div className="flex gap-4">
         <p>
           <a
-            href="mailto:support@zephyr-cloud.io"
+            href="https://zephyr-cloud.io/privacy-policy"
             target="_blank"
             rel="noreferrer"
           >
-            Email us
+            Privacy Policy
+          </a>
+        </p>
+        <p>
+          <a
+            href="https://zephyr-cloud.io/pricing"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Pricing
+          </a>
+        </p>
+        <p>
+          <a
+            href="https://zephyr-cloud.io/faqs"
+            target="_blank"
+            rel="noreferrer"
+          >
+            FAQs
+          </a>
+        </p>
+        <p>
+          <a
+            href="https://zephyr-cloud.io/blog"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Blog
+          </a>
+        </p>
+        <p>
+          <a
+            href="https://zephyr-cloud.io/contact"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Contact
           </a>
         </p>
       </div>
-
-      <p>
+      <p className="mt-3">
         © {new Date().getFullYear()} <b>Zephyr Cloud</b>. All rights reserved.
       </p>
     </div>

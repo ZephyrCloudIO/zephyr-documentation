@@ -133,7 +133,6 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
   title: 'Zephyr Cloud Docs',
-  logoText: 'Zephyr Cloud Docs',
   description: 'Documentation for Zephyr Cloud',
   icon: '/favicon.ico',
   lang: 'en-US',
@@ -158,7 +157,7 @@ export default defineConfig({
     sidebar,
     socialLinks,
     editLink: {
-      docRepoBaseUrl: 'https://github.com/ZephyrCloudIO/zephyr-documentation',
+      docRepoBaseUrl: 'https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/docs',
       text: 'Edit this page on GitHub',
     },
   },
