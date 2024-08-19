@@ -196,6 +196,21 @@ export const Errors = {
     message: 'Failed to convert graph to dashboard data.',
     kind: 'browser',
   },
+  ERR_UPLOAD_TO_CLOUDFLARE_PAGES: {
+    id: '027',
+    message: 'Error upload to cloudflare pages.',
+    kind: 'deploy',
+  },
+  ERR_NO_WRANGLER: {
+    id: '028',
+    message: 'Wrangler dependency is needed for Cloudflare deployment. Please install dependencies without --no-optional flag.',
+    kind: 'build',
+  },
+  ERR_CREATE_DIST_FOLDER: {
+    id: '029',
+    message: 'Error creating dist folder.',
+    kind: 'build',
+  },
 } as const satisfies {
   [name: string]: {
     id: `${Digit}${Digit}${Digit}`;

@@ -6,3 +6,5 @@ github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/stretchr/testify v1.7.2 h1:4jaiDzPyXQvSd7D0EjG45355tLlV3VOECpq10pLC+8s=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+poseur.com/dotenv v1.0.1 h1:dbgB8RioRnodx/z6kE8Nxee9781WqHLS2tpc7Rsi3bg=
+poseur.com/dotenv v1.0.1/go.mod h1:AXzgiw449QfWLjwg3/RInJSUFtyRoKvM1JI1+5rm7/o=
