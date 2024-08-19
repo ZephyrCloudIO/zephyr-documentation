@@ -9,6 +9,7 @@ import { defineConfig } from 'rspress/config';
 import type { UserConfig } from 'rspress/config';
 import { Categories, Errors } from './lib/error-codes-messages';
 import { capitalizeFirstLetter } from './lib/utils/casing';
+import { getError as getZeError, PAGE_CODE_REGEX } from './lib/error-helpers';
 import type { RsbuildPlugin } from "@rsbuild/core"
 import { createApplicationUID, ZephyrPluginOptions, ZeUploadAssetsOptions } from "../zephyr-mono/libs/zephyr-edge-contract/dist"
 import { upload, getBuildId } from '../zephyr-mono/libs/zephyr-agent/dist';
@@ -17,6 +18,7 @@ import type { ModifyRspackConfigFn } from '@rsbuild/core';
 import rspack, { Configuration as RspackConfiguration, Output, Asset } from "@rspack/core"
 import type { Configuration } from "webpack"
 import { after } from 'node:test';
+import type { RspressPluginInstance } from "rspress"
 
 interface ZephyrPartialInternalOptions {
   root: string;
@@ -28,7 +30,7 @@ interface ZephyrPartialInternalOptions {
 const withZephyr = (_ZephyrInternalOption?: ZephyrPluginOptions): RsbuildPlugin => ({
   name: "zephyr-rspress-plugin",
   setup(api) {
-    api.onAfterBuild(({ environments, isFirstCompile }) => {
+    api.onAfterBuild(({ isFirstCompile }) => {
       // let bundle: Output = {}
       const rspress_options = {} as ZephyrPartialInternalOptions
       const outputAssets: Asset[] = []
@@ -80,7 +82,7 @@ const socialLinks: UserConfig['themeConfig']['socialLinks'] = [
 
 const nav: UserConfig['themeConfig']['nav'] = [
   {
-    text: 'Dashboard →',
+    text: 'Zephyr Cloud →',
     link: 'https://app.zephyr-cloud.io',
   },
 ];
@@ -150,7 +152,7 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
       link: '/recipes',
     },
     {
-      text: 'Error Codes',
+      text: 'Troubleshooting',
       link: '/errors',
       collapsed: true,
       collapsible: true,
@@ -160,7 +162,6 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           text: capitalizeFirstLetter(category),
           collapsed: true,
           collapsible: true,
-          // link: '/errors',
           items: Object.values(Errors)
             .filter((error) => error.kind === category)
             .map((error) => ({
@@ -180,7 +181,7 @@ export default ze()({
   description: 'Documentation for Zephyr Cloud',
   icon: '/favicon.ico',
   lang: 'en-US',
-
+  ssg: true,
   globalStyles: path.join(__dirname, 'styles/index.css'),
   mediumZoom: { selector: '.rspress-doc img' },
 
@@ -201,7 +202,7 @@ export default ze()({
     sidebar,
     socialLinks,
     editLink: {
-      docRepoBaseUrl: 'https://github.com/ZephyrCloudIO/zephyr-documentation',
+      docRepoBaseUrl: 'https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/docs',
       text: 'Edit this page on GitHub',
     },
   },
@@ -233,12 +234,34 @@ export default ze()({
   },
 
   plugins: [
-    // @ts-expect-error ignore this for now
     fileTree(),
-    // @ts-expect-error ignore this for now
     ga({
       id: 'G-B7G266JZDH',
-    }),
+    } as RspressPluginInstance),
+    {
+      name: 'zephyr-add-error-codes',
+      modifySearchIndexData(rows) {
+        for (const row of rows) {
+          const match = PAGE_CODE_REGEX.exec(row.routePath);
+
+          if (!match) {
+            continue;
+          }
+
+          const error = getZeError(match[1]);
+
+          if (!error) {
+            throw new Error(`Invalid error page found: ${match[1]}`);
+          }
+
+          // Adds to content because the indexer is not configured to
+          // lookup the frontmatter data.
+          // https://github.com/web-infra-dev/rspress/blob/d16b4b625c586e8d10385c792ade2a5d356834f3/packages/theme-default/src/components/Search/logic/providers/LocalProvider.ts#L78
+          row.content = `ZE${Categories[error.kind]}${error.id}\n${error.message
+            }\n\n\n${row.content}`; // prepends to have higher priority
+        }
+      },
+    },
 
   ],
 });

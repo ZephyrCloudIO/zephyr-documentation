@@ -1,16 +1,35 @@
 import { getErrorMessage } from '../../lib/error-helpers.ts';
 import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@theme';
 
 # {getErrorMessage('ZE20010')}
 
-<ErrorInfo code="ZE20010" terminal />
+<ErrorInfo code="ZE20010" browser />
 
-{/* TODO */}
+This error occurs when a problem between Zephyr's plugin and our servers happens during file upload and a asset for the remote module is not uploaded.
 
-::: warning
+## Debugging the error
 
-Not documented yet. Had a problem and need help?
+<Steps>
 
-Contact us in our [discord](https://zephyr-cloud.io/discord)!
+### Retry your deployment
+
+If you encounter this error, you can try to deploy your application again. This error can be transient and may not occur on subsequent deployments.
+
+```bash
+npm run build
+```
+
+### Check your network connection
+
+Ensure that your network connection is stable and that there are no issues with your internet connection. A poor network connection can cause issues with file uploads.
+
+</Steps>
+
+## Ask for Support
+
+::: caution
+
+**Still having problems?** [Try joining our Discord server and get help from the community](https://zephyr-cloud.io/discord)
 
 :::

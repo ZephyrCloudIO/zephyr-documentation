@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { getErrorMessage } from '../../lib/error-helpers';
 import { useNavigate } from 'rspress/runtime';
+import { getErrorMessage } from '../../lib/error-helpers';
 
 export function ErrorLink({ code }: { code: string }) {
   const [hover, setHover] = useState(false);
@@ -14,8 +14,8 @@ export function ErrorLink({ code }: { code: string }) {
     <code>
       <a
         href={`/errors/${code.toLowerCase()}`}
-        className="hover:text-[var(--rp-c-brand)] hover:decoration-[var(--rp-c-brand)]"
-        title={getErrorMessage(code)}
+        className="underline hover:no-underline"
+        title="View more information about this error"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onClick={(e) => {

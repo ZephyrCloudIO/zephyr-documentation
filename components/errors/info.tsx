@@ -1,6 +1,5 @@
 import { Helmet } from 'rspress/runtime';
 import { getErrorMessage } from '../../lib/error-helpers';
-import { Separator } from '../ui/separator';
 import { ErrorLink } from './link';
 
 export function ErrorInfo({

@@ -1,5 +1,6 @@
 import { getErrorMessage } from '../../lib/error-helpers.ts';
 import { ErrorInfo } from '../../components/errors/info.tsx';
+import { ErrorLink } from '../../components/errors/link.tsx';
 
 # ZE10011 package.json not found
 # {getErrorMessage('ZE10011')}
@@ -8,7 +9,7 @@ import { ErrorInfo } from '../../components/errors/info.tsx';
 
 After we recursively loop for the current working directory where the bundler's config lives and locate the `package.json` file, we then perform a parsing function to make sure your `package.json` is a valid [JSON](https://www.json.org/json-en.html) format.
 
-If the `package.json` we located is not in a valid JSON format (hey your npm script or dependencies installation will fail if it is not), we will throw the `Error [ZE10020]: package.json {path} is not valid json.`
+If the `package.json` we located is not in a valid JSON format (hey your npm script or dependencies installation will fail if it is not), we will throw the <ErrorLink code="ZE10011" /> error.
 
 ## Debugging the error
 
