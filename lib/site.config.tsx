@@ -12,6 +12,7 @@ export interface CardItemProps {
   title: string;
   href: string;
   framework?: string;
+  developed?: boolean;
   description?: string;
   className?: string;
   icons?: JSX.Element[];
@@ -22,6 +23,9 @@ export type CardProps = Record<string, CardItemProps[]>;
 
 export const Links = {
   github: 'https://github.com/ZephyrCloudIO/docs',
+  extension:
+    'https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn',
+  discord: 'https://zephyr-cloud.io/discord',
 };
 export const SiteConfig: CardProps = {
   start: [
@@ -29,58 +33,84 @@ export const SiteConfig: CardProps = {
       title: 'Why Zephyr', // TODO: shouldn't introduction and "Why" be on the same page?
       description:
         "Have an overview of modern application's development complexity and how Zephyr can speed up the process.",
-      href: '/guide/general/why-zephyr-cloud',
+      href: '/general/why-zephyr-cloud',
     },
     {
       title: 'Get Started',
       description:
         'The quickest way to get you started with our chrome extension, dashboard and npm package. Use Webpack as an example. ',
-      href: '/guide/general/get-started',
+      href: '/general/get-started',
       variant: 'small',
     },
     {
       title: 'Adding Zephyr to existing application',
       description:
         'One line of code to add Zephyr to your existing application. Use Nx + React + Webpack as an example.',
-      href: '/guide/recipes/existing-app',
+      href: '/recipes/existing-app',
       variant: 'small',
     },
     // {
     //     "title": "Module Federation Application",
     //     "description": "Add Zephyr to applications built on module federation.",
-    //     "href": "/guide/getting-started/create-mf-app",
+    //     "href": "/getting-started/create-mf-app",
     //     "variant": "small"
     // },
   ] as CardItemProps[],
+  getStarted: [
+    {
+      title: 'Add Zephyr to your existing project',
+      description: 'Available for Webpack, Rspack and Vite',
+      href: '/recipes/existing-app',
+      variant: 'small',
+    },
+    {
+      title: 'Fork our examples',
+      description:
+        'With pre-configured application, available in both standalone applications and micro-frontends.',
+      href: 'https://github.com/ZephyrCloudIO/zephyr-examples/fork',
+      variant: 'small',
+    },
+    {
+      title: 'Start from scratch',
+      description: 'Using React and Rspack',
+      href: '/general/get-started#start-from-scratch',
+      variant: 'small',
+    },
+  ],
   features: [
     {
       title: 'Version control',
       description:
-        'Zephyr provides version control for your application and enabling your application to rollback and forward on chrome extension.',
-      href: '/features/version-control',
+        'Enable you to deploy unlimited versions (depends on your cloud usage) of your application ever deployed on chrome extension and dashboard.',
+      href: '/usage/versioning',
+      developed: true,
     },
     {
       title: 'Rollback and forward',
-      description:
-        'Zephyr provides rollback and forward features for your application.',
-      href: '/features/rollback-forward',
+      description: 'Rollback and forward your application.',
+      href: '/usage/rollback-forward',
+      developed: false,
     },
     {
       title: 'Sub-second deploy',
-      description: 'Zephyr provides sub-second deploy for your application.',
-      href: '/features/sub-second-deploy',
+      description:
+        'Deploy production and preview version of your application in sub-seconds.',
+      href: '/usage/sub-second-deploy',
+      developed: true,
     },
     {
       title: 'Long-lived preview links',
       description:
-        'Zephyr provides long-lived preview links for your application.',
-      href: '/features/long-lived-preview-links',
+        'Every versions that ever deployed will be live forever unless you delete the deployment.',
+      href: '/usage/long-live-preview',
+      developed: true,
     },
     {
       title: 'Dependency management',
       description:
-        'Zephyr provides dependency management for your application.',
-      href: '/features/dependency-management',
+        'Monitor and visualize your dependency of your application - be it remote modules within a app utilizing module federation, or npm packages.',
+      href: '/usage/dependency-management',
+      developed: true,
     },
   ] as CardItemProps[],
 
@@ -90,7 +120,7 @@ export const SiteConfig: CardProps = {
       title: 'React + Vite',
       framework: 'react',
       description: 'Use Zephyr with React and Vite.',
-      href: '/guide/recipes/react-vite',
+      href: '/recipes/react-vite',
       variant: 'small',
       icons: [<ReactIcon />, <ViteIcon />],
     },
@@ -106,20 +136,20 @@ export const SiteConfig: CardProps = {
     //   title: "React + Vite + Nx",
     //   framework: "react",
     //   description: "Use Zephyr with React, Vite and Nx.",
-    //   href: "/guide/recipes/react-vite-nx",
+    //   href: "/recipes/react-vite-nx",
     //   variant: "small",
     //   icons: [<ReactIcon />, <NxIcon />, <ViteIcon />],
     // },
-    // {
-    //     title: "React + Rspack + Nx",
-    //     description: "Use Zephyr with React, Nx and Rspack.",
-    //     href: "/recipes/react-nx-rspack",
-    //     variant: "small"
-    // },
+    {
+      title: 'React + Rspack + Nx',
+      description: 'Use Zephyr with React, Nx and Rspack.',
+      href: '/recipes/react-nx-rspack',
+      variant: 'small',
+    },
     {
       title: 'Migrate from vanilla module federation',
       description: 'Migrate from vanilla module federation to Zephyr.',
-      href: '/guide/recipes/existing-app',
+      href: '/recipes/existing-app',
       variant: 'small',
       icons: [<ModuleFederationIcon />],
     },
@@ -127,7 +157,7 @@ export const SiteConfig: CardProps = {
       // create-mf-app-rspack
       title: 'React + Rspack',
       description: 'Use Zephyr with React and Rspack',
-      href: '/guide/general/get-started#3-create-a-react-app',
+      href: '/general/get-started#3-create-a-react-app',
       variant: 'small',
       icons: [<ReactIcon />, <RspackIcon />, <ModuleFederationIcon />],
     },
@@ -148,7 +178,7 @@ export const SiteConfig: CardProps = {
       // create-nx-workspace-mf + react-tractor-sample
       title: 'React + Webpack + Nx + Module Federation',
       description: 'Use Zephyr with React, Nx and Module Federation.',
-      href: '/guide/recipes/nx-mf-app',
+      href: '/recipes/nx-mf-app',
       variant: 'small',
       icons: [
         <ReactIcon />,
@@ -200,20 +230,20 @@ export const SiteConfig: CardProps = {
     {
       title: 'Module Federation',
       description: 'Learn about module federation and how Zephyr enhances it.',
-      href: '/guide/concepts/module-federation',
+      href: '/concepts/module-federation',
       variant: 'small',
     },
     {
       title: 'Edge',
       description: 'What does edge mean? How does it benefit us?',
-      href: '/guide/concepts/edge',
+      href: '/concepts/edge',
       variant: 'small',
     },
     {
       title: 'Micro Frontend',
       description:
         "What's Micro Frontend? What are the use cases? When is a good time to implement it?",
-      href: '/guide/concepts/micro-frontend',
+      href: '/concepts/micro-frontend',
     },
   ] as CardItemProps[],
 };
@@ -247,5 +277,76 @@ export const supportedBrowser = [
     name: 'Safari',
     icon: '',
     supported: false,
+  },
+  {
+    name: 'Brave',
+    icon: '',
+    supported: false,
+  },
+];
+
+export const supportedFramework = [
+  {
+    name: 'React',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Angular v15',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Qwik',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Solid.js',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Astro',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Remix',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Svelte',
+    icon: '',
+    supported: 'backlog',
+  },
+];
+
+export const supportedBundler = [
+  {
+    name: 'Rspack',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Webpack',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Vite',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Rollup',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Esbuild',
+    icon: '',
+    supported: 'backlog',
   },
 ];

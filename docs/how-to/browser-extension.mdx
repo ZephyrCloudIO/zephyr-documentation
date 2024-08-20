@@ -1,0 +1,45 @@
+import { Image } from "../../components/ui/image"
+
+# Browser Extension
+
+Zephyr Mission Control is a a side panel that you can use to develop, preview, and publish new versions of your Zephyr Cloud powered site.
+
+<Image alt="image of the Zephyr Cloud browser extension" src="/sidebar-overview.png" size="large" />
+
+## Installation
+
+The browser extension is specifically designed for Google Chrome. To install, download it from the Chrome Web Store by following this link: [Zephyr Mission Control Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn).
+
+:::info
+*Note:* While the extension may also function on other Chromium-based browsers such as Microsoft Edge, Brave, Vivaldi, and Opera, please be aware that these are not officially supported. _**For best user experience, we highly recommend you to use Google Chrome**_. We are not responsible for any issues that may arise, and currently, we do not provide support for these platforms.
+:::
+
+## Deployed Status
+
+When an application reaches the 'Deployed' status, it indicates successful deployment. You can verify this directly within Zephyr Mission Control under the 'Application' section where the status is clearly marked.
+
+## Previewing Versions
+
+Within our browser extension, you can preview all versions of your applications. 
+
+When you select an application under **Name**, you will see your latest deployed application in the browser. You can also preview previously deployed version by clicking on the dropdown menu under **Version**. Rollback and forward to previous/latest deployed version is currently under development. 
+
+## Micro-Frontends & Remotes
+
+In Zephyr Mission Control, you have the ability to manage your micro-frontends and their respective remote versions. Each registered micro-frontend will be listed, and you can control the specific versions that are currently deployed or under development.
+
+### Switching Applications
+
+Zephyr Mission Control allows you to switch between different applications easily. Each application can be selected from a dropdown menu, enabling you to manage multiple projects efficiently.
+
+### Switching Remote Versions
+
+You can also switch between different versions of your remotes. This flexibility supports testing and integration processes by allowing different versions to be deployed in different environments.
+
+## Publishing Updates
+
+When you're ready to update the environment with new changes, you can publish updates directly from Zephyr Mission Control. 
+
+:::warning
+By clicking 'Publish updates', you will create a snapshot of the currently used environment, locking in the versions of all remotes being consumed.
+:::

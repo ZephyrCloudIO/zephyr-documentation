@@ -1,0 +1,12 @@
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+
+# {getErrorMessage('ZE10013')}
+
+<ErrorInfo code="ZE10013" terminal related="ZE10017,ZE10011" />
+
+When you are running a build through Zephyr, we will verify your `package.json`'s fields to check whether you have the **name** and **version** fields. Later one we use those values to compose `application_uid`. Behind the scene we will be using your `applicaiton_uid` to deploy your application with related information as well as generating build id.
+
+## Debugging the error
+
+Make sure the **name** and **version** fields have a value in your `package.json`!

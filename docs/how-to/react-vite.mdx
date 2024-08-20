@@ -1,0 +1,95 @@
+import { ChromeExtension } from '../../components/extension';
+import { Image } from '../../components/ui/image';
+import { SourceCode } from '@theme';
+
+# React + Vite
+
+<SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/react-vite-ts" />
+
+In this React + Vite simple app, we will walk you from creating a simple react app
+with Vite till configure it with Zephyr plugin in `vite.config.ts`.
+
+:::info Pre-Requisites
+
+- We expect you to have finish our [Get Started](/general/get-started) guide.
+- Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
+- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
+
+:::
+
+## Generating a Vite + React project
+
+```bash filename="Terminal"
+# npm, in npm  7+ double dash is needed
+npm create vite@latest react-vite-ts -- --template react-ts
+```
+
+and then run commands to make sure you have necessary dependencies installed.
+
+```bash filename="Terminal"
+cd react-vite-ts
+npm install
+npm run dev
+```
+
+## Add Zephyr configuration
+
+You should see the website lives in localhost. Open the `vite.config.ts` in your editor and add below modification:
+
+```ts filename="vite.config.ts"
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr } from 'vite-plugin-zephyr'; // [!code ++]
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    react(),
+    withZephyr(), // [!code ++]
+  ],
+});
+```
+
+:::warning
+
+**Remember to initialize a git repository in current folder**, before you `npm run build` to deploy your app.
+
+:::
+
+With git config initialized, linked to remote origin and additional configuration, you are ready to deploy:
+
+```bash filename="Terminal"
+npm run build
+```
+
+You will see the build output like so and the highlighted lines include your deployed URL:
+
+```bash {16-18}
+$ react-vite-ts@0.0.0 build
+$ tsc && vite build
+
+The CJS build of Vite's Node API is deprecated. See https://vitejs.dev/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+vite v5.2.13 building for production...
+✓ 34 modules transformed.
+dist/index.html                   0.46 kB │ gzip:  0.30 kB
+dist/assets/react-CHdo91hT.svg    4.13 kB │ gzip:  2.05 kB
+dist/assets/index-DiwrgTda.css    1.39 kB │ gzip:  0.72 kB
+dist/assets/index-DVoHNO1Y.js   143.36 kB │ gzip: 46.09 kB
+✓ built in 423ms
+[zephyr] You are already logged in
+[zephyr]: [react-vite-ts.react-vite-ts.username](id)[78]: uploaded local snapshot in 156ms
+[zephyr]: [react-vite-ts.react-vite-ts.username](id)[78]: uploading missing assets to zephyr (queued 4 out of 4)
+[zephyr]: [react-vite-ts.react-vite-ts.username](id)[78]: uploaded missing assets to zephyr (4 assets in 1009ms, 145.84kb)
+[zephyr]: [react-vite-ts.react-vite-ts.username](id)[78]: deploying to https://t_main_id-react-vite-t-309c6c-ze.valorkin.dev
+[zephyr]: [react-vite-ts.react-vite-ts.username](id)[78]: deploying to https://id_78-react-vite-ts-re-6d13dd-ze.valorkin.dev
+[zephyr]: [react-vite-ts.react-vite-ts.username](id)[78]: deploying to https://react-vite-ts-react-vite-ts-username-ze.valorkin.dev
+[zephyr]: [react-vite-ts.react-vite-ts.username](id)[78]: build deployed in 1067ms
+```
+
+## Chrome Extension
+
+On your browser, click on <ChromeExtension/>, you can see your application is under the dropdown menu:
+
+<Image src="/react-vite-ts-side-panel.png" />
+
+You can access this application as well as all the underlying versions anytime whenver you click on Zephyr Cloud chrome extension.

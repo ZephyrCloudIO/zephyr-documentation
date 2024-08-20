@@ -25,7 +25,12 @@ dist-ssr
 *.sw?
 doc_build
 
-
-
 .nx/cache
 .nx/workspace-data
+
+.env
+
+# Local Netlify folder
+.netlify
+
+pnpm-lock.yaml

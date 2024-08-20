@@ -1,0 +1,92 @@
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@theme';
+import { ErrorLink } from '../../components/errors/link.tsx';
+
+# {getErrorMessage('ZE10020')}
+
+<ErrorInfo code="ZE10020" terminal plugins="Rollup" />
+
+On your build start, there are a list of actions we run through. If any of these actions failed, Zephyr agent will fail to initialize in the Rollup plugin.
+
+<dt>1. Understanding environment</dt>
+<dd>Git info, package.json's information.</dd>
+<dt>2. Application configuration</dt>
+<dd>
+  Application configuration including your remote modules, build id and assets.
+</dd>
+
+## Debugging the error
+
+<Steps>
+
+### Valid `package.json` file
+
+Package.json should be in json format, include name and version) sits in the same directory as your bundler configuration. A typical project structure Zephyr would understand would be similar to below set up, where each application has their unique name in package.json.
+
+```yml
+HostAppDir:
+  - package.json
+      name: "host-app"
+      version: "1.0.0"
+  - webpack.config.js
+
+RemoteAppDir:
+  - package.json
+      name: "remote-app"
+     version: "1.0.0"
+  - webpack.config.js
+```
+
+Related error and potential resolution:
+
+- <ErrorLink code="ZE10010" />
+- <ErrorLink code="ZE10011" />
+- <ErrorLink code="ZE10012" />
+
+### Ensure git configuration
+
+Make sure you have git remote origin url, git username, email configured.
+
+Related error and potential resolution:
+
+- <ErrorLink code="ZE10014" />
+- <ErrorLink code="ZE10015" />
+- <ErrorLink code="ZE10016" />
+
+### Build tool configuration
+
+Your remote modules' configuration should be in a typical format Zephyr understands. For example:
+
+```ts
+plugins = [
+  new CopyRspackPlugin({
+    patterns: [
+      {
+        from: './src/index.html',
+        to: './index.html',
+      },
+    ],
+  }),
+
+  new ModuleFederationPluginV1({
+    name: 'app_04',
+    filename: 'remoteEntry.js',
+    shared: [],
+    exposes: {
+      './App': './src/main.js',
+      './loadApp': './src/loadApp.js',
+    },
+  }),
+];
+```
+
+### Remove your local configuration file
+
+Remove `~/.zephyr` by running below commands and login from either [dashboard](https://app.zephyr-cloud.io) or [sidepanel on Chrome](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) again.
+
+```bash
+rm -rf ~/.zephyr
+```
+
+</Steps>
