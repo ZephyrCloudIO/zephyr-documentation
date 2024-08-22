@@ -33,4 +33,5 @@ doc_build
 # Local Netlify folder
 .netlify
 
-pnpm-lock.yaml
+yarn.lock
+package-lock.yaml
