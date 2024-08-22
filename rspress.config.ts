@@ -57,10 +57,6 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/general/get-started',
         },
         {
-          text: 'Architecture',
-          link: '/general/architecture',
-        },
-        {
           text: 'Create MF App',
           link: '/general/create-mf-app',
         },
@@ -94,6 +90,27 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/how-to/existing-app',
         },
       ],
+    },
+    {
+      text: 'Concepts',
+      link: '/concepts',
+      collapsed: false,
+      collapsible: true,
+      items: [
+        {
+          text: "Architecture",
+          link: "/concepts/architecture"
+        },
+
+        {
+          text: "Micro-Frontend",
+          link: '/concepts/micro-frontend'
+        },
+        {
+          text: "Module Federation",
+          link: "/concepts/module-federation"
+        }
+      ]
     },
     {
       text: 'Resources',
