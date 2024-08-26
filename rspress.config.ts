@@ -159,8 +159,8 @@ export default defineConfig({
   mediumZoom: { selector: '.rspress-doc img' },
 
   logo: {
-    light: '/logo-light.webp',
-    dark: '/logo-dark.webp',
+    light: '/logo-light-bg.png',
+    dark: '/logo-dark-bg.png',
   },
   search: {
     searchHooks: path.join(__dirname, 'lib/utils/after-search.ts'),
