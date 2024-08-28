@@ -9,6 +9,8 @@ export const InvertImage = ({
 }) => {
   const isDark = useDark();
 
+  console.log('isDark', isDark);
+
   const darkSource = darkSrc ? darkSrc : '/bg-dark-logo.png';
 
   const lightSource = lightSrc ? lightSrc : '/bg-light-logo.png';

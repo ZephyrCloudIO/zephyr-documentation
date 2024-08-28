@@ -17,7 +17,7 @@ export const FeatureTable = () => {
               <td className="flex items-start justify-start py-2 text-start">
                 <p
                   className={
-                    'pl-2 pt-1 pb-2 pr-3  hover:underline-offset-4 hover:underline hover:decoration-dashed hover:decoration-[var(--rp-c-brand)]/40 text-[var(--rp-c-brand)] hover:text-zinc-100 transition-all'
+                    'pl-2 pt-1 pb-2 pr-3  hover:underline-offset-4 hover:underline hover:decoration-dashed hover:decoration-[var(--rp-c-brand)]/40 text-[var(--rp-c-link)] hover:text-[--rp-c-background] transition-all'
                   }
                 >
                   <Balancer>{feature.title}</Balancer>

@@ -64,7 +64,7 @@
   --rp-c-text-4: rgba(235, 235, 235, 0.18);
 
   /*!* Will be used in overview page *!*/
-  /*--rp-c-text-code: #c9def1;*/
+  --rp-c-text-code: #c9def1;
 }
 
 :root {

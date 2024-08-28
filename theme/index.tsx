@@ -2,7 +2,14 @@ import Theme from 'rspress/theme';
 import { Footer } from '../components/footer';
 
 const AfterNavTitle = () => {
-  return <div className="text-xs font-bold tracking-tight">Docs</div>;
+  return (
+    <a
+      href="/"
+      className="text-xs font-bold tracking-tight transition-all hover:text-[--rp-c-text-3]"
+    >
+      Docs
+    </a>
+  );
 };
 
 const Layout = () => (
