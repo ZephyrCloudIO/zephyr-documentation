@@ -1,23 +1,28 @@
 import { useDark } from 'rspress/runtime';
+import { useEffect, useState } from 'react';
 
-export const InvertImage = ({
-  darkSrc,
-  lightSrc,
-}: {
+interface ImageTypeProps {
   darkSrc?: string;
-  lightSrc?;
-}) => {
+  lightSrc?: string;
+}
+export const InvertImage = ({ darkSrc, lightSrc }: ImageTypeProps) => {
+  const [imageSrc, setImageSrc] = useState('/bg-dark-logo.png');
+
   const isDark = useDark();
 
-  const darkSource = darkSrc ? darkSrc : '/bg-dark-logo.png';
+  useEffect(() => {
+    console.log('isDark', isDark);
+    if (!isDark) setImageSrc(lightSrc ? lightSrc : '/bg-light-logo.png');
 
-  const lightSource = lightSrc ? lightSrc : '/bg-light-logo.png';
+    if (isDark) setImageSrc(darkSrc ? darkSrc : '/bg-dark-logo.png');
+  }, [isDark]);
+
   return (
     <img
-      src={isDark ? darkSource : lightSource}
+      src={imageSrc}
       alt="Zephyr Cloud"
       height="100"
-      className="w-1/2 h-[220px] mx-auto"
+      className="md:w-1/2 w-full md:min-h-[220px] mx-auto"
     />
   );
 };
