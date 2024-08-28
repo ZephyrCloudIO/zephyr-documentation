@@ -145,6 +145,7 @@ export const SiteConfig: CardProps = {
       description: 'Use Zephyr with React, Nx and Rspack.',
       href: '/recipes/react-nx-rspack',
       variant: 'small',
+      icons: [<ReactIcon />, <RspackIcon />, <NxIcon />],
     },
     {
       title: 'Migrate from vanilla module federation',
