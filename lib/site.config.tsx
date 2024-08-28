@@ -46,7 +46,7 @@ export const SiteConfig: CardProps = {
       title: 'Adding Zephyr to existing application',
       description:
         'One line of code to add Zephyr to your existing application. Use Nx + React + Webpack as an example.',
-      href: '/recipes/existing-app',
+      href: '/how-to/existing-app',
       variant: 'small',
     },
     // {
@@ -60,7 +60,7 @@ export const SiteConfig: CardProps = {
     {
       title: 'Add Zephyr to your existing project',
       description: 'Available for Webpack, Rspack and Vite',
-      href: '/recipes/existing-app',
+      href: '/how-to/existing-app',
       variant: 'small',
     },
     {
@@ -120,7 +120,7 @@ export const SiteConfig: CardProps = {
       title: 'React + Vite',
       framework: 'react',
       description: 'Use Zephyr with React and Vite.',
-      href: '/recipes/react-vite',
+      href: '/how-to/react-vite',
       variant: 'small',
       icons: [<ReactIcon />, <ViteIcon />],
     },
@@ -143,14 +143,14 @@ export const SiteConfig: CardProps = {
     {
       title: 'React + Rspack + Nx',
       description: 'Use Zephyr with React, Nx and Rspack.',
-      href: '/recipes/react-nx-rspack',
+      href: '/how-to/react-rspack-nx',
       variant: 'small',
       icons: [<ReactIcon />, <RspackIcon />, <NxIcon />],
     },
     {
       title: 'Migrate from vanilla module federation',
       description: 'Migrate from vanilla module federation to Zephyr.',
-      href: '/recipes/existing-app',
+      href: '/how-to/existing-app',
       variant: 'small',
       icons: [<ModuleFederationIcon />],
     },
@@ -158,7 +158,7 @@ export const SiteConfig: CardProps = {
       // create-mf-app-rspack
       title: 'React + Rspack',
       description: 'Use Zephyr with React and Rspack',
-      href: '/general/get-started#3-create-a-react-app',
+      href: '/general/get-started#start-from-scratch',
       variant: 'small',
       icons: [<ReactIcon />, <RspackIcon />, <ModuleFederationIcon />],
     },
@@ -179,7 +179,7 @@ export const SiteConfig: CardProps = {
       // create-nx-workspace-mf + react-tractor-sample
       title: 'React + Webpack + Nx + Module Federation',
       description: 'Use Zephyr with React, Nx and Module Federation.',
-      href: '/recipes/nx-mf-app',
+      href: '/how-to/nx-mf-app',
       variant: 'small',
       icons: [
         <ReactIcon />,
