@@ -1,11 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-const theme = require('tailwindcss/defaultTheme')
-const colors = require('tailwindcss/colors')
+import theme from "tailwindcss/defaultTheme"
+import colors from "tailwindcss/colors"
+
 module.exports = {
   content: [
     "./docs/**/*.{js,ts,jsx,tsx,md,mdx}",
     "./components/**/*.{js,ts,jsx,tsx}",
     "./components/*.{js,ts,jsx,tsx}",
+    "./theme/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     ...theme,
@@ -80,6 +82,10 @@ module.exports = {
         "gray-light-1": "hsl(var(--rp-c-gray-light-1)/<alpha-value>)",
         "gray-light-2": "hsl(var(--rp-c-gray-light-2)/<alpha-value>)"
 
+      },
+      fontFamily: {
+        'nebu-semibold': ['Nebulica-SemiBold', 'sans-serif'],
+        'nebu': ['Nebulica-Regular', 'sans-serif']
       }
     },
   },

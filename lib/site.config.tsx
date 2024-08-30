@@ -8,6 +8,9 @@ import { WebpackIcon } from '../components/icons/webpack';
 // import { AngularIcon } from '../components/icons/angular';
 // import { LernaIcon } from '../components/icons/lerna';
 // import { NetlifyIcon } from '../components/icons/netlify';
+
+export const version = '0.0.16';
+
 export interface CardItemProps {
   title: string;
   href: string;
