@@ -19,25 +19,6 @@ const chConfig = {
 };
 
 
-function processCategories() {
-  return Object.entries(Categories)
-    .filter(([category]) => category !== 'unknown')
-    .map(([category, value]) => ({
-      text: capitalizeFirstLetter(category),
-      collapsed: true,
-      collapsible: true,
-      items: Object.values(Errors)
-        .filter((error) => error.kind === category)
-        .map((error) => ({
-          text: `ZE${value}${error.id}`,
-          link: `/errors/ze${value}${error.id}`,
-          description: error.message,
-          label: error.message,
-        })),
-    }));
-}
-
-const errorResults = processCategories()
 
 const socialLinks: UserConfig['themeConfig']['socialLinks'] = [
   {
@@ -112,8 +93,8 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/how-to/browser-extension'
         },
         {
-          text: 'Versioning',
-          link: '/how-to/versioning'
+          text: 'Versioning and Tags',
+          link: '/how-to/versioning-tags'
         },
         {
           text: 'Cloud Providers',

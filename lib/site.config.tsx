@@ -354,3 +354,46 @@ export const supportedBundler = [
     supported: 'backlog',
   },
 ];
+
+export const supportedCloud = [
+  {
+    name: 'Zephyr Managed Cloud (default)',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Cloudflare',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Netlify',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'AWS',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Azure',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Vercel',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Supabase',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'ByteDance Cloud',
+    icon: '',
+    supported: 'backlog',
+  },
+];

@@ -3,10 +3,51 @@ import { Separator } from "../../components/ui/separator"
 
 # Micro-Frontends with Zephyr - The Complete Guide
 
+Micro-Frontends' configuration and it's deployment processes are known to be complicated and painful to debug. Zephyr came in not only to help with resolving dynamic URL and development process for applications applying Micro-Frontends architecture, but also deployment, versioning and more. This section will walk through what are the needed configuration to ensure you have a smooth development workflow and deployment process. 
+
 ## Checklist
 
-A list of configuration required to run Micro-Frontends application with Zephyr (using Module Federation as an example).
+
 <Steps>
+### Micro-Frontends Configuration 
+
+Our first class supported Micro-Frontends architecture is [Module Federation](https://module-federation.io), while other Micro-Frontends architecture might be supported. 
+
+An example working shell app's configuration can be seen below as well as [in our example repository](https://github.com/ZephyrCloudIO/zephyr-examples/blob/comprehensive-react-18/examples/comprehensive-react-18/app-01/rspack.config.js)
+
+```ts title="rspack.config.js"
+new ModuleFederationPluginV1({
+      name: 'app_01',
+      filename: 'remoteEntry.js',
+      remotes: {
+        app_02: 'app_02@http://localhost:3002/remoteEntry.js',
+        app_03: 'app_03@http://localhost:3003/remoteEntry.js',
+        app_04: 'app_04@http://localhost:3004/remoteEntry.js',
+        app_05: 'app_05@http://localhost:3005/remoteEntry.js',
+      },
+      exposes: {
+        './SideNav': './src/SideNav',
+        './Page': './src/Page',
+      },
+      shared: {
+        ...deps,
+        '@material-ui/core': {
+          singleton: true,
+        },
+        'react-router-dom': {
+          singleton: true,
+        },
+        'react-dom': {
+          singleton: true,
+        },
+        react: {
+          singleton: true,
+        },
+      },
+    }),
+```
+
+
 ### Build remotes first 
 
 At the moment. when we are resolving your remote dependencies, we will need the [remotes](/learning/concepts/terminologies#remote-application) to be built first. Be wary that the first built remotes should not be consuming any other remotes. 
@@ -48,6 +89,14 @@ name: 'follow'
 
 You may refer to [how each zephyr options were resolved here](#zephyr-options)
 
+### Git repository 
+
+Several details related to git are required to have a successful deployment. 
+
+- Project directory must be a git repository 
+- Current project directory must have a branch 
+- Current project must have created a commit
+
 ### Confirm access right  
 
 Do you have the admin or editor access to the application you are trying to deploy? You can check it on [Zephyr Dashboard](https://app.zephyr-cloud.io).
@@ -63,7 +112,7 @@ If you don't have it yet, you can contact your Admin on Zephyr dashboard to invi
 
 ### Zephyr Options 
 
-Currently we are reading your configuration and application's git, package.json information to understand your application's deployment information and if you try to set configurations and pass it into Zephyr like below - it won't work (yet). 
+Although we resolve your application's configuration, git, package.json information to understand your application's deployment information and details, you can also opt to pass in configuration directly. 
 
 :::note{title="Directory location"}
 

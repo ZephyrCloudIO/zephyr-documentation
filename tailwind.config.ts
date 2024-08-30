@@ -5,9 +5,9 @@ import colors from "tailwindcss/colors"
 module.exports = {
   content: [
     "./docs/**/*.{js,ts,jsx,tsx,md,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./components/*.{js,ts,jsx,tsx}",
-    "./theme/*.{js,ts,jsx,tsx}"
+    "./components/**/*.{js,ts,jsx,tsx,md,mdx}",
+    "./components/*.{js,ts,jsx,tsx,md,mdx}",
+    "./theme/*.{js,ts,jsx,tsx,md,mdx}"
   ],
   theme: {
     ...theme,

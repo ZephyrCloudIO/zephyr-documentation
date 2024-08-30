@@ -13,11 +13,17 @@ export const CurrentVersion = () => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>
-          <div className="py-1 mb-4 px-3 bg-blue-400 border-[0.4px] border-zinc-400/80 rounded-md">
-            <p className="text-xs flex font-semibold text-[var(--rp-c-text-1)] font-mono">
-              Current version: {version}
-            </p>
-          </div>
+          <a
+            href="https://www.npmjs.com/package/zephyr-webpack-plugin"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div className="py-1 mb-4 px-3 bg-blue-400 border-[0.4px] border-zinc-400/80 rounded-md">
+              <p className="text-xs flex font-semibold text-[var(--rp-c-text-1)] font-mono">
+                Current version: {version}
+              </p>
+            </div>
+          </a>
         </TooltipTrigger>
         <TooltipContent className="bg-zinc-950">
           <p>Applicable to all npm packages.</p>

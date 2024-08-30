@@ -27,7 +27,7 @@
   --rp-c-brand: #5889d5;
   --rp-c-brand-light: #00aaff;
   --rp-c-brand-lighter: #ecf4ff;
-  --rp-c-brand-dark: #0077ff;
+  --rp-c-brand-dark: #287dde;
   --rp-c-brand-darker: #3367af;
   --rp-c-brand-tint: rgba(127, 163, 255, 0.16);
 
@@ -95,8 +95,8 @@ dt {
 
 dd {
   display: inline-block;
-  padding-left: 2em;
-  color: var(--rp-c-text-2);
+  padding: 0.2em 2em;
+  color: var(--rp-c-text-1);
 }
 
 .glow {
