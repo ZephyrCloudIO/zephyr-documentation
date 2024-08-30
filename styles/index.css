@@ -180,6 +180,8 @@ dd {
   em::selection,
   pre::selection,
   code::selection,
+  sub::selection,
+  i::selection,
   span::selection {
     @apply bg-black text-white;
   }
@@ -201,7 +203,9 @@ dd {
   .dark em::selection,
   .dark pre::selection,
   .dark code::selection,
-  .dark span::selection {
+  .dark span::selection,
+  .dark sub::selection,
+  .dark i::selection {
     @apply bg-white text-black;
   }
 
