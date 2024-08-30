@@ -1,0 +1,165 @@
+import { Steps, Badge } from '@theme';
+import { Separator } from "../../components/ui/separator"
+
+# Micro-Frontends with Zephyr - The Complete Guide
+
+Micro-Frontends' configuration and deployment processes are known to be complicated and painful to debug. Zephyr Cloud not only to helps with resolving dynamic URL and development process for applications applying Micro-Frontends architecture, but also deployment, versioning and more. This section will walk through the necessary configuration to ensure you have a smooth development workflow and deployment process.
+
+## Checklist
+
+
+<Steps>
+### Micro-Frontends Configuration 
+
+We have first class support for a Micro-Frontends architecture based on [Module Federation](https://module-federation.io). Other Micro-Frontends architectures may already work or will be supported in the future. 
+
+An example working shell app's configuration can be seen below as well as [in our example repository](https://github.com/ZephyrCloudIO/zephyr-examples/blob/comprehensive-react-18/examples/comprehensive-react-18/app-01/rspack.config.js)
+
+```ts title="rspack.config.js"
+new ModuleFederationPluginV1({
+      name: 'app_01',
+      filename: 'remoteEntry.js',
+      remotes: {
+        app_02: 'app_02@http://localhost:3002/remoteEntry.js',
+        app_03: 'app_03@http://localhost:3003/remoteEntry.js',
+        app_04: 'app_04@http://localhost:3004/remoteEntry.js',
+        app_05: 'app_05@http://localhost:3005/remoteEntry.js',
+      },
+      exposes: {
+        './SideNav': './src/SideNav',
+        './Page': './src/Page',
+      },
+      shared: {
+        ...deps,
+        '@material-ui/core': {
+          singleton: true,
+        },
+        'react-router-dom': {
+          singleton: true,
+        },
+        'react-dom': {
+          singleton: true,
+        },
+        react: {
+          singleton: true,
+        },
+      },
+    }),
+```
+
+
+### Build remotes first 
+
+At the moment. when we are resolving your remote dependencies, we will need the [remotes](/learning/concepts/terminologies#remote-application) to be built first. Be wary that the first built remotes should not be consuming any other remotes. 
+
+In the example below where you have one shell and one remote, you will need to build the remote first. 
+
+![mf_1_circular_dependencies](/mf_guide_1_circular_dependency.png)
+
+Let's take a look at another example. You have a shell application, within the shell app you have two modules: **HeaderNav** and **TaskContent**. 
+
+![mf_2_circular_dependencies](/mf_guide_2_circular_dependency.png)
+
+The **HeaderNav** exposes **Logo**, **UserProfileInfo** and **LeftNav**. 
+
+The **TaskContent** exposes **SearchBar**. 
+
+In this scenario, **LeftNav** is consumed by **TaskContent**; **SearchBar** is consumed by **HeaderNav**. 
+
+You will need to build either the **TaskContent** or the **HeaderNav** first, comment out the remotes that have yet built and add them back later. 
+
+
+### `package.json` name and Module Federation config 
+
+Make sure your remotes' package.json `name` field is exactly the same as your [Module Federation Configurations](https://module-federation.io/configure/index.html) like so:
+
+
+```json title="package.json from your first remote app"
+name: 'post'
+```
+
+```json title="package.json from your second remote app"
+// Your first remote's package.json 
+name: 'follow'
+```
+
+```ts title="Module Federation config in your host"
+ `remotes: ['post', follow']`
+```
+
+You may refer to [how each zephyr options were resolved here](#zephyr-options)
+
+### Git repository 
+
+Several details related to git are required to have a successful deployment. 
+
+- Project directory must be a git repository 
+- Current project directory must have a branch 
+- Current project must have created a commit
+
+### Confirm access right  
+
+Do you have the admin or editor access to the application you are trying to deploy? You can check it on [Zephyr Dashboard](https://app.zephyr-cloud.io).
+
+If you don't have it yet, you can contact your Admin on Zephyr dashboard to invite you and set up the correct access right. 
+
+
+
+</Steps>
+
+<Separator/>
+
+
+## Zephyr Options 
+
+Although we resolve your application's configuration, git, package.json information to understand your application's deployment information and details, you can also opt to pass in configuration directly. 
+
+:::note{title="Directory location"}
+
+Some options are resolved based on where bundler locates so be mindful about hoisting dependencies or not having a package.json in each application when you try to deploy an application through Zephyr - especially when you are deploying Micro-Frontend applications. 
+
+:::
+
+Each options is resolved like so, take [create-nx-workspace-mf's `shell` app](https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/create-nx-workspace-mf/apps/shell) as an example: 
+
+```ts title="ZephyrOptions"
+
+
+const zephyrOptions = {
+
+    /** General application configuration details */
+    app: {
+
+    /** This would match your git's organization name. If you haven't create an organization on Zephyr dashboard yet, the organization would be auto-created based on your git repository's owner name - could be your organization's name or your personal git profile's name depending on the repository. */
+    org: 'ZephyrCloudIO', 
+
+    /** This would match your repository's name. Hence your project folder would need to be initialized as a git repository. */
+    project: 'zephyr-examples', 
+
+    /** This would be resolved from your package.json's name. */
+    name: 'shell', 
+
+    /** This would be resolved from your package.json's version. */
+    version: '0.0.0'
+    }, 
+
+    /** Micro-Frontends configuration. If you have a Module Federation configuration in your bundler config - this is how we resolve each field. Otherwise this field would be empty. */
+    mfConfig: {
+
+        /** The name field in your Module Federation configuration. */
+        name: 'shell', 
+
+        /** The filename in your Module Federation configuration. Default to `remoteEntry.js`. */
+        filename: null, 
+
+        /** The `exposes` field in Module Federation configuration. */
+        exposes: null, 
+        
+        /** The `remotes` field in Module Federation configuration. */
+        remotes: ['remote1', 'remote2'], 
+
+        /** The `shared` field in Module Federation configuration. */
+        shared: null,
+    }
+}
+```

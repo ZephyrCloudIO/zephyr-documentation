@@ -2,7 +2,7 @@ import { HomeStart, HomeConcept, HomeRecipes } from '../components/home';
 import { CardLayout } from '../components/ui/card-layout';
 import { Separator } from '../components/ui/separator';
 import { FeatureTable } from '../components/feature-table';
-import { InvertImage} from "../components/invert-image"
+import { InvertImage} from "../components/ui/invert-image"
 
 <InvertImage/>
 <Separator />
@@ -16,7 +16,6 @@ Whether you're are a small team or a large enterprise, Zephyr Cloud is designed 
 
 Zephyr Cloud is now in public alpha. If you experience any issues, do jump in our [Discord](https://zephyr-cloud.io/discord) and let us know (we hang out here!).
 
-<Separator />
 
 ## Start
 
@@ -24,7 +23,6 @@ Zephyr Cloud is now in public alpha. If you experience any issues, do jump in ou
   <HomeStart />
 </CardLayout>
 
-<Separator />
 
 ## Main Features
 
@@ -42,9 +40,11 @@ See a list of frameworks, bundlers and cloud providers [here](/supported)
 
 We don't assume you know everything about cloud or edge. Whenever we mention a concept or a piece of software, we aim to provide relevant links wherever possible. Our documentation site is Open Sourced, if you wish to contribute, do check out our [Github](https://github.com/ZephyrCloudIO/docs) and open any issues/pull requests.
 
-At the same time, it'd be useful to have a basic understanding of modern frontend frameworks such as [React](https://react.dev), running commands in terminals, [node](https://nodejs.org/en), package management solutions such as [npm](https://docs.npmjs.com/cli/v10/configuring-npm/install) and the concept (or usage) of [monorepo](https://monorepo.tools/). If you're new to web development, we recommend checking out [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web) for a comprehensive guide.
+At the same time, it'd be useful to have a basic understanding of modern frontend frameworks such as [React](https://react.dev), running commands in terminals, [node](https://nodejs.org/en), package management solutions such as [npm](https://docs.npmjs.com/cli/v10/configuring-npm/install) and the concept (or usage) of [monorepo](https://monorepo.tools/). If you're new to web development, we recommend you to check out [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web) for a comprehensive guide. On the other hand, if you want to know more about Micro-Frontends and [Module Federation](https://module-federation.io), our [Module Federation Deep Dive](/learning/concepts/module-federation#deep-dive) is prepared for you. 
 
-<Separator />
+
+Last but not least, welcome to dive into the [learning section](/learning) when you are ready to dive into Micro-Frontends, it's terminologies and configuration. 
+
 
 ## Recipes
 
@@ -57,7 +57,7 @@ At the same time, it'd be useful to have a basic understanding of modern fronten
 <Separator />
 
 <div>
-  <ol className="list-decimal">
+  <ol className="list-decimal text-xs pl-4 pt-4">
     <li id="footnote-1">Additional functionalities are currently under development.</li>
     <li id="footnote-2">Based on internal benchmarks.</li>
     <li id="footnote-3">Initial deployment time may vary.</li>

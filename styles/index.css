@@ -2,6 +2,7 @@
   * Some common css theme variables and they will be used in the tailwind theme as well.
 */
 
+@import url('./fonts.css');
 :root {
   /*--rp-nav-height: 72px;*/
   /*--rp-sidebar-width: 320px;*/
@@ -24,11 +25,11 @@
   /*--rp-c-text-code: #476573;*/
 
   --rp-c-brand: #5889d5;
-  /*--rp-c-brand-light: #00aaff;*/
-  /*--rp-c-brand-lighter: #ecf4ff;*/
-  --rp-c-brand-dark: #0077ff;
+  --rp-c-brand-light: #00aaff;
+  --rp-c-brand-lighter: #ecf4ff;
+  --rp-c-brand-dark: #287dde;
   --rp-c-brand-darker: #3367af;
-  /*--rp-c-brand-tint: rgba(127, 163, 255, 0.16);*/
+  --rp-c-brand-tint: rgba(127, 163, 255, 0.16);
 
   /*--rp-c-gray: #8e8e8e;*/
   --rp-c-gray-light-1: #aeaeae;
@@ -44,7 +45,8 @@
   /*--rp-c-dark-light-4: #5c5c5c;*/
   /*--rp-c-dark-light-5: #6b6b6b;*/
 
-  /*--rp-radius: 1rem;*/
+  --rp-radiu-none: 0rem;
+  --rp-radius: 1rem;
   /*--rp-radius-small: 0.5rem;*/
   --rp-radius-large: 1.5rem;
 }
@@ -93,8 +95,8 @@ dt {
 
 dd {
   display: inline-block;
-  padding-left: 2em;
-  color: var(--rp-c-text-2);
+  padding: 0.2em 2em;
+  color: var(--rp-c-text-1);
 }
 
 .glow {
@@ -159,6 +161,52 @@ dd {
 
   sup {
     @apply text-xs text-[var(--rp-c-brand)];
+  }
+
+  div::selection,
+  h1::selection,
+  h2::selection,
+  h3::selection,
+  h4::selection,
+  h5::selection,
+  ul::selection,
+  ol::selection,
+  li::selection,
+  p::selection,
+  a::selection,
+  strong::selection,
+  label::selection,
+  button::selection,
+  em::selection,
+  pre::selection,
+  code::selection,
+  sub::selection,
+  i::selection,
+  span::selection {
+    @apply bg-black text-white;
+  }
+
+  .dark div::selection,
+  h1::selection,
+  .dark h2::selection,
+  .dark h3::selection,
+  .dark h4::selection,
+  .dark h5::selection,
+  .dark ul::selection,
+  .dark ol::selection,
+  .dark li::selection,
+  .dark p::selection,
+  .dark a::selection,
+  .dark strong::selection,
+  .dark label::selection,
+  .dark button::selection,
+  .dark em::selection,
+  .dark pre::selection,
+  .dark code::selection,
+  .dark span::selection,
+  .dark sub::selection,
+  .dark i::selection {
+    @apply bg-white text-black;
   }
 
   #footer-copyright {

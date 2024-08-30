@@ -2,7 +2,6 @@
 //import { withZephyr } from "vite-plugin-zephyr"
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import type { CodeHikeConfig } from 'codehike/dist/mdx';
 import fileTree from 'rspress-plugin-file-tree';
 import ga from 'rspress-plugin-google-analytics';
 import { defineConfig } from 'rspress/config';
@@ -14,9 +13,12 @@ import { getError as getZeError, PAGE_CODE_REGEX } from './lib/error-helpers';
 
 const newRelicScript = fs.readFileSync('lib/scripts/new-relic.js', 'utf-8');
 
-const chConfig: CodeHikeConfig = {
+/** @type {import('codehike/mdx').CodeHikeConfig} */
+const chConfig = {
   components: { code: 'Code' },
 };
+
+
 
 const socialLinks: UserConfig['themeConfig']['socialLinks'] = [
   {
@@ -30,13 +32,26 @@ const socialLinks: UserConfig['themeConfig']['socialLinks'] = [
     content: 'https://zephyr-cloud.io/discord',
   },
   {
-    icon: 'twitter',
+    icon: 'x',
     mode: 'link',
     content: 'https://twitter.com/ZephyrCloudIO',
   },
 ];
 
+
+
 const nav: UserConfig['themeConfig']['nav'] = [
+  {
+    text: 'Get Started',
+    link: '/general/get-started',
+    activeMatch: "/general/get-started/"
+  },
+  {
+    text: 'Learning',
+    link: '/learning',
+    activeMatch: "/learning"
+  },
+
   {
     text: 'Zephyr Cloud →',
     link: 'https://app.zephyr-cloud.io',
@@ -61,7 +76,7 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/general/create-mf-app',
         },
         {
-          text: 'Question',
+          text: 'FAQ',
           link: '/general/question',
         },
       ],
@@ -70,9 +85,27 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
       text: 'How to',
       items: [
         {
+          text: 'Micro-Frontends with Zephyr',
+          link: '/how-to/mf-guide',
+        },
+        {
+          text: 'Browser Extension',
+          link: '/how-to/browser-extension'
+        },
+        {
+          text: 'Versioning and Tags',
+          link: '/how-to/versioning-tags'
+        },
+        {
           text: 'Cloud Providers',
           link: '/how-to/cloud-providers',
         },
+      ],
+    },
+    {
+      text: 'Recipes',
+      link: '/recipes',
+      items: [
         {
           text: 'React + Vite',
           link: '/how-to/react-vite',
@@ -89,43 +122,15 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           text: 'Existing App',
           link: '/how-to/existing-app',
         },
-      ],
-    },
-    {
-      text: 'Concepts',
-      link: '/concepts',
-      collapsed: false,
-      collapsible: true,
-      items: [
-        {
-          text: "Architecture",
-          link: "/concepts/architecture"
-        },
-
-        {
-          text: "Micro-Frontend",
-          link: '/concepts/micro-frontend'
-        },
-        {
-          text: "Module Federation",
-          link: "/concepts/module-federation"
-        }
       ]
     },
+
     {
-      text: 'Resources',
-      link: '/resources',
-    },
-    {
-      text: 'Supported',
+      text: 'Supported Bundlers & Platforms',
       link: '/supported',
     },
     {
-      text: 'Recipes',
-      link: '/recipes',
-    },
-    {
-      text: 'Troubleshooting',
+      text: 'Trouble Shooting',
       link: '/errors',
       collapsed: true,
       collapsible: true,
@@ -143,9 +148,54 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
               description: error.message,
               label: error.message,
             })),
-        })),
+        }))
+    }
+
+
+  ],
+  '/learning': [
+    {
+      text: 'Concepts',
+      collapsed: false,
+      collapsible: true,
+      items: [
+        {
+          text: 'Terminologies',
+          link: '/learning/concepts/terminologies',
+        },
+        {
+          text: "Architecture",
+          link: "/learning/concepts/architecture"
+        },
+
+        {
+          text: "Micro-Frontend",
+          link: '/learning/concepts/micro-frontend'
+        },
+        {
+          text: "Module Federation",
+          link: "/learning/concepts/module-federation"
+        }
+      ]
+    },
+
+    {
+      text: 'Walk-through',
+      collapsed: true,
+      collapsible: true,
+      items: [
+        {
+          text: "Learn webpack with React",
+          link: "/learning/react-webpack"
+        }
+      ]
+    },
+    {
+      text: 'Additional Resources',
+      link: '/learning/resources',
     },
   ],
+
 };
 
 export default defineConfig({
@@ -185,10 +235,11 @@ export default defineConfig({
   },
 
   markdown: {
-    defaultWrapCode: false,
+    defaultWrapCode: true,
     remarkPlugins: [require('codehike/mdx').remarkPlugins, chConfig],
-    // rehypePlugins: [require('codehike/mdx').rehypePlugins, chConfig],
+    codeHighlighter: 'prism',
     checkDeadLinks: true,
+    showLineNumbers: true
   },
 
   builderConfig: {
@@ -207,6 +258,7 @@ export default defineConfig({
   },
 
   plugins: [
+
     fileTree(),
     ga({
       id: 'G-B7G266JZDH',
@@ -235,6 +287,7 @@ export default defineConfig({
         }
       },
     },
+
 
   ],
 });

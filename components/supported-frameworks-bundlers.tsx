@@ -1,4 +1,8 @@
-import { supportedFramework, supportedBundler } from '../lib/site.config';
+import {
+  supportedFramework,
+  supportedBundler,
+  supportedCloud,
+} from '../lib/site.config';
 import {
   Table,
   TableBody,
@@ -31,12 +35,6 @@ export function Supported({
             </span>
           </div>
         </TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[400px]">Browser</TableHead>
-            <TableHead className="text-center">Supported</TableHead>
-          </TableRow>
-        </TableHeader>
         <TableBody>
           {items.map((item, index) => (
             <TableRow key={index}>
@@ -62,4 +60,8 @@ export const SupportedFramework = () => {
 
 export const SupportedBundler = () => {
   return <Supported items={supportedBundler} />;
+};
+
+export const SupportedCloud = () => {
+  return <Supported items={supportedCloud} />;
 };

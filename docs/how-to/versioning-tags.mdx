@@ -1,6 +1,8 @@
-# Versioning 
+# Versioning and Tags
 
 Zephyr utilizes familiar versioning concepts by adopting [SemVer](https://semver.org/) (Semantic Versioning) as its foundational versioning methodology, ensuring a systematic and meaningful progression of project versions.
+
+Applications deployed through Zephyr could have unlimited number of versions. After you configure Zephyr's npm plugin in your build tool, or bundlers, _**each successful deployment would generate a new version**_. 
 
 ## Semantic Versioning Overview
 
@@ -16,14 +18,63 @@ Semantic versioning is structured as `MAJOR.MINOR.PATCH`:
 3. **Issue Tracking:** Simplifies the process of tracking bugs and changes back to specific releases.
 4. **Dependency Management:** Crucial for effectively managing dependencies, particularly in complex projects.
 
-## Application Name and Version Calculation in Zephyr
 
-- **Application Name:** Derived from the `name` field in `package.json`.
-- **Versions:** Extracted from the `version` field in `package.json`, and further contextualized with the current `branch name` and a formatted `username` to trace development history accurately.
 
-## Zephyr Tag Management
+## Tag Management
 
 To streamline the tagging process and ensure seamless integration with continuous integration and delivery (CI/CD) pipelines, Zephyr adopts specific rules for generating tags based on branch names during CI processes. This approach not only automates tag creation but also aligns with the development workflow to accurately reflect the state of the software at any given point.
+
+
+### How Tags are created 
+
+#### Auto-generated
+
+On your first successful build, we find below two values to generated a tag: 
+- Current branch name
+- Username 
+
+After the first successful build, each build's version fits in these two criteria will be attached as latest version under this tag. 
+
+#### Created via Dashboard 
+
+On [Zephyr's Dashboard](https://app.zephyr-cloud.io), you can find **Tags** under each application's **Settings** page. 
+
+After clicking on **Create Tag**, you will need to input a **Tag name** and choose rules under **Tag conditions**. Currently four related rule sets are available: 
+
+<dl>
+<dt>`User`</dt>
+<dd>After selection any future deployment from this selected user will be locked into to this tag as the latest.</dd>
+
+<dt>`Version`</dt>
+<dd>Select a specific version to pin to this tag. Version number is an integer at the end of a deployment URL.</dd> 
+
+<dt>`Branch`</dt>
+<dd>Your git's branch. Any future deployment from this branch will be locked into this tag as the latest. </dd>
+
+<dt>`CI`</dt>
+<dd>Checking if environment is a CI environment. Only deployment through CI will be locked into this tag.</dd>
+</dl>
+
+You can select a combination of rule set by clicking on **+ Add** under **Tag conditions**. 
+
+:::details{title="How will a combination of tag rules work with deployment"}
+
+Take an example, you just created a new tag rule with 3 rules: 
+- Username: Zack 
+- Branch: fix-ui 
+- Version: 200
+
+Zack's deployment, version 200 under the branch "fix-ui" will be locked into this tag. Since the version rule is set to a fixed version. 
+:::
+
+
+#### Edit existing tags 
+
+Under application's **Settings** page select **Tags** and then the desired **Tag name** you want to edit. 
+
+Click on **+ Add** button to add new rules, edit or delete pre-existing rules. 
+
+
 
 ### Tagging Strategy in CI
 

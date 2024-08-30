@@ -15,7 +15,7 @@ With BYOC, users are able to _manage configuration_, _understand the underlying 
 
 Users belong to an organization can manage and configure cloud providers on Zephyr's [dashboard](https://app.zephyr-cloud.io), and user's organization gets connected with cloud provider account by creating an integration under **Deployment Integration** tab.
 
-<Separator />
+
 ## Cloudflare
 
 In this section we will walk you through how to configure Cloudflare as your default cloud provider.
@@ -161,6 +161,44 @@ Navigate to your cloudflare account's main dashboard page, you can click on **Wo
 
 :::
 
+### Clean uninstall and reset
+
+If you want to delete your existing Cloudflare integration, you will need to finish below steps: 
+
+**Delete Workers & Pages Projects**
+
+1. Sign in to your Cloudflare account, on the left side of the navigation bar click on **Workers & Pages**. 
+
+2. Find and click on **ze-worker-for-static-upload**, and then on the top navigation bar select **Manage**, click on **Delete** on this page. 
+
+3. Go back to the Workers & Pages main page and find the **Cloudflare integration name** when you create the integration on Zephyr dashboard. Choose the project and select **Manage** on the top when you are in the project. Click on the **Delete** button. 
+
+**Delete KV namespace**
+
+1. Under **Workers & Pages** on the left navigation bar on the main dashboard, select **KV**. 
+
+2. Select KV namespaces with below names: 
+- ze_envs 
+- ze_snapshots 
+- ze_files 
+
+3. Click on `···` on the right of each items and select **Delete**. 
+
+**Delete Worker Routes** 
+
+1. On the main dashboard, select the **domain** you added to Zephyr dashboard for Deployment integration. 
+
+2. Choose **Workers Routes** on the left side of the navigation bar. Find the Worker routes with prefix `ze` and `*-ze` and click on **Edit**. 
+
+3. On the pop up modal select **Remove**. 
+
+**Delete Deployment Integration** 
+
+1. Log into your account and select the organization associated with the deployment integration you want to delete. 
+
+2. Select **Settings** on the organization dashboard. On the left side choose **Deployment Integration**. 
+
+3. Choose the name of integration you want to delete and select **Remove** on the next page. 
 
 
 <Separator />

@@ -8,6 +8,9 @@ import { WebpackIcon } from '../components/icons/webpack';
 // import { AngularIcon } from '../components/icons/angular';
 // import { LernaIcon } from '../components/icons/lerna';
 // import { NetlifyIcon } from '../components/icons/netlify';
+
+export const version = '0.0.16';
+
 export interface CardItemProps {
   title: string;
   href: string;
@@ -347,6 +350,49 @@ export const supportedBundler = [
   },
   {
     name: 'Esbuild',
+    icon: '',
+    supported: 'backlog',
+  },
+];
+
+export const supportedCloud = [
+  {
+    name: 'Zephyr Managed Cloud (default)',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Cloudflare',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'Netlify',
+    icon: '',
+    supported: 'prod',
+  },
+  {
+    name: 'AWS',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Azure',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Vercel',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'Supabase',
+    icon: '',
+    supported: 'backlog',
+  },
+  {
+    name: 'ByteDance Cloud',
     icon: '',
     supported: 'backlog',
   },
