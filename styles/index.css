@@ -90,12 +90,13 @@ html {
 
 dt {
   font-weight: bold;
+  padding: 0em 0em;
   color: var(--rp-c-text-1);
 }
 
 dd {
   display: inline-block;
-  padding: 0.2em 2em;
+  padding: 0.02em 2em;
   color: var(--rp-c-text-1);
 }
 

@@ -102,6 +102,21 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
         },
       ],
     },
+
+    {
+      text: "Cloud Providers",
+      link: '/cloud',
+      items: [
+        {
+          text: 'Cloudflare',
+          link: '/cloud/cloudflare'
+        },
+        {
+          text: 'Netlify',
+          link: '/cloud/netlify'
+        }
+      ]
+    },
     {
       text: 'Recipes',
       link: '/recipes',

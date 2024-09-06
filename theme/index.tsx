@@ -25,7 +25,7 @@ export const CurrentVersion = () => {
             </div>
           </a>
         </TooltipTrigger>
-        <TooltipContent className="bg-zinc-950">
+        <TooltipContent className="bg-zinc-950 max-w-64 z-[100]">
           <p>Applicable to all npm packages.</p>
         </TooltipContent>
       </Tooltip>

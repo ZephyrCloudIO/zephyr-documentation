@@ -1,0 +1,24 @@
+---
+title: Manage Cloud Providers
+description: With Zephyr's bring your own cloud feature, you can use Zephyr with your existing cloud infrastructure to manage your applications
+---
+
+import { Button } from '../components/ui/button.tsx';
+import { Steps, Badge } from '@theme';
+import { Separator } from '../components/ui/separator.tsx';
+import { CardLayout } from '../components/ui/card-layout';
+import { CloudProviderCards } from "../components/cloud-provider"
+
+# Manage Cloud Providers on Zephyr
+
+Zephyr's Bring Your Own Cloud (BYOC) feature allows users to use their own cloud infrastructure instead of relying on Zephyr's managed cloud. User's applications deployed through Zephyr are usually deployed through user's own cloud providers.
+
+With BYOC, users are able to _manage configuration_, _understand the underlying infrastruture_, _utilizing familiar features_ and _having a clear billing_ among cloud infrastructures.
+
+Users belong to an organization can manage and configure cloud providers on Zephyr's [dashboard](https://app.zephyr-cloud.io), and user's organization gets connected with cloud provider account by creating an integration under **Deployment Integration** tab.
+
+## Choose your Cloud provider 
+
+<CardLayout>
+<CloudProviderCards/>
+</CardLayout>
