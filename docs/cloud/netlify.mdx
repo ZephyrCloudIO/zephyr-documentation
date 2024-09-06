@@ -20,13 +20,12 @@ We will discuss how to configure Netlify as your default cloud provider with Blo
 - A registered Netlify account and a team with Pro plan (to enable custom domain)
 - A registered Zephyr account
 - A Netlify site project with custom domain. ([Read more about custom domain on Netlify and how to configure it](https://docs.netlify.com/domains-https/custom-domains/), it can be a domain managed by Netlify or you will need to point your domain's name servers towards Netlify)
-- Wildcard domain enabled for your custom domain like `*.domain.com` - to ensure Zephyr's feature like **versioning**, **rollback/roll-forward** and more are available. ([You will **_need to_** contact Netlify Support for a wildcard domain](https://www.netlify.com/support/))
+- Wildcard subdomain enabled for your custom domain like `*.domain.com` - to ensure Zephyr's feature like **versioning**, **rollback/roll-forward** and more are available. ([You will **_need to_** contact Netlify Support for a wildcard domain](https://www.netlify.com/support/))
 
 :::
 
 ### Wildcard domain on Netlify 
 
-To enable versioning, rollback and other Zephyr features, you will need a wildcard subdomain for your custom domain.
 
 :::warning How-to
 Wildcard subdomains can be activated via contacting Netlify support, but there are a few requirements:
@@ -39,7 +38,7 @@ Wildcard subdomains can be activated via contacting Netlify support, but there a
 If you need the wildcard to be `*.bundlercorp.com`⁣ where `*`⁣ can be your wildcard subdomain, the primary domain must be `www.bundlercorp.com⁣` (www⁣ can be replaced with any string).
 6. You need to configure the DNS for the wildcard subdomain even in case you are using Netlify DNS. You can follow the external DNS configuration for subdomains and add a CNAME entry with `*⁣` as the hostname or any other value that you want. The value of this DNS entry should be the Netlify site address.
 
-[Read more about sub-domain in Netlify's Documentation](https://docs.netlify.com/domains-https/custom-domains/configure-external-dns/#configure-a-subdomain).
+[Read more about subdomain in Netlify's Documentation](https://docs.netlify.com/domains-https/custom-domains/configure-external-dns/#configure-a-subdomain).
 
 :::
 
