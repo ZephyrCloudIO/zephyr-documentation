@@ -7,9 +7,10 @@ import { WebpackIcon } from '../components/icons/webpack';
 // import { QwikIcon } from '../components/icons/qwik';
 // import { AngularIcon } from '../components/icons/angular';
 // import { LernaIcon } from '../components/icons/lerna';
-// import { NetlifyIcon } from '../components/icons/netlify';
+import { NetlifyIcon } from '../components/icons/netlify';
+import { CloudflareIcon } from '@/components/icons/cloudflare';
 
-export const version = '0.0.16';
+export const version = '0.0.17';
 
 export interface CardItemProps {
   title: string;
@@ -250,6 +251,24 @@ export const SiteConfig: CardProps = {
       href: '/concepts/micro-frontend',
     },
   ] as CardItemProps[],
+  cloud: [
+    {
+      title: 'Cloudflare',
+      description:
+        'Configure Cloudflare integration with Page project, KV namespaces and Workers',
+      variant: 'small',
+      href: '/cloud/cloudflare',
+      icons: [<CloudflareIcon className=" w-12 h-10" />],
+    },
+    {
+      title: 'Netlify',
+      description:
+        'Manage your Netlify integration with Netlify function, site, and Blob storage',
+      variant: 'small',
+      href: '/cloud/netlify',
+      icons: [<NetlifyIcon className="w-12 h-10 " />],
+    },
+  ],
 };
 
 export const supportedBrowser = [

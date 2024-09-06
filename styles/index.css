@@ -90,12 +90,13 @@ html {
 
 dt {
   font-weight: bold;
+  padding: 0em 0em;
   color: var(--rp-c-text-1);
 }
 
 dd {
   display: inline-block;
-  padding: 0.2em 2em;
+  padding: 0.02em 2em;
   color: var(--rp-c-text-1);
 }
 
@@ -169,6 +170,7 @@ dd {
   h3::selection,
   h4::selection,
   h5::selection,
+  h6::selection,
   ul::selection,
   ol::selection,
   li::selection,
@@ -192,6 +194,7 @@ dd {
   .dark h3::selection,
   .dark h4::selection,
   .dark h5::selection,
+  .dark h6::selection,
   .dark ul::selection,
   .dark ol::selection,
   .dark li::selection,
