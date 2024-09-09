@@ -3,110 +3,39 @@ import { Separator } from "../../components/ui/separator"
 
 # Why Zephyr Cloud
 
-Zephyr Cloud enhances and accelerates the software development lifecycle (SDLC). 
-
-_Vague right_?  
+Zephyr Cloud enhances and accelerates the software development lifecycle (SDLC) and we are purposed built for Micro-Frontends. 
 
 <Separator/>
 
-Let's put the bubbly marketing keywords aside and talk about the _real pain that exists_ between all of us while we develop applications and bring them to users. 
+## Purposed-built for Micro-Frontend
 
-Setting aside which cloud provider, bundler ro framework we are using for a second, the least sophisticated way to deploy an application is we log into a dashboard, import the repository from a Git Provider, click `Deploy` and then we wait for ~2-30mins for it to build and deploy. Life as a developer doesn't have to be this WebAssembly. 
+We developed Zephyr Cloud in response to recurring questions from our customers about the complexity and difficulties while deploying federated applications. Zephyr represents our second attempt at addressing these challenges, following our initial platform, [Medusa](https://medusa.codes/).
 
-<h3 className="h3">Long.</h3>
+Micro-Frontend is complicated; even the best DevOps in the industry could quote Micro-Frontend as insanity; the majority of deployment platforms don't have out of the box support for Micro-Frontend and requires a lot of custom support. 
 
-<Separator/>
-
-Then comes the story of the blue whale, docker - we write a docker file (or whatever deployment configuration file your cloud provider prescribes), git push, and then we wait for the CI to build. The previous version became obsolete when the latest version came live. If we absolutely want multiple version, we need multiple docker files and deploy them multiple times. 
-
-<h3 className="h3">Singular</h3>
-
+To deploy Micro-Frontend application with Zephyr, you only need ot run a build (or have it run in the CI). The answer to "how to configure and deploy Micro-Frontend" lives in your code - it's Terraform but in the shape of pre-existing bundler configuration. Zephyr will figure out your output bundle for applications in the browser to fetch remote applications, and helping remotes, hosts applications to communicate correctly. 
 
 <Separator/>
 
+## Versions and Rollback 
 
-Until the whale doesn't fit in our need for orchestration, consistency and global scaling. We then upgraded to the next as our deployment strategy advanced - Kubernetes, to enable the possibility of multi-cloud. Oftentimes, we opt for a blue/green deployment where two versions of the applications are waiting for one another to be ready. Yet still, no pods are supposed to live simultaneously.
+With large scale enterprises, frontend applications are often written in different frameworks, splitted in different teams. When a Micro-Frontend applicaiton is deployed (say a remote application getting updated into a host app), sometimes it doesn't fit requirement, or it breaks other parts of the application. 
 
-Our team keeps growing, customer requirements are piling, we then started to add micro-services, micro-frontends, different languages, frameworks...
+Our customers have intense needs to rollback immediately in such situation, while waiting for CI to run and redploy costs time and business value. Unless customers have serveral containers running the same application for versioning, or have a Kubernetes Cluster to recover from it - it's almost impossible to rollback and have versions for application. 
 
-They are all great solutions until they aren't.
-
-<Separator/>
-
-**How are we supposed to trace which services is producing and consuming one another?**
+However, each application deployed throught Zephyr, regardless it is a standalone application, remote components, or host applications in Micro-Frontends, is **versioned**. You can rollback immediately from dashboard, from our our Chrome Extension. 
 
 
-**If service A is dependent on service B, service A is being used in production and my developer, who is 6 hours ahead of my timezone, pushes a broken version that brings production down? Or the configuration in service A no longer points to the correct location of service B after a rebuild?**
+## Public Beta
 
+Zephyr Cloud is currently in public beta stage. As you evaluate Zephyr Cloud please do not hesitate to reach out to us on [Discord](https://zephyr-cloud.io/discord) and provide your feedback.
 
-
-**Why does the application work locally but doesn't behave the same after it is built - I already tested it 10+ times?**
-
-
-**With services coupling up, how are we supposed to manage the dependencies? Which one is shared and which one might affect upstream consumers?**
-
-**As we start to split up frontend into different frameworks and different underlying bundlers, how are we supposed to keep things consistent?**
-
-......and the list continues.
-
-<Separator/>
-
-## Zephyr Cloud wants to answer these questions
-
-- **What if we only need sub-seconds for deployment, rather than waiting for minutes or hours?**
-
-- **What if we don't need Kubernetes for instant rollback and forward?**
-
-- **What if instant rollback and forward only takes one click on a button?**
-
-- **What if all versions of our application we have ever deployed exist, active and live in the cloud? Not just all the /api/v2 route, but every version of `/api/v2/me` and `/api/v2/me/{id}`.**
-
-- **What if every service, regardless of whether it is providers, consumers, backend and frontend, can all be visualized, traced, monitored, orchestrated without configuration insanity?**
-
-- **What if deploying to different cloud providers is as simple as `npm run build`?**
-
-- **What if deploying distributed applications only takes one line of code to configure?**
-
-- **What if we can "test in production" in a safe manner?**
-
-
-<h3 className="h3">Simple. Fast. Without magic abstraction.</h3>
-
-We have come a long way to make this happen. From [module federation](https://module-federation.io?ref=zephyr-docs), [medusa](https://medusa.codes?ref=zephyr-docs) and now [Zephyr](https://zephyr-cloud.io?ref=zephyr-docs) - supporting many of the companies building technologies of tomorrow.
-
-<h1 className="h1">We are now in public alpha.</h1>
-
-
-
-## Core Features
-
-* Versioning applications
-* Rollback and roll-forward with versions 🚧
-* Enhance your CI/CD pipeline efficiency 🚧
-* Improve code quality 🚧
-* Gain insights into distributed applications 
-
-## Public Alpha
-
-Zephyr Cloud is currently in public alpha stage. As you evaluate Zephyr Cloud please do not hesitate to reach out to us on [Discord](https://zephyr-cloud.io/discord) and provide your feedback.
-
-
-
-[//]: # (We need to create a video for this part of the docs)
-
-We developed Zephyr Cloud in response to recurring questions from our clients about deploying federated applications and best practices for developing and deploying micro-frontends.
-
-Zephyr represents our second attempt at addressing these challenges, following our initial platform, [Medusa](https://medusa.codes/).
-
-As we expanded Zephyr Cloud, we realized that it was enhancing productivity across all sites, not just in federated environments.
 
 ## How Zephyr Enhances Your Operations
 
-Zephyr helps to: **speed up your software development lifecycle** (e.g. local development, CI/CD, QA Testing, Deployment),
-**increase collaboration** and **increase iteration speed**.
-
 You can use Zephyr to:
-* Deploy more rapidly to your existing public cloud account
+* Deploy more rapidly, more frequent
 * Manage version control for your frontend
+* Rollback or rollforward after component testing and evaluation
 * Improve or gain visibility into the connectivity of your micro-frontends
-[//]: # (I have a work in progress image for this section)
+
