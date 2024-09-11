@@ -120,27 +120,29 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
     {
       text: 'Recipes',
       link: '/recipes',
+      collapsed: true,
+      collapsible: true,
       items: [
         {
           text: 'React + Vite',
-          link: '/how-to/react-vite',
+          link: '/recipes/react-vite',
         },
-        //  {
-        //    text: 'React + Rspack + Nx',
-        //    link: '/how-to/react-rspack-nx',
-        //  },
+        {
+          text: 'React + Rspack + Nx',
+          link: '/how-to/react-rspack-nx',
+        },
         {
           text: 'Migrate from Webpack to Rspack in Nx',
-          link: '/how-to/migrate-nx-webpack-to-rspack'
+          link: '/recipes/migrate-nx-webpack-to-rspack'
 
         },
         {
           text: 'Nx MF App',
-          link: '/how-to/nx-mf-app',
+          link: '/recipes/nx-mf-app',
         },
         {
           text: 'Existing App',
-          link: '/how-to/existing-app',
+          link: '/recipes/existing-app',
         },
       ]
     },
