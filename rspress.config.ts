@@ -127,9 +127,14 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           text: 'React + Vite',
           link: '/recipes/react-vite',
         },
+        //  {
+        //    text: 'React + Rspack + Nx',
+        //    link: '/how-to/react-rspack-nx',
+        //  },
         {
-          text: 'React + Rspack + Nx',
-          link: '/how-to/react-rspack-nx',
+          text: 'Migrate from Webpack to Rspack in Nx',
+          link: '/how-to/migrate-nx-webpack-to-rspack'
+
         },
         {
           text: 'Migrate from Webpack to Rspack in Nx',

@@ -1,0 +1,311 @@
+import { Video } from "../../components/video"
+
+# Migrate an Nx workspace from Webpack to Rspack 
+
+
+If you have an Nx workspace setup for Micro-Frontend application in place with Webpack and curious about how to migrate to Rspack and **use Zephyr** - this documentation is for you. 
+
+:::info Prerequisites
+- You have a pre-existing Nx workspace with React based on Webpack
+- We expect you to have finish our [Get Started](/general/get-started) guide.
+- Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
+- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
+- npm >=10
+- node >=20 
+
+If you don't have `nvm` to manage your node version yet, head to [the official nvm guide](https://github.com/nvm-sh/nvm) to install it.
+```bash 
+nvm use 20 
+```
+
+:::
+
+### Video Walk-through 
+
+
+<Video src="https://www.loom.com/embed/78d039c5f5354543a190c24824b81035?sid=01dbcf74-4b93-4e92-b80e-325a7618b772" title="Migrate from Webpack in Nx to Rspack to deploy on Zephyr"/>
+
+## Example in Code
+An example contains line-by-line changes [in our example repository](https://github.com/ZephyrCloudIO/zephyr-examples/pull/43/files#diff-ae97963da9251d9d7d435301f6a6061201fdf9382ea69d647862e6e51127251a).
+
+
+### Installation 
+
+Within your project directory, run below commands to install required packages for `rspack` and Zephyr's npm package: 
+
+```bash title="Terminal"
+npm i @nx/rspack @rspack/dev-server zephyr-webpack-plugin@0.0.17 --force
+```
+
+
+### Change import path 
+
+1. `module-federation.config.ts` 
+
+Every `module-federation.config.ts`'s import needs to be replaced by 
+
+```ts title="module-federation.config.ts"
+// import { ModuleFederationConfig } from '@nx/webpack'; 
+import { ModuleFederationConfig } from '@nx/rspack/module-federation';
+```
+
+2. `webpack.config.ts` and `webpack.config.prod.ts` 
+
+Rename `webpack.config.ts` to `rspack.config.ts` and change all import path to below. While changing the import path, we will also add Zephyr's plugin to build configuration.
+
+```ts title="host and remotes / rspack.config.ts" {4,5,6,23}
+// import { composePlugins, withNx, ModuleFederationConfig } from '@nx/webpack';
+// import { withReact } from '@nx/react';
+// import { withModuleFederation } from '@nx/react/module-federation';
+import { composePlugins, withNx, withReact } from '@nx/rspack';
+import { withModuleFederation, ModuleFederationConfig } from '@nx/rspack/module-federation';
+import { withZephyr } from 'zephyr-webpack-plugin'; // import Zephyr
+
+import baseConfig from './module-federation.config';
+
+const config: ModuleFederationConfig = {
+  ...baseConfig,
+};
+// Nx plugins for webpack to build config object from Nx options and context.
+/**
+ * DTS Plugin is disabled in Nx Workspaces as Nx already provides Typing support for Module Federation
+ * The DTS Plugin can be enabled by setting dts: true
+ * Learn more about the DTS Plugin here: https://module-federation.io/configure/dts.html
+ */
+export default composePlugins(
+  withNx(),
+  withReact(),
+  withModuleFederation(config, { dts: false }),
+  withZephyr() // add zephyr in plugin
+);
+```
+
+Rename all `webpack.config.prod.ts` to `rspack.config.prod.ts` and within the file (**of each remotes**), change the import path: 
+
+```ts title="remote*/rspack.config.prod.ts"
+export default require('./rspack.config');
+```
+
+For **Host application**'s `rspack.config.prod.ts`, you will need to do the same changes as `rspack.config.ts`: 
+
+```ts title="host/rspack.config.prod.ts" {5,6,7,45}
+
+// import { composePlugins, withNx } from '@nx/webpack';
+// import { withReact } from '@nx/react';
+// import { withModuleFederation } from '@nx/react/module-federation';
+// import { ModuleFederationConfig } from '@nx/webpack';
+import { composePlugins, withNx, withReact } from '@nx/rspack';
+import { withModuleFederation, ModuleFederationConfig } from '@nx/rspack/module-federation';
+import { withZephyr } from 'zephyr-webpack-plugin';
+
+import baseConfig from './module-federation.config';
+
+const prodConfig: ModuleFederationConfig = {
+  ...baseConfig,
+  /*
+   * Remote overrides for production.
+   * Each entry is a pair of a unique name and the URL where it is deployed.
+   *
+   * e.g.
+   * remotes: [
+   *   ['app1', 'http://app1.example.com'],
+   *   ['app2', 'http://app2.example.com'],
+   * ]
+   *
+   * You can also use a full path to the remoteEntry.js file if desired.
+   *
+   * remotes: [
+   *   ['app1', 'http://example.com/path/to/app1/remoteEntry.js'],
+   *   ['app2', 'http://example.com/path/to/app2/remoteEntry.js'],
+   * ]
+   */
+  remotes: [
+    ['remote1', 'http://localhost:4201/'],
+    ['remote2', 'http://localhost:4202/'],
+  ],
+};
+// Nx plugins for webpack to build config object from Nx options and context.
+/**
+ * DTS Plugin is disabled in Nx Workspaces as Nx already provides Typing support for Module Federation
+ * The DTS Plugin can be enabled by setting dts: true
+ * Learn more about the DTS Plugin here: https://module-federation.io/configure/dts.html
+ */
+export default composePlugins(
+  withNx(),
+  withReact(),
+  withModuleFederation(prodConfig, { dts: false }),
+  withZephyr()
+);
+```
+
+### Edit project.json 
+
+In every `project.json`, you will need to edit below changes: 
+
+1. Change build executor to `@nx/rspack:rspack` 
+**2. Add `"target":"web"` to build options** (this inferred a )
+3. Under `build`'s `options` -- change all `"webpackConfig":"apps/{appName}/webpack.config.ts"` to `"rspackConfig": "apps/{appName}/rspack.config.ts"`
+4. Under `configurations`'s `production` config -- change all `"webpackConfig":"apps/{appName}/webpack.config.prod.ts"` to `"rspackConfig": "apps/{appName}/rspack.config.prod.ts"`
+5. Edit `executor` in `serve` -- change `@nx/react:module-federation-dev-server` to `"@nx/rspack:module-federation-dev-server"`
+
+
+```json title="host or remotes' project.json" {9,15,30,52,57}
+{
+  "name": "remote1",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/remote1/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/rspack:rspack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "web",
+        "compiler": "babel",
+        "outputPath": "dist/apps/remote1",
+        "index": "apps/remote1/src/index.html",
+        "baseHref": "/",
+        "main": "apps/remote1/src/main.ts",
+        "tsConfig": "apps/remote1/tsconfig.app.json",
+        "assets": [
+          "apps/remote1/src/favicon.ico",
+          "apps/remote1/src/assets"
+        ],
+        "styles": [
+          "apps/remote1/src/styles.css"
+        ],
+        "scripts": [],
+        "rspackConfig": "apps/remote1/rspack.config.ts"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/remote1/src/environments/environment.ts",
+              "with": "apps/remote1/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "rspackConfig": "apps/remote1/rspack.config.prod.ts"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/rspack:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "remote1:build",
+        "hmr": true,
+        "port": 4201
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "remote1:build:development"
+        },
+        "production": {
+          "buildTarget": "remote1:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "remote1:build",
+        "watch": false,
+        "port": 4201
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "remote1:build:development"
+        },
+        "production": {
+          "buildTarget": "remote1:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/remote1/jest.config.ts"
+      }
+    }
+  }
+}
+```
+
+### Add package.json 
+
+In **each of the applications, hosts or remotes, it will need a `package.json` file with `name` and `version` field** in order for Zephyr to map the remote's name. 
+
+If you are naming `host` application in Module Federation configuration like: 
+
+```ts title="module-federation.config.ts"
+const config: ModuleFederationConfig = {
+  name: 'host',
+
+  remotes: ['remote1', 'remote2'],
+};
+
+export default config;
+
+```
+
+You will need a `package.json` like so within the `host`'s folder: 
+
+```json title="package.json"
+{
+    "name": "host", 
+    "version": "0.0.0" // Versioning depending on you, it's a required field for Zephyr 
+}
+
+``` 
+
+### Deploy through Zephyr 
+
+Before we deploy to Zephyr, make sure: 
+- this repository is a `git` repository
+- Have pre-existing commit hash
+- Have a `remote.origin.url` 
+
+Since this is a Micro-Frontend application, you will need to build the remote first by running each of these command in sequence. Remotes must be built first for Zephyr to map them in host applications. [Read more](/how-to/mf-guide).
+
+First: 
+
+```sh title="Terminal"
+npx nx run remote1:build 
+```
+
+Second: 
+
+```sh title="Terminal"
+npx nx run remote2:build 
+```
+
+Third: 
+
+```sh title="Terminal"
+npx nx run host:build 
+```
