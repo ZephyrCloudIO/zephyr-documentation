@@ -120,21 +120,20 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
     {
       text: 'Recipes',
       link: '/recipes',
-      collapsed: true,
+      collapsed: false,
       collapsible: true,
       items: [
+        {
+          text: 'Existing App',
+          link: '/recipes/existing-app',
+        },
         {
           text: 'React + Vite',
           link: '/recipes/react-vite',
         },
-        //  {
-        //    text: 'React + Rspack + Nx',
-        //    link: '/how-to/react-rspack-nx',
-        //  },
         {
-          text: 'Migrate from Webpack to Rspack in Nx',
-          link: '/how-to/migrate-nx-webpack-to-rspack'
-
+          text: 'React + Rspack + Nx',
+          link: '/recipes/react-rspack-nx',
         },
         {
           text: 'Migrate from Webpack to Rspack in Nx',
@@ -145,10 +144,7 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           text: 'Nx MF App',
           link: '/recipes/nx-mf-app',
         },
-        {
-          text: 'Existing App',
-          link: '/recipes/existing-app',
-        },
+
       ]
     },
 
