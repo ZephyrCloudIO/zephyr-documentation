@@ -124,9 +124,18 @@ export const SiteConfig: CardProps = {
       title: 'React + Vite',
       framework: 'react',
       description: 'Use Zephyr with React and Vite.',
-      href: '/how-to/react-vite',
+      href: '/recipes/react-vite',
       variant: 'small',
       icons: [<ReactIcon />, <ViteIcon />],
+    },
+    {
+      // react-vite-ts
+      title: 'Add Zephyr to existing App',
+      framework: 'react',
+      description: 'Add Zephyr to an existing application',
+      href: '/recipes/existing-app',
+      variant: 'small',
+      icons: [<ReactIcon />, <ViteIcon />, <WebpackIcon />, <RspackIcon />],
     },
 
     // {
@@ -147,14 +156,14 @@ export const SiteConfig: CardProps = {
     {
       title: 'React + Rspack + Nx',
       description: 'Use Zephyr with React, Nx and Rspack.',
-      href: '/how-to/react-rspack-nx',
+      href: '/recipes/react-rspack-nx',
       variant: 'small',
       icons: [<ReactIcon />, <RspackIcon />, <NxIcon />],
     },
     {
-      title: 'Migrate from vanilla module federation',
-      description: 'Migrate from vanilla module federation to Zephyr.',
-      href: '/how-to/existing-app',
+      title: 'Migrate from Webpack in Nx to Rspack',
+      description: 'Migrate from Webpack in Nx to Rspack and use Zephyr.',
+      href: '/recipes/migrate-nx-webpack-to-rspack',
       variant: 'small',
       icons: [<ModuleFederationIcon />],
     },
@@ -183,7 +192,7 @@ export const SiteConfig: CardProps = {
       // create-nx-workspace-mf + react-tractor-sample
       title: 'React + Webpack + Nx + Module Federation',
       description: 'Use Zephyr with React, Nx and Module Federation.',
-      href: '/how-to/nx-mf-app',
+      href: '/recipes/nx-mf-app',
       variant: 'small',
       icons: [
         <ReactIcon />,
