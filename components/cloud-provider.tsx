@@ -1,6 +1,8 @@
 import { SiteConfig } from '../lib/site.config';
 import { Card } from './ui/card';
-
+import { NetlifyIcon } from './icons/netlify';
+import { CloudflareIcon } from './icons/cloudflare';
+import type { CardItemProps } from '../lib/site.config';
 export const CloudProviderCards = () => {
   return (
     <>
@@ -8,5 +10,22 @@ export const CloudProviderCards = () => {
         <Card key={i} item={item} />
       ))}
     </>
+  );
+};
+
+const item = {
+  title: 'Add Custom Domain',
+  href: '/how-to/custom-domain',
+  description:
+    'Configure custom domain for your application with your deployment integration platform.',
+  variant: 'default',
+  icons: [<CloudflareIcon />, <NetlifyIcon />],
+} satisfies CardItemProps;
+
+export const CustomDomain = () => {
+  return (
+    <div>
+      <Card item={item} />
+    </div>
   );
 };

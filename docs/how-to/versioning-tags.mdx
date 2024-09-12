@@ -35,12 +35,13 @@ On your first successful build, we find below two values to generated a tag:
 
 After the first successful build, each build's version fits in these two criteria will be attached as latest version under this tag. 
 
-#### Created via Dashboard 
+#### Tag rules on Dashboard
 
 On [Zephyr's Dashboard](https://app.zephyr-cloud.io), you can find **Tags** under each application's **Settings** page. 
 
 After clicking on **Create Tag**, you will need to input a **Tag name** and choose rules under **Tag conditions**. Currently four related rule sets are available: 
 
+<div className="pl-4">
 <dl>
 <dt>`User`</dt>
 <dd>After selection any future deployment from this selected user will be locked into to this tag as the latest.</dd>
@@ -54,6 +55,7 @@ After clicking on **Create Tag**, you will need to input a **Tag name** and choo
 <dt>`CI`</dt>
 <dd>Checking if environment is a CI environment. Only deployment through CI will be locked into this tag.</dd>
 </dl>
+</div>
 
 You can select a combination of rule set by clicking on **+ Add** under **Tag conditions**. 
 

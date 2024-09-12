@@ -89,16 +89,16 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/how-to/mf-guide',
         },
         {
+          text: "Custom Domain",
+          link: "/how-to/custom-domain"
+        },
+        {
           text: 'Browser Extension',
           link: '/how-to/browser-extension'
         },
         {
           text: 'Versioning and Tags',
           link: '/how-to/versioning-tags'
-        },
-        {
-          text: 'Cloud Providers',
-          link: '/how-to/cloud-providers',
         },
       ],
     },
