@@ -93,13 +93,14 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: "/how-to/custom-domain"
         },
         {
-          text: 'Browser Extension',
+          text: 'Chrome Extension',
           link: '/how-to/browser-extension'
         },
         {
-          text: 'Versioning and Tags',
+          text: 'Version rollback and roll-forward',
           link: '/how-to/versioning-tags'
         },
+
       ],
     },
 
