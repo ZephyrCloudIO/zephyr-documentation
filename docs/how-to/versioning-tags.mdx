@@ -18,6 +18,26 @@ Semantic versioning is structured as `MAJOR.MINOR.PATCH`:
 3. **Issue Tracking:** Simplifies the process of tracking bugs and changes back to specific releases.
 4. **Dependency Management:** Crucial for effectively managing dependencies, particularly in complex projects.
 
+## Version Rollback And Roll-forward 
+
+You can rollback or roll-forward an application's version on Zephyr's [dashboard](https://app.zephyr-cloud.io) and [Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) towards a tag or a specific environment. 
+
+You can read more about [how tag rules are created](#how-tags-are-created) and [how to create an environment to have a custom domain](/how-to/custom-domain) in other sections of our documnetation.
+
+
+### Dashboard 
+
+1. Navigate to Zephyr's dashboard, sign in to an organization and find the application you'd like to make changes to under **Applications** page. 
+2. Next click on **Versions** and scroll down to the **Versions history**. 
+3. Select a version and click on **Deploy**. You can verify whether it is a version you'd like to promote by clicking on its link. 
+4. Select either a specific **Tag** or an **Environment** on the pop up. 
+5. Type in **Deploy** in the last input field and click on **Yes, I am sure** to confirm the changes. 
+
+:::note Custom Domain 
+
+If you want to rollback or roll-forward a version towards a custom domain, you can know more by walking through [how to configure custom domain on Zephyr](/how-to/custom-domain).
+
+:::
 
 
 ## Tag Management
@@ -29,11 +49,9 @@ To streamline the tagging process and ensure seamless integration with continuou
 
 #### Auto-generated
 
-On your first successful build, we find below two values to generated a tag: 
-- Current branch name
-- Username 
+On your first successful build, we find your branch name to auto-create a tag. 
 
-After the first successful build, each build's version fits in these two criteria will be attached as latest version under this tag. 
+After the first successful build, each build's version fits in thiscriteria will be attached as latest version under this tag. 
 
 #### Tag rules on Dashboard
 
