@@ -21,7 +21,7 @@ export const Card = ({ item }: { item: CardItemProps }) => {
         <a
           href={item.href}
           className={cn(
-            'z-5 lg:px-5 lg:py-4 relative md:min-h-48 min-h-32 xl:min-h-48 max-h-52  rounded-md  bg-[var(--rp-c-bg-soft)] hover:bg-[calc(var(--rp-c-bg-soft)/20)] flex flex-col transition-all p-4   gap-2 lg:gap-5 md:gap-4 lg:hover:!opacity-100 lg:hover:bg-[var(--rp-c-bg)]/30 '
+            'z-5 lg:px-5 lg:py-4 relative border-[0.2px] border-slate-300/30 md:min-h-48 min-h-32 xl:min-h-48 max-h-52  rounded-md  bg-[var(--rp-c-bg-soft)] hover:bg-[calc(var(--rp-c-bg-soft)/20)] flex flex-col transition-all p-4   gap-2 lg:gap-5 md:gap-4 lg:hover:!opacity-100 lg:hover:bg-[var(--rp-c-bg)]/30 '
           )}
         >
           {item.icons && (
@@ -31,7 +31,7 @@ export const Card = ({ item }: { item: CardItemProps }) => {
               ))}
             </div>
           )}
-          <h2>{item.title}</h2>
+          <h2 className="font-semibold ">{item.title}</h2>
           <p>{item.description && item.description}</p>
         </a>
       </div>
