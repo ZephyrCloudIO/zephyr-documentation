@@ -10,7 +10,7 @@ import { WebpackIcon } from '../components/icons/webpack';
 import { NetlifyIcon } from '../components/icons/netlify';
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 
-export const version = '0.0.17';
+export const version = '0.0.19';
 
 export interface CardItemProps {
   title: string;
@@ -64,7 +64,7 @@ export const SiteConfig: CardProps = {
     {
       title: 'Add Zephyr to your existing project',
       description: 'Available for Webpack, Rspack and Vite',
-      href: '/how-to/existing-app',
+      href: '/recipes/existing-app',
       variant: 'small',
     },
     {
