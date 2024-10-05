@@ -1,0 +1,104 @@
+# Vite + Webpack + Rspack with Module Federation
+
+This guide aims to walk you through how you can deploy a Micro-Frontend application using the Official Vite Plugin from Module Federation. After this guide, you will have a Vite application consuming remote applications bundled by Vite, Rspack and Webpack deployed through Zephyr Cloud.
+
+:::info Prerequisites
+
+- We expect you to have finished our [Get Started](/general/get-started) guide.
+- Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
+- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
+- npm >=10
+- node >=20
+
+If you don't have `nvm` to manage your node version yet, head to [the official nvm guide](https://github.com/nvm-sh/nvm) to install it.
+
+```bash
+nvm use 20 
+```
+
+:::
+
+## Example configuration
+
+### Install Zephyr Plugin
+
+```sh{title="Terminal"}
+npm i vite-plugin-zephyr@latest
+```
+
+### Vite Host
+
+```js{title="vite.config.ts"}
+
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr } from 'vite-plugin-zephyr';
+
+const mfConfig = {
+  name: 'vite-host',
+  filename: 'remoteEntry.js',
+  remotes: {
+    'vite-remote': {
+      entry: 'http://localhost:5174/remoteEntry.js',
+      type: 'module',
+    },
+    vite_webpack: {
+      entry: 'http://localhost:8080/remoteEntry.js',
+      type: 'var',
+    },
+    vite_rspack: {
+      entry: 'http://localhost:8081/remoteEntry.js',
+      type: 'var',
+    },
+  },
+  shared: {
+    react: {
+      singleton: true,
+    },
+    'react-dom': {
+      singleton: true,
+    },
+  },
+};
+
+export default defineConfig({
+  plugins: [react(), withZephyr(mfConfig)],
+  build: {
+    target: 'chrome89',
+  },
+});
+
+```
+
+### Vite Remote
+
+```ts{title="vite.config.ts"}
+
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr } from 'vite-plugin-zephyr';
+
+const mfConfig = {
+  name: 'vite-remote',
+  filename: 'remoteEntry.js',
+  exposes: {
+    './Button': './src/Button',
+  },
+  shared: ['react', 'react-dom'],
+};
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react(), withZephyr({ ...mfConfig })],
+  experimental: {
+    renderBuiltUrl() {
+      return { relative: true };
+    },
+  },
+  build: {
+    target: 'chrome89',
+  },
+});
+```
+
+### 1. Scaffold the host in Vite
