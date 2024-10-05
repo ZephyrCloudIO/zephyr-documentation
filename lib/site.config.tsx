@@ -161,6 +161,11 @@ export const SiteConfig: CardProps = {
       icons: [<ReactIcon />, <RspackIcon />, <NxIcon />],
     },
     {
+      title: 'React Native',
+      description:
+        'Read more about how Zephyr works with Re.Pack - built for React Native.',
+    },
+    {
       title: 'Migrate from Webpack in Nx to Rspack',
       description: 'Migrate from Webpack in Nx to Rspack and use Zephyr.',
       href: '/recipes/migrate-nx-webpack-to-rspack',

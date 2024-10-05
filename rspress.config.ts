@@ -137,6 +137,10 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/recipes/react-rspack-nx',
         },
         {
+          text: 'React Native',
+          link: '/recipes/react-native'
+        },
+        {
           text: 'Migrate from Webpack to Rspack in Nx',
           link: '/recipes/migrate-nx-webpack-to-rspack'
 
