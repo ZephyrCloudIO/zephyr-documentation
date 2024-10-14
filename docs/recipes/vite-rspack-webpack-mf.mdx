@@ -26,7 +26,7 @@ For applications built with Vite:
 npm i vite-plugin-zephyr@latest 
 ```
 
-For applications built with Webpack: 
+For applications built with Webpack and Rspack: 
 
 ```sh title="Terminal"
 npm i zephyr-webpack-plugin@latest
@@ -109,6 +109,8 @@ export default defineConfig({
 });
 ```
 ### Rspack Remote 
+
+Example project created via `npx create-mf-app`
 
 ```ts title="rspack.config.js"
 const rspack = require('@rspack/core');
@@ -226,6 +228,8 @@ module.exports = withZephyr()({
 ```
 
 ### Webpack Remote 
+
+Example project created via `npx create-mf-app`
 
 ```ts title="webpack.config.js"
 const HtmlWebPackPlugin = require('html-webpack-plugin');
