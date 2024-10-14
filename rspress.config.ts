@@ -89,17 +89,18 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/how-to/mf-guide',
         },
         {
-          text: 'Browser Extension',
+          text: "Custom Domain",
+          link: "/how-to/custom-domain"
+        },
+        {
+          text: 'Chrome Extension',
           link: '/how-to/browser-extension'
         },
         {
-          text: 'Versioning and Tags',
+          text: 'Version rollback and roll-forward',
           link: '/how-to/versioning-tags'
         },
-        {
-          text: 'Cloud Providers',
-          link: '/how-to/cloud-providers',
-        },
+
       ],
     },
 
@@ -138,6 +139,10 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
         {
           text: 'React + Rspack + Nx',
           link: '/recipes/react-rspack-nx',
+        },
+        {
+          text: 'React Native',
+          link: '/recipes/react-native'
         },
         {
           text: 'Migrate from Webpack to Rspack in Nx',

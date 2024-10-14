@@ -6,7 +6,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { version } from '../lib/site.config';
+import { CardItemProps, version } from '../lib/site.config';
+import { Card } from '@/components/ui/card';
+import { CardLayout } from '@/components/ui/card-layout';
 
 export const CurrentVersion = () => {
   return (
@@ -46,6 +48,49 @@ const AfterNavTitle = () => {
   );
 };
 
+const items = [
+  {
+    title: 'Get Started Guide',
+    href: '/general/get-started',
+    description: 'Not sure where to start?',
+    variant: 'small',
+  },
+  {
+    title: 'Existing Application',
+    href: '/how-to/existing-app',
+    description: 'Check how to add Zephyr to your existing application?',
+    variant: 'small',
+  },
+  {
+    title: 'Netlify Integration',
+    href: '/cloud/netlify',
+    description: 'Add Netlify as your Deployment Integration on Zephyr Cloud.',
+    variant: 'small',
+  },
+  {
+    title: 'Cloudflare Integration',
+    href: '/cloud/cloudflare',
+    description:
+      'Add Cloudflare as your Deployment Integration on Zephyr Cloud.',
+    variant: 'small',
+  },
+] satisfies CardItemProps[];
+
+const NotFoundLayout = () => (
+  <div className="flex flex-col gap-10 items-center justify-center container mx-auto min-w-[96vw] min-h-[80vh]">
+    <h1 className="text-6xl font-semibold">404</h1>
+    <h2>
+      We can't find the page you were looking for...Maybe take a look at these?
+    </h2>
+
+    <CardLayout>
+      {items.map((item) => (
+        <Card item={item}></Card>
+      ))}
+    </CardLayout>
+  </div>
+);
+
 const Layout = () => (
   <Theme.Layout
     beforeDocContent={<CurrentVersion />}
@@ -57,6 +102,7 @@ const Layout = () => (
 export default {
   ...Theme,
   Layout,
+  NotFoundLayout,
 };
 
 export * from 'rspress/theme';

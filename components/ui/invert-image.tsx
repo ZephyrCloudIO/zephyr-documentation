@@ -7,14 +7,14 @@ interface ImageTypeProps {
   lightSrc?: string;
 }
 export const InvertImage = ({ darkSrc, lightSrc }: ImageTypeProps) => {
-  const [imageSrc, setImageSrc] = useState('/bg-dark-logo.png');
+  const [imageSrc, setImageSrc] = useState('/dark-bg-logo.png');
 
   const isDark = useDark();
 
   useEffect(() => {
-    if (!isDark) setImageSrc(lightSrc ? lightSrc : '/bg-light-logo.png');
+    if (!isDark) setImageSrc(lightSrc ? lightSrc : '/light-bg-logo.png');
 
-    if (isDark) setImageSrc(darkSrc ? darkSrc : '/bg-dark-logo.png');
+    if (isDark) setImageSrc(darkSrc ? darkSrc : '/dark-bg-logo.png');
   }, [isDark]);
 
   return (

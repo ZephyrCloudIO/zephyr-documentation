@@ -1,11 +1,12 @@
 ---
-title: Netlify on Zephyr
+title: Configure Netlify on Zephyr
 description: Configuring Netlify as your deployment integration provider on Zephyr
 ---
 
 import { Button } from '../../components/ui/button.tsx';
 import { Steps, Badge } from '@theme';
 import { Separator } from '../../components/ui/separator.tsx';
+import { CustomDomain } from '../../components/cloud-provider.tsx'
 
 # Configure Netlify on Zephyr 
 
@@ -13,11 +14,13 @@ According to Netlify's documentation, Netlify is an enterprise-ready platform, w
 
 We will discuss how to configure Netlify as your default cloud provider with Blob storage, Netlify sites and Netlify functions to deploy and version your application with Zephyr Cloud, deliver content to your users using Netlify's Blob storage, Functions and Edge network. 
 
+[Launch Week 1 - Netlify's Blog on how to use Zephyr with Netlify](https://developers.netlify.com/guides/micro-frontends-with-zephyr-cloud/).
+
 :::tip
 
 To deploy a Micro-frontend application on Netlify, the bare minimum set up will **only require you to configure one site** on Netlify. 
 
-In the land of Micro-Frontend and how Zephyr deploy applications, we map each individual components and serve them with edge functions via the wildcards of one domain. 
+In the land of Micro-Frontend and how Zephyr deploy applications, we map each individual components and serve them with edge functions via the wildcards of one domain (so you don't need to configure multiple site project on Netlify for a Micro-Frontend application). 
 
 :::
 
@@ -36,6 +39,9 @@ In the land of Micro-Frontend and how Zephyr deploy applications, we map each in
 
 
 :::warning How-to
+
+Because Zephyr Cloud handles deployments on your behalf, it needs the ability to create subdomains on your behalf, which means that you need to be able to configure a wildcard `CNAME` record on your domain, and you can’t use dynamic domain features from Netlify, such as branch deploys or deploy previews.
+
 Wildcard subdomains can be activated via [contacting Netlify support](https://www.netlify.com/support/), but there are a few requirements:
 1. The site must be on a Pro or above team. ✅
 2. The DNS must be managed by Netlify OR you need to bring a custom wildcard SSL certificate. ✅
@@ -262,4 +268,6 @@ On your site project's dashboard, click on **Site configuration** on the left, s
 3. Choose the name of integration you want to delete and select **Remove** on the next page. 
 
 
-<Separator/>
+## What's next? 
+
+<CustomDomain/>

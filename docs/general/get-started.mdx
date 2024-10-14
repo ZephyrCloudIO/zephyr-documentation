@@ -67,9 +67,8 @@ nvm use 20
 
 Once the prerequisites are fulfilled, we can start scaffolding our application in the terminal:
 
-<PackageManagerTabs command="create rspack@latest" />
-```bash 
-pnpm create rspack@latest 
+```bash title="Terminal" 
+pnpm create rspack@latest
 ```
 
 :::tip
@@ -79,7 +78,7 @@ If you are using our managed cloud (Cloudflare) or custom deployment integration
 :::
 
 The creation process will ask you for **project folder name** and **project template**, we will be choosing `react` in this example: 
-```bash 
+```bash title="Terminal"
 .../Library/pnpm/store/v3/tmp/dlx-74427  |  +20 ++
 .../Library/pnpm/store/v3/tmp/dlx-74427  | Progress: resolved 20, reused 20, downloaded 0, added 20, done
 ✔ Project folder … rspack-project
@@ -91,9 +90,10 @@ The creation process will ask you for **project folder name** and **project temp
 ```
 Press <Keyboard shortcuts={["Enter"]}/>, enter the project directory:
 
-
-<PackageManagerTabs command="install" />
-
+```bash title="Terminal"
+cd rspack-project
+pnpm i 
+```
 
 Follow the console output to open the app in browser running on localhost. 
 
@@ -102,82 +102,83 @@ Follow the console output to open the app in browser running on localhost.
 #### 2. Adding Zephyr
 Open the project folder we created with code editor of your choice. Within current working directory, install Zephyr's plugin by running: 
 
-<PackageManagerTabs command="i zephyr-webpack-plugin" />
-
+```bash title="Terminal"
+pnpm add zephyr-webpack-plugin@latest
+```
 
 After install the plugin, open the file `rspack.config.ts` in project root and replace the original configuration as below:
 
-```ts title="rspack.config.mjs" 
+```ts title="rspack.config.mjs" {4,11,51,60,62}
+import { defineConfig } from '@rspack/cli';
+import { rspack } from '@rspack/core';
+import * as RefreshPlugin from '@rspack/plugin-react-refresh';
+import { withZephyr } from 'zephyr-webpack-plugin';
 
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { rspack } from "@rspack/core";
-import RefreshPlugin from "@rspack/plugin-react-refresh";
-import { withZephyr } from "zephyr-webpack-plugin";
+const isDev = process.env.NODE_ENV === 'development';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const isDev = process.env.NODE_ENV === "development";
+// Target browsers, see: https://github.com/browserslist/browserslist
+const targets = ['chrome >= 87', 'edge >= 88', 'firefox >= 78', 'safari >= 14'];
 
 export default withZephyr()({
-	context: __dirname,
-	entry: {
-		main: "./src/main.jsx"
-	},
-	resolve: {
-		extensions: ["...", ".ts", ".tsx", ".jsx"]
-	},
-	module: {
-		rules: [
-			{
-				test: /\.svg$/,
-				type: "asset"
-			},
-			{
-				test: /\.(jsx?|tsx?)$/,
-				use: [
-					{
-						loader: "builtin:swc-loader",
-						options: {
-							jsc: {
-								parser: {
-									syntax: "typescript",
-									tsx: true
-								},
-								transform: {
-									react: {
-										runtime: "automatic",
-										development: isDev,
-										refresh: isDev
-									}
-								}
-							},
-							env: {
-								targets: [
-									"chrome >= 87",
-									"edge >= 88",
-									"firefox >= 78",
-									"safari >= 14"
-								]
-							}
-						}
-					}
-				]
-			}
-		]
-	},
-	plugins: [
-		new rspack.DefinePlugin({
-			"process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
-		}),
-		new rspack.ProgressPlugin({}),
-		new rspack.HtmlRspackPlugin({
-			template: "./index.html"
-		}),
-		isDev ? new RefreshPlugin() : null
-	].filter(Boolean),
-	experiments: {
-		css: true
-	}
+  context: __dirname,
+  entry: {
+    main: './src/main.tsx',
+  },
+  resolve: {
+    extensions: ['...', '.ts', '.tsx', '.jsx'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.svg$/,
+        type: 'asset',
+      },
+      {
+        test: /\.(jsx?|tsx?)$/,
+        use: [
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              jsc: {
+                parser: {
+                  syntax: 'typescript',
+                  tsx: true,
+                },
+                transform: {
+                  react: {
+                    runtime: 'automatic',
+                    development: isDev,
+                    refresh: isDev,
+                  },
+                },
+              },
+              env: { targets },
+            },
+          },
+        ],
+      },
+    ],
+  },
+  // @ts-expect-error Below are non-blocking error and we are working on improving them
+  plugins: [
+    new rspack.HtmlRspackPlugin({
+      template: './index.html',
+    }),
+    isDev ? new RefreshPlugin() : null,
+  ].filter(Boolean),
+  optimization: {
+    minimizer: [
+      // @ts-expect-error
+      new rspack.SwcJsMinimizerRspackPlugin(),
+      // @ts-expect-error
+      new rspack.LightningCssMinimizerRspackPlugin({
+        minimizerOptions: { targets },
+      }),
+    ],
+  },
+  experiments: {
+    css: true,
+  },
 });
 
 
@@ -209,7 +210,9 @@ On the next page where your repository has been created on Github, copy paste th
 
 After we finished configuring the project, within your terminal run: 
 
-<PackageManagerTabs command="run build" />
+```bash title="Terminal"
+pnpm run build
+```
 
 If you haven't register an account with us, or you haven't sign in for a while, your default browser will pop up and prompt you to sign up to our dashboard. If you already have an account or signed in recently, the browser will notify that you already signed in. 
 
@@ -234,7 +237,9 @@ Once you click on <img src="/logo.png" className="inline h-5 w-5 brightness-[3]"
 
 
 :::details{title="What happens when you log in?"}
+
 While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run: 
+
 ```bash 
 rm rf ~/.zephyr 
 ```
@@ -290,8 +295,9 @@ export default App;
 ```
 Next in your terminal run: 
 
-<PackageManagerTabs command="run build" />
-
+```bash title="Terminal"
+pnpm run build
+```
 
 The console output will return the latest deployed URL. On Chrome ChromeExtension, the latest deployed version will be under **Version** dropdown in as the first option. You should see the app's heading is changed to `Rspack + React + Zephyr`
 

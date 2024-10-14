@@ -64,7 +64,7 @@ export const SiteConfig: CardProps = {
     {
       title: 'Add Zephyr to your existing project',
       description: 'Available for Webpack, Rspack and Vite',
-      href: '/how-to/existing-app',
+      href: '/recipes/existing-app',
       variant: 'small',
     },
     {
@@ -174,6 +174,11 @@ export const SiteConfig: CardProps = {
       href: '/recipes/react-rspack-nx',
       variant: 'small',
       icons: [<ReactIcon />, <RspackIcon />, <NxIcon />],
+    },
+    {
+      title: 'React Native',
+      description:
+        'Read more about how Zephyr works with Re.Pack - built for React Native.',
     },
     {
       title: 'Migrate from Webpack in Nx to Rspack',
