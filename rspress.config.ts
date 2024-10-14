@@ -133,6 +133,10 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/recipes/react-vite',
         },
         {
+          text: 'Vite + Rspack + Webpack + MF',
+          link: '/recipes/vite-rspack-webpack-mf'
+        },
+        {
           text: 'React + Rspack + Nx',
           link: '/recipes/react-rspack-nx',
         },

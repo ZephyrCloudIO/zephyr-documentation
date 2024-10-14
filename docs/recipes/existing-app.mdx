@@ -31,7 +31,7 @@ If you already have an application and wish to enhance it with Zephyr Cloud, we 
 ### 1. Add Zephyr as a dependency
 
 Install the package via NPM:
-<Tabs values={[{label:"Rspack"}, {label: 'Webpack'}, {label: 'Vite'}]}>
+<Tabs values={[{label:"Rspack"}, {label: 'Webpack'}]}>
  <Tab>
 ```bash filename="Terminal"
 npm i zephyr-webpack-plugin@latest --save
@@ -40,11 +40,6 @@ npm i zephyr-webpack-plugin@latest --save
 <Tab>
 ```bash filename="Terminal"
 npm i zephyr-webpack-plugin@latest --save
-```
-</Tab>
- <Tab>
-```bash filename="Terminal"
-npm i vite-plugin-zephyr@latest --save
 ```
 </Tab>
 </Tabs>
@@ -91,3 +86,5 @@ Wrap your existing configuration settings with the necessary modifications.
 Initiate the build process for your application to activate Zephyr. This action will automatically launch your default browser and prompt you for login credentials.
 
 Once logged in, you can begin developing with Zephyr.
+
+Read more about Vite in [React + Vite](/recipes/react-vite) and [Vite + Rspack + Webpack with Module Federation](/recipes/vite-rspack-webpack-mf). 

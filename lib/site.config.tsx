@@ -10,7 +10,7 @@ import { WebpackIcon } from '../components/icons/webpack';
 import { NetlifyIcon } from '../components/icons/netlify';
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 
-export const version = '0.0.19';
+export const version = '0.0.21';
 
 export interface CardItemProps {
   title: string;
@@ -136,6 +136,21 @@ export const SiteConfig: CardProps = {
       href: '/recipes/existing-app',
       variant: 'small',
       icons: [<ReactIcon />, <ViteIcon />, <WebpackIcon />, <RspackIcon />],
+    },
+    {
+      title: 'Vite + Rspack + Webpack + Module Federation',
+      framework: 'vite',
+      description:
+        'Deploying a Micro-Frontend application using the Official Vite Plugin from Module Federation with Vite, Rspack and Webpack on Zephyr. ',
+      href: '/recipes/vite-rspack-webpack-mf',
+      variant: 'small',
+      icons: [
+        <ViteIcon />,
+        <ReactIcon />,
+        <WebpackIcon />,
+        <RspackIcon />,
+        <ModuleFederationIcon />,
+      ],
     },
 
     // {
