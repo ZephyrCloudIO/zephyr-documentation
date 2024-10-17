@@ -100,6 +100,10 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           text: 'Version rollback and roll-forward',
           link: '/how-to/versioning-tags'
         },
+        {
+          text: 'Allow IP addresses',
+          link: "/how-to/allow-ip-addresses"
+        }
 
       ],
     },
