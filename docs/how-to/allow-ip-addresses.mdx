@@ -4,7 +4,7 @@
 This guide is recommended for users who want to "bring your own cloud" (BYOC) or using our managed cloud. Zephyr Cloud leverages many other IP ranges for various product and services but some of these address will not make connections to your origin. 
 ::: 
 
-Zephyr has several IP addresses which are used by all proxied hostnames. These IP addresses construct the skeleton of our global edge network to help distribute traffic amongs various servers. 
+Zephyr has several IP addresses which are used by all proxied hostnames. These IP addresses construct the skeleton of our global edge network to help distribute traffic among various servers. 
 
 
 If you have private network setup, implemented IP filtering, or allowing certain IP addresses in your organization, all traffic between your origin and Zephyr Cloud's server will pass through your proxy network. Without whitelisting below IP addresses to your allow list, devices at your origin will stop receiving traffic from our servers. Blocking these IPs will resulting visitor traffic termination or deployment failure. Whitelisting below IP addresses enable connections to our backend server and providers to enable flawless deployment flow. 
