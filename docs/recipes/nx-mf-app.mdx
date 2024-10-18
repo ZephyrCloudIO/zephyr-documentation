@@ -9,7 +9,7 @@ import { SourceCode } from '@theme';
 
 <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/create-nx-workspace-mf" />
 
-Special thanks to [Colum](https://github.com/Coly010) at Nx for his feedback on using Nx generators with Module Federation.
+Special thanks to [Colum](https://x.com/FerryColum) at Nx for his feedback on using Nx generators with Module Federation.
 
 :::info Prerequisites
 
@@ -103,21 +103,13 @@ npx nx add @nx/react
 
 ### Installing Zephyr
 
-Install the `zephyr-edge-contract` and `zephyr-webpack-plugin` using npm with the following commands:
+Install the `zephyr-webpack-plugin` using npm with the following commands:
 
 ```bash
-npm install zephyr-edge-contract@latest
 npm install zephyr-webpack-plugin@latest
 ```
 
-Once installed, ensure these packages are listed in your `package.json` under dependencies:
-
-```json filename="package.json"
-"dependencies": {
-  "zephyr-edge-contract": "^0.0.2",
-  "zephyr-webpack-plugin": "^0.0.2"
-}
-```
+Once installed, ensure these packages are listed in your `package.json` under dependencies and they are the latest version.
 
 ### Generate Module Federation Shell and Remotes
 
@@ -184,19 +176,22 @@ Zephyr Cloud requires a `package.json` file in each application to resolve names
 
 ```bash filename="myorg/apps/shell/package.json"
 {
-"name": "shell"
+"name": "shell", 
+"version": "0.0.1"
 }
 ```
 
 ```bash filename="myorg/apps/remote1/package.json"
 {
-"name": "remote1"
+"name": "remote1", 
+"version": "0.0.1",
 }
 ```
 
 ```bash filename="myorg/apps/remote2/package.json"
 {
-"name": "remote2"
+"name": "remote2", 
+"version": "0.0.1"
 }
 ```
 
