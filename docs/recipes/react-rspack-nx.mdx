@@ -37,7 +37,7 @@ nvm use 20
 Run below commands:
 
 ```bash title="Terminal"
-npx create-nx-workspace my-workspace
+npx create-nx-workspace@latest my-workspace --preset=apps
 ```
 And select from these options: 
 
@@ -54,7 +54,7 @@ In your terminal, run:
 
 ```bash title="Terminal"
 npx nx add @nx/react
-npx nx g @nx/react:host host --remotes=remote1,remote2 --bundler=rspack --directory=apps/host 
+npx nx g @nx/react:host --remotes=remote1,remote2 --bundler=rspack --directory=apps/host 
 ```
 
 In the terminal select from below answers: 
@@ -122,9 +122,46 @@ In remote2's `package.json`, add below field:
 
 #### 4. Create your first commit 
 
+After making sure each application in this project has a `package.json` and the naming align with the unique name in module federation config, you will need to make sure this project is a github repository and has at least one commit hash by running `git commit -m "commit something"` command. 
+
 #### 5. Adding configuration for Zephyr
 
+Install Zephyr's plugin for Rspack (works in Webpack too): 
 
+```sh title="Terminal"
+npm i zephyr-webpack-plugin@latest 
+```
+
+Add Zephyr plugin to each application's build config by adding below lines from Nx's auto-generated build config: 
+
+```ts title="rspack.config.ts" {6,24}
+import { composePlugins, withNx, withReact } from '@nx/rspack';
+import {
+  withModuleFederation,
+  ModuleFederationConfig,
+} from '@nx/rspack/module-federation';
+import { withZephyr } from "zephyr-webpack-plugin"
+
+import baseConfig from './module-federation.config';
+
+const config: ModuleFederationConfig = {
+  ...baseConfig,
+};
+
+// Nx plugins for rspack to build config object from Nx options and context.
+/**
+ * DTS Plugin is disabled in Nx Workspaces as Nx already provides Typing support for Module Federation
+ * The DTS Plugin can be enabled by setting dts: true
+ * Learn more about the DTS Plugin here: https://module-federation.io/configure/dts.html
+ */
+export default composePlugins(
+  withNx(),
+  withReact(),
+  withModuleFederation(config, { dts: false }),
+  withZephyr() // the plugin sequence in Nx matters. Do remember to put zephyr at the end of your config file. 
+)
+```
+You will need to do the same for `rspack.config.prod.ts` for host app. 
 
 #### 6. Rollback to previous version 
 
