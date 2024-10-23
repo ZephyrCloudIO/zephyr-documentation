@@ -100,6 +100,10 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           text: 'Version rollback and roll-forward',
           link: '/how-to/versioning-tags'
         },
+        {
+          text: 'Allow IP addresses',
+          link: "/how-to/allow-ip-addresses"
+        }
 
       ],
     },
@@ -133,7 +137,7 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/recipes/react-vite',
         },
         {
-          text: 'Vite + Rspack + Webpack + MF',
+          text: 'Vite + Rspack + webpack + MF',
           link: '/recipes/vite-rspack-webpack-mf'
         },
         {

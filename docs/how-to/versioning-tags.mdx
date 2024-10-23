@@ -1,8 +1,8 @@
-# Versioning and Tags
+# Versioning, Tags and Environments
 
 Zephyr utilizes familiar versioning concepts by adopting [SemVer](https://semver.org/) (Semantic Versioning) as its foundational versioning methodology, ensuring a systematic and meaningful progression of project versions.
 
-Applications deployed through Zephyr could have unlimited number of versions. After you configure Zephyr's npm plugin in your build tool, or bundlers, _**each successful deployment would generate a new version**_. 
+Applications deployed through Zephyr can have an unlimited number of versions. After you configure Zephyr's npm plugin in your build tool, or bundlers, _**each successful deployment will generate a new version**_. Check [here to see how tags are created](#how-tags-are-created) and [how versions, tags and environments work together](#).
 
 ## Semantic Versioning Overview
 
@@ -53,7 +53,7 @@ On your first successful build, we find your branch name to auto-create a tag.
 
 After the first successful build, each build's version fits in thiscriteria will be attached as latest version under this tag. 
 
-#### Tag rules on Dashboard
+#### Manually created on Dashboard
 
 On [Zephyr's Dashboard](https://app.zephyr-cloud.io), you can find **Tags** under each application's **Settings** page. 
 
@@ -83,6 +83,7 @@ Take an example, you just created a new tag rule with 3 rules:
 - Username: Zack 
 - Branch: fix-ui 
 - Version: 200
+- is-CI: true
 
 Zack's deployment, version 200 under the branch "fix-ui" will be locked into this tag. Since the version rule is set to a fixed version. 
 :::
@@ -93,7 +94,6 @@ Zack's deployment, version 200 under the branch "fix-ui" will be locked into thi
 Under application's **Settings** page select **Tags** and then the desired **Tag name** you want to edit. 
 
 Click on **+ Add** button to add new rules, edit or delete pre-existing rules. 
-
 
 
 ### Tagging Strategy in CI
