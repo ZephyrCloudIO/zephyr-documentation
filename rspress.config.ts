@@ -10,15 +10,7 @@ import { Categories, Errors } from './lib/error-codes-messages';
 import { capitalizeFirstLetter } from './lib/utils/casing';
 import { getError as getZeError, PAGE_CODE_REGEX } from './lib/error-helpers';
 
-
 const newRelicScript = fs.readFileSync('lib/scripts/new-relic.js', 'utf-8');
-
-/** @type {import('codehike/mdx').CodeHikeConfig} */
-const chConfig = {
-  components: { code: 'Code' },
-};
-
-
 
 const socialLinks: UserConfig['themeConfig']['socialLinks'] = [
   {
@@ -38,18 +30,16 @@ const socialLinks: UserConfig['themeConfig']['socialLinks'] = [
   },
 ];
 
-
-
 const nav: UserConfig['themeConfig']['nav'] = [
   {
     text: 'Get Started',
     link: '/general/get-started',
-    activeMatch: "/general/get-started/"
+    activeMatch: '/general/get-started/',
   },
   {
     text: 'Learning',
     link: '/learning',
-    activeMatch: "/learning"
+    activeMatch: '/learning',
   },
 
   {
@@ -89,38 +79,37 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/how-to/mf-guide',
         },
         {
-          text: "Custom Domain",
-          link: "/how-to/custom-domain"
+          text: 'Custom Domain',
+          link: '/how-to/custom-domain',
         },
         {
           text: 'Chrome Extension',
-          link: '/how-to/browser-extension'
+          link: '/how-to/browser-extension',
         },
         {
           text: 'Version rollback and roll-forward',
-          link: '/how-to/versioning-tags'
+          link: '/how-to/versioning-tags',
         },
         {
           text: 'Allow IP addresses',
-          link: "/how-to/allow-ip-addresses"
-        }
-
+          link: '/how-to/allow-ip-addresses',
+        },
       ],
     },
 
     {
-      text: "Cloud Providers",
+      text: 'Cloud Providers',
       link: '/cloud',
       items: [
         {
           text: 'Cloudflare',
-          link: '/cloud/cloudflare'
+          link: '/cloud/cloudflare',
         },
         {
           text: 'Netlify',
-          link: '/cloud/netlify'
-        }
-      ]
+          link: '/cloud/netlify',
+        },
+      ],
     },
     {
       text: 'Recipes',
@@ -138,7 +127,7 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
         },
         {
           text: 'Vite + Rspack + webpack + MF',
-          link: '/recipes/vite-rspack-webpack-mf'
+          link: '/recipes/vite-rspack-webpack-mf',
         },
         {
           text: 'React + Rspack + Nx',
@@ -146,19 +135,17 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
         },
         {
           text: 'React Native',
-          link: '/recipes/react-native'
+          link: '/recipes/react-native',
         },
         {
           text: 'Migrate from Webpack to Rspack in Nx',
-          link: '/recipes/migrate-nx-webpack-to-rspack'
-
+          link: '/recipes/migrate-nx-webpack-to-rspack',
         },
         {
           text: 'Nx MF App',
           link: '/recipes/nx-mf-app',
         },
-
-      ]
+      ],
     },
 
     {
@@ -184,10 +171,8 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
               description: error.message,
               label: error.message,
             })),
-        }))
-    }
-
-
+        })),
+    },
   ],
   '/learning': [
     {
@@ -200,19 +185,19 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/learning/concepts/terminologies',
         },
         {
-          text: "Architecture",
-          link: "/learning/concepts/architecture"
+          text: 'Architecture',
+          link: '/learning/concepts/architecture',
         },
 
         {
-          text: "Micro-Frontend",
-          link: '/learning/concepts/micro-frontend'
+          text: 'Micro-Frontend',
+          link: '/learning/concepts/micro-frontend',
         },
         {
-          text: "Module Federation",
-          link: "/learning/concepts/module-federation"
-        }
-      ]
+          text: 'Module Federation',
+          link: '/learning/concepts/module-federation',
+        },
+      ],
     },
 
     {
@@ -221,17 +206,16 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
       collapsible: true,
       items: [
         {
-          text: "Learn webpack with React",
-          link: "/learning/react-webpack"
-        }
-      ]
+          text: 'Learn webpack with React',
+          link: '/learning/react-webpack',
+        },
+      ],
     },
     {
       text: 'Additional Resources',
       link: '/learning/resources',
     },
   ],
-
 };
 
 export default defineConfig({
@@ -261,21 +245,14 @@ export default defineConfig({
     sidebar,
     socialLinks,
     editLink: {
-      docRepoBaseUrl: 'https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/docs',
+      docRepoBaseUrl:
+        'https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/docs',
       text: 'Edit this page on GitHub',
     },
   },
 
   route: {
     cleanUrls: true,
-  },
-
-  markdown: {
-    defaultWrapCode: true,
-    remarkPlugins: [require('codehike/mdx').remarkPlugins, chConfig],
-    codeHighlighter: 'prism',
-    checkDeadLinks: true,
-    showLineNumbers: true
   },
 
   builderConfig: {
@@ -288,13 +265,9 @@ export default defineConfig({
         },
       ],
     },
-    plugins: [
-      //  withZephyr()
-    ]
   },
 
   plugins: [
-
     fileTree(),
     ga({
       id: 'G-B7G266JZDH',
@@ -318,12 +291,11 @@ export default defineConfig({
           // Adds to content because the indexer is not configured to
           // lookup the frontmatter data.
           // https://github.com/web-infra-dev/rspress/blob/d16b4b625c586e8d10385c792ade2a5d356834f3/packages/theme-default/src/components/Search/logic/providers/LocalProvider.ts#L78
-          row.content = `ZE${Categories[error.kind]}${error.id}\n${error.message
-            }\n\n\n${row.content}`; // prepends to have higher priority
+          row.content = `ZE${Categories[error.kind]}${error.id}\n${
+            error.message
+          }\n\n\n${row.content}`; // prepends to have higher priority
         }
       },
     },
-
-
   ],
 });
