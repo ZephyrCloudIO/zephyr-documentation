@@ -71,13 +71,11 @@ In the terminal select from below answers:
 Your Nx application's initial setup is complete! If you run: 
 
 ```bash title="Terminal"
-npx nx run-many -t build --parallel=1 --skip-nx-cache --verbose -p host remote1 remote2
-# Or alternatively only serve host 
 npx nx run host:serve
 ```
 You can see your application in the browser. 
 
-#### 3. Naming each components
+#### 3. Naming each application
 
 To understand why these configuration are necessary - [Read the complete checklist to deploy Micro-Frontend with Zephyr](/how-to/mf-guide). 
 
@@ -91,6 +89,12 @@ Open the new directory in your selected editor and add `package.json` as a struc
 --- package.json 
 -- remote2 
 --- package.json 
+```
+
+This command will create all 3 files for you
+
+```bash title="Terminal
+touch apps/host/package.json apps/remote1/package.json apps/remote2/package.json
 ```
 
 In host's `package.json`, add below field (minimal example): 
@@ -122,7 +126,7 @@ In remote2's `package.json`, add below field:
 
 #### 4. Create your first commit 
 
-After making sure each application in this project has a `package.json` and the naming align with the unique name in module federation config, you will need to make sure this project is a github repository and has at least one commit hash by running `git commit -m "commit something"` command. 
+After making sure each application in this project has a `package.json` and the naming aligns with the unique name in module federation config, you will need to make sure this project is a github repository and has at least one commit hash by running `git commit -m "commit something"` command. 
 
 #### 5. Adding configuration for Zephyr
 
@@ -161,42 +165,52 @@ export default composePlugins(
   withZephyr() // the plugin sequence in Nx matters. Do remember to put zephyr at the end of your config file. 
 )
 ```
-You will need to do the same for `rspack.config.prod.ts` for host app. 
+You will need to do the same for `rspack.config.prod.ts` for host app.
 
-#### 6. Rollback to previous version 
+#### 6. Build the remotes and serve the host
 
-The first option in the dropdown menu under **Version** is the latest deployment of your app. In the dropdown menu you will see more previous version of your app. 
+You have to build the remote applications first; this ensures that the host application can properly contact the remotes.
 
-But if you want to rollback to the previous version of your deployed application, you can click on one of the options and that version will show up in the browser, once you confirm that you want to push it to production you can click on **Publish updates** at the bottom of the side panel. 
+```bash Title=Terminal
+nx run remote1:build
+```
 
+```bash Title=Terminal
+nx run remote2:build
+```
+Now you can serve the host application, which through nx magic will start the two remotes also
 
-#### 6. Chrome Extension 
+```bash Title=Terminal
+nx run host:serve
+```
+
+Your host app should start on port 4200 by default and each remote will spin up on its own port. All three applications should be deployed now.
+
+#### 8. Chrome Extension 
 
 You can check the application you just deployed in our chrome extension. 
 
 Head to Chrome Web Store to install our chrome extension - [Zephyr Mission Control](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn). Click on **Add to Chrome** and confirm with **Add extension**. After you finish remember to **pin** the extension by clicking on <DrawingPinIcon className="inline -rotate-45"/> on extension management tab to provide you a quicker access to Zephyr's side panel.
-
-
 
 Once you click on the Chrome Extension, a login page will pop up and prompt you to log in (if you are using Microsoft Edge you will need to click on **Open Side Panel**).
 
 
 
 :::details{title="What happens when you log in?"}
-While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run: 
+While we are logging you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run: 
 ```bash 
 rm rf ~/.zephyr 
 ```
 :::
 
-Now you have created an account and the side panel is empty - hold up! We will get into how to use our dashboard in a bit. Let's deploy an app through Zephyr so you can see a live example of how to use our side panel.
+Now that you have logged in and deployed your apps; you should see the versions of the host application, and the versions of our two remotes (remote1 & remote2). Make some changes locally, watch them redeploy and select the new version from the drop down (you may need to refresh the browser to see the latest, if live reload is not checked)
 
 :::info
 Our chrome extension is only supported on Chromium based browsers. See a list of [supported browser](/supported#browser-support).
 :::
 
 
-#### 7. Dashboard 
+#### 9. Dashboard 
 
 If you want to see all your projects and their versions, sign in on [dashboard](https://app.zephyr-cloud.io) and you will see all your projects and their dependencies.
 
