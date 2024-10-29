@@ -36,7 +36,7 @@ npm i zephyr-webpack-plugin@latest
 Four example build configuration for Vite, Rspack and Webpack. 
 ### Vite Host
 
-```js title="vite.config.ts"
+```js title="vite.config.ts"{3,35}
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -70,17 +70,92 @@ const mfConfig = {
 };
 
 export default defineConfig({
-  plugins: [react(), withZephyr(mfConfig)],
+  plugins: [
+    react(), 
+    withZephyr({mfConfig}), // sequence matters
+    svgr({
+        svgrOptions: {
+          // svgr options
+        },
+      }),
+  ],
   build: {
     target: 'chrome89',
+    modulePreload: {
+        resolveDependencies: (_, deps: string[]) => {
+          // Only preload React packages and non-federated modules
+          return deps.filter((dep) => {
+            const isReactPackage = dep.includes('react') || dep.includes('react-dom');
+            const isNotRemoteEntry = !dep.includes('remoteEntry.js');
+
+            return isReactPackage && isNotRemoteEntry;
+          });
+        },
+      },
   },
 });
 
 ```
 
-### Vite Remote
+:::warning{title="Known issue"}
+
+**1. Enable top level await**
+For `vite-plugin-zephyr` to work properly with your remotes, you need to set your build target to `chrome89` to enable top level await, alternatively you can install [`vite-plugin-top-level-await` plugin to enable it](https://www.npmjs.com/package/vite-plugin-top-level-await) and use it in configuration: 
 
 ```ts title="vite.config.ts"
+  plugins: [
+    react(),
+    federation({
+      name: 'viteViteHost',
+      remotes: {
+       ...
+      },
+      filename: 'remoteEntry-[hash].js',
+      manifest: true,
+      shared: {
+        vue: {},
+        'react/': {
+          requiredVersion: '18',
+        },
+        'react-dom': {},
+      ...
+      },
+      runtimePlugins: ['./src/mfPlugins'],
+    }),
+    // If you set build.target: "chrome89", you can remove this plugin
+    false && topLevelAwait(),
+  ],
+    build: {
+    target: 'chrome89',
+  },
+```
+
+**2. Sequence of plugins** 
+
+Because of how Vite and Rollup exposing hooks and processing modules in plugins, the sequence of plugin matters where `withZephyr()` should be after `react()` but before any other plugins. For example, if `svgr()` is before `withZephyr()` it would interrupt transformed output bundle and not as expected. 
+
+**3. Shared dependencies** 
+If the application doesn't show up in the browser, you might be experiencing problems related to dependencies (one of the potential issues), please rememeber to configure `modulePreload` in your `vite.config.ts`: 
+
+```ts title="vite.config.ts"
+ modulePreload: {
+        resolveDependencies: (_, deps: string[]) => {
+          // Only preload React packages and non-federated modules
+          return deps.filter((dep) => {
+            const isReactPackage = dep.includes('react') || dep.includes('react-dom');
+            const isNotRemoteEntry = !dep.includes('remoteEntry.js');
+
+            return isReactPackage && isNotRemoteEntry;
+          });
+        },
+      },
+```
+
+:::
+
+### Vite Remote
+
+```ts title="vite.config.ts"{3,18}
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -97,7 +172,10 @@ const mfConfig = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), withZephyr({ ...mfConfig })],
+  plugins: [
+    react(), 
+    withZephyr({ mfConfig })
+  ],
   experimental: {
     renderBuiltUrl() {
       return { relative: true };
@@ -112,7 +190,7 @@ export default defineConfig({
 
 Example project created via `npx create-mf-app`
 
-```ts title="rspack.config.js"
+```ts title="rspack.config.js" {5,12}
 const rspack = require('@rspack/core');
 const refreshPlugin = require('@rspack/plugin-react-refresh');
 const isDev = process.env.NODE_ENV === 'development';
@@ -231,7 +309,7 @@ module.exports = withZephyr()({
 
 Example project created via `npx create-mf-app`
 
-```ts title="webpack.config.js"
+```ts title="webpack.config.js"{5,13}
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 //const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const path = require('path');
