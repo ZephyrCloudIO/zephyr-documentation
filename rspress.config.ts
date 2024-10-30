@@ -9,8 +9,19 @@ import type { UserConfig } from 'rspress/config';
 import { Categories, Errors } from './lib/error-codes-messages';
 import { capitalizeFirstLetter } from './lib/utils/casing';
 import { getError as getZeError, PAGE_CODE_REGEX } from './lib/error-helpers';
+import { withZephyr } from "zephyr-webpack-plugin"
+import { pluginReact } from '@rsbuild/plugin-react';
 
 const newRelicScript = fs.readFileSync('lib/scripts/new-relic.js', 'utf-8');
+
+const zephyrRsbuildPlugin = () => ({
+  name: 'zephyr-rsbuild-plugin',
+  setup(api) {
+    api.modifyRspackConfig((rspackConfig) => {
+      return withZephyr()(rspackConfig);
+    });
+  },
+});
 
 const socialLinks: UserConfig['themeConfig']['socialLinks'] = [
   {
@@ -265,6 +276,7 @@ export default defineConfig({
         },
       ],
     },
+    plugins: [pluginReact(), zephyrRsbuildPlugin()]
   },
 
   plugins: [
@@ -291,9 +303,8 @@ export default defineConfig({
           // Adds to content because the indexer is not configured to
           // lookup the frontmatter data.
           // https://github.com/web-infra-dev/rspress/blob/d16b4b625c586e8d10385c792ade2a5d356834f3/packages/theme-default/src/components/Search/logic/providers/LocalProvider.ts#L78
-          row.content = `ZE${Categories[error.kind]}${error.id}\n${
-            error.message
-          }\n\n\n${row.content}`; // prepends to have higher priority
+          row.content = `ZE${Categories[error.kind]}${error.id}\n${error.message
+            }\n\n\n${row.content}`; // prepends to have higher priority
         }
       },
     },

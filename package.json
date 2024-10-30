@@ -40,7 +40,7 @@
     "tailwindcss-animate": "^1.0.7",
     "vite-plugin-zephyr": "^0.0.13",
     "webpack": "^5.93.0",
-    "zephyr-webpack-plugin": "^0.0.13",
+    "zephyr-webpack-plugin": "^0.0.23",
     "zod": "^3.23.8"
   },
   "devDependencies": {
