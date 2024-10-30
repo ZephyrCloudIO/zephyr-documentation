@@ -21,8 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18' # Specify the Node.js version as needed
-          cache: 'pnpm' # Optional: caches dependencies
+          node-version: '20' # Specify the Node.js version as needed
 
       - name: Install pnpm
         run: npm install -g pnpm
