@@ -5,11 +5,11 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to run workflow on'
+        description: "Branch to run workflow on"
         required: true
-        default: 'main'
+        default: "main"
 env:
-  ZE_SECRET_TOKEN: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwczovL2FwaS56ZXBoeXItY2xvdWQuaW8vZW1haWwiOiJsb2lzQHplcGh5ci1jbG91ZC5pbyIsImh0dHBzOi8vYXBpLnplcGh5ci1jbG91ZC5pby9uYW1lIjoiTG9pcyBaaGFvIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnplcGh5ci1jbG91ZC5pby8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDExMzkwMTE4NDA1NzYxNzIyMjUyNSIsImF1ZCI6WyJodHRwczovL2FwaS56ZXBoeXItY2xvdWQuaW8iLCJodHRwczovL3plcGh5ci1jbG91ZC51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImF6cCI6IklkdWVEdzBibkJvQ1BmWFNtWWtNZ2F3dERLWGtrQ2hOIiwiZW1haWwiOiJsb2lzQHplcGh5ci1jbG91ZC5pbyIsIm5hbWUiOiJMb2lzIFpoYW8iLCJpYXQiOjE3MzAyNDk5NDEsImV4cCI6MTczMDg1NDc0MX0.neNjbKKBL9xayssRXSLOSoMdju9MHRmvkARUgX5yMHk'
+  ZE_SECRET_TOKEN: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwczovL2FwaS56ZXBoeXItY2xvdWQuaW8vZW1haWwiOiJsb2lzQHplcGh5ci1jbG91ZC5pbyIsImh0dHBzOi8vYXBpLnplcGh5ci1jbG91ZC5pby9uYW1lIjoiTG9pcyBaaGFvIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnplcGh5ci1jbG91ZC5pby8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDExMzkwMTE4NDA1NzYxNzIyMjUyNSIsImF1ZCI6WyJodHRwczovL2FwaS56ZXBoeXItY2xvdWQuaW8iLCJodHRwczovL3plcGh5ci1jbG91ZC51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImF6cCI6IklkdWVEdzBibkJvQ1BmWFNtWWtNZ2F3dERLWGtrQ2hOIiwiZW1haWwiOiJsb2lzQHplcGh5ci1jbG91ZC5pbyIsIm5hbWUiOiJMb2lzIFpoYW8iLCJpYXQiOjE3MzAyNDk5NDEsImV4cCI6MTczMDg1NDc0MX0.neNjbKKBL9xayssRXSLOSoMdju9MHRmvkARUgX5yMHk"
 
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Specify the Node.js version as needed
+          node-version: "20" # Specify the Node.js version as needed
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -32,4 +32,4 @@ jobs:
         run: pnpm install
 
       - name: Build application
-        run: DBUEG=zephyr:* pnpm run build
+        run: DEBUG=zephyr:* pnpm run build
