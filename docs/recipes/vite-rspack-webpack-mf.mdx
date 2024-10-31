@@ -20,20 +20,22 @@ nvm use 20
 
 ### Install Zephyr Plugins
 
-For applications built with Vite: 
+For applications built with Vite:
 
 ```sh title="Terminal"
 npm i vite-plugin-zephyr@latest 
 ```
 
-For applications built with Webpack and Rspack: 
+For applications built with Webpack and Rspack:
 
 ```sh title="Terminal"
 npm i zephyr-webpack-plugin@latest
 ```
 
 ## Example configuration
-Four example build configuration for Vite, Rspack and Webpack. 
+
+Four example build configuration for Vite, Rspack and Webpack.
+
 ### Vite Host
 
 ```js title="vite.config.ts"{3,35}
@@ -100,12 +102,12 @@ export default defineConfig({
 :::warning{title="Known issue"}
 
 **1. Enable top level await**
-For `vite-plugin-zephyr` to work properly with your remotes, you need to set your build target to `chrome89` to enable top level await, alternatively you can install [`vite-plugin-top-level-await` plugin to enable it](https://www.npmjs.com/package/vite-plugin-top-level-await) and use it in configuration: 
+For `vite-plugin-zephyr` to work properly with your remotes, you need to set your build target to `chrome89` to enable top level await, alternatively you can install [`vite-plugin-top-level-await` plugin to enable it](https://www.npmjs.com/package/vite-plugin-top-level-await) and use it in configuration:
 
 ```ts title="vite.config.ts"
   plugins: [
     react(),
-    federation({
+    withZephyr({
       name: 'viteViteHost',
       remotes: {
        ...
@@ -130,12 +132,12 @@ For `vite-plugin-zephyr` to work properly with your remotes, you need to set you
   },
 ```
 
-**2. Sequence of plugins** 
+**2. Sequence of plugins**
 
 Because of how Vite and Rollup are exposing hooks and processing modules in plugins, the sequence of plugins matters where `withZephyr()` should be after `react()` but before any other plugins. For example, if `svgr()` is before `withZephyr()` it would unexpectedly interrupt the transformed output bundle.
 
-**3. Shared dependencies** 
-If the application doesn't show up in the browser, you might be experiencing problems related to dependencies (one of the potential issues), please rememeber to configure `modulePreload` in your `vite.config.ts`: 
+**3. Shared dependencies**
+If the application doesn't show up in the browser, you might be experiencing problems related to dependencies (one of the potential issues), please rememeber to configure `modulePreload` in your `vite.config.ts`:
 
 ```ts title="vite.config.ts"
  modulePreload: {
@@ -186,7 +188,8 @@ export default defineConfig({
   },
 });
 ```
-### Rspack Remote 
+
+### Rspack Remote
 
 Example project created via `npx create-mf-app`
 
@@ -305,7 +308,7 @@ module.exports = withZephyr()({
 });
 ```
 
-### Webpack Remote 
+### Webpack Remote
 
 Example project created via `npx create-mf-app`
 
@@ -403,5 +406,3 @@ module.exports = (_, argv) =>
   });
 
 ```
-
-
