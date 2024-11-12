@@ -137,6 +137,7 @@ For `vite-plugin-zephyr` to work properly with your remotes, you need to set you
 Because of how Vite and Rollup are exposing hooks and processing modules in plugins, the sequence of plugins matters where `withZephyr()` should be after `react()` but before any other plugins. For example, if `svgr()` is before `withZephyr()` it would unexpectedly interrupt the transformed output bundle.
 
 **3. Shared dependencies**
+
 If the application doesn't show up in the browser, you might be experiencing problems related to dependencies (one of the potential issues), please rememeber to configure `modulePreload` in your `vite.config.ts`:
 
 ```ts title="vite.config.ts"
