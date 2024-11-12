@@ -14,8 +14,8 @@ export const CloudProviderCards = () => {
 };
 
 const item = {
-  title: 'Add Custom Domain',
-  href: '/how-to/custom-domain',
+  title: 'Add Environments',
+  href: '/how-to/environments',
   description:
     'Configure custom domain for your application with your deployment integration platform.',
   variant: 'default',

@@ -1,61 +1,60 @@
 ---
-title: "Configure Cloudflare on Zephyr"
-description: "Configuring Cloudflare as your deployment integration provider on Zephyr"
+title: 'Configure Cloudflare on Zephyr'
+description: 'Configuring Cloudflare as your deployment integration provider on Zephyr'
 ---
 
 import { Button } from '../../components/ui/button.tsx';
 import { Steps, Badge } from '@theme';
 import { Separator } from '../../components/ui/separator.tsx';
-import { CustomDomain } from "../../components/cloud-provider.tsx"
-
+import { CustomDomain } from '../../components/cloud-provider.tsx';
 
 # Configure Cloudflare on Zephyr
 
-Started as an email spam tracker, Cloudflare today offers extensive ability to help users register, manage their domain as a registrar and monitor, secure, configure user's entire IT infrastructure.
+Originally launched as an email spam tracker, Cloudflare today offers extensive capabilities for users to register, manage domains as a registrar, and monitor, secure, and configure an entire IT infrastructure.
 
-In this section we will walk you through how to configure Cloudflare as your default cloud provider to deploy and version your application with Zephyr Cloud, using Cloudflare's global edge network, KV namespace, Workers & Pages project to deliver your content on the edge. 
+In this guide, we'll walk you through configuring Cloudflare as your default cloud provider for deploying and versioning applications with Zephyr Cloud. This setup leverages Cloudflare's global edge network, KV namespaces, Workers, and Pages to deliver your content at the edge.
 
-## Pre-requisites
+## Prerequisites
 
-:::info 
+:::info
 
-- A registered Cloudflare account 
-- A domain registered on Cloudflare, or a domain DNS can be modified by Cloudflare 
+- A registered Cloudflare account
+- A domain registered on Cloudflare, or a domain whose DNS can be managed by Cloudflare
 - A registered Zephyr Account
 
 :::
 
+## Configure and Enable Cloudflare
 
-## Configure and enable Cloudflare
-<Steps> 
-### Log in to Zephyr dashboard 
+<Steps>
+### Log in to the Zephyr Dashboard
 <a href="https://app.zephyr-cloud.io">
-<Button variant="outline" className=" hover:bg-zinc-100 hover:text-black">Dashboard</Button>
+<Button variant="outline" className="hover:bg-zinc-100 hover:text-black">Dashboard</Button>
 </a>
-After sign in, click on your selected organization. 
+After signing in, select your organization.
 <br/>
 
-### Find Cloudflare under Deployment Integration
+### Locate Cloudflare under Deployment Integration
 
-- Select **Settings** under organization on top navigation tabs.
-- On the left side, select **Deployment Integration**.
-- Choose **Available** to find Cloudflare and click on **Add integraiton**.
+- Select **Settings** from the top navigation tabs.
+- On the left sidebar, select **Deployment Integration**.
+- Choose **Available** to find Cloudflare, then click on **Add integration**.
 
-### How to get credentials and configure Cloudflare
+### Retrieve Credentials and Configure Cloudflare
 
-Before you move to the next step, you will need two details and one DNS configuration from Cloudflare:
+Before proceeding, you will need two details and one DNS configuration from Cloudflare:
 
 **1. Zone ID**
 
-- On domain's **Overview** tab, scroll down until you can see **API** on the right side bar.
-- You will find **Zone ID** under the API section.
+- On your domain’s **Overview** tab, scroll down to the **API** section on the right sidebar.
+- Find the **Zone ID** in this section.
 
-**2. API token**
+**2. API Token**
 
-- Under Zone ID and Account ID within the API section, _right click_ on **Get your API token** to _open it on a new tab_.
-- Scroll down to the bottom and select **Create Custom Token** by clicking on "Get started".
-- Give your API token a meaningfull name (who created this, what's this for etc).
-- The configuration needed for API tokens are under **Permissions** (only these are _required_):
+- Near Zone ID and Account ID, _right-click_ on **Get your API token** to _open it in a new tab_.
+- Scroll to the bottom and select **Create Custom Token** by clicking on "Get started."
+- Give your API token a meaningful name (e.g., the purpose or creator).
+- Configure the required **Permissions**:
 
 | Resource |   Resource Type   | Permission |
 | :------- | :---------------: | :--------: |
@@ -64,78 +63,66 @@ Before you move to the next step, you will need two details and one DNS configur
 | Account  | Cloudflare Pages  |    Edit    |
 | Zone     |   Worker Routes   |    Edit    |
 
-- **Zone Resources**: When asked to whether include a specific zone to this API token, you to **Include** a **Specific zone** under your **domain**.
+- **Zone Resources**: When prompted, include a **Specific zone** under your **domain**.
 
-- The rest of configuration details (Account resources, Client IP Address Filtering etc.) are not required by us and you can leave them as default.
-- Scroll to bottom to select **Continue to summary** to confirm if the configurations are correct and then **Create Token**, you will see your token on the next page.
+- Leave other configurations (e.g., Account resources, Client IP Address Filtering) as defaults.
+- Scroll to the bottom and select **Continue to summary** to review your configurations, then **Create Token**. The token will display on the next page.
 
-**3. Configure your DNS record**
+**3. Configure Your DNS Record**
 
+- Return to your domain’s home page (the **Overview** page should still be open) and click on **DNS** on the left sidebar.
+- Click **Add record** on the _Records_ page and enter the following details:
 
-- Go back to your domain's home page (hope that **Overview** page is still opened at this point) and click on **DNS** on left side panel.
-- Click on **Add record** on _Records_ page and add below details:
+![dns](../public/cf-dns-entry-cname.png)
 
-| Type |      Name      |  IPv4 Address  | Proxy status | TTL  |
-| :--: | :------------: | :------------: | :----------: | :--: |
-|  A   |       *       | `99.83.190.102` |   Proxied    | Auto |
-|  A   | `<domain.com>` | `99.83.190.102` |   Proxied    | Auto |
+### Configuration Inputs
 
-- Note: The **Name** field should be a wild card record as that's needed for serverless workers.
+Details for each input after clicking **Add Integration** under **Cloudflare**:
 
-### Configuration inputs
+<dt>Integration Name</dt>
+<dd>A unique name within your organization, used as a slug.</dd>
 
-Additional details for each inputs after clicking on **Add integration** under **Cloudflare**:
+<dt>Integration Display Name</dt>
+<dd>The name of the integration shown on the dashboard.</dd>
 
-<dt>Integration name</dt>
+<dt>API Token</dt>
 <dd>
-A unique name within your organization. It will be used as a slug. 
+  Obtainable from Cloudflare. [See
+  instructions](#how-to-get-credentials-and-configure-cloudflare) for creating
+  your API token.
 </dd>
-<dt>Integration display name</dt>
-<dd>
-The name of integration shown on dashboard.
-</dd>
-<dt>API token</dt>
-<dd>
-  Obtained from Cloudflare. The [instruction
-  above](#how-to-get-credentials-and-configure-cloudflare) should walk you
-  through how to get your API token.
-</dd>
+
 <dt>Zone ID</dt>
+<dd>Obtainable from Cloudflare. Requires a valid domain on Cloudflare.</dd>
+
+<dt>Cloudflare Project Name</dt>
 <dd>
-Obtained from Cloudflare. You will need a valid domain on Cloudlfare.
+  This operation is idempotent and will create a [Cloudflare Pages
+  project](https://developers.cloudflare.com/pages).
 </dd>
-<dt>Cloudflare project name</dt>
+
+<dt>Set Integration as Default</dt>
 <dd>
-  This operation is idempotent, it will create a [cloudflare pages
-  project](https://developers.cloudflare.com/pages) on Cloudflare.
-</dd>
-<dt>Set integration as default.</dt>
-<dd>
-  Make every repository deployed through Zephyr will attempt to deploy through this
-  integration setting. This won't change until you delete this integration or
-  add new integration as default.
+  When set as default, all Zephyr deployments will use this integration until a
+  new one is set.
 </dd>
 
 <br />
 <br />
-### How to test it{' '}
 
-Navigate to our [recipes](/recipes) to try one of the application, you should see your next deployment deployed through your designated domain! (if not come [talk to us](https://zephyr-cloud.io/discord))
+### Testing It
 
-:::tip
+Visit our [recipes](/recipes) to test an application. Your next deployment should use your designated domain! (If not, [contact us](https://zephyr-cloud.io/discord)).
 
-If you are using our managed cloud (Cloudflare) or custom deployment integration through Cloudflare, when you are adding assets, naming your application in `package.json` or module federation configuration, make sure the name **doesn't include capital letter** to avoid query problem with Cloudflare. 
-
-:::
-
+When using our managed cloud (Cloudflare) or custom Cloudflare integration, avoid including capital letters in names for `package.json`, module federation configuration, or assets to prevent issues with Cloudflare queries.
 
 </Steps>
 
-:::note What will be created on your Cloudflare account?
+### What Will Be Created on Your Cloudflare Account?
 
-After you add Cloudflare as your cloud provider on Zephyr, several properties will be modified and added on your Cloudflare account.
+When Cloudflare is added as your provider on Zephyr, these properties will be created on your Cloudflare account:
 
-1. KV Namespaces
+1. **KV Namespaces**
 
 Three namespaces will be added:
 
@@ -143,86 +130,79 @@ Three namespaces will be added:
 - ze_files
 - ze_env
 
-2. Workers
+2. **Workers**
 
-- `ze-worker-for-static-upload` (used for uploading and serving assets)
+- `ze-worker-for-static-upload` (for uploading and serving assets)
 
-3. Worker routes
+3. **Worker Routes**
 
 - `ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
 - `*-ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
 
-:::
+### Deployment and Inspecting Assets
 
-### Deployment and inspecting assets
+Once your first Cloudflare deployment is complete, you can inspect assets.
 
-Once you finish your first deployment on Cloudflare, you can inspect your assets on Cloudflare.
-
-Navigate to your cloudflare account's main dashboard page, you can click on **Workers & Pages** and then **KV** to inspect your assets by clicking on **View** next to `ze_files`.
+In your Cloudflare dashboard, navigate to **Workers & Pages** and then **KV** to view assets under `ze_files`.
 
 :::info
 
-
-- `ze_files` stores your actual assets.
-- `ze_envs` stores you application's environment, access right etc.
-- `ze_snapshot` stores your application's snapshots comparing against previous build.
-- If you are deploying an application that's previously deployed through our managed cloud, you will need to run `rm -rf ~/.zephyr` before deployment.
-- If you faced issues while deploying Micro-frontend application, you can follow your complete guide on [how to deploy Micro-frontend applications on Zephyr](/how-to/mf-guide).
-
-:::
-
-## Clean uninstall and reset
-
-:::danger Warning 
-
-- Zephyr Cloud do not handle your API token's and any other properties related to your Cloudflare account's deletion. 
-- Assets and information on your Cloudflare account are by default immutable. If you are performing a **clean uninstall** (as below), you previous deployed assets and information are unrecoverable. 
+- `ze_files`: stores your actual assets.
+- `ze_envs`: stores application environment and access rights.
+- `ze_snapshot`: stores application snapshots compared against the previous build.
+- If deploying an application previously on our managed cloud, run `rm -rf ~/.zephyr` before deployment.
+- If you encounter issues deploying Micro-frontend applications, see our [Micro-frontend deployment guide](/how-to/mf-guide).
 
 :::
 
-If you want to delete your existing Cloudflare integration, you will need to finish below steps: 
+## Clean Uninstall and Reset
+
+:::danger Warning
+
+- Zephyr Cloud does not manage deletion of API tokens or any Cloudflare account properties.
+- Assets and information on your Cloudflare account are immutable by default. During a **clean uninstall**, previously deployed assets and information are unrecoverable.
+
+:::
+
+To delete an existing Cloudflare integration, follow these steps:
 
 ### Delete Workers & Pages Projects
 
-1. Sign in to your Cloudflare account, on the left side of the navigation bar click on **Workers & Pages**. 
+1. Sign in to Cloudflare. In the navigation bar, select **Workers & Pages**.
 
-2. Find and click on **ze-worker-for-static-upload**, and then on the top navigation bar select **Manage**, click on **Delete** on this page. 
+2. Click on **ze-worker-for-static-upload**, select **Manage**, then click **Delete**.
 
-3. Go back to the Workers & Pages main page and find these two properties:  
-- **Cloudflare integration name**: created by yourself under **Cloudflare Project Name** when you add new integration on Zephyr dashboard. 
-- **ze-worker-for-static-upload**: created by us when you add new integration on Zephyr. 
+3. Return to **Workers & Pages** and locate these two properties:
 
-Choose both projects and select **Manage** on the top when you are in the project. Click on the **Delete** button. 
+- **Cloudflare integration name**: created under **Cloudflare Project Name** on the Zephyr dashboard.
+- **ze-worker-for-static-upload**: created by Zephyr when integration was added.
 
-### Delete KV namespace
+Select both projects, choose **Manage**, and click **Delete**.
 
-1. Under **Workers & Pages** on the left navigation bar on the main dashboard, select **KV**. 
+### Delete KV Namespace
 
-2. Select KV namespaces with below names: 
-- ze_envs 
-- ze_snapshots 
-- ze_files 
+1. In **Workers & Pages**, select **KV**.
 
-3. Click on `···` on the right of each items and select **Delete**. 
+2. Locate and delete the following namespaces:
+
+- ze_envs
+- ze_snapshots
+- ze_files
 
 ### Delete Worker Routes
 
-1. On the main dashboard, select the **domain** you added to Zephyr dashboard for Deployment integration. 
+1. On the dashboard, select the **domain** used for Deployment integration.
 
-2. Choose **Workers Routes** on the left side of the navigation bar. Find the Worker routes with prefix `ze` and `*-ze` and click on **Edit**. 
-
-3. On the pop up modal select **Remove**. 
+2. Choose **Workers Routes** in the navigation bar. Locate routes with `ze` and `*-ze` prefixes, then select **Edit** and **Remove**.
 
 ### Delete Deployment Integration
 
-1. Log into your account and select the organization associated with the deployment integration you want to delete. 
+1. Log into Zephyr, select the organization with the integration to delete.
 
-2. Select **Settings** on the organization dashboard. On the left side choose **Deployment Integration**. 
+2. Go to **Settings** in the organization dashboard, choose **Deployment Integration**.
 
-3. Choose the name of integration you want to delete and select **Remove** on the next page. 
+3. Select the integration name and click **Remove**.
 
+## What’s Next?
 
-## What's next? 
-
-<CustomDomain/>
-
+<CustomDomain />

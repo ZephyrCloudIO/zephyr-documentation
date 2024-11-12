@@ -79,8 +79,8 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/how-to/mf-guide',
         },
         {
-          text: 'Custom Domain',
-          link: '/how-to/custom-domain',
+          text: 'Environments',
+          link: '/how-to/environments',
         },
         {
           text: 'Chrome Extension',

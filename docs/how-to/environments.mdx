@@ -1,0 +1,115 @@
+# Environments
+
+:::warning Requirements
+
+Custom domains _(cnames)_ are only available for applications deployed through a [Custom Deployment Integration Provider](../cloud.mdx).
+
+:::
+
+Environments support custom DNS records, allowing each deployment to have unique domain configurations tailored to its requirements.
+
+## When a Tag is Not Enough
+
+Tags are used to identify specific versions based on predefined conditions, facilitating easy management of builds. Environments can be configured to use either a specific version or a tag, offering flexibility in versioning.
+
+[Learn more about tags, versions, and tag rules](../how-to/versioning-tags.mdx#tag-rules-on-dashboard).
+
+## General Configuration
+
+When assigning a custom domain name, creating a new tag and additional verification steps in environment settings can be helpful. Here’s how to set up a custom domain before editing DNS records.
+
+### 1. Create a New Tag (Optional)
+
+Since a custom domain can be tied to either a **Version** or a **Tag**, creating a specific tag can help clearly identify the application version or deployment rules.
+
+a. Select an application on the [Zephyr Dashboard](https://app.zephyr-cloud.io), go to **Settings**, and select **Tags** on the left navigation bar.
+
+b. Click on **Create Tag**, provide a **Tag name**, and select a [**Tag condition**](/how-to/versioning-tags#tag-rules-on-dashboard). - Example: If you set the tag condition to **Branch** and enter your branch name (e.g., `user/feature`), any deployment under this branch will attach to this tag, and its URL will automatically update with each new deployment that satisfies the condition.
+
+c. Run a build command to deploy your application and confirm the latest deployed version is attached to the tag by viewing **Version** next to the tag name on Zephyr’s dashboard, or by using the [Zephyr Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) to verify deployment.
+
+### 2. Environment Settings
+
+1. Select an application, navigate to **Settings**, and click **Environment** on the left.
+
+2. On the **Environment** page, click **Create Environment**.
+
+#### Environment Input Fields
+
+<div className="pl-4">
+<dl>
+<dt>`Environment name`</dt>
+<dd>This is the display name for the environment on the dashboard. While it doesn’t affect DNS settings, it’s useful to choose a name that reflects the domain or tag conditions related to this environment.</dd>
+
+<dt>`Environment Conditions - Channel`</dt>
+<dd>
+  Select either **Tag** or **Version**. After selection, a version URL will
+  appear in the **Version** field on the right.
+</dd>
+
+<dt>`Custom DNS name`</dt>
+<dd>
+  Enter the full URL for the custom domain. If you followed the [Cloud Provider
+  Configuration Guide](/cloud), you can input custom domains like
+  `sub.domain.com` without needing `https://`.
+</dd>
+
+<dt>`Description`</dt>
+<dd>A brief description can be helpful for managing multiple environments.</dd>
+</dl>
+</div>
+
+3. Copy the domain name
+
+After selecting a **Channel**, copy the version URL that appears in the **Version** field. Keep this handy for the next step, as it may need adjustments depending on your registrar’s DNS settings.
+
+You can confirm the deployed URL is attached to the newly created tag by checking the **Environment** settings and the version URL. Here are the next steps you can choose:
+
+## Cloudflare
+
+Our Cloudflare integration does not needs any extra steps to configure a custom domain, just by creating an environment in our dashboard, we automatically creates all DNS records and routes for you.
+
+After adding a new domain, you can see in your worker's configuration a custom entry for it was added:
+
+![route](../public/cf-domains.png)
+
+And that a custom DNS entry was automatically added to your domain:
+
+![dns](../public/cf-dns-entry.png)
+
+## Netlify
+
+:::info Prerequisites
+
+Attach a domain to a Netlify site project and set the Netlify integration as the **Default deployment integration** on Zephyr’s dashboard. You can confirm domain management status under your Netlify Team account’s **Domain** settings.
+
+If needed, refer to the [Netlify Configuration Guide](/cloud/netlify) and confirm that you meet all requirements [listed here](/cloud/netlify#wildcard-subdomain-on-netlify).
+
+:::
+
+1. Log into Netlify and go to **Domains**. Select the domain attached to the site project configured as the **Default Deployment Integration** on Zephyr’s dashboard.
+
+2. Trim the version URL by removing `https://` and the trailing slash.
+
+3. Add a new `CNAME` record:
+
+   - For the primary domain (`www`), set **Name** to `www` and **Value** to the edited version URL. Delete the root domain under the **NETLIFY** type.
+   - For a subdomain, enter **Name** (e.g., `sub`) and **Value** as the edited version URL.
+
+4. Return to Zephyr’s **Environment** page and add the entry as `www.domain.com` (for the primary domain) or `sub.domain.com` (for the subdomain).
+
+5. Save the configuration to complete your custom domain setup.
+
+## Promote a Previous Version to Custom Domain
+
+Once your custom domain is set up, you can promote a previous deployment to the domain:
+
+1. Go to the application’s **Versions** page.
+
+2. Under **Version history**, select a version to promote and click **Deploy**.
+
+3. Choose the **Environment** for the deployment in the pop-up window, or select a tag to deploy a previous version.
+
+4. Enter **Deploy** in the confirmation field, then click **Yes, I am sure** to finalize.
+
+5. The custom domain should show the content of your version URL shortly. If not, allow a few minutes for DNS propagation.
