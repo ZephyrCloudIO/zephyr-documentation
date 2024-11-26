@@ -12,3 +12,6 @@ Run:
 ```bash
 npm run build
 ```
+
+## Contributors
+![Alt](https://repobeats.axiom.co/api/embed/fd0de09aa25d444bf55d21d43902d7c71f4e69d2.svg "Repobeats analytics image")
