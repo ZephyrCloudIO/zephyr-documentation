@@ -10,7 +10,7 @@ import { WebpackIcon } from '../components/icons/webpack';
 import { NetlifyIcon } from '../components/icons/netlify';
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 
-export const version = '0.0.23';
+export const version = "0.0.30";
 
 export interface CardItemProps {
   title: string;
