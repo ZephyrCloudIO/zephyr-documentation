@@ -134,6 +134,10 @@ const sidebar: UserConfig['themeConfig']['sidebar'] = {
           link: '/recipes/react-rspack-nx',
         },
         {
+          text: 'React + Rspack + Turborepo',
+          link: '/recipes/turborepo-react',
+        },
+        {
           text: 'React Native',
           link: '/recipes/react-native',
         },
