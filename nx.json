@@ -1,24 +1,20 @@
 {
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "targetDefaults": {
-    "dev": {
-      "outputs": [
-        "{projectRoot}/dist"
-      ],
-      "cache": true
-    },
-    "build": {
-      "outputs": [
-        "{projectRoot}/build"
-      ],
-      "cache": true
-    },
-    "lint": {
-      "cache": true
-    },
-    "lint:fix": {
-      "cache": true
-    }
-  },
-  "defaultBase": "main"
+	"$schema": "./node_modules/nx/schemas/nx-schema.json",
+	"targetDefaults": {
+		"dev": {
+			"outputs": ["{projectRoot}/dist"],
+			"cache": true
+		},
+		"build": {
+			"outputs": ["{projectRoot}/build"],
+			"cache": true
+		},
+		"lint": {
+			"cache": true
+		},
+		"lint:fix": {
+			"cache": true
+		}
+	},
+	"defaultBase": "main"
 }

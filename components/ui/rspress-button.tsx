@@ -1,1 +1,1 @@
-import { Button } from '@rspress/theme-default';
+import { Button } from "@rspress/theme-default";

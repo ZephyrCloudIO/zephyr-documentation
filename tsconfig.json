@@ -1,13 +1,13 @@
 {
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "esModuleInterop": true, 
-    "module": "ESNext",
-    "moduleResolution": "Bundler", 
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    }
-  },
-  "include": ["**/*.tsx", "**/*.ts"]
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"esModuleInterop": true,
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./*"]
+		}
+	},
+	"include": ["**/*.tsx", "**/*.ts"]
 }
