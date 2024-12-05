@@ -1,2 +1,2 @@
 # FIXME: This is a temporary workaround to be able to push without --no-verify
-# npm run lint:fix
+npm run lint:fix
