@@ -22,7 +22,6 @@
 
 <!-- @zmzlois @arthurfiorette @zackarychapple -->
 
-d
 ### (Required) Pre-PR/Merge checklist
 
 - [ ] I have added/updated our feature to sync with this PR
