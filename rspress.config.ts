@@ -79,6 +79,10 @@ const sidebar: UserConfig["themeConfig"]["sidebar"] = {
 					link: "/how-to/mf-guide",
 				},
 				{
+					text: "Fork Our Examples",
+					link: "/how-to/fork-our-examples",
+				},
+				{
 					text: "Environments",
 					link: "/how-to/environments",
 				},

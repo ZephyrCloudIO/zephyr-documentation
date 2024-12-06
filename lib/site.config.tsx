@@ -10,7 +10,7 @@ import { RspackIcon } from "../components/icons/rspack";
 import { ViteIcon } from "../components/icons/vite";
 import { WebpackIcon } from "../components/icons/webpack";
 
-export const version = "0.0.30";
+export const version = "0.0.31";
 
 export interface CardItemProps {
 	title: string;
@@ -71,7 +71,7 @@ export const SiteConfig: CardProps = {
 			title: "Fork our examples",
 			description:
 				"With pre-configured application, available in both standalone applications and micro-frontends.",
-			href: "https://github.com/ZephyrCloudIO/zephyr-examples/fork",
+			href: "/how-to/fork-our-examples",
 			variant: "small",
 		},
 		{
