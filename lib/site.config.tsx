@@ -71,7 +71,7 @@ export const SiteConfig: CardProps = {
 			title: "Fork our examples",
 			description:
 				"With pre-configured application, available in both standalone applications and micro-frontends.",
-			href: "https://github.com/ZephyrCloudIO/zephyr-examples/fork",
+			href: "/how-to/fork-our-examples",
 			variant: "small",
 		},
 		{
