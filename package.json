@@ -1,5 +1,5 @@
 {
-	"name": "@zephyr-cloud/docs",
+	"name": "zephyr-cloud-docs",
 	"version": "0.0.1",
 	"private": true,
 	"repository": {
@@ -7,7 +7,7 @@
 		"url": "git+https://github.com/ZephyrCloudIO/zephyr-documentation.git"
 	},
 	"scripts": {
-		"build": "rspress build",
+		"build": "NODE_ENV=production rspress build",
 		"dev": "rspress dev --port 3030",
 		"lint": "biome check",
 		"lint:fix": "biome check --fix",
@@ -24,9 +24,10 @@
 		"@radix-ui/react-tooltip": "^1.1.3",
 		"@rsbuild/core": "^1.0.19",
 		"@rspack/core": "^1.0.14",
-		"@rspress/core": "^1.35.3",
+		"@rspress/core": "^1.37.4",
 		"@rspress/mdx-rs": "^0.6.1",
-		"@rspress/runtime": "^1.35.3",
+		"@rspress/runtime": "^1.37.4",
+		"@rspress/shared": "^1.37.4",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"commitlint": "^19.5.0",
@@ -45,8 +46,8 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@rspress/plugin-preview": "^1.35.3",
-		"@rspress/plugin-shiki": "^1.35.3",
+		"@rspress/plugin-preview": "^1.37.4",
+		"@rspress/plugin-shiki": "^1.37.4",
 		"@tailwindcss/typography": "^0.5.15",
 		"@types/node": "^22.8.6",
 		"@types/react": "^18.3.12",
@@ -55,7 +56,7 @@
 		"nx": "19.6.2",
 		"postcss": "^8.4.47",
 		"postcss-loader": "^8.1.1",
-		"rspress": "^1.35.3",
+		"rspress": "^1.37.4",
 		"tailwindcss": "^3.4.14",
 		"typescript": "^5.6.3",
 		"zephyr-rspack-plugin": "^0.0.31"

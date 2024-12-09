@@ -2,25 +2,42 @@
 //import { withZephyr } from "vite-plugin-zephyr"
 import * as fs from "node:fs";
 import * as path from "node:path";
+import type { RsbuildPlugin } from "@rsbuild/core";
 import fileTree from "rspress-plugin-file-tree";
 import ga from "rspress-plugin-google-analytics";
 import { defineConfig } from "rspress/config";
 import type { UserConfig } from "rspress/config";
+import { withZephyr } from "zephyr-rspack-plugin";
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
-import { withZephyr } from "zephyr-rspack-plugin";
-import type { RsbuildPlugin } from "@rsbuild/core";
+import type { RspressPlugin } from "@rspress/shared";
 
 const newRelicScript = fs.readFileSync("lib/scripts/new-relic.js", "utf-8");
+
+const zephyrRspressPlugin = (): RspressPlugin => ({
+  name: "zephyr-plugin",
+  builderConfig: {
+    tools: {
+      rspack: async (config) => {
+        config = await withZephyr()(config);
+        // console.log("ZE");
+      }
+    }
+  }
+});
 
 const zephyrRsbuildPlugin = (): RsbuildPlugin => ({
   name: "zephyr-rsbuild-plugin",
   setup(api) {
+    // console.log("zephyr-rsbuild-plugin");
+    // //@ts-expect-error - type conflict with zephyr and rsbuild
+
     api.modifyRspackConfig(async (config) => {
-      //@ts-expect-error - type conflict with zephyr and rsbuild
-      // biome-ignore lint/style/noParameterAssign: shush
-      config = await withZephyr()(config);
+      console.log("zephyr-rsbuild-plugin modifyRspackConfig");
+      // Deploy with zephyr
+      // //@ts-expect-error - type conflict with zephyr and rsbuild
+      // return await withZephyr()(config);
     });
   }
 });
@@ -282,7 +299,6 @@ export default defineConfig({
         patterns: [{ from: "docs/public" }]
       }
     },
-    plugins: [zephyrRsbuildPlugin()],
     html: {
       tags: [
         {
@@ -292,9 +308,11 @@ export default defineConfig({
         }
       ]
     }
+    // plugins: [zephyrRsbuildPlugin()]
   },
 
   plugins: [
+    zephyrRspressPlugin(),
     fileTree(),
     ga({
       id: "G-B7G266JZDH"
