@@ -20,6 +20,8 @@ const zephyrRspressPlugin = (): RspressPlugin => ({
 	builderConfig: {
 		tools: {
 			rspack: async (config) => {
+				//@ts-expect-error - type conflict with zephyr and rsbuild
+				// biome-ignore lint/style/noParameterAssign: I hate you biome
 				config = await withZephyr()(config);
 				// console.log("ZE");
 			},

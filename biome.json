@@ -7,7 +7,14 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["node_modules", "dist", "components/icons", "lib/scripts", ".nx"]
+		"ignore": [
+			"node_modules",
+			"dist",
+			"components/icons",
+			"lib/scripts",
+			".nx",
+			"doc_build"
+		]
 	},
 	"formatter": {
 		"enabled": true,
