@@ -222,7 +222,7 @@ module.exports = withZephyr()({
 
 ```
 
-### Zephyr Dependencies in package.json
+### Zephyr Dependencies in package.json optional
 
 For example we have [react-tractor-sample](https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/react-tractor-sample).
 There is app `team-red` that consumes another two app `team-green` and `team-blue`.
@@ -242,6 +242,7 @@ To use specific version of each app define `zephyrDependencies` in `package.json
   }
 }
 ```
+If omit this configuration will be uses latest version of remote.
 
 ### Setting a Git Origin
 

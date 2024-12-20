@@ -87,7 +87,15 @@ name: 'follow'
  `remotes: ['post', follow']`
 ```
 
+```json title="Optional Zephyr Dependencies in host package.json"
+ "zephyrDependencies": {
+    "post": "0.0.1",
+    "follow": "0.0.1"
+ }
+```
+
 You may refer to [how each zephyr options were resolved here](#zephyr-options)
+<br />You may refer to [Zephyr Dependencies example](/general/create-mf-app#zephyr-dependencies-in-packagejson-optional)
 
 ### Git repository 
 
@@ -163,3 +171,5 @@ const zephyrOptions = {
     }
 }
 ```
+
+## Zephyr Dependencies
