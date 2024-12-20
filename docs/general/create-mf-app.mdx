@@ -222,6 +222,27 @@ module.exports = withZephyr()({
 
 ```
 
+### Zephyr Dependencies in package.json
+
+For example we have [react-tractor-sample](https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/react-tractor-sample).
+There is app `team-red` that consumes another two app `team-green` and `team-blue`.
+To use specific version of each app define `zephyrDependencies` in `package.json` like this.
+
+```json title=package.json
+{
+  "name": "team-red",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "nx run team-red:build --skip-nx-cache"
+  },
+  "private": true,
+  "zephyrDependencies": {
+    "team-blue": "0.1.0",
+    "team-green": "0.1.0"
+  }
+}
+```
+
 ### Setting a Git Origin
 
 1. **Initialize the Git Repository:**
