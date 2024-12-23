@@ -87,7 +87,8 @@ name: 'follow'
  `remotes: ['post', follow']`
 ```
 
-```json title="Optional Zephyr Dependencies in host package.json"
+Optionally, to specify which version of the remote application host app should be using, you can add a field in host's `package.json`. If the remote's version is not specified in the host app, the latest version will always be used. 
+```json title="host package.json"
  "zephyrDependencies": {
     "post": "0.0.1",
     "follow": "0.0.1"
