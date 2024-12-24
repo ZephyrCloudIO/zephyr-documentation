@@ -110,6 +110,10 @@ const sidebar: UserConfig["themeConfig"]["sidebar"] = {
 					link: "/cloud/cloudflare",
 				},
 				{
+					text: "Fastly",
+					link: "/cloud/fastly",
+				},
+				{
 					text: "Netlify",
 					link: "/cloud/netlify",
 				},
