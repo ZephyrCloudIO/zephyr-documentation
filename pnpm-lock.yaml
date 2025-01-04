@@ -87,8 +87,8 @@ importers:
         specifier: ^5.96.0
         version: 5.96.0(esbuild@0.17.19)
       zephyr-webpack-plugin:
-        specifier: ^0.0.23
-        version: 0.0.23(esbuild@0.17.19)
+        specifier: ^0.0.30
+        version: 0.0.30(esbuild@0.17.19)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -4837,11 +4837,17 @@ packages:
   zephyr-agent@0.0.23:
     resolution: {integrity: sha512-Mg/VRGl0ZtUuhJG7Enwntv7/bQVNfB5sQuN8nTMIijcSH934WI/jI3+jIFNXy4oD1nCSyHSdEjO9G6t763ZYiQ==}
 
+  zephyr-agent@0.0.30:
+    resolution: {integrity: sha512-m2+2FtviTZlXwmT4UGHMMu1n2HUHEMyzlD8LJNQUeD9h2peki2P2tIipHVgGu2Agp9WnM1Dj1caB7YLU34zFBA==}
+
   zephyr-agent@0.0.31:
     resolution: {integrity: sha512-+1r6/+J8w4+uh5/zl8ueghNtywveU9hc7A77AGBTWMxNA7YKmOnk7hDFHtB9FmlK9D7QftzD9F0BEFFhM8p9zA==}
 
   zephyr-edge-contract@0.0.23:
     resolution: {integrity: sha512-BVmZp7/y+nNa8Q4pUpL88Yt8rDRNTHyGwNrVghvTKeWtYewULJ7IJJmFoM42jksgV6IGkG/EqhgVgTMOIfQ34g==}
+
+  zephyr-edge-contract@0.0.30:
+    resolution: {integrity: sha512-GCA0s1sPhC7bNmv9ZRzGKoqqUAIa0TWEZ4un44UVUrieyUegNuuzOTXFqkOSiJXEM5Q9Pgo6MHT9sdbi39a1gQ==}
 
   zephyr-edge-contract@0.0.31:
     resolution: {integrity: sha512-eXSFXYmtfVCpZew4hldL0tHwRQbdCPPy9IDuOf6Kw2RUP2h9bGG1rwxuHLsOUlfg0kAVTlSG1rhUrqUey0FSTw==}
@@ -4849,8 +4855,11 @@ packages:
   zephyr-rspack-plugin@0.0.31:
     resolution: {integrity: sha512-hkDW1A41xXy7UBsorGrvJGA931ggKWpYZb0rgqtcet1sE7ap71zH8ROOnxCn98zbxdCwrrKp5nVqJEMnbjkluw==}
 
-  zephyr-webpack-plugin@0.0.23:
-    resolution: {integrity: sha512-KvlrLcEYFalooEGAFx+S+xR0uZs4HXdx72rOEx58KaE1fufFmj+78miUtl27/+gQ5//isEADm3/OlwdSqj+x0g==}
+  zephyr-webpack-plugin@0.0.30:
+    resolution: {integrity: sha512-/FY+RD12RmfWeh9bQr1rFyEJLuhQf1dvFZXe1Vke/RvQ7uC4g3/PVSSnT+jLvNM9L/jDehbGCLiwb5iNOhyJrg==}
+
+  zephyr-xpack-internal@0.0.30:
+    resolution: {integrity: sha512-mNL43/bSILyww3iIO5mhIr/US/1R3Bt63VP5Yqj4qY5FMmAHf1JlaJOUA3G+Z6HbobNkJoVhaegNsm1oMHNzAA==}
 
   zephyr-xpack-internal@0.0.31:
     resolution: {integrity: sha512-H4xMGlMH8xkjTVlIF/BszCQ4e0REA8XI2cqHfy7qCam1VAzX0N0Lh2kr4SjVRlI39uW3v+brLdmjJwiOEXPtDw==}
@@ -10180,6 +10189,28 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  zephyr-agent@0.0.30:
+    dependencies:
+      cloudflare: 3.5.0
+      debug: 4.3.7
+      git-url-parse: 15.0.0
+      is-ci: 3.0.1
+      jose: 5.9.6
+      node-persist: 4.0.3
+      open: 10.1.0
+      socket.io-client: 4.8.1
+      tslib: 2.8.1
+      uuid: 8.3.2
+      zephyr-edge-contract: 0.0.30
+    optionalDependencies:
+      wrangler: 3.84.1
+    transitivePeerDependencies:
+      - '@cloudflare/workers-types'
+      - bufferutil
+      - encoding
+      - supports-color
+      - utf-8-validate
+
   zephyr-agent@0.0.31:
     dependencies:
       cloudflare: 3.5.0
@@ -10210,6 +10241,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  zephyr-edge-contract@0.0.30:
+    dependencies:
+      tslib: 2.8.1
+
   zephyr-edge-contract@0.0.31:
     dependencies:
       tslib: 2.8.1
@@ -10236,14 +10271,34 @@ snapshots:
       - webpack
       - webpack-cli
 
-  zephyr-webpack-plugin@0.0.23(esbuild@0.17.19):
+  zephyr-webpack-plugin@0.0.30(esbuild@0.17.19):
     dependencies:
       '@module-federation/automatic-vendor-federation': 1.2.1(webpack@5.96.0(esbuild@0.17.19))
       is-ci: 3.0.1
       tslib: 2.8.1
       webpack: 5.96.0(esbuild@0.17.19)
-      zephyr-agent: 0.0.23
-      zephyr-edge-contract: 0.0.23
+      zephyr-agent: 0.0.30
+      zephyr-edge-contract: 0.0.30
+      zephyr-xpack-internal: 0.0.30(esbuild@0.17.19)
+    transitivePeerDependencies:
+      - '@cloudflare/workers-types'
+      - '@swc/core'
+      - bufferutil
+      - encoding
+      - esbuild
+      - supports-color
+      - uglify-js
+      - utf-8-validate
+      - webpack-cli
+
+  zephyr-xpack-internal@0.0.30(esbuild@0.17.19):
+    dependencies:
+      '@module-federation/automatic-vendor-federation': 1.2.1(webpack@5.96.0(esbuild@0.17.19))
+      is-ci: 3.0.1
+      tslib: 2.8.1
+      webpack: 5.96.0(esbuild@0.17.19)
+      zephyr-agent: 0.0.30
+      zephyr-edge-contract: 0.0.30
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@swc/core'

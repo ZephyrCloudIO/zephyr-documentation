@@ -1,0 +1,602 @@
+
+> zephyr-cloud-docs@0.0.1 build /Users/lois/Documents/GitHub/zephyr-documentation
+> NODE_ENV=production rspress build
+
+🔥 Rspress v1.37.4
+
+config.build.config {
+  target: 'node',
+  name: 'node',
+  devtool: false,
+  context: '/Users/lois/Documents/GitHub/zephyr-documentation',
+  mode: 'production',
+  infrastructureLogging: { level: 'error' },
+  watchOptions: { ignored: /[\\/](?:\.git|node_modules)[\\/]/, aggregateTimeout: 0 },
+  experiments: { asyncWebAssembly: true },
+  output: {
+    path: '/Users/lois/Documents/GitHub/zephyr-documentation/doc_build/ssr',
+    filename: 'main.cjs',
+    chunkFilename: '[name].js',
+    publicPath: '/',
+    pathinfo: false,
+    hashFunction: 'xxhash64',
+    library: { type: 'commonjs2' },
+    assetModuleFilename: 'static/assets/[name].[contenthash:8][ext]',
+    webassemblyModuleFilename: 'static/wasm/[hash].module.wasm'
+  },
+  resolve: {
+    tsConfig: {
+      configFile: '/Users/lois/Documents/GitHub/zephyr-documentation/tsconfig.json',
+      references: 'auto'
+    },
+    alias: {
+      '@swc/helpers': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@swc+helpers@0.5.15/node_modules/@swc/helpers',
+      '@mdx-js/react': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@mdx-js+react@2.3.0_react@18.3.1/node_modules/@mdx-js/react/index.js',
+      '@theme': [Array],
+      '@/theme-default': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+theme-default@1.37.4/node_modules/@rspress/theme-default/dist/index.js',
+      '@rspress/core': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+core@1.37.4_webpack@5.96.0_esbuild@0.17.19_/node_modules/@rspress/core',
+      'react-lazy-with-preload': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-lazy-with-preload@2.2.1/node_modules/react-lazy-with-preload/lib/index.js',
+      'react-syntax-highlighter': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-syntax-highlighter@15.6.1_react@18.3.1/node_modules/react-syntax-highlighter',
+      '@theme-assets': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+theme-default@1.37.4/node_modules/@rspress/theme-default/dist/assets',
+      'react/jsx-runtime': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js',
+      'react/jsx-dev-runtime': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-dev-runtime.js',
+      'react-dom/server': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/server.node.js',
+      'react-dom/client': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js',
+      react: '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js',
+      'react-dom': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js'
+    },
+    extensionAlias: { '.js': [Array], '.jsx': [Array] },
+    extensions: [
+      '.mdx', '.md',
+      '.mjs', '.ts',
+      '.tsx', '.js',
+      '.jsx', '.json'
+    ]
+  },
+  module: {
+    generator: { 'asset/resource': [Object] },
+    parser: { javascript: [Object] },
+    rules: [
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object]
+    ]
+  },
+  optimization: { minimize: false, splitChunks: false },
+  plugins: [
+    RsbuildCorePlugin {},
+    CopyRspackPlugin {
+      name: 'CopyRspackPlugin',
+      affectedHooks: undefined,
+      _args: [Array]
+    },
+    DefinePlugin {
+      name: 'DefinePlugin',
+      affectedHooks: 'compilation',
+      _args: [Array]
+    },
+    RspackVirtualModulePlugin {}
+  ],
+  performance: { hints: false },
+  entry: {
+    index: [
+      '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+core@1.37.4_webpack@5.96.0_esbuild@0.17.19_/node_modules/@rspress/core/dist/runtime/ssrEntry.js'
+    ]
+  }
+}
+config.module.generator [ [ 'asset/resource', { emit: false } ] ]
+config.module.parser [ [ 'javascript', { exportsPresence: 'error' } ] ]
+config.module.rules [
+  [ '0', { test: /\.m?js/, resolve: [Object] } ],
+  [
+    '1',
+    {
+      test: /\.css$/,
+      type: 'javascript/auto',
+      dependency: [Object],
+      sideEffects: true,
+      use: [Array],
+      resolve: [Object]
+    }
+  ],
+  [
+    '2',
+    {
+      test: /\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+      type: 'javascript/auto',
+      dependency: [Object],
+      include: [Array],
+      use: [Array]
+    }
+  ],
+  [ '3', { mimetype: [Object], use: [Array], resolve: [Object] } ],
+  [
+    '4',
+    {
+      test: /\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif)$/i,
+      oneOf: [Array]
+    }
+  ],
+  [ '5', { test: /\.svg$/i, oneOf: [Array] } ],
+  [
+    '6',
+    {
+      test: /\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+      oneOf: [Array]
+    }
+  ],
+  [
+    '7',
+    { test: /\.(?:woff|woff2|eot|ttf|otf|ttc)$/i, oneOf: [Array] }
+  ],
+  [
+    '8',
+    {
+      test: /\.wasm$/,
+      dependency: 'url',
+      type: 'asset/resource',
+      generator: [Object]
+    }
+  ],
+  [ '9', { test: /\.node$/, use: [Array] } ],
+  [
+    '10',
+    {
+      test: /\.s(?:a|c)ss$/,
+      sideEffects: true,
+      dependency: [Object],
+      use: [Array],
+      resolve: [Object]
+    }
+  ],
+  [
+    '11',
+    {
+      test: /\.less$/,
+      sideEffects: true,
+      use: [Array],
+      resolve: [Object]
+    }
+  ],
+  [
+    '12',
+    { type: 'javascript/auto', test: /\.mdx?$/, oneOf: [Array] }
+  ],
+  [
+    '13',
+    {
+      test: /\.rspress[\\/]runtime[\\/]virtual-global-styles/,
+      sideEffects: true
+    }
+  ],
+  [ '14', { resourceQuery: /raw/, type: 'asset/source' } ]
+]
+config.build.config {
+  target: [
+    'web',
+    'browserslist:chrome >= 51,edge >= 15,firefox >= 54,safari >= 10,ios_saf >= 10'
+  ],
+  name: 'web',
+  devtool: false,
+  context: '/Users/lois/Documents/GitHub/zephyr-documentation',
+  mode: 'production',
+  infrastructureLogging: { level: 'error' },
+  watchOptions: { ignored: /[\\/](?:\.git|node_modules)[\\/]/, aggregateTimeout: 0 },
+  experiments: { asyncWebAssembly: true },
+  output: {
+    path: '/Users/lois/Documents/GitHub/zephyr-documentation/doc_build',
+    filename: 'static/js/[name].[contenthash:8].js',
+    chunkFilename: 'static/js/async/[name].[contenthash:8].js',
+    publicPath: '/',
+    pathinfo: false,
+    hashFunction: 'xxhash64',
+    assetModuleFilename: 'static/assets/[name].[contenthash:8][ext]',
+    webassemblyModuleFilename: 'static/wasm/[hash].module.wasm'
+  },
+  resolve: {
+    tsConfig: {
+      configFile: '/Users/lois/Documents/GitHub/zephyr-documentation/tsconfig.json',
+      references: 'auto'
+    },
+    alias: {
+      '@swc/helpers': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@swc+helpers@0.5.15/node_modules/@swc/helpers',
+      '@mdx-js/react': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@mdx-js+react@2.3.0_react@18.3.1/node_modules/@mdx-js/react/index.js',
+      '@theme': [Array],
+      '@/theme-default': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+theme-default@1.37.4/node_modules/@rspress/theme-default/dist/index.js',
+      '@rspress/core': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+core@1.37.4_webpack@5.96.0_esbuild@0.17.19_/node_modules/@rspress/core',
+      'react-lazy-with-preload': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-lazy-with-preload@2.2.1/node_modules/react-lazy-with-preload/lib/index.js',
+      'react-syntax-highlighter': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-syntax-highlighter@15.6.1_react@18.3.1/node_modules/react-syntax-highlighter',
+      '@theme-assets': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+theme-default@1.37.4/node_modules/@rspress/theme-default/dist/assets',
+      'react/jsx-runtime': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js',
+      'react/jsx-dev-runtime': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-dev-runtime.js',
+      'react-dom/server': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/server.browser.js',
+      'react-dom/client': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js',
+      react: '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js',
+      'react-dom': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js'
+    },
+    extensionAlias: { '.js': [Array], '.jsx': [Array] },
+    extensions: [
+      '.mdx', '.md',
+      '.mjs', '.ts',
+      '.tsx', '.js',
+      '.jsx', '.json'
+    ]
+  },
+  module: {
+    parser: { javascript: [Object] },
+    rules: [
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object]
+    ]
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: { chunks: 'all', cacheGroups: [Object] },
+    minimizer: [
+      [SwcJsMinimizerRspackPlugin],
+      [LightningCssMinimizerRspackPlugin]
+    ]
+  },
+  plugins: [
+    RsbuildCorePlugin {},
+    CopyRspackPlugin {
+      name: 'CopyRspackPlugin',
+      affectedHooks: undefined,
+      _args: [Array]
+    },
+    CssExtractRspackPlugin { options: [Object] },
+    HtmlRspackPlugin { version: 6, options: [Object] },
+    RsbuildHtmlPlugin {
+      name: 'RsbuildHtmlPlugin',
+      getEnvironment: [Function (anonymous)],
+      options: [Object],
+      modifyTagsFn: [AsyncFunction (anonymous)]
+    },
+    DefinePlugin {
+      name: 'DefinePlugin',
+      affectedHooks: 'compilation',
+      _args: [Array]
+    },
+    RspackVirtualModulePlugin {}
+  ],
+  performance: { hints: false },
+  entry: {
+    index: [
+      '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+core@1.37.4_webpack@5.96.0_esbuild@0.17.19_/node_modules/@rspress/core/dist/runtime/clientEntry.js'
+    ]
+  }
+}
+config.module.parser [ [ 'javascript', { exportsPresence: 'error' } ] ]
+config.module.rules [
+  [ '0', { test: /\.m?js/, resolve: [Object] } ],
+  [
+    '1',
+    {
+      test: /\.css$/,
+      type: 'javascript/auto',
+      dependency: [Object],
+      sideEffects: true,
+      use: [Array],
+      resolve: [Object]
+    }
+  ],
+  [
+    '2',
+    {
+      test: /\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts)$/,
+      type: 'javascript/auto',
+      dependency: [Object],
+      include: [Array],
+      use: [Array]
+    }
+  ],
+  [ '3', { mimetype: [Object], use: [Array], resolve: [Object] } ],
+  [
+    '4',
+    {
+      test: /\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif)$/i,
+      oneOf: [Array]
+    }
+  ],
+  [ '5', { test: /\.svg$/i, oneOf: [Array] } ],
+  [
+    '6',
+    {
+      test: /\.(?:mp4|webm|ogg|mov|mp3|wav|flac|aac|m4a|opus)$/i,
+      oneOf: [Array]
+    }
+  ],
+  [
+    '7',
+    { test: /\.(?:woff|woff2|eot|ttf|otf|ttc)$/i, oneOf: [Array] }
+  ],
+  [
+    '8',
+    {
+      test: /\.wasm$/,
+      dependency: 'url',
+      type: 'asset/resource',
+      generator: [Object]
+    }
+  ],
+  [
+    '9',
+    {
+      test: /\.s(?:a|c)ss$/,
+      sideEffects: true,
+      dependency: [Object],
+      use: [Array],
+      resolve: [Object]
+    }
+  ],
+  [
+    '10',
+    {
+      test: /\.less$/,
+      sideEffects: true,
+      use: [Array],
+      resolve: [Object]
+    }
+  ],
+  [
+    '11',
+    { type: 'javascript/auto', test: /\.mdx?$/, oneOf: [Array] }
+  ],
+  [
+    '12',
+    {
+      test: /\.rspress[\\/]runtime[\\/]virtual-global-styles/,
+      sideEffects: true
+    }
+  ],
+  [ '13', { resourceQuery: /raw/, type: 'asset/source' } ]
+]
+config {
+  target: [
+    'web',
+    'browserslist:chrome >= 51,edge >= 15,firefox >= 54,safari >= 10,ios_saf >= 10'
+  ],
+  name: 'web',
+  devtool: false,
+  context: '/Users/lois/Documents/GitHub/zephyr-documentation',
+  mode: 'production',
+  infrastructureLogging: { level: 'error' },
+  watchOptions: { ignored: /[\\/](?:\.git|node_modules)[\\/]/, aggregateTimeout: 0 },
+  experiments: { asyncWebAssembly: true },
+  output: {
+    path: '/Users/lois/Documents/GitHub/zephyr-documentation/doc_build',
+    filename: 'static/js/[name].[contenthash:8].js',
+    chunkFilename: 'static/js/async/[name].[contenthash:8].js',
+    publicPath: '/',
+    pathinfo: false,
+    hashFunction: 'xxhash64',
+    assetModuleFilename: 'static/assets/[name].[contenthash:8][ext]',
+    webassemblyModuleFilename: 'static/wasm/[hash].module.wasm'
+  },
+  resolve: {
+    tsConfig: {
+      configFile: '/Users/lois/Documents/GitHub/zephyr-documentation/tsconfig.json',
+      references: 'auto'
+    },
+    alias: {
+      '@swc/helpers': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@swc+helpers@0.5.15/node_modules/@swc/helpers',
+      '@mdx-js/react': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@mdx-js+react@2.3.0_react@18.3.1/node_modules/@mdx-js/react/index.js',
+      '@theme': [Array],
+      '@/theme-default': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+theme-default@1.37.4/node_modules/@rspress/theme-default/dist/index.js',
+      '@rspress/core': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+core@1.37.4_webpack@5.96.0_esbuild@0.17.19_/node_modules/@rspress/core',
+      'react-lazy-with-preload': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-lazy-with-preload@2.2.1/node_modules/react-lazy-with-preload/lib/index.js',
+      'react-syntax-highlighter': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-syntax-highlighter@15.6.1_react@18.3.1/node_modules/react-syntax-highlighter',
+      '@theme-assets': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+theme-default@1.37.4/node_modules/@rspress/theme-default/dist/assets',
+      'react/jsx-runtime': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js',
+      'react/jsx-dev-runtime': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-dev-runtime.js',
+      'react-dom/server': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/server.browser.js',
+      'react-dom/client': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js',
+      react: '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js',
+      'react-dom': '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js'
+    },
+    extensionAlias: { '.js': [Array], '.jsx': [Array] },
+    extensions: [
+      '.mdx', '.md',
+      '.mjs', '.ts',
+      '.tsx', '.js',
+      '.jsx', '.json'
+    ]
+  },
+  module: {
+    parser: { javascript: [Object] },
+    rules: [
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object]
+    ]
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: { chunks: 'all', cacheGroups: [Object] },
+    minimizer: [
+      [SwcJsMinimizerRspackPlugin],
+      [LightningCssMinimizerRspackPlugin]
+    ]
+  },
+  plugins: [
+    RsbuildCorePlugin {},
+    CopyRspackPlugin {
+      name: 'CopyRspackPlugin',
+      affectedHooks: undefined,
+      _args: [Array]
+    },
+    CssExtractRspackPlugin { options: [Object] },
+    HtmlRspackPlugin { version: 6, options: [Object] },
+    RsbuildHtmlPlugin {
+      name: 'RsbuildHtmlPlugin',
+      getEnvironment: [Function (anonymous)],
+      options: [Object],
+      modifyTagsFn: [AsyncFunction (anonymous)]
+    },
+    DefinePlugin {
+      name: 'DefinePlugin',
+      affectedHooks: 'compilation',
+      _args: [Array]
+    },
+    RspackVirtualModulePlugin {}
+  ],
+  performance: { hints: false },
+  entry: {
+    index: [
+      '/Users/lois/Documents/GitHub/zephyr-documentation/node_modules/.pnpm/@rspress+core@1.37.4_webpack@5.96.0_esbuild@0.17.19_/node_modules/@rspress/core/dist/runtime/clientEntry.js'
+    ]
+  }
+}
+ ZEPHYR   Opening browser for authentication...
+ ZEPHYR   Hi lois_zhao!
+ ZEPHYR   zephyr-cloud-docs.zephyr-documentation.zephyrcloudio#511
+ ZEPHYR   
+ ZEPHYR   No assets to upload, skipping...
+ ZEPHYR   Uploaded ci snapshot in 265ms
+ ZEPHYR   Deployed to Zephyr's edge in 1166ms.
+ ZEPHYR   
+ ZEPHYR   https://lois-zhao-511-zephyr-cloud-docs-zephyr-documentat-29359cec9-ze.bundlercorp.io
+
+ready   Built in 3.56 s (web)
+ready   Built in 1.81 s (node)
+warn    Compile Warning: 
+⚠ 'global' is not recognized as a valid pseudo-class. Did you mean '::global' (pseudo-element) or is this a typo? at static/css/styles.daf720c3.css:6590:38
+
+⚠ 'global' is not recognized as a valid pseudo-class. Did you mean '::global' (pseudo-element) or is this a typo? at static/css/styles.daf720c3.css:6669:36
+
+
+  File (web)                                                Size         Gzip    
+  doc_build/static/js/styles.1d7ab2ac.js                    0.22 kB      0.14 kB
+  doc_build/static/js/async/8325.e1759383.js                0.79 kB      0.45 kB
+  doc_build/static/js/async/6971.22b5c424.js                0.85 kB      0.47 kB
+  doc_build/static/js/async/995.e65b510a.js                 0.90 kB      0.52 kB
+  doc_build/static/js/async/4842.b14ae2c7.js                0.91 kB      0.52 kB
+  doc_build/static/js/async/2984.e87c19da.js                0.94 kB      0.53 kB
+  doc_build/static/js/async/6747.525deaab.js                1.0 kB       0.53 kB
+  doc_build/static/js/async/4600.6896cf63.js                1.2 kB       0.61 kB
+  doc_build/static/js/async/3972.ea2b7e68.js                1.2 kB       0.59 kB
+  doc_build/light-bg-icon.png                               1.5 kB       1.5 kB
+  doc_build/dark-bg-icon.png                                1.7 kB       1.7 kB
+  doc_build/static/js/async/7622.dbd569bc.js                1.9 kB       0.80 kB
+  doc_build/static/js/async/5831.4c3d39c4.js                2.5 kB       1.0 kB
+  doc_build/static/js/async/466.c09d7254.js                 2.5 kB       1.1 kB
+  doc_build/static/js/async/3731.5897e0e4.js                2.6 kB       1.2 kB
+  doc_build/static/js/async/3295.4ab95e4d.js                2.6 kB       0.80 kB
+  doc_build/static/js/async/3068.2121afe7.js                2.9 kB       1.2 kB
+  doc_build/static/js/async/8629.548abf2c.js                3.3 kB       1.2 kB
+  doc_build/static/js/async/1757.20b688ab.js                3.9 kB       1.4 kB
+  doc_build/static/js/async/5200.08f65d6a.js                4.3 kB       1.5 kB
+  doc_build/static/js/async/3650.42910c1b.js                4.5 kB       1.7 kB
+  doc_build/static/js/async/6074.7951a40b.js                5.0 kB       1.9 kB
+  doc_build/static/js/async/9168.2e62b22b.js                6.6 kB       2.1 kB
+  doc_build/static/js/async/8466.c956b776.js                6.7 kB       2.5 kB
+  doc_build/static/js/async/1893.53a0fc32.js                6.7 kB       2.2 kB
+  doc_build/static/js/async/1049.578a297b.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/2262.d65d9232.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/608.203d043e.js                 6.9 kB       2.6 kB
+  doc_build/static/js/async/740.f37c5314.js                 6.9 kB       2.6 kB
+  doc_build/static/js/async/9038.f351a3df.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/1601.1ed8b3c6.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/2050.033264a8.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/2071.bfa486b3.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/3324.38c1e1f7.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/4855.8c846ea5.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/5411.52006e2e.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/7755.2f31ef0b.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/8087.471fc0b4.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/9906.3ccf5de2.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/9986.0272634d.js                6.9 kB       2.6 kB
+  doc_build/static/js/async/4859.b9ee53a5.js                6.9 kB       2.1 kB
+  doc_build/static/js/async/4872.16e8dc5f.js                7.0 kB       2.7 kB
+  doc_build/static/js/async/2735.dd34ad20.js                7.3 kB       2.6 kB
+  doc_build/static/js/async/8768.f935487c.js                7.5 kB       2.8 kB
+  doc_build/static/js/async/5720.a81c7d91.js                7.6 kB       2.7 kB
+  doc_build/static/js/async/2138.452d0c63.js                7.8 kB       2.9 kB
+  doc_build/static/js/async/9801.4629b1c0.js                7.9 kB       2.9 kB
+  doc_build/static/js/async/58.39866a46.js                  7.9 kB       3.0 kB
+  doc_build/static/js/async/1216.f10f9ccd.js                7.9 kB       3.0 kB
+  doc_build/static/js/async/9237.c7da4e8b.js                8.6 kB       3.1 kB
+  doc_build/static/js/async/1566.28aff504.js                8.8 kB       3.2 kB
+  doc_build/static/js/async/2866.96e06c36.js                8.8 kB       3.1 kB
+  doc_build/static/js/async/6866.d44ca908.js                8.8 kB       3.3 kB
+  doc_build/static/js/async/5100.26463984.js                9.0 kB       3.3 kB
+  doc_build/static/js/async/7664.242fc6c1.js                9.1 kB       3.2 kB
+  doc_build/static/js/async/5491.5c4df086.js                9.1 kB       3.2 kB
+  doc_build/static/js/async/9157.60f00d56.js                9.4 kB       3.7 kB
+  doc_build/static/js/async/607.63ca0032.js                 9.4 kB       3.1 kB
+  doc_build/static/js/async/185.46635db2.js                 9.6 kB       3.8 kB
+  doc_build/static/js/async/9439.158d2a09.js                10.1 kB      3.0 kB
+  doc_build/cf-dns-entry-cname.png                          10.1 kB      9.6 kB
+  doc_build/static/image/cf-dns-entry-cname.f9a44251.png    10.1 kB      9.6 kB
+  doc_build/static/js/async/7305.5dabfc13.js                10.7 kB      3.5 kB
+  doc_build/static/js/async/7672.91aa22e4.js                10.7 kB      3.6 kB
+  doc_build/static/js/async/4998.916ccc87.js                10.8 kB      3.6 kB
+  doc_build/static/js/async/9557.38cf68d1.js                11.2 kB      3.3 kB
+  doc_build/static/js/async/1996.c1037f6e.js                12.9 kB      3.4 kB
+  doc_build/static/js/async/1590.755fef7f.js                13.9 kB      3.8 kB
+  doc_build/static/js/async/5726.26f0f85a.js                14.3 kB      4.1 kB
+  doc_build/static/js/lib-router.db58cb4e.js                15.0 kB      5.8 kB
+  doc_build/cf-dns-entry.png                                15.3 kB      14.5 kB
+  doc_build/static/image/cf-dns-entry.b69329e4.png          15.3 kB      14.5 kB
+  doc_build/docs-logo-1x.webp                               15.4 kB      15.5 kB
+  doc_build/static/js/async/6947.023a6eb7.js                15.5 kB      4.1 kB
+  doc_build/static/js/async/4715.32046d29.js                17.1 kB      4.3 kB
+  doc_build/static/js/async/9861.8cd72e43.js                17.1 kB      4.3 kB
+  doc_build/static/js/async/298.642908ce.js                 17.3 kB      5.9 kB
+  doc_build/static/js/async/4410.c727e541.js                21.5 kB      6.1 kB
+  doc_build/bg-dark-logo.png                                21.5 kB      19.8 kB
+  doc_build/cf-domains.png                                  22.3 kB      20.9 kB
+  doc_build/static/image/cf-domains.336932e1.png            22.3 kB      20.9 kB
+  doc_build/static/js/async/817.c79df329.js                 22.6 kB      5.6 kB
+  doc_build/static/js/async/3411.596728b1.js                23.2 kB      6.2 kB
+  doc_build/light-bg-logo.png                               23.6 kB      20.1 kB
+  doc_build/static/js/async/8503.614f0fc2.js                29.0 kB      6.9 kB
+  doc_build/dark-bg-logo.png                                31.2 kB      27.9 kB
+  doc_build/static/js/async/3576.75a1726f.js                36.3 kB      6.7 kB
+  doc_build/react-vite-ts-side-panel.png                    60.0 kB      53.2 kB
+  doc_build/static/js/index.f3a1b0d9.js                     63.3 kB      20.8 kB
+  doc_build/side-panel-1.png                                66.9 kB      56.8 kB
+  doc_build/sidebar-overview.png                            75.9 kB      67.6 kB
+  doc_build/empty-sidepanel.png                             77.2 kB      42.5 kB
+  doc_build/static/css/styles.ac7e1008.css                  95.4 kB      16.4 kB
+  doc_build/side-panel-2.png                                96.1 kB      81.7 kB
+  doc_build/side-panel-3.png                                100.8 kB     76.5 kB
+  doc_build/index.html                                      101.6 kB     26.4 kB
+  doc_build/static/font/Nebulica-Black.39f42f48.ttf         104.6 kB     45.9 kB
+  doc_build/Nebulica-Black.ttf                              104.6 kB     45.9 kB
+  doc_build/static/font/Nebulica-SemiBold.c22ae796.ttf      107.8 kB     49.3 kB
+  doc_build/Nebulica-SemiBold.ttf                           107.8 kB     49.3 kB
+  doc_build/static/font/Nebulica-Regular.4fa5854d.ttf       107.9 kB     48.8 kB
+  doc_build/Nebulica-Regular.ttf                            107.9 kB     48.8 kB
+  doc_build/static/font/Nebulica-ExtraLight.49d68a48.ttf    108.1 kB     48.7 kB
+  doc_build/Nebulica-ExtraLight.ttf                         108.1 kB     48.7 kB
+  doc_build/log-in.png                                      137.1 kB     98.6 kB
+  doc_build/static/js/lib-react.f65c2ee4.js                 140.3 kB     45.0 kB
+  doc_build/my-first-mf-app-2.png                           141.9 kB     78.2 kB
+  doc_build/favicon.ico                                     209.2 kB     208.4 kB
+  doc_build/dashboard-main.png                              277.5 kB     207.3 kB
+  doc_build/mf_guide_1_circular_dependency.png              368.3 kB     344.9 kB
+  doc_build/static/js/9568.11c3c3f1.js                      373.3 kB     118.5 kB
+  doc_build/my-first-mf-app-1.png                           383.8 kB     309.2 kB
+  doc_build/mf_guide_2_circular_dependency.png              402.2 kB     381.3 kB
+  doc_build/deployed-side-panel.png                         883.9 kB     808.2 kB
+  doc_build/architecture-v2.png                             2909.1 kB    2882.3 kB
+
+  Total: 8646.4 kB (gzip: 6692.0 kB)
+
+info    Rendering pages...
+success Pages rendered in 520 ms.
