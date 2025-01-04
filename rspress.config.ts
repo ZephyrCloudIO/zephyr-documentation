@@ -9,7 +9,7 @@ import ga from "rspress-plugin-google-analytics";
 import { defineConfig } from "rspress/config";
 import type { UserConfig } from "rspress/config";
 import { withZephyr } from "zephyr-rspack-plugin";
-import { withZephyr as withZephyrWebpack } from "zephyr-webpack-plugin"
+import { withZephyr as withZephyrWebpack } from "zephyr-webpack-plugin";
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
@@ -20,16 +20,26 @@ const zephyrRspressPlugin = (): RspressPlugin => ({
 	name: "zephyr-plugin",
 	builderConfig: {
 		tools: {
-
 			rspack: async (config) => {
-				console.log('config.build.config', config)
+				console.log("config.build.config", config);
 
-				config.module.generator && console.log('config.module.generator', Object.entries(config.module.generator))
-				config.module.parser && console.log('config.module.parser', Object.entries(config.module.parser))
-				config.module.rules && console.log('config.module.rules', Object.entries(config.module.rules))
+				config.module.generator &&
+					console.log(
+						"config.module.generator",
+						Object.entries(config.module.generator),
+					);
+				config.module.parser &&
+					console.log(
+						"config.module.parser",
+						Object.entries(config.module.parser),
+					);
+				config.module.rules &&
+					console.log(
+						"config.module.rules",
+						Object.entries(config.module.rules),
+					);
 
-
-				if (String(config.target).includes('web')) {
+				if (String(config.target).includes("web")) {
 					//@ts-expect-error - type conflict with zephyr and rsbuild
 					// biome-ignore lint/style/noParameterAssign: I hate you biome
 					config = await withZephyr()(config);
@@ -350,8 +360,9 @@ export default defineConfig({
 					// Adds to content because the indexer is not configured to
 					// lookup the frontmatter data.
 					// https://github.com/web-infra-dev/rspress/blob/d16b4b625c586e8d10385c792ade2a5d356834f3/packages/theme-default/src/components/Search/logic/providers/LocalProvider.ts#L78
-					row.content = `ZE${Categories[error.kind]}${error.id}\n${error.message
-						}\n\n\n${row.content}`; // prepends to have higher priority
+					row.content = `ZE${Categories[error.kind]}${error.id}\n${
+						error.message
+					}\n\n\n${row.content}`; // prepends to have higher priority
 				}
 			},
 		},
