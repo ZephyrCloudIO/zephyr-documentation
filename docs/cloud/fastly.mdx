@@ -50,21 +50,19 @@ API Token Configuration
 
 ### Configure DNS Domain
 
-1. Sign in to Fastly dashboard, go to **Security > Subscriptions**
+1. In Fastly, go to **Security > Subscriptions**
 2. Click "Secure another domain"
 3. Add two domains:
    - `ze.yourdomain.com`
    - `*.ze.yourdomain.com`
-4. Click "Add" then "Submit"
+4. Click "Add" then "Submit" 
 5. You'll see a "Pending verification" status
+6. You will see CNAME records here that you'll need for the next step
 
 ### Set Up DNS Records
 
 1. Go to your domain provider (e.g., GoDaddy)
-2. Add the verification CNAME record from the Subscription Details page
-   :::caution Important
-   If available, set TTL time to minimum 30 minutes
-   :::
+2. Add the verification CNAME record from the fastly Subscription Details page. [**Step 6 of the previous section**](/cloud/fastly#configure-dns-domain)
 3. Wait for domain verification in Fastly
 4. Click "View/Edit" once verified
 5. Create two CNAME records:
