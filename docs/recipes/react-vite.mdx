@@ -44,16 +44,16 @@ npm run dev
 
 You should see the website lives in localhost. Open the `vite.config.ts` in your editor and add below modification:
 
-```ts filename="vite.config.ts"
+```ts filename="vite.config.ts" {3,9}
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { withZephyr } from 'vite-plugin-zephyr'; // [!code ++]
+import { withZephyr } from 'vite-plugin-zephyr'; 
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    withZephyr(), // [!code ++]
+    withZephyr(), 
   ],
 });
 ```
@@ -96,7 +96,7 @@ dist/assets/index-DVoHNO1Y.js   143.36 kB │ gzip: 46.09 kB
 
 ## Chrome Extension
 
-On your browser, click on <ChromeExtension/>, you can see your application is under the dropdown menu:
+On your browser, click on chrome extension**Zephyr Mission Control** <ChromeExtension/>, you can see your application is under the dropdown menu:
 
 <Image src="/react-vite-ts-side-panel.png" />
 
