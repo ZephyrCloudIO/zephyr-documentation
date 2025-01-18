@@ -12,7 +12,7 @@ export const TailwindIndicator = () => {
 		"xs" | "sm" | "md" | "lg" | "2xl"
 	>("xs");
 	useEffect(() => {
-		const width = win.innerWidth
+		const width = win.innerWidth;
 		if (width < 640) {
 			setScreenSize("xs");
 		}
