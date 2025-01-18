@@ -21,14 +21,15 @@ export function getError(
 	let category = "";
 
 	for (const key in Categories) {
-		if (Categories[key] === categoryKey) {
+		if (Categories[key as keyof typeof Categories] === categoryKey) {
 			category = key;
 		}
 	}
 
 	for (const key in Errors) {
-		if (Errors[key].id === errCode && Errors[key].kind === category) {
-			return Errors[key];
+		const keyAs = key as keyof typeof Errors;
+		if (Errors[keyAs].id === errCode && Errors[keyAs].kind === category) {
+			return Errors[keyAs];
 		}
 	}
 

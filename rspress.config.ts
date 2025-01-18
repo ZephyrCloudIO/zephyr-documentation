@@ -7,13 +7,14 @@ import ga from "rspress-plugin-google-analytics";
 import { defineConfig } from "rspress/config";
 import { pluginClientRedirects } from "@rspress/plugin-client-redirects";
 import type { UserConfig } from "rspress/config";
+import type { Nav, Sidebar, SocialLink } from "@rspress/shared";
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
 
 const newRelicScript = fs.readFileSync("lib/scripts/new-relic.js", "utf-8");
 
-const socialLinks: UserConfig["themeConfig"]["socialLinks"] = [
+const socialLinks: SocialLink[] = [
   {
     icon: "github",
     mode: "link",
@@ -31,7 +32,7 @@ const socialLinks: UserConfig["themeConfig"]["socialLinks"] = [
   }
 ];
 
-const nav: UserConfig["themeConfig"]["nav"] = [
+const nav: Nav = [
   {
     text: "Get Started",
     link: "/general/get-started",
@@ -49,7 +50,7 @@ const nav: UserConfig["themeConfig"]["nav"] = [
   }
 ];
 
-const sidebar: UserConfig["themeConfig"]["sidebar"] = {
+const sidebar: Sidebar = {
   "/": [
     {
       text: "General",

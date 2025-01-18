@@ -4,12 +4,15 @@ export const TailwindIndicator = () => {
 	const environment = process.env.NODE_ENV;
 
 	const win = typeof window !== "undefined" && window;
+	if (!win) {
+		return null;
+	}
 
 	const [screenSize, setScreenSize] = useState<
 		"xs" | "sm" | "md" | "lg" | "2xl"
-	>(null);
+	>("xs");
 	useEffect(() => {
-		const width = win.innerWidth;
+		const width = win.innerWidth
 		if (width < 640) {
 			setScreenSize("xs");
 		}
