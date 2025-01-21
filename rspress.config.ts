@@ -97,6 +97,10 @@ const sidebar: Sidebar = {
 					link: "/how-to/versioning-tags",
 				},
 				{
+					text: "Generate an API Token",
+					link: "/how-to/api-token",
+				},
+				{
 					text: "Allow IP addresses",
 					link: "/how-to/allow-ip-addresses",
 				},
@@ -110,6 +114,10 @@ const sidebar: Sidebar = {
 				{
 					text: "Cloudflare",
 					link: "/cloud/cloudflare",
+				},
+				{
+					text: "Fastly",
+					link: "/cloud/fastly",
 				},
 				{
 					text: "Netlify",
