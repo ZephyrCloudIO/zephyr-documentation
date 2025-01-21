@@ -47,13 +47,13 @@ You should see the website lives in localhost. Open the `vite.config.ts` in your
 ```ts filename="vite.config.ts"
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { withZephyr } from 'vite-plugin-zephyr'; // [!code ++]
+import { withZephyr } from 'vite-plugin-zephyr'; // Add this line
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    withZephyr(), // [!code ++]
+    withZephyr(), // Add this line
   ],
 });
 ```

@@ -2,6 +2,8 @@
 //import { withZephyr } from "vite-plugin-zephyr"
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { pluginClientRedirects } from "@rspress/plugin-client-redirects";
+import type { Nav, Sidebar, SocialLink } from "@rspress/shared";
 import fileTree from "rspress-plugin-file-tree";
 import ga from "rspress-plugin-google-analytics";
 import { defineConfig } from "rspress/config";
@@ -12,7 +14,7 @@ import { capitalizeFirstLetter } from "./lib/utils/casing";
 
 const newRelicScript = fs.readFileSync("lib/scripts/new-relic.js", "utf-8");
 
-const socialLinks: UserConfig["themeConfig"]["socialLinks"] = [
+const socialLinks: SocialLink[] = [
 	{
 		icon: "github",
 		mode: "link",
@@ -30,7 +32,7 @@ const socialLinks: UserConfig["themeConfig"]["socialLinks"] = [
 	},
 ];
 
-const nav: UserConfig["themeConfig"]["nav"] = [
+const nav: Nav = [
 	{
 		text: "Get Started",
 		link: "/general/get-started",
@@ -48,7 +50,7 @@ const nav: UserConfig["themeConfig"]["nav"] = [
 	},
 ];
 
-const sidebar: UserConfig["themeConfig"]["sidebar"] = {
+const sidebar: Sidebar = {
 	"/": [
 		{
 			text: "General",
@@ -287,6 +289,24 @@ export default defineConfig({
 		fileTree(),
 		ga({
 			id: "G-B7G266JZDH",
+		}),
+		pluginClientRedirects({
+			redirects: [
+				{ from: "/how-to/cloud-providers", to: "/cloud" },
+				{ from: "^/guide/general/get-started", to: "/general/get-started" },
+				{
+					from: "^/concepts/architecture",
+					to: "/learning/concepts/architecture",
+				},
+				{
+					from: "/guide/integrations/cloudflare",
+					to: "/cloud/cloudflare",
+				},
+				{
+					from: "/guide/integrations/netlify",
+					to: "/cloud/netlify",
+				},
+			],
 		}),
 		{
 			name: "zephyr-add-error-codes",
