@@ -136,7 +136,7 @@ const sidebar: Sidebar = {
 					link: "/recipes/existing-app",
 				},
 				{
-					text: "React Native, Module Federation and Re.Pack",
+					text: "React Native + Re.Pack + MF",
 					link: "/recipes/repack-mf",
 				},
 				{
