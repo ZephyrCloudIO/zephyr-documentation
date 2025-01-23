@@ -331,8 +331,9 @@ export default defineConfig({
 					// Adds to content because the indexer is not configured to
 					// lookup the frontmatter data.
 					// https://github.com/web-infra-dev/rspress/blob/d16b4b625c586e8d10385c792ade2a5d356834f3/packages/theme-default/src/components/Search/logic/providers/LocalProvider.ts#L78
-					row.content = `ZE${Categories[error.kind]}${error.id}\n${error.message
-						}\n\n\n${row.content}`; // prepends to have higher priority
+					row.content = `ZE${Categories[error.kind]}${error.id}\n${
+						error.message
+					}\n\n\n${row.content}`; // prepends to have higher priority
 				}
 			},
 		},
