@@ -18,3 +18,59 @@ This guide will explain how to use [Re.Pack](https://re-pack.dev) to build a Rea
 
 
 <RepackTabs />
+
+
+## Manage dependencies 
+
+Sharing dependencies in a federated mobile application differs slightly from a federated web application. It requires more effort due to the native aspects of React Native dependencies.
+
+To make module federation work correctly in React Native applications, we need to configure the `shared` field in the Module Federation plugin from Re.Pack. The general rule is that `react` and `react-native` dependencies must be included in the list and marked as singletons. Marking them as singletons ensures that only one instance of such modules is ever initialized, which is a strict requirement for React and React Native.
+
+If the dependencies are specified in the host app (or a mini application running in isolation), they should also include the `eager` flag. The `eager` flag ensures that the module is initialized at the start of the app.
+
+The same rule applies to all dependencies that include native code. For example, if any mini-app uses a library with native code (such as `react-native-reanimated` or `react-native-mmkv`), it should be added as a singleton and eager-shared dependency in the host app, and as a singleton dependency in the mini-app that uses it.
+
+For shared JavaScript-only dependencies, it’s not necessary to mark them as shared, as Re.Pack can handle downloading them from the mini-app. However, for better network efficiency, it is recommended to include them as shared dependencies.
+
+All this effort requires significant maintenance of the dependencies list in `rspack`/`webpack` and `package.json` for each application. This process can be simplified by using Microsoft’s `rnx-align-deps` library with a custom preset and helper functions to generate the shared dependencies list. 
+
+
+## Handle Navigation 
+
+Handling navigation in a React Native federated application differs slightly from web apps, as it does not rely solely on a links-based routing system and the browser's history API. Instead, it incorporates native navigation concepts such as UINavigationController on iOS and Fragment on Android.
+
+This has a few implications:
+
+- Every navigator needs to be wrapped in a NavigationContainer.
+- It is not possible to navigate directly from one NavigationContainer to another.
+
+Considering best practices for mini application development, one recommended approach is to use multiple NavigationContainer instances: one for the host application and one for each mini application. This allows each mini application to maintain independent navigation states and linking setups (e.g., with unique prefixes). Navigation between mini applications would then rely solely on methods exposed by the host. This approach minimizes the coupling of mini applications by enabling communication between them exclusively through the host application.
+
+However, sometimes we opted for a centralized solution, letting the host manage the navigation using a single NavigationContainer with the navigation structure defined within it. This approach made sense in our case, as some of our mini applications contained only a single isolated screen. It offered several advantages, including:
+
+- A unified source of navigation truth.
+- Simplified linking setup.
+- Compatibility with all navigation scenarios.
+- Adherence to best navigation practices, such as avoiding nested stack navigators and maintaining type safety.
+
+On the downside, this approach increased coupling, which resulted in challenges for standalone development and required host app updates for any navigation changes within the application.
+
+There is also a third solution: using a single NavigationContainer in the host application while exposing navigators from the mini applications. This approach reduces coupling, allowing mini applications to maintain control over their navigators. However, it can lead to undesirable navigation structures, such as deeply nested stack navigators, and a complex linking setup that requires synchronization between the host and mini applications.
+
+
+
+
+
+#### Contributor 
+
+Huge thanks for [Callstack](https://callstack.com) for working with us to make this possible.
+
+[Jakub Romańczyk](https://github.com/jbroma)
+
+[Maciej Budzinski](https://github.com/maciekBudzinski)
+
+[Kacper Wiszczuk](https://github.com/Esemesek)
+
+[Boris Yankov](https://github.com/borisyankov)
+
+[Maciej Lodygowsk](https://github.com/draggie)
