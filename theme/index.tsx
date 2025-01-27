@@ -6,11 +6,14 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/cn";
+import { useDark } from "rspress/runtime";
 import Theme from "rspress/theme";
 import { Footer } from "../components/footer";
 import { type CardItemProps, version } from "../lib/site.config";
 
 export const CurrentVersion = () => {
+	const dark = useDark();
 	return (
 		<TooltipProvider>
 			<Tooltip>
@@ -27,7 +30,12 @@ export const CurrentVersion = () => {
 						</div>
 					</a>
 				</TooltipTrigger>
-				<TooltipContent className="bg-zinc-950 max-w-64 z-[100]">
+				<TooltipContent
+					className={cn(
+						" max-w-64 z-[100]",
+						dark ? "bg-zinc-950" : "bg-zinc-50",
+					)}
+				>
 					<p>Applicable to all npm packages.</p>
 				</TooltipContent>
 			</Tooltip>

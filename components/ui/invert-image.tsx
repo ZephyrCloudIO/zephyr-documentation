@@ -15,7 +15,7 @@ export const InvertImage = ({ darkSrc, lightSrc }: ImageTypeProps) => {
 		if (!isDark) setImageSrc(lightSrc ? lightSrc : "/light-bg-logo.png");
 
 		if (isDark) setImageSrc(darkSrc ? darkSrc : "/dark-bg-logo.png");
-	}, [isDark]);
+	}, [isDark, darkSrc, lightSrc]);
 
 	return (
 		<img

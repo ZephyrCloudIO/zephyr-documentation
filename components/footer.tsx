@@ -1,72 +1,55 @@
+const footerConfig = {
+	discord: {
+		label: "Discord",
+		href: "https://zephyr-cloud.io/discord",
+	},
+	linkedin: {
+		label: "LinkedIn",
+		href: "https://www.linkedin.com/company/zephyr-cloud",
+	},
+	blog: {
+		label: "Blog",
+		href: "https://zephyr-cloud.io/blog",
+	},
+	pricing: {
+		label: "Pricing",
+		href: "https://zephyr-cloud.io/pricing",
+	},
+	faqs: {
+		label: "FAQs",
+		href: "https://zephyr-cloud.io/faqs",
+	},
+	contact: {
+		label: "Contact",
+		href: "https://zephyr-cloud.io/contact",
+	},
+	status: {
+		label: "System status",
+		href: "https://status.zephyr-cloud.io/",
+	},
+};
+
 export const Footer = () => {
+	const array = Object.values(footerConfig);
 	return (
 		<div id="footer-copyright">
 			<div className="flex gap-4">
-				<p>
-					<a
-						href="https://zephyr-cloud.io/discord"
-						target="_blank"
-						rel="noreferrer"
-					>
-						Discord
-					</a>
-				</p>
-				<p>
-					<a
-						href="https://www.linkedin.com/company/zephyr-cloud"
-						target="_blank"
-						rel="noreferrer"
-					>
-						LinkedIn
-					</a>
-				</p>
+				{array.slice(0, 3).map((item) => (
+					<p>
+						<a href={item.href} target="_blank" rel="noreferrer">
+							{item.label}
+						</a>
+					</p>
+				))}
 			</div>
 			<div className="flex gap-4">
-				<p>
-					<a
-						href="https://zephyr-cloud.io/privacy-policy"
-						target="_blank"
-						rel="noreferrer"
-					>
-						Privacy Policy
-					</a>
-				</p>
-				<p>
-					<a
-						href="https://zephyr-cloud.io/pricing"
-						target="_blank"
-						rel="noreferrer"
-					>
-						Pricing
-					</a>
-				</p>
-				<p>
-					<a
-						href="https://zephyr-cloud.io/faqs"
-						target="_blank"
-						rel="noreferrer"
-					>
-						FAQs
-					</a>
-				</p>
-				<p>
-					<a
-						href="https://zephyr-cloud.io/blog"
-						target="_blank"
-						rel="noreferrer"
-					>
-						Blog
-					</a>
-				</p>
-				<p>
-					<a
-						href="https://zephyr-cloud.io/contact"
-						target="_blank"
-						rel="noreferrer"
-					>
-						Contact
-					</a>
-				</p>
+				{array.slice(3).map((item) => (
+					<p>
+						<a href={item.href} target="_blank" rel="noreferrer">
+							{item.label}
+						</a>
+					</p>
+				))}
 			</div>
 			<p className="mt-3">
 				© {new Date().getFullYear()} <b>Zephyr Cloud</b>. All rights reserved.

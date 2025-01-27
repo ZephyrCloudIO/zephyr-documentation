@@ -136,6 +136,10 @@ const sidebar: Sidebar = {
 					link: "/recipes/existing-app",
 				},
 				{
+					text: "React Native + Re.Pack + MF",
+					link: "/recipes/repack-mf",
+				},
+				{
 					text: "React + Vite",
 					link: "/recipes/react-vite",
 				},
