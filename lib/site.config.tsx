@@ -356,7 +356,12 @@ export const supportedFramework = [
 	{
 		name: "Solid.js",
 		icon: "",
-		supported: "backlog",
+		supported: "prod",
+	},
+	{
+		name: "Svelte",
+		icon: "",
+		supported: "prod",
 	},
 	{
 		name: "Astro",
@@ -365,11 +370,6 @@ export const supportedFramework = [
 	},
 	{
 		name: "Remix",
-		icon: "",
-		supported: "backlog",
-	},
-	{
-		name: "Svelte",
 		icon: "",
 		supported: "backlog",
 	},
