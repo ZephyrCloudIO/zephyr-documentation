@@ -14,6 +14,17 @@ This guide will explain how to use [Re.Pack](https://re-pack.dev) to build a Rea
 
 :::
 
+Several key points that were handled by Re.Pack to make this integration attainable:
+
+1. CLI:
+   1. Traditionally when users run `react-native build ios` it will fire metro bundler to build the application
+   2. With Re.Pack it will move the build to Rspack
+2. Module Federation support
+   1. Re.Pack nicely handle the cache invalidation and Federation runtime for cross-platform build
+3. Utilities
+   1. A couple handy rule sets crafted by Re.Pack
+   2. The rule sets are not baked-in/compulsory, user can plug and play with them within rspack config
+
 ## Get Started
 
 
