@@ -58,7 +58,7 @@ At this stage, both of your HostApp and MiniApp's `rspack.config.js` files shoul
 <details>
 <summary> Default build config <Badge variant="default">Info</Badge></summary>
 
-```js {title="rspack.config.js"}
+```js title="rspack.config.js"
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import * as Repack from '@callstack/repack';
@@ -244,7 +244,7 @@ export default (env) => {
 Open the `rspack.config.js` file and modify the `build` configuration to include the following: 
 
 
-```js {title="HostApp/rspack.config.js"}
+```js title="HostApp/rspack.config.js"
 import {createRequire} from 'node:module';
 import path from 'node:path';
 import rspack from '@rspack/core';
@@ -547,7 +547,7 @@ export default env => {
 
 Within the `HostApp` folder, create a `screens` folder in `src` and create a `HomeScreen.tsx` file. 
 
-```tsx {title="src/screens/HomeScreen.tsx"}
+```tsx title="src/screens/HomeScreen.tsx"
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
@@ -589,7 +589,7 @@ export default HomeScreen;
 
 Create a `CartScreen.tsx` file in the `screens` folder. 
 
-```tsx {title="src/screens/CartScreen.tsx"}
+```tsx title="src/screens/CartScreen.tsx"
 
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
@@ -633,7 +633,7 @@ export default HomeScreen;
 
 Create a `navigation` folder in `src` and create a `MainNavigator.tsx` file. 
 
-```tsx {title="src/navigation/MainNavigator.tsx"}
+```tsx title="src/navigation/MainNavigator.tsx"
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import ErrorBoundary from '../components/ErrorBoundary';
@@ -670,7 +670,7 @@ export default CartScreen;
 #### Build configuration 
 Open the `rspack.config.js` in `MiniApp` and modify it as below: 
 
-```js {title="MiniApp/rspack.config.js"}
+```js title="MiniApp/rspack.config.js"
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import rspack from '@rspack/core';
@@ -974,7 +974,7 @@ export default (env) => {
 
 Within MiniApp, create a `navigation` folder and create the content below: 
 
-```tsx {title="src/navigation/CartNavigator.tsx"}
+```tsx title="src/navigation/CartNavigator.tsx"
 
 import React from 'react';
 import {StyleSheet} from 'react-native';
@@ -1023,7 +1023,7 @@ export default MainNavigator;
 
 For `MiniApp` screen, create a `CartScreen.tsx` file. 
 
-```tsx {title="src/screens/CartScreen.tsx"}
+```tsx title="src/screens/CartScreen.tsx"
 
 import React from 'react';
 import {
@@ -1110,7 +1110,7 @@ That's all the modifications within application code itself!
 
 At the root of the monorepo, create a `pnpm-workspace.yaml` file. 
 
-```yaml {title="pnpm-workspace.yaml"}
+```yaml title="pnpm-workspace.yaml"
 packages:
   - '*'
 ```
@@ -1130,7 +1130,7 @@ Alternatively, you can use [mprocs](https://github.com/pvolok/mprocs) to run scr
 
 :::
 
-```json {title="package.json"}
+```json title="package.json"
 
 "scripts": {
      "start:ios": "run-p start:host-app:ios start:mini-app:ios",
