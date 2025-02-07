@@ -1,21 +1,26 @@
 {
-	"$schema": "./node_modules/nx/schemas/nx-schema.json",
-	"targetDefaults": {
-		"dev": {
-			"outputs": ["{projectRoot}/dist"],
-			"cache": true
-		},
-		"build": {
-			"outputs": ["{projectRoot}/build"],
-			"cache": true
-		},
-		"lint": {
-			"cache": true
-		},
-		"lint:fix": {
-			"cache": true
-		}
-	},
-	"defaultBase": "main",
-	"nxCloudAccessToken": "Nzk0Y2MxMzYtY2I5Yy00NDkwLWE3MGEtMmYwZmQ4OGIxMWUyfHJlYWQtd3JpdGU="
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "dev": {
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
+      "cache": true
+    },
+    "build": {
+      "outputs": [
+        "{projectRoot}/build"
+      ],
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    },
+    "lint:fix": {
+      "cache": true
+    }
+  },
+  "defaultBase": "main",
+  "nxCloudAccessToken": "Nzk0Y2MxMzYtY2I5Yy00NDkwLWE3MGEtMmYwZmQ4OGIxMWUyfHJlYWQtd3JpdGU=",
+  "useLegacyCache": true
 }
