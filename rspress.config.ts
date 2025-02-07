@@ -285,6 +285,11 @@ export default defineConfig({
 
 	builderConfig: {
 		plugins: [zephyrRsbuildPlugin()],
+		output: {
+			copy: {
+				patterns: [{ from: "docs/public" }],
+			},
+		},
 		html: {
 			tags: [
 				{
