@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-//import { withZephyr } from "vite-plugin-zephyr"
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { pluginClientRedirects } from "@rspress/plugin-client-redirects";
@@ -7,10 +5,18 @@ import type { Nav, Sidebar, SocialLink } from "@rspress/shared";
 import fileTree from "rspress-plugin-file-tree";
 import ga from "rspress-plugin-google-analytics";
 import { defineConfig } from "rspress/config";
-import type { UserConfig } from "rspress/config";
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
+import {withZephyr} from "zephyr-rspack-plugin";
+const zephyrRsbuildPlugin = () => ({
+	name: "zephyr-rsbuild-plugin",
+	setup(api) {
+		api.modifyRspackConfig(async (config) => {
+			config = await withZephyr()(config);
+		});
+	},
+});
 
 const newRelicScript = fs.readFileSync("lib/scripts/new-relic.js", "utf-8");
 
@@ -278,6 +284,7 @@ export default defineConfig({
 	},
 
 	builderConfig: {
+		plugins:[ zephyrRsbuildPlugin()],
 		html: {
 			tags: [
 				{
