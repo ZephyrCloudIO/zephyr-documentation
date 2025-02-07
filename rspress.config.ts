@@ -252,7 +252,7 @@ export default defineConfig({
 	description: "Documentation for Zephyr Cloud",
 	icon: "/favicon.ico",
 	lang: "en-US",
-	ssg: true,
+	ssg: false,
 	globalStyles: path.join(__dirname, "styles/index.css"),
 	mediumZoom: { selector: ".rspress-doc img" },
 
