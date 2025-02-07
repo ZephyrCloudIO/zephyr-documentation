@@ -38,7 +38,7 @@
     "rspress": "^1.39.4",
     "rspress-plugin-file-tree": "^0.4.0",
     "rspress-plugin-google-analytics": "^0.3.0",
-    "tailwind-merge": "^2.5.4",
+    "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
     "webpack": "^5.96.0",
     "zod": "^3.23.8"
