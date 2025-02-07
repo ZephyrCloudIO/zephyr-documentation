@@ -33,7 +33,7 @@
 		"commitlint": "^19.5.0",
 		"dotenv": "^16.4.5",
 		"husky": "^9.1.6",
-		"lucide-react": "^0.454.0",
+		"lucide-react": "^0.471.1",
 		"react-wrap-balancer": "^1.1.1",
 		"rspress": "^1.39.4",
 		"rspress-plugin-file-tree": "^0.4.0",
