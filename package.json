@@ -40,9 +40,9 @@
 		"rspress-plugin-google-analytics": "^0.3.0",
 		"tailwind-merge": "^2.5.4",
 		"tailwindcss-animate": "^1.0.7",
-		"vite-plugin-zephyr": "^0.0.23",
+		"vite-plugin-zephyr": "^0.0.31",
 		"webpack": "^5.96.0",
-		"zephyr-webpack-plugin": "^0.0.23",
+		"zephyr-webpack-plugin": "^0.0.31",
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
