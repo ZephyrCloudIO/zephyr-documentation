@@ -167,6 +167,10 @@ const sidebar: Sidebar = {
 					text: "Nx MF App",
 					link: "/recipes/nx-mf-app",
 				},
+				{
+					text: "ModernJS",
+					link: "/recipes/modernjs",
+				},
 			],
 		},
 

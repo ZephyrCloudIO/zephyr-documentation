@@ -1,0 +1,105 @@
+import { ChromeExtension } from '../../components/extension';
+import { Image } from '../../components/ui/image';
+import { SourceCode } from '@theme';
+
+# ModernJS (Canary)
+
+<SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/modernjs-app" />
+
+In this guide, we'll walk through creating a Modern.js application and configuring it with Zephyr's Canary release. 
+
+:::danger
+*Please note that this plugin is still in testing stage and Module Federation features are currently under development and will be available in future releases.*
+:::
+
+:::info Prerequisites
+
+- We expect you to have finished our [Get Started](/general/get-started) guide.
+- Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
+- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
+- npm >=10
+- node >=20
+
+If you don't have `nvm` to manage your node version yet, head to [the official nvm guide](https://github.com/nvm-sh/nvm) to install it.
+
+```bash
+nvm use 20 
+```
+
+:::
+
+## Creating a Modern.js Project
+
+You can create a new Modern.js project in two ways:
+
+### **Using Zephyr CLI (Recommended)**
+
+```bash filename="Terminal"
+npx create-zephyr-apps@latest
+```
+
+#### Using ModernJS CLI
+
+```bash filename="Terminal"
+npx @modern-js/create@latest
+```
+
+## Configure Zephyr
+
+Once created, navigate to your project directory and install dependencies:
+
+```bash filename="Terminal"
+cd your-project-name
+npm install
+npm install zephyr-modernjs-plugin@canary
+```
+
+Open your `modern.config.ts` file and add the Zephyr plugin and the following settings.
+
+```ts filename="modern.config.ts"
+import { appTools, defineConfig } from '@modern-js/app-tools';
+import { withZephyr } from 'zephyr-modernjs-plugin';
+
+export default defineConfig({
+  html: {
+    outputStructure: 'flat',
+  },
+  source: {
+    mainEntryName: 'index',
+  },
+  output: {
+    distPath: {
+      html: './',
+    },
+  },
+  plugins: [
+    appTools({
+      bundler: 'rspack', // Or 'webpack'
+    }),
+    withZephyr(),
+  ],
+});
+```
+
+:::warning
+
+**Remember to initialize a git repository in current folder**, and **adding a git remote** before deploying your app:
+
+```bash
+git init
+git remote add origin git@github.com/my-user/my-repo.git
+git add .
+git commit -m "Initial commit"
+```
+
+:::
+
+## Deploy your application
+
+With git initialized and configured, you can now deploy your application:
+
+```bash filename="Terminal"
+npm run build
+```
+
+You will see the build output with your deployed URL highlighted in the console output.
