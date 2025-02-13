@@ -31,6 +31,14 @@ Several key points that were handled by Re.Pack to make this integration attaina
 <RepackTabs />
 
 
+## Resolving platforms  
+
+Behind `zephyr-repack-plugin`, we auto-handle the platform resolution. When you are building a React Native app, the plugin would recognise the platform and finding, resolving the correct dependencies for the platform. For example if you are building for iOS, the plugin would resolve the iOS dependencies and vice versa for Android. No additional configuration is required to resolve the platform. 
+
+For each version that's built and deployed, you can find the platform on the Tag page of the application version, displayed as `IOS` or `ANDROID` next to `Target` field. The platform's name is also part of the tag name that's being created on each deployment.
+
+![platform-tag](/repack/platform-resolve.png)
+
 ## Manage dependencies 
 
 Sharing dependencies in a federated mobile application differs slightly from a federated web application. It requires more effort due to the native aspects of React Native dependencies.
