@@ -5,11 +5,6 @@ on:
     types: [closed]
 
 jobs:
-  checking-status:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Output event payload
-        run: echo "${{ toJson(github.event) }}"
   run-on-merge:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
@@ -22,6 +17,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      # Install pnpm
+      - name: Add PNPM
+        run: npm install -g pnpm
 
       # Install dependencies
       - name: Install dependencies
