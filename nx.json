@@ -17,5 +17,6 @@
 		}
 	},
 	"defaultBase": "main",
-	"nxCloudAccessToken": "Nzk0Y2MxMzYtY2I5Yy00NDkwLWE3MGEtMmYwZmQ4OGIxMWUyfHJlYWQtd3JpdGU="
+	"nxCloudAccessToken": "Nzk0Y2MxMzYtY2I5Yy00NDkwLWE3MGEtMmYwZmQ4OGIxMWUyfHJlYWQtd3JpdGU=",
+	"useLegacyCache": true
 }
