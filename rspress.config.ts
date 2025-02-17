@@ -95,6 +95,10 @@ const sidebar: Sidebar = {
 					link: "/how-to/environments",
 				},
 				{
+					text: "GitHub automations",
+					link: "/how-to/github-automations",
+				},
+				{
 					text: "Chrome Extension",
 					link: "/how-to/browser-extension",
 				},
