@@ -5,6 +5,10 @@ on:
     types: [closed]
 
 jobs:
+  checking-status:
+    steps:
+      - name: Output event payload
+        run: echo "${{ toJson(github.event) }}"
   run-on-merge:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
