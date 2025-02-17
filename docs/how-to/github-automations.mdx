@@ -1,0 +1,12 @@
+# Building on CI
+Zephyr requires an authenticated user in order to publish updates. In order to configure your CI pipeline, and in our case, GitHub actions to build and deploy with Zephyr we will need to add a token
+to the secrets for the action.
+
+## Adding the GitHub secret
+You will need to create a token on your [API token](https://app.zephyr-cloud.io/profile/settings/user-tokens) page. After creating this token you will need to add it as a secret.
+This secret must be assigned to the `ZE_SECRET_TOKEN` environment variable.
+
+```yml title=pull_request.yml
+env:
+  ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
+```
