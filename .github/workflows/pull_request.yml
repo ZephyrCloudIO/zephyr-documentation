@@ -6,6 +6,7 @@ on:
 
 jobs:
   checking-status:
+    runs-on: ubuntu-latest
     steps:
       - name: Output event payload
         run: echo "${{ toJson(github.event) }}"
