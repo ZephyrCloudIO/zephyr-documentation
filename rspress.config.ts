@@ -99,6 +99,10 @@ const sidebar: Sidebar = {
 					link: "/how-to/github-automations",
 				},
 				{
+					text: "End-to-end Testing",
+					link: "/how-to/end-to-end-testing",
+				},
+				{
 					text: "Chrome Extension",
 					link: "/how-to/browser-extension",
 				},
