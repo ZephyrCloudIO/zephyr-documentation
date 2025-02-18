@@ -99,7 +99,7 @@ const sidebar: Sidebar = {
 					link: "/how-to/github-automations",
 				},
 				{
-					text: "End to End Testing",
+					text: "End-to-end Testing",
 					link: "/how-to/end-to-end-testing",
 				},
 				{
