@@ -9,7 +9,9 @@ You can proceed to test this URL directly. [Check our guide to promote this URL 
 
 We found one of the quickest and easiest ways to do this is to get the output URL.
 You can leverage the build output directly and using regex find the appropriate output text.
+### Github Action
 
+Add below script to your `pull_request.yaml` file. 
 ```yml title=pull_request.yml
 run: |
   OUTPUT=$(npm run build)
