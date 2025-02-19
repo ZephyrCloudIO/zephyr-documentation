@@ -3,15 +3,18 @@
 Part of the software development lifecycle for many organizations includes the need to do end-to-end (e2e) testing.
 This is often done to test for regressions but can also be used to validate that acceptance criteria have been met.
 
-# Testing Basic Applications
+## Testing Basic Applications
+
 The Zephyr build output provides a deployed URL to the immutable version that was created and published as part of the build.
 You can proceed to test this URL directly. [Check our guide to promote this URL directly under an environment here](/how-to/environments).
 
-We found one of the quickest and easiest ways to do this is to get the output URL by adding a script to your CI runner script. 
+We found one of the quickest and easiest ways to do this is to get the output URL by adding a script to your CI runner script.
 You can leverage the build output directly and using regex find the appropriate output text.
+
 ### Github Action
 
-Add below script to your `pull_request.yaml` file. 
+Add below script to your `pull_request.yaml` file.
+
 ```yml title=pull_request.yml
 run: |
   OUTPUT=$(npm run build)
@@ -23,6 +26,7 @@ run: |
   echo "host=$HOST" >> "$GITHUB_OUTPUT"
   echo "url=$URL" >> "$GITHUB_OUTPUT"
 ```
+
 The output can then be used as variables in later steps of your pipeline to serve as the base URL for your test.
 
 ```yml title=pull_request.yml
@@ -31,7 +35,8 @@ env:
   REMOTE: ${{ steps.buildRemote.outputs.remote }}
 ```
 
-# Testing Federated Applications
+## Testing Federated Applications
+
 Testing federated applications is typically a bit more challenging, however with Zephyr this is a fairly trivial task.
 
 Because of how the Zephyr workers resolve the federated remotes we have the ability to modify our session and have the worker give us different versions of the application.
@@ -44,14 +49,19 @@ After refreshing the page the remote will be swapped with the version on the ses
 const remote = process.env.REMOTE;
 const remoteUrl = process.env.REMOTE_URL;
 
-await page.evaluate((remote, url) => {
+await page.evaluate(
+  (remote, url) => {
     sessionStorage.setItem(remote, url);
-  }, remote, remoteUrl
+  },
+  remote,
+  remoteUrl,
 );
 ```
 
 ## Testing in production
+
 If you want to test a new remote in production you can perform the following in your testing suite.
+
 1. Go to the production url
 2. Update the session storage to set the remote and url that you want to replace.
 3. Refresh the page
