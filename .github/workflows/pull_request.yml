@@ -1,0 +1,34 @@
+name: Run on PR Merge
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  run-on-merge:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Install dependencies
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.1
+          run_install: false
+      - name: Install dependencies
+        run: pnpm i
+
+      # Run the build script (make sure "build" is defined in your package.json)
+      - name: Run build
+        id: build
+        env:
+          ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
+        run: pnpm run build

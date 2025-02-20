@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-//import { withZephyr } from "vite-plugin-zephyr"
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { pluginClientRedirects } from "@rspress/plugin-client-redirects";
@@ -7,10 +5,18 @@ import type { Nav, Sidebar, SocialLink } from "@rspress/shared";
 import fileTree from "rspress-plugin-file-tree";
 import ga from "rspress-plugin-google-analytics";
 import { defineConfig } from "rspress/config";
-import type { UserConfig } from "rspress/config";
+import { withZephyr } from "zephyr-rspack-plugin";
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
+const zephyrRsbuildPlugin = () => ({
+	name: "zephyr-rsbuild-plugin",
+	setup(api) {
+		api.modifyRspackConfig(async (config) => {
+			await withZephyr()(config);
+		});
+	},
+});
 
 const newRelicScript = fs.readFileSync("lib/scripts/new-relic.js", "utf-8");
 
@@ -87,6 +93,14 @@ const sidebar: Sidebar = {
 				{
 					text: "Environments",
 					link: "/how-to/environments",
+				},
+				{
+					text: "GitHub automations",
+					link: "/how-to/github-automations",
+				},
+				{
+					text: "End-to-end Testing",
+					link: "/how-to/end-to-end-testing",
 				},
 				{
 					text: "Chrome Extension",
@@ -250,7 +264,7 @@ export default defineConfig({
 	description: "Documentation for Zephyr Cloud",
 	icon: "/favicon.ico",
 	lang: "en-US",
-	ssg: true,
+	ssg: false,
 	globalStyles: path.join(__dirname, "styles/index.css"),
 	mediumZoom: { selector: ".rspress-doc img" },
 
@@ -282,6 +296,12 @@ export default defineConfig({
 	},
 
 	builderConfig: {
+		plugins: [zephyrRsbuildPlugin()],
+		output: {
+			copy: {
+				patterns: [{ from: "docs/public" }],
+			},
+		},
 		html: {
 			tags: [
 				{
