@@ -7,10 +7,122 @@ import { ErrorInfo } from '../../components/errors/info.tsx';
 
 {/* TODO */}
 
+### What does this error mean?
+
+This error means that the application is not able to correctly connect to your Cloud provider.
+
+## Debugging 
+
+### 1. Cloudflare Integration
+
+#### a. KV Namespaces 
+Check if the following namespaces are created on your Cloudflare account:
+
+- `ze_snapshots`
+- `ze_files`
+- `ze_env`
+
+#### b. Workers 
+Check if the following workers are created on your Cloudflare account:
+
+- `ze-worker-for-static-upload`
+
+#### c. Worker Routes
+Check if the following worker routes are created on your Cloudflare account:
+
+- `ze.<domain.com>/*`
+- `*-ze.<domain.com>/*`
+
+#### d. DNS Records
+Check if a CNAME record is created on your Cloudflare account/domain - it needs to be a wildcard record (e.g. `*`) and point to `ze.<your-domain>.com`.
+
+##### Example
+
+| Type  | Name |       Content        | Proxy Status | TTL  |
+| :---: | :--: | :------------------: | :----------: | :--: |
+| CNAME | `*`  | `ze.zephyrcloud.app` |   Proxied    | Auto |
+
+
+
+### 2. Netlify Integration
+
+You must have a Netlify site project to use this integration.
+
+#### a. Blob Storage 
+
+Check if the following blob storage spaces are created on your Netlify site project:
+
+- `site:ze_snapshots`
+- `site:ze_files`
+- `site:ze_env`
+
+#### b. Environment Variable 
+
+Check if an environment variable named `JWT_SECRET` is created on your Netlify site project. 
+
+#### c. Function 
+
+Check if a function named `ze_worker_for_upload` is created on your Netlify site project.
+
+#### d. Edge Function 
+
+Check if an edge function named `ze_worker_for_serve` is created on your Netlify site project.
+
+
+### 3. Fastly Integration 
+
+You must have a Fastly compute service to use this integration.
+
+#### a. API Token 
+
+Check if the API token created under **Account Tokens** is valid and has **Global API access** scope. 
+
+#### b. KV Stores
+
+Check if the following KV stores are created on your Fastly account:
+
+- `ze-snapshots`
+- `ze-files`
+- `ze-env`
+
+#### c. DNS Records 
+
+Check if the following DNS records are created on your Fastly account:
+
+- `ze.<domain.com>`
+- `*.ze.<domain.com>`
+
+#### d. Compute Service  
+
+Check if the following compute service is created on your Fastly account:
+
+- `ze-worker`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ::: warning
 
-Not documented yet. Had a problem and need help?
-
-Contact us in our [discord](https://zephyr-cloud.io/discord)!
+If you are still facing this issue, contact us in our [discord](https://zephyr-cloud.io/discord)!
 
 :::
