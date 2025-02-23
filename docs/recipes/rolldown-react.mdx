@@ -46,7 +46,7 @@ pnpm create zephyr-apps
 
 Follow the CLI prompts and select Rolldown as your bundler. This will create a new project with all the necessary dependencies and configuration.
 
-Alternatively, if you prefer to set up manually:
+## Manually
 
 <Tabs values={[{label:"npm"}, {label: 'yarn'}, {label: 'pnpm'}]}>
 <Tab>
@@ -77,9 +77,9 @@ pnpm add rolldown zephyr-rolldown-plugin@latest react react-dom @types/react @ty
 
 ## Configure Zephyr with Rolldown
 
-Create a `rolldown.config.js` file in your project root with the following configuration:
+Create a `rolldown.config.mjs` file in your project root with the following configuration:
 
-```ts filename="rolldown.config.js"
+```ts filename="rolldown.config.mjs"
 import { defineConfig } from 'rolldown';
 import { withZephyr } from 'zephyr-rolldown-plugin';
 
