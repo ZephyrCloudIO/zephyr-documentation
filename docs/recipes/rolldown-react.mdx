@@ -1,0 +1,159 @@
+import { ChromeExtension } from '../../components/extension';
+import { Image } from '../../components/ui/image';
+import { SourceCode, Tabs, Tab } from '@theme';
+
+# Rolldown with Zephyr
+
+<SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/rolldown-app" />
+
+In this guide, we'll walk through creating a Rolldown application and configuring it with Zephyr's release.
+
+:::info Prerequisites
+
+- We expect you to have finished our [Get Started](/general/get-started) guide.
+- Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
+- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
+
+If you don't have `nvm` to manage your node version yet, head to [the official nvm guide](https://github.com/nvm-sh/nvm) to install it.
+
+```bash
+nvm use 20 
+```
+
+:::
+
+## Creating a New Project
+
+The easiest way to get started is using the `create-zephyr-apps` CLI:
+
+<Tabs values={[{label:"npm"}, {label: 'yarn'}, {label: 'pnpm'}]}>
+<Tab>
+```bash filename="Terminal"
+npx create-zephyr-apps@latest
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+yarn create zephyr-apps
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+pnpm create zephyr-apps
+```
+</Tab>
+</Tabs>
+
+Follow the CLI prompts and select Rolldown as your bundler. This will create a new project with all the necessary dependencies and configuration.
+
+Alternatively, if you prefer to set up manually:
+
+<Tabs values={[{label:"npm"}, {label: 'yarn'}, {label: 'pnpm'}]}>
+<Tab>
+```bash filename="Terminal"
+mkdir my-rolldown-app
+cd my-rolldown-app
+npm init -y
+npm install rolldown zephyr-rolldown-plugin@latest react react-dom @types/react @types/react-dom typescript
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+mkdir my-rolldown-app
+cd my-rolldown-app
+yarn init -y
+yarn add rolldown zephyr-rolldown-plugin@latest react react-dom @types/react @types/react-dom typescript
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+mkdir my-rolldown-app
+cd my-rolldown-app
+pnpm init
+pnpm add rolldown zephyr-rolldown-plugin@latest react react-dom @types/react @types/react-dom typescript
+```
+</Tab>
+</Tabs>
+
+## Configure Zephyr with Rolldown
+
+Create a `rolldown.config.js` file in your project root with the following configuration:
+
+```ts filename="rolldown.config.js"
+import { defineConfig } from 'rolldown';
+import { withZephyr } from 'zephyr-rolldown-plugin';
+
+export default defineConfig({
+  input: 'src/main.tsx',
+  plugins: [
+    {
+      name: 'emit-html',
+      generateBundle() {
+        const html = `
+          <html>
+            <body>
+              <div id="root"></div>
+              <script type="module" src="./main.js"></script>
+            </body>
+          </html>
+        `;
+        this.emitFile({
+          type: 'asset',
+          fileName: 'index.html',
+          source: html,
+        });
+      },
+    },
+    withZephyr(),
+  ],
+});
+```
+
+## Deploy your application
+
+:::warning
+
+**Remember to initialize a git repository in current folder**, and **adding a git remote** before attempting to deploy your app:
+
+```bash
+git init
+git remote add origin <REMOTE_URL>
+git add .
+git commit -m "Initial commit"
+```
+
+:::
+
+With git initialized and configured, you can now build and deploy your application:
+
+<Tabs values={[{label:"npm"}, {label: 'yarn'}, {label: 'pnpm'}]}>
+<Tab>
+```bash filename="Terminal"
+npm run build
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+yarn build
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+pnpm build
+```
+</Tab>
+</Tabs>
+
+You will see the build output with your deployed URL highlighted in the console output.
+
+:::info
+Make sure to add a build script to your package.json:
+
+```json
+{
+  "scripts": {
+    "build": "rolldown --config ./rolldown.config.mjs"
+  }
+}
+```
+:::
