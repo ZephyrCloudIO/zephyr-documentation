@@ -4,6 +4,14 @@ on:
   pull_request:
     types: [closed]
 
+env:
+  NX_BRANCH: ${{ github.event.number || github.ref_name }}
+  NODE_VERSION: 18
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   run-on-merge:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
@@ -30,5 +38,13 @@ jobs:
       - name: Run build
         id: build
         env:
-          ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
+          ZE_SECRET_TOKEN: ${{ secrets.ZE_SECRET_TOKEN }}
         run: pnpm run build
+
+      - name: Zephyr deploy summary
+        uses: ZephyrCloudIO/deploy-summary-action@v1.3.0
+        id: zephyr-summary
+        with:
+          application_uid: zephyr-cloud-docs.zephyr-documentation.zephyrcloudio # Required
+      - name: Zephyr deploy summary
+        run: echo "Deployed to ${{ steps.zephyr.outputs.version_url }}"
