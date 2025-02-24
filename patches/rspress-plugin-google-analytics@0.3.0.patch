@@ -1,0 +1,40 @@
+diff --git a/dist/index.js b/dist/index.js
+index 2fb34de75eaba20af646b0aa4175c0b6f860320f..0183fa667c5f78370ad6b8646b2855d2dc4089dd 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -54,11 +54,34 @@ export default function rspressPluginGoogleAnalytics(options) {
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
++
++const id_name = '*_ze_id';
++
++function get_or_create_ze_id() {
++  const ze_id = localStorage.getItem(id_name);
++  if (ze_id) {
++    return ze_id;
++  }
++  return Math.random().toString(36).substring(2, 15);
++}
++
++const ze_id = get_or_create_ze_id();
+               ${idList
+                             .map((id) => `
+ gtag('config', '${id}', {
+   anonymize_ip: ${anonymizeIP},
+-});`)
++  page_path: window.location.pathname,
++  first_field_name: 'documentation',
++  linker: {
++    domains: ['docs.zephyr-cloud.io', 'zephyr-cloud.io', 'app.zephyr-cloud.io'],
++  },
++  link_id: ze_id,
++});
++
++gtag('set', 'linker', {
++accept_incoming: true,
++});
++`)
+                             .join('\n')}
+             `,
+                     },
