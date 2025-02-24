@@ -5,12 +5,7 @@ on:
     types: [closed]
 
 env:
-  NX_BRANCH: ${{ github.event.number || github.ref_name }}
   NODE_VERSION: 18
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   run-on-merge:
