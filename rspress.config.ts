@@ -118,6 +118,10 @@ const sidebar: Sidebar = {
 					text: "Allow IP addresses",
 					link: "/how-to/allow-ip-addresses",
 				},
+				{
+					text: "Version Statuses",
+					link: "/how-to/version-statuses",
+				},
 			],
 		},
 
