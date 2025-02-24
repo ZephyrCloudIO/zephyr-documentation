@@ -23,10 +23,15 @@ The version is outdated and should no longer be used. Version is still usable bu
 - **Unavailable** \
 The version is no longer accessible for deployment.
 
+### Using Version Status
+You can view version statuses at the application level under the Versions tab.
 You can check version status in Version List Table. Version statuses are displayed in the Status column.
+![alt 'Version statuses column'](/version-statuses-column.png)
 
 ### Updating Version Status
-To update a version’s status, click the Actions button next to a version in the list. This will open a dropdown menu with the following options:
+To update a version’s status, click the Actions button next to a version in the list. 
+![alt 'Version history actions'](/version-history-actions-btn.png)
+This will open a dropdown menu with the following options:
  - **Deploy Version** \
  You can deploy version with any status except unavailable. If you attempt to deploy a Deprecated version, you will see a warning message. You must acknowledge the risks by checking a confirmation box before proceeding.
  ![alt 'Deploy modal'](/deploy-modal-with-warning.png)
