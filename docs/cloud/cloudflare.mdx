@@ -122,15 +122,11 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 
 </Steps>
 
-
 ### Testing Cloudflare Integration
 
 Visit our [recipes](/recipes) to test an application. Your next deployment should use your designated domain! (If not, [talk to us on Discord](https://zephyr-cloud.io/discord)).
 
 When using our managed cloud (Cloudflare) or custom Cloudflare integration, avoid including capital letters in names for `package.json`, module federation configuration, or assets to prevent issues with Cloudflare queries.
-
-
-
 
 ## Troubleshooting
 
@@ -155,16 +151,13 @@ Three namespaces will be added:
 - `ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
 - `*-ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
 
-
 #### 4. **DNS Records**
 
 A CNAME record will be added to your domain with the following details:
 
 | Type  | Name |       Content        | Proxy Status | TTL  |
 | :---: | :--: | :------------------: | :----------: | :--: |
-| CNAME | `*`  | `ze.zephyrcloud.app` |   Proxied    | Auto |
-
-
+| CNAME | `*`  | `ze.zephyrcloud.app` |  ✔ Proxied   | Auto |
 
 ### Deployment and Inspecting Assets
 
