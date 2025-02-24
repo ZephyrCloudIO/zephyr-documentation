@@ -33,7 +33,7 @@ jobs:
       - name: Run build
         id: build
         env:
-          ZE_SECRET_TOKEN: ${{ secrets.ZE_SECRET_TOKEN }}
+          ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
         run: pnpm run build
 
       - name: Zephyr deploy summary
