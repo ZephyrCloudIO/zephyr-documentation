@@ -2,7 +2,7 @@ name: Run on PR Merge
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened, synchronize]
 
 env:
   NODE_VERSION: 18
