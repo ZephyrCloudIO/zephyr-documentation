@@ -2,7 +2,7 @@ name: Run on PR Merge
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened, closed]
 
 env:
   NODE_VERSION: 18
@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
 
       # Install dependencies
       - uses: pnpm/action-setup@v4
