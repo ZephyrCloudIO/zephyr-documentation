@@ -8,7 +8,7 @@ env:
   NODE_VERSION: 20
 
 jobs:
-  run-on-merge:
+  deploy-on-pr-changes:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
