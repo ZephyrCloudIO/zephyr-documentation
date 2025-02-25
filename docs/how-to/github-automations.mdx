@@ -10,3 +10,12 @@ This secret must be assigned to the `ZE_SECRET_TOKEN` environment variable.
 env:
   ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
 ```
+
+## Zephyr plugin behaviour
+When the Zephyr plugin is triggered on an environment that holds the `ZE_SECRET_TOKEN` environment variable, it will use this token to authenticate with the Zephyr API.
+
+You will notice that with a log in the console, the plugin will print the following message:
+
+```shell
+ ZEPHYR   Token found in environment. Using secret token for authentication
+```
