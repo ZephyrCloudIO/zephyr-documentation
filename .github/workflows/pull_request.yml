@@ -5,14 +5,10 @@ on:
     types: [opened, synchronize, reopened, closed]
 
 env:
-  NODE_VERSION: 18
-
-env:
-  NODE_VERSION: 18
+  NODE_VERSION: 20
 
 jobs:
   run-on-merge:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
