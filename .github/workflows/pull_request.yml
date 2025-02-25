@@ -40,5 +40,7 @@ jobs:
         id: zephyr-summary
         with:
           application_uid: zephyr-cloud-docs.zephyr-documentation.zephyrcloudio # Required
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_environment: zephyr-docs (Preview)
       - name: Zephyr deploy summary
         run: echo "Deployed to ${{ steps.zephyr.outputs.version_url }}"
