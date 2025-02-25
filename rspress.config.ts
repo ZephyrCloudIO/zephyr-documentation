@@ -185,6 +185,10 @@ const sidebar: Sidebar = {
 					text: "ModernJS",
 					link: "/recipes/modernjs",
 				},
+				{
+					text: "Rolldown React",
+					link: "/recipes/rolldown-react"
+				}
 			],
 		},
 
