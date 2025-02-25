@@ -7,6 +7,9 @@ on:
 env:
   NODE_VERSION: 18
 
+env:
+  NODE_VERSION: 18
+
 jobs:
   run-on-merge:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'

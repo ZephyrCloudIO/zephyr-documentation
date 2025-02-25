@@ -181,6 +181,10 @@ const sidebar: Sidebar = {
 					text: "Nx MF App",
 					link: "/recipes/nx-mf-app",
 				},
+				{
+					text: "Rolldown React",
+					link: "/recipes/rolldown-react",
+				},
 			],
 		},
 
