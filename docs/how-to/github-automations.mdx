@@ -12,7 +12,7 @@ env:
 ```
 
 ## Plugin behavior when secret token presents
-When the Zephyr plugin is triggered on an environment that holds the `ZE_SECRET_TOKEN` environment variable, it will use this token to authenticate with the Zephyr API.
+When the Zephyr plugin is triggered on an environment that holds the `ZE_SECRET_TOKEN` environment variable, it will use this token to authenticate with the Zephyr API and bypassing the usual log in step. 
 
 You will notice that with a log in the console, the plugin will print the following message:
 
