@@ -188,6 +188,10 @@ const sidebar: Sidebar = {
 				{
 					text: "Rolldown React",
 					link: "/recipes/rolldown-react"
+				},
+				{
+					text: "Parcel React",
+					link: "/recipes/parcel-react"
 				}
 			],
 		},
