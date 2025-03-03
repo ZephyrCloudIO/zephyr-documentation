@@ -63,7 +63,7 @@ Before proceeding, you will need two details and one DNS configuration from Clou
 | Account  | Cloudflare Pages  |    Edit    |
 | Zone     |   Worker Routes   |    Edit    |
 
-#### 3. **Zone Resources**: When prompted, include a **Specific zone** under your **domain**.
+#### 3. Zone Resources: When prompted, include a Specific zone under your domain
 
 - Leave other configurations (e.g., Account resources, Client IP Address Filtering) as defaults.
 - Scroll to the bottom and select **Continue to summary** to review your configurations, then **Create Token**. The token will display on the next page.
@@ -134,7 +134,7 @@ When using our managed cloud (Cloudflare) or custom Cloudflare integration, avoi
 
 When Cloudflare is added as your provider on Zephyr, these properties will be created on your Cloudflare account:
 
-#### 1. **KV Namespaces**
+#### 1. KV Namespaces
 
 Three namespaces will be added:
 
@@ -142,16 +142,16 @@ Three namespaces will be added:
 - ze_files
 - ze_env
 
-#### 2. **Workers**
+#### 2. Workers
 
 - `ze-worker-for-static-upload` (for uploading and serving assets)
 
-#### 3. **Worker Routes**
+#### 3. Worker Routes
 
 - `ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
 - `*-ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
 
-#### 4. **DNS Records**
+#### 4. DNS Records
 
 A CNAME record will be added to your domain with the following details:
 
