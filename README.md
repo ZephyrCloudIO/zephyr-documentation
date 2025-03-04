@@ -10,7 +10,8 @@ Built using [Rspress](https://rspress.dev/).
 Run:
 
 ```bash
-npm run build
+pnpm install
+pnpm build
 ```
 
 ## Contributors
