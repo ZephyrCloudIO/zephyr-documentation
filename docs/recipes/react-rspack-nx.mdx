@@ -15,7 +15,7 @@ import { Card } from "../../components/ui/card"
 
 :::info Prerequisites
 
-- We expect you to have finish our [Get Started](/general/get-started) guide.
+- We expect you to have finished our [Get Started](/general/get-started) guide.
 - Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
 - A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
 - npm >=10
@@ -133,7 +133,7 @@ After making sure each application in this project has a `package.json` and the 
 Install Zephyr's plugin for Rspack (works in Webpack too): 
 
 ```sh title="Terminal"
-npm i zephyr-webpack-plugin@latest 
+npm i zephyr-rspack-plugin@latest 
 ```
 
 Add Zephyr plugin to each application's build config by adding below lines from Nx's auto-generated build config: 
@@ -144,7 +144,7 @@ import {
   withModuleFederation,
   ModuleFederationConfig,
 } from '@nx/rspack/module-federation';
-import { withZephyr } from "zephyr-webpack-plugin"
+import { withZephyr } from "zephyr-rspack-plugin"
 
 import baseConfig from './module-federation.config';
 
@@ -186,7 +186,7 @@ nx run host:serve
 
 Your host app should start on port 4200 by default and each remote will spin up on its own port. All three applications should be deployed now.
 
-#### 8. Chrome Extension 
+#### 7. Chrome Extension 
 
 You can check the application you just deployed in our chrome extension. 
 
@@ -210,13 +210,13 @@ Our chrome extension is only supported on Chromium based browsers. See a list of
 :::
 
 
-#### 9. Dashboard 
+#### 8. Dashboard 
 
 If you want to see all your projects and their versions, sign in on [dashboard](https://app.zephyr-cloud.io) and you will see all your projects and their dependencies.
 
 <Image src="/dashboard-main.png" size="large"/>
 
-A more detailed explaination on how to use our dashboard is coming soon.
+A more detailed explanation on how to use our dashboard is coming soon.
 
 
 
