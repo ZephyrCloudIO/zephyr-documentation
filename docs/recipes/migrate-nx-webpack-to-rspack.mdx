@@ -7,7 +7,7 @@ If you have an Nx workspace setup for Micro-Frontend application in place with W
 
 :::info Prerequisites
 - You have a pre-existing Nx workspace with React based on Webpack
-- We expect you to have finish our [Get Started](/general/get-started) guide.
+- We expect you to have finished our [Get Started](/general/get-started) guide.
 - Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
 - A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
 - npm >=10
@@ -34,7 +34,7 @@ An example contains line-by-line changes [in our example repository](https://git
 Within your project directory, run below commands to install required packages for `rspack` and Zephyr's npm package: 
 
 ```bash title="Terminal"
-npm i @nx/rspack @rspack/dev-server zephyr-webpack-plugin@0.0.17 --force
+npm i @nx/rspack @rspack/dev-server zephyr-rspack-plugin@latest --force
 ```
 
 
@@ -59,7 +59,7 @@ Rename `webpack.config.ts` to `rspack.config.ts` and change all import path to b
 // import { withModuleFederation } from '@nx/react/module-federation';
 import { composePlugins, withNx, withReact } from '@nx/rspack';
 import { withModuleFederation, ModuleFederationConfig } from '@nx/rspack/module-federation';
-import { withZephyr } from 'zephyr-webpack-plugin'; // import Zephyr
+import { withZephyr } from 'zephyr-rspack-plugin'; // import Zephyr
 
 import baseConfig from './module-federation.config';
 
@@ -96,7 +96,7 @@ For **Host application**'s `rspack.config.prod.ts`, you will need to do the same
 // import { ModuleFederationConfig } from '@nx/webpack';
 import { composePlugins, withNx, withReact } from '@nx/rspack';
 import { withModuleFederation, ModuleFederationConfig } from '@nx/rspack/module-federation';
-import { withZephyr } from 'zephyr-webpack-plugin';
+import { withZephyr } from 'zephyr-rspack-plugin';
 
 import baseConfig from './module-federation.config';
 
@@ -143,7 +143,7 @@ export default composePlugins(
 In every `project.json`, you will need to edit below changes: 
 
 1. Change build executor to `@nx/rspack:rspack` 
-**2. Add `"target":"web"` to build options** (this inferred a )
+**2. Add `"target":"web"` to build options**
 3. Under `build`'s `options` -- change all `"webpackConfig":"apps/{appName}/webpack.config.ts"` to `"rspackConfig": "apps/{appName}/rspack.config.ts"`
 4. Under `configurations`'s `production` config -- change all `"webpackConfig":"apps/{appName}/webpack.config.prod.ts"` to `"rspackConfig": "apps/{appName}/rspack.config.prod.ts"`
 5. Edit `executor` in `serve` -- change `@nx/react:module-federation-dev-server` to `"@nx/rspack:module-federation-dev-server"`
