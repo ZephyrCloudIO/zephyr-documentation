@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   rspress-plugin-google-analytics@0.3.0:
-    hash: b4p2gbqcgqcrxw4vkfkdrjinla
+    hash: 1cb480ddd858fd8892f5ebc2ee6014c1afa07cc675c67c60a54e9ac803dd71cd
     path: patches/rspress-plugin-google-analytics@0.3.0.patch
 
 importers:
@@ -84,7 +84,7 @@ importers:
         version: 0.4.0(rspress@1.41.3(webpack@5.96.0(esbuild@0.17.19)))
       rspress-plugin-google-analytics:
         specifier: ^0.3.0
-        version: 0.3.0(patch_hash=b4p2gbqcgqcrxw4vkfkdrjinla)(rspress@1.41.3(webpack@5.96.0(esbuild@0.17.19)))
+        version: 0.3.0(patch_hash=1cb480ddd858fd8892f5ebc2ee6014c1afa07cc675c67c60a54e9ac803dd71cd)(rspress@1.41.3(webpack@5.96.0(esbuild@0.17.19)))
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
@@ -97,10 +97,6 @@ importers:
       zod:
         specifier: ^3.24.2
         version: 3.24.2
-    optionalDependencies:
-      '@rspress/mdx-rs-linux-x64-gnu':
-        specifier: ^0.6.6
-        version: 0.6.6
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -135,6 +131,10 @@ importers:
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
+    optionalDependencies:
+      '@rspress/mdx-rs-linux-x64-gnu':
+        specifier: ^0.6.6
+        version: 0.6.6
 
 packages:
 
@@ -8514,7 +8514,7 @@ snapshots:
       - '@rspack/tracing'
       - supports-color
 
-  rspress-plugin-google-analytics@0.3.0(patch_hash=b4p2gbqcgqcrxw4vkfkdrjinla)(rspress@1.41.3(webpack@5.96.0(esbuild@0.17.19))):
+  rspress-plugin-google-analytics@0.3.0(patch_hash=1cb480ddd858fd8892f5ebc2ee6014c1afa07cc675c67c60a54e9ac803dd71cd)(rspress@1.41.3(webpack@5.96.0(esbuild@0.17.19))):
     dependencies:
       '@rspress/shared': 1.41.3
       rspress: 1.41.3(webpack@5.96.0(esbuild@0.17.19))
