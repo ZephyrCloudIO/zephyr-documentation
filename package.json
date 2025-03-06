@@ -1,69 +1,70 @@
 {
-  "name": "zephyr-cloud-docs",
-  "version": "0.0.1",
-  "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ZephyrCloudIO/zephyr-documentation.git"
-  },
-  "scripts": {
-    "build": "rspress build",
-    "dev": "rspress dev --port 3030",
-    "lint": "biome check",
-    "lint:fix": "biome check --fix",
-    "prepare": "husky",
-    "preview": "rspress preview",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@commitlint/config-conventional": "^19.7.1",
-    "@newrelic/browser-agent": "^1.282.0",
-    "@radix-ui/react-icons": "^1.3.2",
-    "@radix-ui/react-progress": "^1.1.2",
-    "@radix-ui/react-slot": "^1.1.2",
-    "@radix-ui/react-tabs": "^1.1.3",
-    "@radix-ui/react-tooltip": "^1.1.8",
-    "@rspress/core": "^1.41.3",
-    "@rspress/mdx-rs": "^0.6.6",
-    "@rspress/plugin-client-redirects": "^1.41.3",
-    "@rspress/plugin-preview": "^1.41.3",
-    "@rspress/plugin-shiki": "^1.41.3",
-    "@rspress/runtime": "^1.41.3",
-    "@rspress/shared": "^1.41.3",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "commitlint": "^19.7.1",
-    "dotenv": "^16.4.7",
-    "husky": "^9.1.7",
-    "lucide-react": "^0.474.0",
-    "react-wrap-balancer": "^1.1.1",
-    "rspress": "^1.41.3",
-    "rspress-plugin-file-tree": "^0.4.0",
-    "rspress-plugin-google-analytics": "^0.3.0",
-    "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7",
-    "zephyr-rspack-plugin": "^0.0.34",
-    "zod": "^3.24.2"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@tailwindcss/typography": "^0.5.16",
-    "@types/node": "^22.13.4",
-    "@types/react": "^18.3.18",
-    "autoprefixer": "^10.4.20",
-    "globals": "^15.15.0",
-    "nx": "20.4.4",
-    "postcss": "^8.5.2",
-    "postcss-loader": "^8.1.1",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.3"
-  },
-  "optionalDependencies": {
-    "@rspress/mdx-rs-linux-x64-gnu": "^0.6.6"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "rspress-plugin-google-analytics@0.3.0": "patches/rspress-plugin-google-analytics@0.3.0.patch"
-    }
-  }
+	"name": "zephyr-cloud-docs",
+	"version": "0.0.1",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ZephyrCloudIO/zephyr-documentation.git"
+	},
+	"scripts": {
+		"build": "rspress build",
+		"dev": "rspress dev --port 3030",
+		"lint": "biome check",
+		"lint:fix": "biome check --fix",
+		"prepare": "husky",
+		"preview": "rspress preview",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@commitlint/config-conventional": "^19.7.1",
+		"@newrelic/browser-agent": "^1.282.0",
+		"@radix-ui/react-icons": "^1.3.2",
+		"@radix-ui/react-progress": "^1.1.2",
+		"@radix-ui/react-slot": "^1.1.2",
+		"@radix-ui/react-tabs": "^1.1.3",
+		"@radix-ui/react-tooltip": "^1.1.8",
+		"@rspress/core": "^1.41.3",
+		"@rspress/mdx-rs": "^0.6.6",
+		"@rspress/plugin-client-redirects": "^1.41.3",
+		"@rspress/plugin-preview": "^1.41.3",
+		"@rspress/plugin-shiki": "^1.41.3",
+		"@rspress/runtime": "^1.41.3",
+		"@rspress/shared": "^1.41.3",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"commitlint": "^19.7.1",
+		"dotenv": "^16.4.7",
+		"husky": "^9.1.7",
+		"lucide-react": "^0.474.0",
+		"react-wrap-balancer": "^1.1.1",
+		"rspress": "^1.41.3",
+		"rspress-plugin-file-tree": "^0.4.0",
+		"rspress-plugin-google-analytics": "^0.3.0",
+		"tailwind-merge": "^2.6.0",
+		"tailwindcss-animate": "^1.0.7",
+		"zephyr-rspack-plugin": "^0.0.34",
+		"zod": "^3.24.2"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@tailwindcss/typography": "^0.5.16",
+		"@types/node": "^22.13.4",
+		"@types/react": "^18.3.18",
+		"autoprefixer": "^10.4.20",
+		"globals": "^15.15.0",
+		"nx": "20.4.4",
+		"postcss": "^8.5.2",
+		"postcss-loader": "^8.1.1",
+		"tailwindcss": "^3.4.17",
+		"typescript": "^5.7.3"
+	},
+	"optionalDependencies": {
+		"@rspress/mdx-rs-linux-x64-gnu": "^0.6.6"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"rspress-plugin-google-analytics@0.3.0": "patches/rspress-plugin-google-analytics@0.3.0.patch"
+		}
+	},
+	"packageManager": "pnpm@10.5.2+sha512.da9dc28cd3ff40d0592188235ab25d3202add8a207afbedc682220e4a0029ffbff4562102b9e6e46b4e3f9e8bd53e6d05de48544b0c57d4b0179e22c76d1199b"
 }

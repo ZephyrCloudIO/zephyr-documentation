@@ -187,12 +187,12 @@ const sidebar: Sidebar = {
 				},
 				{
 					text: "Rolldown React",
-					link: "/recipes/rolldown-react"
+					link: "/recipes/rolldown-react",
 				},
 				{
 					text: "Parcel React",
-					link: "/recipes/parcel-react"
-				}
+					link: "/recipes/parcel-react",
+				},
 			],
 		},
 
@@ -281,7 +281,9 @@ export default defineConfig({
 		dark: "/dark-bg-icon.png",
 	},
 	search: {
-		searchHooks: path.join(__dirname, "lib/utils/after-search.ts"),
+		searchHooks: path
+			.join(__dirname, "lib/utils/after-search.ts")
+			.replace(/\\/g, "/"),
 	},
 
 	themeConfig: {
