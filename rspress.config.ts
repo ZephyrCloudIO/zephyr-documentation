@@ -12,28 +12,28 @@ import { capitalizeFirstLetter } from "./lib/utils/casing";
 
 const TEMP_SEARCH_INDEX_PATH = path.join(__dirname, "temp-search-index.json");
 const getSearchIndexHash = () => {
-	let searchIndexHash = "";
-	return {
-		setHash: (hash: string) => {
-			searchIndexHash = hash;
-		},
-		getHashedFilename: () =>
-			`search_index.en-US${searchIndexHash ? `.${searchIndexHash}` : ""}.json`,
-	};
+  let searchIndexHash = "";
+  return {
+    setHash: (hash: string) => {
+      searchIndexHash = hash;
+    },
+    getHashedFilename: () =>
+      `search_index.en-US${searchIndexHash ? `.${searchIndexHash}` : ""}.json`,
+  };
 };
 
 const searchIndexHelper = getSearchIndexHash();
 
 const zephyrRsbuildPlugin = () => ({
-	name: "zephyr-rsbuild-plugin",
-	setup(api) {
-		api.modifyRspackConfig(async (config) => {
-			let searchIndexExists = false;
-			searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);
+  name: "zephyr-rsbuild-plugin",
+  setup(api) {
+    api.modifyRspackConfig(async (config) => {
+      let searchIndexExists = false;
+      searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);
 
-			await withZephyr()(config);
-		});
-	},
+      await withZephyr()(config);
+    });
+  },
 });
 
 const newRelicScript = fs.readFileSync("lib/scripts/new-relic.js", "utf-8");
@@ -139,80 +139,80 @@ const sidebar: Sidebar = {
       ],
     },
 
-		{
-			text: "Cloud Providers",
-			link: "/cloud",
-			items: [
-				{
-					text: "Cloudflare",
-					link: "/cloud/cloudflare",
-				},
-				{
-					text: "Fastly",
-					link: "/cloud/fastly",
-				},
-				{
-					text: "Netlify",
-					link: "/cloud/netlify",
-				},
-			],
-		},
-		{
-			text: "Recipes",
-			link: "/recipes",
-			collapsed: false,
-			collapsible: true,
-			items: [
-				{
-					text: "Existing App",
-					link: "/recipes/existing-app",
-				},
-				{
-					text: "React Native + Re.Pack + MF",
-					link: "/recipes/repack-mf",
-				},
-				{
-					text: "React + Vite",
-					link: "/recipes/react-vite",
-				},
-				{
-					text: "Vite + Rspack + webpack + MF",
-					link: "/recipes/vite-rspack-webpack-mf",
-				},
-				{
-					text: "React + Rspack + Nx",
-					link: "/recipes/react-rspack-nx",
-				},
-				{
-					text: "React + Rspack + Turborepo",
-					link: "/recipes/turborepo-react",
-				},
-				{
-					text: "React Native",
-					link: "/recipes/react-native",
-				},
-				{
-					text: "Migrate from Webpack to Rspack in Nx",
-					link: "/recipes/migrate-nx-webpack-to-rspack",
-				},
-				{
-					text: "Nx MF App",
-					link: "/recipes/nx-mf-app",
-				},
-				{
-					text: "ModernJS",
-					link: "/recipes/modernjs",
-				},
-				{
-					text: "Rolldown React",
-					link: "/recipes/rolldown-react",
-				},
-				{
-					text: "Parcel React",
-					link: "/recipes/parcel-react",
-				},
-			],
-		},
+    {
+      text: "Cloud Providers",
+      link: "/cloud",
+      items: [
+        {
+          text: "Cloudflare",
+          link: "/cloud/cloudflare",
+        },
+        {
+          text: "Fastly",
+          link: "/cloud/fastly",
+        },
+        {
+          text: "Netlify",
+          link: "/cloud/netlify",
+        },
+      ],
+    },
+    {
+      text: "Recipes",
+      link: "/recipes",
+      collapsed: false,
+      collapsible: true,
+      items: [
+        {
+          text: "Existing App",
+          link: "/recipes/existing-app",
+        },
+        {
+          text: "React Native + Re.Pack + MF",
+          link: "/recipes/repack-mf",
+        },
+        {
+          text: "React + Vite",
+          link: "/recipes/react-vite",
+        },
+        {
+          text: "Vite + Rspack + webpack + MF",
+          link: "/recipes/vite-rspack-webpack-mf",
+        },
+        {
+          text: "React + Rspack + Nx",
+          link: "/recipes/react-rspack-nx",
+        },
+        {
+          text: "React + Rspack + Turborepo",
+          link: "/recipes/turborepo-react",
+        },
+        {
+          text: "React Native",
+          link: "/recipes/react-native",
+        },
+        {
+          text: "Migrate from Webpack to Rspack in Nx",
+          link: "/recipes/migrate-nx-webpack-to-rspack",
+        },
+        {
+          text: "Nx MF App",
+          link: "/recipes/nx-mf-app",
+        },
+        {
+          text: "ModernJS",
+          link: "/recipes/modernjs",
+        },
+        {
+          text: "Rolldown React",
+          link: "/recipes/rolldown-react",
+        },
+        {
+          text: "Parcel React",
+          link: "/recipes/parcel-react",
+        },
+      ],
+    },
 
     {
       text: "Supported Bundlers & Platforms",
@@ -294,10 +294,10 @@ export default defineConfig({
   globalStyles: path.join(__dirname, "styles/index.css"),
   mediumZoom: { selector: ".rspress-doc img" },
 
-	logo: {
-		light: "/light-bg-icon.png",
-		dark: "/dark-bg-icon.png",
-	},
+  logo: {
+    light: "/light-bg-icon.png",
+    dark: "/dark-bg-icon.png",
+  },
 
   themeConfig: {
     darkMode: true,
@@ -318,82 +318,82 @@ export default defineConfig({
     cleanUrls: true,
   },
 
-	builderConfig: {
-		plugins: [zephyrRsbuildPlugin()],
-		output: {
-			copy: {
-				patterns: [
-					{ from: "docs/public" },
-					{
-						from: "temp-search-index.json",
-						to: () => `static/${searchIndexHelper.getHashedFilename()}`,
-					},
-				],
-			},
-		},
-		html: {
-			tags: [
-				{
-					tag: "script",
-					attrs: { type: "text/javascript" },
-					children: newRelicScript,
-				},
-			],
-		},
-	},
+  builderConfig: {
+    plugins: [zephyrRsbuildPlugin()],
+    output: {
+      copy: {
+        patterns: [
+          { from: "docs/public" },
+          {
+            from: "temp-search-index.json",
+            to: () => `static/${searchIndexHelper.getHashedFilename()}`,
+          },
+        ],
+      },
+    },
+    html: {
+      tags: [
+        {
+          tag: "script",
+          attrs: { type: "text/javascript" },
+          children: newRelicScript,
+        },
+      ],
+    },
+  },
 
-	plugins: [
-		{
-			name: "zephyr-search-enhancer",
-			modifySearchIndexData(rows) {
-				for (const row of rows) {
-					const match = PAGE_CODE_REGEX.exec(row.routePath);
-					if (!match) continue;
+  plugins: [
+    {
+      name: "zephyr-search-enhancer",
+      modifySearchIndexData(rows) {
+        for (const row of rows) {
+          const match = PAGE_CODE_REGEX.exec(row.routePath);
+          if (!match) continue;
 
-					const error = getZeError(match[1]);
-					if (!error) {
-						throw new Error(`Invalid error page found: ${match[1]}`);
-					}
+          const error = getZeError(match[1]);
+          if (!error) {
+            throw new Error(`Invalid error page found: ${match[1]}`);
+          }
 
-					row.content = `ZE${Categories[error.kind]}${error.id}\n${
-						error.message
-					}\n\n\n${row.content}`;
-				}
+          row.content = `ZE${Categories[error.kind]}${error.id}\n${
+            error.message
+          }\n\n\n${row.content}`;
+        }
 
-				const searchIndexData = JSON.stringify(rows);
-				const files = fs.readdirSync(path.join(__dirname, "doc_build/static"));
-				for (const file of files) {
-					const match = file.match(/search_index\.en-US\.([a-z0-9]+)\.json/);
-					if (match) {
-						searchIndexHelper.setHash(match[1]);
-						break;
-					}
-				}
+        const searchIndexData = JSON.stringify(rows);
+        const files = fs.readdirSync(path.join(__dirname, "doc_build/static"));
+        for (const file of files) {
+          const match = file.match(/search_index\.en-US\.([a-z0-9]+)\.json/);
+          if (match) {
+            searchIndexHelper.setHash(match[1]);
+            break;
+          }
+        }
 
-				fs.writeFileSync(TEMP_SEARCH_INDEX_PATH, searchIndexData);
-			},
-		},
-		fileTree(),
-		ga({
-			id: "G-B7G266JZDH",
-		}),
-		pluginClientRedirects({
-			redirects: [
-				{ from: "/how-to/cloud-providers", to: "/cloud" },
-				{ from: "^/guide/general/get-started", to: "/general/get-started" },
-				{
-					from: "^/concepts/architecture",
-					to: "/learning/concepts/architecture",
-				},
-				{
-					from: "/guide/integrations/cloudflare",
-					to: "/cloud/cloudflare",
-				},
-				{
-					from: "/guide/integrations/netlify",
-					to: "/cloud/netlify",
-				},
-			],
-		}),
-	],
+        fs.writeFileSync(TEMP_SEARCH_INDEX_PATH, searchIndexData);
+      },
+    },
+    fileTree(),
+    ga({
+      id: "G-B7G266JZDH",
+    }),
+    pluginClientRedirects({
+      redirects: [
+        { from: "/how-to/cloud-providers", to: "/cloud" },
+        { from: "^/guide/general/get-started", to: "/general/get-started" },
+        {
+          from: "^/concepts/architecture",
+          to: "/learning/concepts/architecture",
+        },
+        {
+          from: "/guide/integrations/cloudflare",
+          to: "/cloud/cloudflare",
+        },
+        {
+          from: "/guide/integrations/netlify",
+          to: "/cloud/netlify",
+        },
+      ],
+    }),
+  ],
 });
