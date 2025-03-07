@@ -1,19 +1,19 @@
 @font-face {
-	font-family: "Nebulica-Black";
-	src: url("../docs/public/Nebulica-Black.ttf");
+  font-family: "Nebulica-Black";
+  src: url("../docs/public/Nebulica-Black.ttf");
 }
 
 @font-face {
-	font-family: "Nebulica-Regular";
-	src: url("../docs/public/Nebulica-Regular.ttf");
+  font-family: "Nebulica-Regular";
+  src: url("../docs/public/Nebulica-Regular.ttf");
 }
 
 @font-face {
-	font-family: "Nebulica-ExtraLight";
-	src: url("../docs/public/Nebulica-ExtraLight.ttf");
+  font-family: "Nebulica-ExtraLight";
+  src: url("../docs/public/Nebulica-ExtraLight.ttf");
 }
 
 @font-face {
-	font-family: "Nebulica-SemiBold";
-	src: url("../docs/public/Nebulica-SemiBold.ttf");
+  font-family: "Nebulica-SemiBold";
+  src: url("../docs/public/Nebulica-SemiBold.ttf");
 }
