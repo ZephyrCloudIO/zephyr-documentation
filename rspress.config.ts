@@ -9,10 +9,28 @@ import { withZephyr } from "zephyr-rspack-plugin";
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
+
+const TEMP_SEARCH_INDEX_PATH = path.join(__dirname, "temp-search-index.json");
+const getSearchIndexHash = () => {
+  let searchIndexHash = "";
+  return {
+    setHash: (hash: string) => {
+      searchIndexHash = hash;
+    },
+    getHashedFilename: () =>
+      `search_index.en-US${searchIndexHash ? `.${searchIndexHash}` : ""}.json`,
+  };
+};
+
+const searchIndexHelper = getSearchIndexHash();
+
 const zephyrRsbuildPlugin = () => ({
   name: "zephyr-rsbuild-plugin",
   setup(api) {
     api.modifyRspackConfig(async (config) => {
+      let searchIndexExists = false;
+      searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);
+
       await withZephyr()(config);
     });
   },
@@ -280,9 +298,6 @@ export default defineConfig({
     light: "/light-bg-icon.png",
     dark: "/dark-bg-icon.png",
   },
-  search: {
-    searchHooks: path.join(__dirname, "lib/utils/after-search.ts"),
-  },
 
   themeConfig: {
     darkMode: true,
@@ -307,7 +322,13 @@ export default defineConfig({
     plugins: [zephyrRsbuildPlugin()],
     output: {
       copy: {
-        patterns: [{ from: "docs/public" }],
+        patterns: [
+          { from: "docs/public" },
+          {
+            from: "temp-search-index.json",
+            to: () => `static/${searchIndexHelper.getHashedFilename()}`,
+          },
+        ],
       },
     },
     html: {
@@ -322,6 +343,39 @@ export default defineConfig({
   },
 
   plugins: [
+    {
+      name: "zephyr-search-enhancer",
+      modifySearchIndexData(rows) {
+        for (const row of rows) {
+          const match = PAGE_CODE_REGEX.exec(row.routePath);
+          if (!match) continue;
+
+          const error = getZeError(match[1]);
+          if (!error) {
+            throw new Error(`Invalid error page found: ${match[1]}`);
+          }
+
+          // Adds to content because the indexer is not configured to
+          // lookup the frontmatter data.
+          // https://github.com/web-infra-dev/rspress/blob/d16b4b625c586e8d10385c792ade2a5d356834f3/packages/theme-default/src/components/Search/logic/providers/LocalProvider.ts#L78
+          row.content = `ZE${Categories[error.kind]}${error.id}\n${
+            error.message
+          }\n\n\n${row.content}`;
+        }
+
+        const searchIndexData = JSON.stringify(rows);
+        const files = fs.readdirSync(path.join(__dirname, "doc_build/static"));
+        for (const file of files) {
+          const match = file.match(/search_index\.en-US\.([a-z0-9]+)\.json/);
+          if (match) {
+            searchIndexHelper.setHash(match[1]);
+            break;
+          }
+        }
+
+        fs.writeFileSync(TEMP_SEARCH_INDEX_PATH, searchIndexData);
+      },
+    },
     fileTree(),
     ga({
       id: "G-B7G266JZDH",
@@ -344,30 +398,5 @@ export default defineConfig({
         },
       ],
     }),
-    {
-      name: "zephyr-add-error-codes",
-      modifySearchIndexData(rows) {
-        for (const row of rows) {
-          const match = PAGE_CODE_REGEX.exec(row.routePath);
-
-          if (!match) {
-            continue;
-          }
-
-          const error = getZeError(match[1]);
-
-          if (!error) {
-            throw new Error(`Invalid error page found: ${match[1]}`);
-          }
-
-          // Adds to content because the indexer is not configured to
-          // lookup the frontmatter data.
-          // https://github.com/web-infra-dev/rspress/blob/d16b4b625c586e8d10385c792ade2a5d356834f3/packages/theme-default/src/components/Search/logic/providers/LocalProvider.ts#L78
-          row.content = `ZE${Categories[error.kind]}${error.id}\n${
-            error.message
-          }\n\n\n${row.content}`; // prepends to have higher priority
-        }
-      },
-    },
   ],
 });
