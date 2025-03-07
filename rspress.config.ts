@@ -39,105 +39,105 @@ const zephyrRsbuildPlugin = () => ({
 const newRelicScript = fs.readFileSync("lib/scripts/new-relic.js", "utf-8");
 
 const socialLinks: SocialLink[] = [
-	{
-		icon: "github",
-		mode: "link",
-		content: "https://github.com/zephyrcloudio",
-	},
-	{
-		icon: "discord",
-		mode: "link",
-		content: "https://zephyr-cloud.io/discord",
-	},
-	{
-		icon: "x",
-		mode: "link",
-		content: "https://twitter.com/ZephyrCloudIO",
-	},
+  {
+    icon: "github",
+    mode: "link",
+    content: "https://github.com/zephyrcloudio",
+  },
+  {
+    icon: "discord",
+    mode: "link",
+    content: "https://zephyr-cloud.io/discord",
+  },
+  {
+    icon: "x",
+    mode: "link",
+    content: "https://twitter.com/ZephyrCloudIO",
+  },
 ];
 
 const nav: Nav = [
-	{
-		text: "Get Started",
-		link: "/general/get-started",
-		activeMatch: "/general/get-started/",
-	},
-	{
-		text: "Learning",
-		link: "/learning",
-		activeMatch: "/learning",
-	},
+  {
+    text: "Get Started",
+    link: "/general/get-started",
+    activeMatch: "/general/get-started/",
+  },
+  {
+    text: "Learning",
+    link: "/learning",
+    activeMatch: "/learning",
+  },
 
-	{
-		text: "Zephyr Cloud →",
-		link: "https://app.zephyr-cloud.io",
-	},
+  {
+    text: "Zephyr Cloud →",
+    link: "https://app.zephyr-cloud.io",
+  },
 ];
 
 const sidebar: Sidebar = {
-	"/": [
-		{
-			text: "General",
-			items: [
-				{
-					text: "Why Zephyr Cloud",
-					link: "/general/why-zephyr-cloud",
-				},
-				{
-					text: "Get Started",
-					link: "/general/get-started",
-				},
-				{
-					text: "Create MF App",
-					link: "/general/create-mf-app",
-				},
-				{
-					text: "FAQ",
-					link: "/general/question",
-				},
-			],
-		},
-		{
-			text: "How to",
-			items: [
-				{
-					text: "Micro-Frontends with Zephyr",
-					link: "/how-to/mf-guide",
-				},
-				{
-					text: "Fork Our Examples",
-					link: "/how-to/fork-our-examples",
-				},
-				{
-					text: "Environments",
-					link: "/how-to/environments",
-				},
-				{
-					text: "GitHub automations",
-					link: "/how-to/github-automations",
-				},
-				{
-					text: "End-to-end Testing",
-					link: "/how-to/end-to-end-testing",
-				},
-				{
-					text: "Chrome Extension",
-					link: "/how-to/browser-extension",
-				},
-				{
-					text: "Version rollback and roll-forward",
-					link: "/how-to/versioning-tags",
-				},
-				{
-					text: "Generate an API Token",
-					link: "/how-to/api-token",
-				},
-				{
-					text: "Allow IP addresses",
-					link: "/how-to/allow-ip-addresses",
-				},
-			],
-		},
+  "/": [
+    {
+      text: "General",
+      items: [
+        {
+          text: "Why Zephyr Cloud",
+          link: "/general/why-zephyr-cloud",
+        },
+        {
+          text: "Get Started",
+          link: "/general/get-started",
+        },
+        {
+          text: "Create MF App",
+          link: "/general/create-mf-app",
+        },
+        {
+          text: "FAQ",
+          link: "/general/question",
+        },
+      ],
+    },
+    {
+      text: "How to",
+      items: [
+        {
+          text: "Micro-Frontends with Zephyr",
+          link: "/how-to/mf-guide",
+        },
+        {
+          text: "Fork Our Examples",
+          link: "/how-to/fork-our-examples",
+        },
+        {
+          text: "Environments",
+          link: "/how-to/environments",
+        },
+        {
+          text: "GitHub automations",
+          link: "/how-to/github-automations",
+        },
+        {
+          text: "End-to-end Testing",
+          link: "/how-to/end-to-end-testing",
+        },
+        {
+          text: "Chrome Extension",
+          link: "/how-to/browser-extension",
+        },
+        {
+          text: "Version rollback and roll-forward",
+          link: "/how-to/versioning-tags",
+        },
+        {
+          text: "Generate an API Token",
+          link: "/how-to/api-token",
+        },
+        {
+          text: "Allow IP addresses",
+          link: "/how-to/allow-ip-addresses",
+        },
+      ],
+    },
 
 		{
 			text: "Cloud Providers",
@@ -214,109 +214,109 @@ const sidebar: Sidebar = {
 			],
 		},
 
-		{
-			text: "Supported Bundlers & Platforms",
-			link: "/supported",
-		},
-		{
-			text: "Trouble Shooting",
-			link: "/errors",
-			collapsed: true,
-			collapsible: true,
-			items: Object.entries(Categories)
-				.filter(([category]) => category !== "unknown")
-				.map(([category, value]) => ({
-					text: capitalizeFirstLetter(category),
-					collapsed: true,
-					collapsible: true,
-					items: Object.values(Errors)
-						.filter((error) => error.kind === category)
-						.map((error) => ({
-							text: `ZE${value}${error.id}`,
-							link: `/errors/ze${value}${error.id}`,
-							description: error.message,
-							label: error.message,
-						})),
-				})),
-		},
-	],
-	"/learning": [
-		{
-			text: "Concepts",
-			collapsed: false,
-			collapsible: true,
-			items: [
-				{
-					text: "Terminologies",
-					link: "/learning/concepts/terminologies",
-				},
-				{
-					text: "Architecture",
-					link: "/learning/concepts/architecture",
-				},
+    {
+      text: "Supported Bundlers & Platforms",
+      link: "/supported",
+    },
+    {
+      text: "Trouble Shooting",
+      link: "/errors",
+      collapsed: true,
+      collapsible: true,
+      items: Object.entries(Categories)
+        .filter(([category]) => category !== "unknown")
+        .map(([category, value]) => ({
+          text: capitalizeFirstLetter(category),
+          collapsed: true,
+          collapsible: true,
+          items: Object.values(Errors)
+            .filter((error) => error.kind === category)
+            .map((error) => ({
+              text: `ZE${value}${error.id}`,
+              link: `/errors/ze${value}${error.id}`,
+              description: error.message,
+              label: error.message,
+            })),
+        })),
+    },
+  ],
+  "/learning": [
+    {
+      text: "Concepts",
+      collapsed: false,
+      collapsible: true,
+      items: [
+        {
+          text: "Terminologies",
+          link: "/learning/concepts/terminologies",
+        },
+        {
+          text: "Architecture",
+          link: "/learning/concepts/architecture",
+        },
 
-				{
-					text: "Micro-Frontend",
-					link: "/learning/concepts/micro-frontend",
-				},
-				{
-					text: "Module Federation",
-					link: "/learning/concepts/module-federation",
-				},
-			],
-		},
+        {
+          text: "Micro-Frontend",
+          link: "/learning/concepts/micro-frontend",
+        },
+        {
+          text: "Module Federation",
+          link: "/learning/concepts/module-federation",
+        },
+      ],
+    },
 
-		{
-			text: "Walk-through",
-			collapsed: true,
-			collapsible: true,
-			items: [
-				{
-					text: "Learn webpack with React",
-					link: "/learning/react-webpack",
-				},
-			],
-		},
-		{
-			text: "Additional Resources",
-			link: "/learning/resources",
-		},
-	],
+    {
+      text: "Walk-through",
+      collapsed: true,
+      collapsible: true,
+      items: [
+        {
+          text: "Learn webpack with React",
+          link: "/learning/react-webpack",
+        },
+      ],
+    },
+    {
+      text: "Additional Resources",
+      link: "/learning/resources",
+    },
+  ],
 };
 
 export default defineConfig({
-	root: path.join(__dirname, "docs"),
-	title: "Zephyr Cloud Docs",
-	description: "Documentation for Zephyr Cloud",
-	icon: "/favicon.ico",
-	lang: "en-US",
-	ssg: false,
-	globalStyles: path.join(__dirname, "styles/index.css"),
-	mediumZoom: { selector: ".rspress-doc img" },
+  root: path.join(__dirname, "docs"),
+  title: "Zephyr Cloud Docs",
+  description: "Documentation for Zephyr Cloud",
+  icon: "/favicon.ico",
+  lang: "en-US",
+  ssg: false,
+  globalStyles: path.join(__dirname, "styles/index.css"),
+  mediumZoom: { selector: ".rspress-doc img" },
 
 	logo: {
 		light: "/light-bg-icon.png",
 		dark: "/dark-bg-icon.png",
 	},
 
-	themeConfig: {
-		darkMode: true,
-		enableContentAnimation: true,
-		enableScrollToTop: true,
-		lastUpdated: true,
-		nav,
-		sidebar,
-		socialLinks,
-		editLink: {
-			docRepoBaseUrl:
-				"https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/docs",
-			text: "Edit this page on GitHub",
-		},
-	},
+  themeConfig: {
+    darkMode: true,
+    enableContentAnimation: true,
+    enableScrollToTop: true,
+    lastUpdated: true,
+    nav,
+    sidebar,
+    socialLinks,
+    editLink: {
+      docRepoBaseUrl:
+        "https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/docs",
+      text: "Edit this page on GitHub",
+    },
+  },
 
-	route: {
-		cleanUrls: true,
-	},
+  route: {
+    cleanUrls: true,
+  },
 
 	builderConfig: {
 		plugins: [zephyrRsbuildPlugin()],
