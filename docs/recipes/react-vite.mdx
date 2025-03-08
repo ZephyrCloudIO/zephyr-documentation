@@ -6,18 +6,17 @@ import { SourceCode } from '@theme';
 
 <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/react-vite-ts" />
 
-In this React + Vite simple app, we will walk you from creating a simple react app
-with Vite till configure it with Zephyr plugin in `vite.config.ts`.
+This guide will show you how to create a simple React app using Vite for bundling, and how to configure it with the Zephyr plugin in `vite.config.ts`.
 
 :::info Prerequisites
 
-- We expect you to have finished our [Get Started](/general/get-started) guide.
-- Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
-- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
-- npm >=10
-- node >=20
+- Finished our [Get Started](/general/get-started) guide.
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn).
+- Registered an account on [Zephyr Cloud](https://app.zephyr-cloud.io).
+- Installed npm >=10.
+- Installed node >=20.
 
-If you don't have `nvm` to manage your node version yet, head to [the official nvm guide](https://github.com/nvm-sh/nvm) to install it.
+If you don't have `nvm` to manage your node versions yet, head to [the official nvm guide](https://github.com/nvm-sh/nvm) to install it.
 
 ```bash
 nvm use 20 
@@ -42,7 +41,7 @@ npm run dev
 
 ## Add Zephyr configuration
 
-You should see the website lives in localhost. Open the `vite.config.ts` in your editor and add below modification:
+You should see the website running on localhost. Open `vite.config.ts` in your editor and add the following modifications:
 
 ```ts filename="vite.config.ts"
 import { defineConfig } from 'vite';
@@ -64,13 +63,13 @@ export default defineConfig({
 
 :::
 
-With git config initialized, linked to remote origin and additional configuration, you are ready to deploy:
+With git config initialized, configured, and linked to remote origin, you are ready to deploy:
 
 ```bash filename="Terminal"
 npm run build
 ```
 
-You will see the build output like so and the highlighted lines include your deployed URL:
+You should see something similar to the following build output below. The highlighted lines include your deployed URL:
 
 ```bash {16-18}
 $ react-vite-ts@0.0.0 build
@@ -96,8 +95,8 @@ dist/assets/index-DVoHNO1Y.js   143.36 kB │ gzip: 46.09 kB
 
 ## Chrome Extension
 
-On your browser, click on <ChromeExtension/>, you can see your application is under the dropdown menu:
+On your browser, click on <ChromeExtension/> to see your application under the dropdown menu:
 
 <Image src="/react-vite-ts-side-panel.png" />
 
-You can access this application as well as all the underlying versions anytime whenver you click on Zephyr Cloud chrome extension.
+You can access this application as well as all the previous versions anytime you use on Zephyr Cloud Chrome extension! 
