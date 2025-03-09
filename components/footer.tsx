@@ -32,7 +32,7 @@ const footerConfig = {
 export const Footer = () => {
   const array = Object.values(footerConfig);
   return (
-    <div id="footer-copyright">
+    <footer id="footer-copyright">
       <div className="flex gap-4">
         {array.slice(0, 3).map((item) => (
           <p>
@@ -54,6 +54,6 @@ export const Footer = () => {
       <p className="mt-3">
         © {new Date().getFullYear()} <b>Zephyr Cloud</b>. All rights reserved.
       </p>
-    </div>
+    </footer>
   );
 };
