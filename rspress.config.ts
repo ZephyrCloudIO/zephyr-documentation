@@ -364,12 +364,16 @@ export default defineConfig({
         }
 
         const searchIndexData = JSON.stringify(rows);
-        const files = fs.readdirSync(path.join(__dirname, "doc_build/static"));
-        for (const file of files) {
-          const match = file.match(/search_index\.en-US\.([a-z0-9]+)\.json/);
-          if (match) {
-            searchIndexHelper.setHash(match[1]);
-            break;
+        const staticDir = path.join(__dirname, "doc_build/static");
+
+        if (fs.existsSync(staticDir)) {
+          const files = fs.readdirSync(staticDir);
+          for (const file of files) {
+            const match = file.match(/search_index\.en-US\.([a-z0-9]+)\.json/);
+            if (match) {
+              searchIndexHelper.setHash(match[1]);
+              break;
+            }
           }
         }
 
