@@ -4,6 +4,7 @@ description: Zephyr Cloud Documentation - Creating a module federation app in Nx
 ---
 
 import { SourceCode } from '@theme';
+import BuildAuthInfo from "../../components/build-auth-info.mdx";
 
 # React + Webpack + Nx
 
@@ -332,6 +333,8 @@ To build the shell application, execute the following command, which uses watch 
 ```bash filename="Terminal"
 npx nx build shell -- --watch
 ```
+
+<BuildAuthInfo />
 
 :::info
 Ensure you have created `package.json` files in each project directory as outlined earlier. Failure to do so may result in errors like the ones below, indicating unresolved remote entry points:
