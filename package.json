@@ -1,6 +1,6 @@
 {
   "name": "zephyr-cloud-docs",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "repository": {
     "type": "git",
@@ -71,6 +71,9 @@
     "patchedDependencies": {
       "rspress-plugin-google-analytics@0.3.0": "patches/rspress-plugin-google-analytics@0.3.0.patch"
     },
-    "onlyBuiltDependencies": ["@swc/core", "nx"]
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "nx"
+    ]
   }
 }
