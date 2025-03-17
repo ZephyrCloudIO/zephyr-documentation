@@ -10,7 +10,7 @@
     "build": "rspress build",
     "build:ci": "node scripts/build-ci.js",
     "dev": "rspress dev --port 3030",
-    "create-release": "nx release --skip-publish --first-release",
+    "create-release": "nx release --skip-publish",
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "prepare": "husky",

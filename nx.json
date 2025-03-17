@@ -10,7 +10,12 @@
   "nxCloudAccessToken": "Nzk0Y2MxMzYtY2I5Yy00NDkwLWE3MGEtMmYwZmQ4OGIxMWUyfHJlYWQtd3JpdGU=",
   "release": {
     "version": {
-      "conventionalCommits": true
+      "conventionalCommits": true,
+      "git": {
+        "commit": false,
+        "stageChanges": false,
+        "tag": false
+      }
     },
     "projects": ["*"],
     "changelog": {
@@ -22,6 +27,11 @@
           "commitReferences": true,
           "versionTitleDate": true
         }
+      },
+      "git": {
+        "commit": false,
+        "stageChanges": false,
+        "tag": false
       }
     }
   },
