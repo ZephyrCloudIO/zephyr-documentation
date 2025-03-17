@@ -24,8 +24,8 @@ const item = {
 
 export const CustomDomain = () => {
   return (
-    <div>
+    <>
       <Card item={item} />
-    </div>
+    </>
   );
 };

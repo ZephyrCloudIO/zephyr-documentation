@@ -49,7 +49,7 @@ If the dependencies are specified in the host app (or a mini application running
 
 The same rule applies to all dependencies that include native code. For example, if any mini-app uses a library with native code (such as `react-native-reanimated` or `react-native-mmkv`), it should be added as a singleton and eager-shared dependency in the host app, and as a singleton dependency in the mini-app that uses it.
 
-For shared JavaScript-only dependencies, it’s not necessary to mark them as shared, as Re.Pack can handle downloading them from the mini-app. However, for better network efficiency, it is recommended to include them as shared dependencies.
+For shared JavaScript-only dependencies, it's not necessary to mark them as shared, as Re.Pack can handle downloading them from the mini-app. However, for better network efficiency, it is recommended to include them as shared dependencies.
 
 All this effort requires significant maintenance of the dependencies list in `rspack`/`webpack` and `package.json` for each application. This process can be simplified by using Microsoft’s `rnx-align-deps` library with a custom preset and helper functions to generate the shared dependencies list. 
 

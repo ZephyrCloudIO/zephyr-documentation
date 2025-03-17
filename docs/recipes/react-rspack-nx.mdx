@@ -3,13 +3,14 @@ title: React + Rspack + Nx
 description: Zephyr Cloud Documentation - Get started guide
 ---
 
-import SupportedBrowser from "../../components/browser-table"
+import SupportedBrowser from "../../components/browser-table";
 import { DrawingPinIcon } from '@radix-ui/react-icons';
-import { Image } from "../../components/ui/image"
-import { Keyboard } from "../../components/ui/keyboard"
+import { Image } from "../../components/ui/image";
+import { Keyboard } from "../../components/ui/keyboard";
 import { SourceCode } from '@theme';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { Card } from "../../components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
+import { Card } from "../../components/ui/card";
+import BuildAuthInfo from "../../components/build-auth-info.mdx";
 
 # React + Rspack + Nx
 
@@ -178,6 +179,9 @@ nx run remote1:build
 ```bash Title=Terminal
 nx run remote2:build
 ```
+
+<BuildAuthInfo />
+
 Now you can serve the host application to check if everything is working properly, which through nx magic will start the two remotes. 
 
 ```bash Title=Terminal

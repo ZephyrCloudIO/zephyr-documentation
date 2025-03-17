@@ -1,6 +1,7 @@
 import { ChromeExtension } from '../../components/extension';
 import { Image } from '../../components/ui/image';
 import { SourceCode } from '@theme';
+import BuildAuthInfo from '../../components/build-auth-info.mdx';
 
 # React + Vite
 
@@ -69,7 +70,11 @@ With git config initialized, configured, and linked to remote origin, you are re
 npm run build
 ```
 
+
 You should see something similar to the following build output below. The highlighted lines include your deployed URL:
+
+<BuildAuthInfo />
+
 
 ```bash {16-18}
 $ react-vite-ts@0.0.0 build
