@@ -10,7 +10,6 @@
     "build": "rspress build",
     "build:ci": "node scripts/build-ci.js",
     "dev": "rspress dev --port 3030",
-    "generate:plan": "nx release plan",
     "create-release": "nx release --skip-publish",
     "lint": "biome check",
     "lint:fix": "biome check --fix",
