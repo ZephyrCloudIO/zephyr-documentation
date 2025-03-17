@@ -1,0 +1,87 @@
+## Bootstrapping Your React Native Application
+
+Out of the box a React Native application loads the application bundle and executes it _synchronously_. This is fine for pre-packaged applications because the bundle is already built and deployed with the application.
+
+With Module Federation, the application is also asynchrnously loading external modules that were not included at build time. This leaves us with two options:
+
+1. **Load federated modules asynchronously** - This is the default behavior of Module Federation. But it requires the application code to handle the asynchronous loading of the modules which can lead to complex code.
+2. **Boostrap the application to allow for synchronous loading of federated modules** - This requires a different method of starting up the application so that the the module federation runtime can be initialized and all of the federated modules can be loaded _before_ the application code is executed.
+
+If you don't boostrap your application then your code for importing and running a component would look like this:
+
+```tsx
+const MyComponent = React.lazy(() => import("my-remote/MyComponent"));
+
+function App() {
+  return (
+    <Suspense fallback={<Text>Loading...</Text>}>
+      <MyComponent />
+    </Suspense>
+  );
+}
+```
+
+If you bootstrap your application so that the application is given time to load the federated modules before executing the application code then you can import the federated modules synchronously, like this:
+
+```tsx
+import MyComponent from "my-remote/MyComponent";
+
+function App() {
+  return <MyComponent />;
+}
+```
+
+### Setting Up The Bootstrap
+
+Add a file named `bootstrap.js` to the root of your application with the following code.
+
+```ts
+import { Script, ScriptManager } from "@callstack/repack/client";
+import React from "react";
+
+// tell repack how to deal with the async app chunk
+// in dev mode we will obtain it from the dev server
+// in production we will load the chunk from the filesystem
+// since it will be packaged into the app's assets
+ScriptManager.shared.addResolver((scriptId) => {
+  if (scriptId !== "async-app") return;
+  return {
+    url: __DEV__
+      ? Script.getDevServerURL(scriptId)
+      : Script.getFileSystemURL(scriptId),
+  };
+});
+
+// make the App component lazy
+const App = React.lazy(
+  () => import(/* webpackChunkName: "async-app" */ "./App")
+);
+
+// create a bootstrap component that will be used to render the App
+// it wraps the lazy App component in a Suspense component
+const Bootstrap = () => {
+  return React.createElement(React.Suspense, {}, React.createElement(App));
+};
+
+export default Bootstrap;
+```
+
+This code assumes that your root `App` component is defined in a file named `App`. You'll need to adjust the import to match the name of your root component.
+
+What this code does is create a Suspense boundary around the root `App` component. This lazy loading allows the Module Federation runtime time to load the application bundle and all of the federated modules before the application code is executed.
+
+### Updating The Entry Point
+
+Update your entry point file (e.g. `index.js`) to use the `Bootstrap` component.
+
+```ts
+import { AppRegistry } from "react-native";
+import { name as appName } from "./app.json";
+import Bootstrap from "./bootstrap";
+
+AppRegistry.registerComponent(appName, () => Bootstrap);
+```
+
+### Video Walkthrough
+
+[Video Walkthrough of Bootstrapping a React Native Application](https://vimeo.com/1066654791/e10e9d70e0)
