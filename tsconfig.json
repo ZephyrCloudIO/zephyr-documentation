@@ -9,13 +9,8 @@
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
-  "include": [
-    "**/*.tsx",
-    "**/*.ts"
-  ]
+  "include": ["**/*.tsx", "**/*.ts"]
 }

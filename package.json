@@ -71,9 +71,6 @@
     "patchedDependencies": {
       "rspress-plugin-google-analytics@0.3.0": "patches/rspress-plugin-google-analytics@0.3.0.patch"
     },
-    "onlyBuiltDependencies": [
-      "@swc/core",
-      "nx"
-    ]
+    "onlyBuiltDependencies": ["@swc/core", "nx"]
   }
 }
