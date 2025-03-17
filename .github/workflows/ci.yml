@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 22
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
       # Install dependencies
       - uses: pnpm/action-setup@v4
         with:
-          version: 9.15.1
+          version: 10.6.3
           run_install: false
       - name: Install dependencies
         run: pnpm i
@@ -48,3 +48,9 @@ jobs:
           application_uid: zephyr-cloud-docs.zephyr-documentation.zephyrcloudio # Required
       - name: Zephyr deploy summary
         run: echo "Deployed to ${{ steps.zephyr.outputs.version_url }}"
+
+      # Publish the release
+      - name: Publishing Release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: pnpm run create-release

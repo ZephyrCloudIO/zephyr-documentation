@@ -133,9 +133,9 @@ const sidebar: Sidebar = {
           link: "/how-to/api-token",
         },
         {
-					text: "Version Statuses",
-					link: "/how-to/version-statuses",
-				},
+          text: "Version Statuses",
+          link: "/how-to/version-statuses",
+        },
         {
           text: "Allow IP addresses",
           link: "/how-to/allow-ip-addresses",
