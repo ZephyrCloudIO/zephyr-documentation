@@ -14,13 +14,6 @@
     },
     "projects": ["*"],
     "changelog": {
-      "projectChangelogs": {
-        "renderOptions": {
-          "authors": true,
-          "commitReferences": true,
-          "versionTitleDate": true
-        }
-      },
       "workspaceChangelog": {
         "createRelease": "github",
         "file": false,
