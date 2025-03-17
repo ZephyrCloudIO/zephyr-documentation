@@ -13,7 +13,6 @@
       "conventionalCommits": true
     },
     "projects": ["*"],
-    "versionPlans": true,
     "changelog": {
       "projectChangelogs": {
         "renderOptions": {
