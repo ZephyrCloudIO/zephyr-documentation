@@ -10,7 +10,8 @@
   "nxCloudAccessToken": "Nzk0Y2MxMzYtY2I5Yy00NDkwLWE3MGEtMmYwZmQ4OGIxMWUyfHJlYWQtd3JpdGU=",
   "release": {
     "version": {
-      "conventionalCommits": true
+      "conventionalCommits": true,
+      "preVersionCommand": "pnpm run lint:fix"
     },
     "projects": ["*"],
     "changelog": {
