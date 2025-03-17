@@ -4,13 +4,14 @@ description: Zephyr Cloud Documentation - How to add Zephyr to existing applicat
 ---
 
 
-import {Tabs, Tab} from '@theme';
+import { Tabs, Tab } from '@theme';
+import BuildAuthInfo from '../../components/build-auth-info.mdx';
 
 # Add Zephyr to existing application 
 
 :::info Prerequisites
 
-- We expect you to have finish our [Get Started](/general/get-started) guide.
+- We expect you to have finished our [Get Started](/general/get-started) guide.
 - Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
 - A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
 - npm >=10
@@ -32,16 +33,16 @@ If you already have an application and wish to enhance it with Zephyr Cloud, we 
 
 Install the package via NPM:
 <Tabs values={[{label:"Rspack"}, {label: 'webpack'}]}>
- <Tab>
-```bash filename="Terminal"
-npm i zephyr-webpack-plugin@latest --save
-```
-</Tab>
-<Tab>
-```bash filename="Terminal"
-npm i zephyr-webpack-plugin@latest --save
-```
-</Tab>
+  <Tab>
+  ```bash filename="Terminal"
+  npm i zephyr-rspack-plugin@latest --save
+  ```
+  </Tab>
+  <Tab>
+  ```bash filename="Terminal"
+  npm i zephyr-webpack-plugin@latest --save
+  ```
+  </Tab>
 </Tabs>
 
 ### 2. Setting Up
@@ -83,7 +84,9 @@ Wrap your existing configuration settings with the necessary modifications.
 
 ### Building the Application
 
-Initiate the build process for your application to activate Zephyr. This action will automatically launch your default browser and prompt you for login credentials.
+Initiate the build process for your application to activate Zephyr.  
+
+<BuildAuthInfo />
 
 Once logged in, you can begin developing with Zephyr.
 

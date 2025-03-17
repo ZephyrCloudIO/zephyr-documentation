@@ -1,0 +1,176 @@
+import { ChromeExtension } from '../../components/extension';
+import { Image } from '../../components/ui/image';
+import { SourceCode, Tabs, Tab } from '@theme';
+import BuildAuthInfo from "../../components/build-auth-info.mdx";
+
+# Parcel with Zephyr
+
+<SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/parcel-app" />
+
+In this guide, we'll walk through creating a Parcel application and configuring it to deploy with Zephyr.
+
+:::info Prerequisites
+- We expect you to have finished our [Get Started](/general/get-started) guide.
+- Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
+- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
+
+If you don't have `nvm` to manage your node version yet, head to [the official nvm guide](https://github.com/nvm-sh/nvm) to install it.
+```bash
+nvm use 20 
+```
+:::
+
+## Creating a New Project
+
+The easiest way to get started is using the `create-zephyr-apps` CLI:
+
+<Tabs values={[{label:"npm"}, {label: 'yarn'}, {label: 'pnpm'}]}>
+<Tab>
+```bash filename="Terminal"
+npx create-zephyr-apps@latest
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+yarn create zephyr-apps
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+pnpm create zephyr-apps
+```
+</Tab>
+</Tabs>
+
+Follow the CLI prompts and select Parcel as your bundler. This will create a new project with all the necessary dependencies and configuration.
+
+## Manually
+
+<Tabs values={[{label:"npm"}, {label: 'yarn'}, {label: 'pnpm'}]}>
+<Tab>
+```bash filename="Terminal"
+mkdir my-parcel-app
+cd my-parcel-app
+npm init -y
+npm install parcel parcel-reporter-zephyr@latest react react-dom @types/react @types/react-dom typescript
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+mkdir my-parcel-app
+cd my-parcel-app
+yarn init -y
+yarn add parcel parcel-reporter-zephyr@latest react react-dom @types/react @types/react-dom typescript
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+mkdir my-parcel-app
+cd my-parcel-app
+pnpm init
+pnpm add parcel parcel-reporter-zephyr@latest react react-dom @types/react @types/react-dom typescript
+```
+</Tab>
+</Tabs>
+
+## Configure Zephyr with Parcel
+
+Create a `.parcelrc` file in your project root with the following configuration:
+
+```json filename=".parcelrc"
+{
+  "extends": "@parcel/config-default",
+  "reporters": [
+    // ... other reporters,
+    "parcel-reporter-zephyr"
+  ]
+}
+```
+
+Create a basic project structure:
+
+```tsx filename="src/index.html"
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Parcel App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  </body>
+</html>
+```
+
+```tsx filename="src/index.tsx"
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  const root = createRoot(rootElement);
+  root.render(<App />);
+}
+```
+
+```tsx filename="src/App.tsx"
+import React from 'react';
+
+export default function App() {
+  return (
+    <div>
+      <h1>Hello from Parcel + Zephyr!</h1>
+      <p>Edit src/App.tsx to get started</p>
+    </div>
+  );
+}
+```
+
+## Deploy your application
+
+:::warning
+**Remember to initialize a git repository in current folder**, and **adding a git remote** before attempting to deploy your app:
+```bash
+git init
+git remote add origin <REMOTE_URL>
+git add .
+git commit -m "Initial commit"
+```
+:::
+
+With git initialized and configured, you can now build and deploy your application:
+
+<Tabs values={[{label:"npm"}, {label: 'yarn'}, {label: 'pnpm'}]}>
+<Tab>
+```bash filename="Terminal"
+npm run build
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+yarn build
+```
+</Tab>
+<Tab>
+```bash filename="Terminal"
+pnpm build
+```
+</Tab>
+</Tabs>
+
+<BuildAuthInfo />
+
+You will see the build output with your deployed URL highlighted in the console output.
+
+:::info
+Make sure to add a build script to your package.json:
+```json
+{
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html"
+  }
+}
+```
+:::

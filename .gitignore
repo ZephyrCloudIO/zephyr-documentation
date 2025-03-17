@@ -35,3 +35,5 @@ doc_build
 
 yarn.lock
 package-lock.yaml
+
+temp-search-index.json

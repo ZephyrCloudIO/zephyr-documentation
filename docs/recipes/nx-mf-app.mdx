@@ -4,6 +4,7 @@ description: Zephyr Cloud Documentation - Creating a module federation app in Nx
 ---
 
 import { SourceCode } from '@theme';
+import BuildAuthInfo from "../../components/build-auth-info.mdx";
 
 # React + Webpack + Nx
 
@@ -13,7 +14,7 @@ Special thanks to [Colum](https://x.com/FerryColum) at Nx for his feedback on us
 
 :::info Prerequisites
 
-- We expect you to have finish our [Get Started](/general/get-started) guide.
+- We expect you to have finished our [Get Started](/general/get-started) guide.
 - Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
 - A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
 - npm >=10
@@ -174,24 +175,24 @@ To accommodate Zephyr Cloud support, we need to make certain modifications to th
 
 Zephyr Cloud requires a `package.json` file in each application to resolve names. Create a `package.json` for each application, specifying a unique name for each:
 
-```bash filename="myorg/apps/shell/package.json"
+```json filename="myorg/apps/shell/package.json"
 {
-"name": "shell", 
-"version": "0.0.1"
+  "name": "shell", 
+  "version": "0.0.1"
 }
 ```
 
-```bash filename="myorg/apps/remote1/package.json"
+```json filename="myorg/apps/remote1/package.json"
 {
-"name": "remote1", 
-"version": "0.0.1",
+  "name": "remote1", 
+  "version": "0.0.1"
 }
 ```
 
-```bash filename="myorg/apps/remote2/package.json"
+```json filename="myorg/apps/remote2/package.json"
 {
-"name": "remote2", 
-"version": "0.0.1"
+  "name": "remote2", 
+  "version": "0.0.1"
 }
 ```
 
@@ -332,6 +333,8 @@ To build the shell application, execute the following command, which uses watch 
 ```bash filename="Terminal"
 npx nx build shell -- --watch
 ```
+
+<BuildAuthInfo />
 
 :::info
 Ensure you have created `package.json` files in each project directory as outlined earlier. Failure to do so may result in errors like the ones below, indicating unresolved remote entry points:
@@ -505,4 +508,3 @@ webpack compiled successfully (ba7bd784fa780a37)
 
 Now that the initial setup is complete, you can proceed to add remote modules and start developing your federated application as planned.
 
-[//]: # 'Colum has a fantastic [video]() '

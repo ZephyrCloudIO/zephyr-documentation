@@ -44,12 +44,12 @@ After signing in, select your organization.
 
 Before proceeding, you will need two details and one DNS configuration from Cloudflare:
 
-**1. Zone ID**
+#### 1. Zone ID
 
 - On your domain’s **Overview** tab, scroll down to the **API** section on the right sidebar.
 - Find the **Zone ID** in this section.
 
-**2. API Token**
+#### 2. API Token
 
 - Near Zone ID and Account ID, _right-click_ on **Get your API token** to _open it in a new tab_.
 - Scroll to the bottom and select **Create Custom Token** by clicking on "Get started."
@@ -63,12 +63,12 @@ Before proceeding, you will need two details and one DNS configuration from Clou
 | Account  | Cloudflare Pages  |    Edit    |
 | Zone     |   Worker Routes   |    Edit    |
 
-- **Zone Resources**: When prompted, include a **Specific zone** under your **domain**.
+#### 3. Zone Resources: When prompted, include a Specific zone under your domain
 
 - Leave other configurations (e.g., Account resources, Client IP Address Filtering) as defaults.
 - Scroll to the bottom and select **Continue to summary** to review your configurations, then **Create Token**. The token will display on the next page.
 
-**3. Configure Your DNS Record**
+#### 4. Configure Your DNS Record
 
 - Return to your domain’s home page (the **Overview** page should still be open) and click on **DNS** on the left sidebar.
 - Click **Add record** on the _Records_ page and enter the following details:
@@ -107,7 +107,8 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 <dt>Cloudflare Project Name</dt>
 <dd>
   This operation is idempotent and will create a [Cloudflare Pages
-  project](https://developers.cloudflare.com/pages). This field will become the name of your Cloudflare Pages project.
+  project](https://developers.cloudflare.com/pages). This field will become the
+  name of your Cloudflare Pages project.
 </dd>
 
 <dt>Set Integration as Default</dt>
@@ -119,19 +120,21 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 <br />
 <br />
 
-### Testing It
+</Steps>
 
-Visit our [recipes](/recipes) to test an application. Your next deployment should use your designated domain! (If not, [contact us](https://zephyr-cloud.io/discord)).
+### Testing Cloudflare Integration
+
+Visit our [recipes](/recipes) to test an application. Your next deployment should use your designated domain! (If not, [talk to us on Discord](https://zephyr-cloud.io/discord)).
 
 When using our managed cloud (Cloudflare) or custom Cloudflare integration, avoid including capital letters in names for `package.json`, module federation configuration, or assets to prevent issues with Cloudflare queries.
 
-</Steps>
+## Troubleshooting
 
 ### What Will Be Created on Your Cloudflare Account?
 
 When Cloudflare is added as your provider on Zephyr, these properties will be created on your Cloudflare account:
 
-1. **KV Namespaces**
+#### 1. KV Namespaces
 
 Three namespaces will be added:
 
@@ -139,14 +142,22 @@ Three namespaces will be added:
 - ze_files
 - ze_env
 
-2. **Workers**
+#### 2. Workers
 
 - `ze-worker-for-static-upload` (for uploading and serving assets)
 
-3. **Worker Routes**
+#### 3. Worker Routes
 
 - `ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
 - `*-ze.<domain.com>/*` on worker `ze-worker-for-static-upload`
+
+#### 4. DNS Records
+
+A CNAME record will be added to your domain with the following details:
+
+| Type  | Name |       Content        | Proxy Status | TTL  |
+| :---: | :--: | :------------------: | :----------: | :--: |
+| CNAME | `*`  | `ze.zephyrcloud.app` |  ✔ Proxied   | Auto |
 
 ### Deployment and Inspecting Assets
 

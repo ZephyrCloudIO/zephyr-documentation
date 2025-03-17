@@ -4,6 +4,9 @@ on:
   pull_request:
     types: [closed]
 
+env:
+  NODE_VERSION: 20
+
 jobs:
   run-on-merge:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
@@ -16,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
 
       # Install dependencies
       - uses: pnpm/action-setup@v4
@@ -26,9 +29,17 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      # Run the build script (make sure "build" is defined in your package.json)
-      - name: Run build
+      # Run the CI build script to ensure search works
+      - name: Run CI build
         id: build
         env:
           ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
-        run: pnpm run build
+        run: pnpm run build:ci
+
+      - name: Zephyr deploy summary
+        uses: ZephyrCloudIO/deploy-summary-action@v1.3.0
+        id: zephyr-summary
+        with:
+          application_uid: zephyr-cloud-docs.zephyr-documentation.zephyrcloudio # Required
+      - name: Zephyr deploy summary
+        run: echo "Deployed to ${{ steps.zephyr.outputs.version_url }}"

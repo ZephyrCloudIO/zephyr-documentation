@@ -4,10 +4,11 @@ description: Zephyr Cloud Documentation - Creating a basic module federation app
 ---
 
 import { SourceCode } from '@theme';
-import { Tabs, TabsList, TabsTrigger, TabsContent} from "../../components/ui/tabs"
-import { PreCode } from "../../components/ui/pre"
-import { Code } from "../../components/ui/code"
-import {ZephyrInfo } from "../../components/zephyr/console-output"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
+import { PreCode } from "../../components/ui/pre";
+import { Code } from "../../components/ui/code";
+import { ZephyrInfo } from "../../components/zephyr/console-output";
+import BuildAuthInfo from "../../components/build-auth-info.mdx";
 
 # Create a module federation app
 <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/examples/create-mf-app-rspack" />
@@ -336,12 +337,7 @@ Zephyr operates as a side effect of the build process, allowing you to execute t
 npm run build --watch
 ```
 
-:::info
-The first time you initiate a build with Zephyr, it will prompt you to log in by directing you to the Zephyr website. This login is required only on your first build; subsequent builds will not require a login.
-
-We may require you to log in again if you removed your Zephyr configuration file `~/.zephyr` locally. 
-
-:::
+<BuildAuthInfo />
 
 ### Understanding Build Outputs
 
