@@ -22,6 +22,8 @@
         }
       },
       "workspaceChangelog": {
+        "createRelease": "github",
+        "file": false,
         "renderOptions": {
           "authors": true,
           "commitReferences": true,
