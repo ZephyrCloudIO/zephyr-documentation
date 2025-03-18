@@ -84,6 +84,12 @@ Before proceeding, you will need two details and one DNS configuration from Clou
 
 </details>
 
+#### 5. Configure advanced certificate (optional: required if you want to use domains like `*.ze.your.domain`)
+
+- Go to **SSL/TLS** page and view **Edge Certificates**
+- Click on Purchase ACM and complete buying
+- Order/configure advanced certificate and add `*.ze.your.domain` into Certificate Hostnames, so complete list should look like `your.domain *.your.domain *.ze.your.domain`
+
 ### Configuration Inputs
 
 Details for each input after clicking **Add Integration** under **Cloudflare**:
@@ -93,6 +99,9 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 
 <dt>Integration Display Name</dt>
 <dd>The name of the integration shown on the dashboard.</dd>
+
+<dt>Delimiter</dt>
+<dd>Choose the delimiter for application subdomains: `-` (your deploy URL will be `*-ze.your.domain`) or `.` (your deploy URL will be `*.ze.your.domain`) </dd>
 
 <dt>API Token</dt>
 <dd>
