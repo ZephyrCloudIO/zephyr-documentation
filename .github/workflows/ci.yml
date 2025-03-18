@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 22
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
       # Install dependencies
       - uses: pnpm/action-setup@v4
         with:
-          version: 9.15.1
+          version: 10.6.3
           run_install: false
       - name: Install dependencies
         run: pnpm i

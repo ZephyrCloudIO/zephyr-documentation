@@ -31,7 +31,7 @@ In the land of Micro-Frontend and how Zephyr deploy applications, we map each in
 - A registered Netlify account and a team with Pro plan (to enable custom domain)
 - A registered Zephyr account
 - A Netlify site project with custom domain. ([Read more about custom domain on Netlify and how to configure it](https://docs.netlify.com/domains-https/environmentss/), it can be a domain managed by Netlify or you will need to point your domain's name servers towards Netlify)
-- Wildcard subdomain enabled for your custom domain like `*.domain.com` - to ensure Zephyr's feature like **versioning**, **rollback/roll-forward** and more are available. ([You will **_need to_** contact Netlify Support for a wildcard domain](https://www.netlify.com/support/))
+- Wildcard subdomain enabled for your custom domain like `*.domain.com` (`*.ze.domain.com` if you plan using `.` delimiter) - to ensure Zephyr's feature like **versioning**, **rollback/roll-forward** and more are available. ([You will **_need to_** contact Netlify Support for a wildcard domain](https://www.netlify.com/support/))
 
 :::
 
@@ -49,7 +49,7 @@ Wildcard subdomains can be activated via [contacting Netlify support](https://ww
 4. The site cannot use Automatic Deploy Subdomains, so please disable this feature if you are currently using it. ✅
 5. The primary domain of the website should be on the same level as the required wildcard domain. 
 🚨 For example:
-If you need the wildcard to be `*.bundlercorp.com`⁣ where `*`⁣ can be your wildcard subdomain, the primary domain must be `www.bundlercorp.com⁣` (www⁣ can be replaced with any string).
+If you need the wildcard to be `*.bundlercorp.com` (`*.ze.bundlercorp.com` if you plan using `.` delimiter)⁣ where `*`⁣ can be your wildcard subdomain, the primary domain must be `www.bundlercorp.com (`www.ze.bundlercorp.com` if you plan using `.` delimiter)⁣` (www⁣ can be replaced with any string).
 6. You need to configure the DNS for the wildcard subdomain even in case you are using Netlify DNS. You can follow the external DNS configuration for subdomains and add a CNAME entry with `*⁣` as the hostname or any other value that you want. The value of this DNS entry should be the Netlify site address.
 
 [Read more about subdomain in Netlify's Documentation](https://docs.netlify.com/domains-https/environmentss/configure-external-dns/#configure-a-subdomain).
@@ -74,7 +74,14 @@ Below is an example of `bundlercorp.com`'s DNS settings:
 | :--: | :---: | :----: | :--: | 
 | NETLIFY | `bundlercorp.com` | `random-very-long-string.netlify.app` | 3600 | 
 | NETLIFY | `www.bundlercorp.com` | `random-very-long-string.netlify.app` | 3600 | 
-| CNAME | `*.bundlercorp.com` | `random-very-long-string.netlify.app` | 3600 | 
+| CNAME | `*.bundlercorp.com` | `random-very-long-string.netlify.app` | 3600 |
+
+or the following (if you plan using `.` delimiter)
+| Type | Name | Value | TTL |
+| :--: | :---: | :----: | :--: |
+| NETLIFY | `ze.bundlercorp.com` | `random-very-long-string.netlify.app` | 3600 |
+| NETLIFY | `www.ze.bundlercorp.com` | `random-very-long-string.netlify.app` | 3600 |
+| CNAME | `*.ze.bundlercorp.com` | `random-very-long-string.netlify.app` | 3600 |
 
 
 #### Example name servers 
@@ -115,7 +122,7 @@ If your domain has TLS/SSL certificate verified for both wildcard domain and pri
 <br/>
 
 ###### - Your site has HTTPS enabled ✅
-###### - Domains: `*.bundlercorp.com`, `bundlercorp.com` 
+###### - Domains: `*.bundlercorp.com`, `bundlercorp.com` (additionally `*.ze.bundlercorp.com` if you plan using `.` delimiter)
 <br/>
 </div>
 
@@ -172,6 +179,10 @@ A unique name within your organization. It will be used as a slug.
 <dd>
 The name of integration shown on dashboard.
 </dd>
+
+<dt>Delimiter</dt>
+<dd>Choose the delimiter for application subdomains: `-` (your deploy URL will be `*-ze.your.domain`) or `.` (your deploy URL will be `*.ze.your.domain`) </dd>
+
 <dt>API token</dt>
 <dd>
 Obtained from Netlify. The [instruction above](#how-to-get-credentials) should walk you through how to get your API token.
