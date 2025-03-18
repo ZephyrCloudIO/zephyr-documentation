@@ -1,0 +1,57 @@
+## Setting Up a React Native iOS Application with RSpack
+
+First we need to create an application using the React Native CLI.
+
+```bash
+npx @react-native-community/cli init myapp
+```
+
+This will create a new application using the default template.
+
+You will be prompted to install CocoaPods dependencies. You should do that.
+
+### Converting Metro to Rspack
+
+Metro doesn't support Module Federation. It's also slow. Rspack is a faster bundler that supports Module Federation.
+
+To convert the project to use Rspack, we can use the @callstack/repack-init package.
+
+```bash
+npx @callstack/repack-init
+```
+
+You can decide between using Rspack or Webpack. We recommend using Rspack for better performance.
+
+### Converting to pnpm
+
+We recommend using pnpm for your package manager. To convert simply remove the existing `package-lock.json` file and run `pnpm i`.
+
+### Updating The Bundle
+
+The repack init will add some bundles to the project. You need to run `bundle install` to install the additional dependencies.
+
+```bash
+bundle install
+```
+
+### Modifying The package.json Scripts
+
+There is an additional change that we recommend making to the `package.json` scripts. We recommend splitting up the building of the application from the bundling of the application.
+
+To do this we add the `--no-packager` flag to the `react-native run-ios` command. Like so:
+
+```json
+"scripts": {
+  "ios": "react-native run-ios --no-packager"
+}
+```
+
+This will compile the iOS application but not bundle the JavaScript code.
+
+You can start the bundler separately using `pnpm start`.
+
+### Video Walkthrough
+
+Here is a video walkthrough of the process:
+
+[Video Walkthrough of Configuring the Host Application](https://vimeo.com/1066654839/2fc573d3a0)

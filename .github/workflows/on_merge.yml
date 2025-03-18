@@ -2,14 +2,13 @@ name: Run on PR Merge
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened, synchronize, reopened, closed]
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 22
 
 jobs:
-  run-on-merge:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+  deploy-on-pr-changes:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,7 +23,7 @@ jobs:
       # Install dependencies
       - uses: pnpm/action-setup@v4
         with:
-          version: 9.15.1
+          version: 10.6.3
           run_install: false
       - name: Install dependencies
         run: pnpm i
@@ -41,5 +40,7 @@ jobs:
         id: zephyr-summary
         with:
           application_uid: zephyr-cloud-docs.zephyr-documentation.zephyrcloudio # Required
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_environment: zephyr-docs (Preview)
       - name: Zephyr deploy summary
         run: echo "Deployed to ${{ steps.zephyr.outputs.version_url }}"

@@ -1,0 +1,142 @@
+## Setting Up a React Native Remote Application
+
+Starting from our base RSpack setup, we need to make some modifications to support exporting modules as a remote.
+
+First, we need to stabilize the port number because we don't want it colliding with other running servers or services.
+
+### Stabilizing the port number
+
+That starts with setting the PORT number for the React Native application to talk to the bundler.
+
+To do that we add `RCT_METRO_PORT` to the `ios` script in the `package.json` file.
+
+```json
+"ios": "RTC_METRO_PORT=8081 react-native run-ios --no-packager",
+```
+
+This will compile the iOS application using the port number 8081. You can change this port number to any other number that is not being used by other services.
+
+Next we need to stabilize the port number for the bundler.
+
+To do that we add the `--port` flag to the `react-native start` command in the `package.json` file.
+
+```json
+"start": "react-native start --port 8081",
+```
+
+Now the application and the bundler will be fixed to the same port number.
+
+### Running The Application
+
+Now that the application is configured we can build and run it.
+
+```bash
+npm run ios
+```
+
+This will build the application and run it on the iOS simulator.
+
+Next we need to start the bundler:
+
+```bash
+npm start
+```
+
+This will start the bundler and the application will be able to connect to it.
+
+You will want to keep the bundler running while you are developing so that any changes you make to the code are reflected immediately.
+
+### Configuring The Remote For Module Federation
+
+Because we need to share dependencies between the host and the remotes, we need to bring the dependencies of the remote application into the RSpack confiugration file.
+
+To do this we add this line:
+
+```ts
+import pkg from './package.json' with { type: "json" };
+```
+
+To the top of the `rspack.config.mjs` file.
+
+Then we need to add the Module Federation Plugin to the plugins array.
+
+```ts
+  new Repack.plugins.ModuleFederationPluginV2({
+    name: '[app-name]',
+    filename: '[app-name].container.js.bundle',
+    exposes: {
+    },
+    shared: Object.fromEntries(
+      Object.entries(pkg.dependencies).map((dep, version) => {
+        return [
+          dep,
+          {singleton: true, eager: true, requiredVersion: version},
+        ];
+      }),
+    ),
+  }),
+```
+
+You'll need to replace `[app-name]` with the name of the application. You should also replace the `[app-name]` callout on the `filename` key with your application name.
+
+The code for the shared object will iterate through all of the dependencies in the `package.json` file and create a new object that has the version number as `requiredVersion` and `singleton` and `eager` set to `true`.
+
+`singleton` means that the dependency will be loaded only once and shared across the remotes.
+
+`eager` means that the dependency will be loaded when the host is loaded.
+
+`requiredVersion` is the version of the dependency that is required by this remote.
+
+### Exposing Modules
+
+Next well need to add all of the modules that we want to expose to host applications to the `exposes` object.
+
+Here is an example of how to expose a component named `CartList`:
+
+```ts
+exposes: {
+  CartList: './src/components/CartList',
+},
+```
+
+This will expose the `CartList` component to any host application.
+
+### Any Module Can Be Exposed
+
+Any module can be exposed. This includes components, hooks, utilities, and more.
+
+### Module Federation Enhanced
+
+The Module Federation Enhanced library is required for the runtime to work properly.
+
+To install it we run:
+
+```bash
+npm install @module-federation/enhanced
+```
+
+### Checking Your Work
+
+Once you have Module Federation configured you can make sure it is working by running `npm start` and then using curl to check for the container file.
+
+```bash
+curl http://localhost:8081/ios/Cart.container.js.bundle
+```
+
+If you see a large block of JavaScript, then you know that the remote is configured correctly.
+
+### Using the Federated Module
+
+Now that we have the remote application configured, we can use the federated module in a host application. For more information on how to use the federated module, please refer to the [Setting Up a React Native Host Application](./configuring host.md) documentation.
+
+### Applications Can Be Both Hosts and Remotes
+
+Applications can be both hosts and remotes. This allows you to create a truly federated architecture.
+
+To do this the application simply needs to also have a `remotes` object in the `ModuleFederationPluginV2` configuration. And then it can import modules from other remotes.
+
+### Video Walkthrough
+
+Here is a video walkthrough of the process:
+
+[Video Walkthrough of Configuring the Remote Application](https://vimeo.com/1066654820/ed68905633)
