@@ -60,178 +60,75 @@ At this stage, both of your HostApp and MiniApp's `rspack.config.js` files shoul
 <summary> Default build config <Badge variant="default">Info</Badge></summary>
 
 ```js title="rspack.config.js"
-import { createRequire } from 'node:module';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import * as Repack from '@callstack/repack';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const dirname = Repack.getDirname(import.meta.url);
-const { resolve } = createRequire(import.meta.url);
-
-/**
- * More documentation, installation, usage, motivation and differences with Metro is available at:
- * https://github.com/callstack/repack/blob/main/README.md
- *
- * The API documentation for the functions and plugins used in this file is available at:
- * https://re-pack.dev
- */
+const USE_ZEPHYR = Boolean(process.env.ZC);
 
 /**
- * Webpack configuration.
- * You can also export a static object or a function returning a Promise.
+ * Rspack configuration enhanced with Re.Pack defaults for React Native.
  *
- * @param env Environment options passed from either Webpack CLI or React Native Community CLI
- *            when running with `react-native start/bundle`.
+ * Learn about Rspack configuration: https://rspack.dev/config/
+ * Learn about Re.Pack configuration: https://re-pack.dev/docs/guides/configuration
  */
-export default (env) => {
-  const {
-    mode = 'development',
-    context = dirname,
-    entry = './index.js',
-    platform = process.env.PLATFORM,
-    minimize = mode === 'production',
-    devServer = undefined,
-    bundleFilename = undefined,
-    sourceMapFilename = undefined,
-    assetsPath = undefined,
-    reactNativePath = resolve('react-native'),
-  } = env;
 
-  if (!platform) {
-    throw new Error('Missing platform');
-  }
-
+export default env => {
+  const { platform, mode } = env
   return {
-    mode,
-    /**
-     * This should be always `false`, since the Source Map configuration is done
-     * by `SourceMapDevToolPlugin`.
-     */
-    devtool: false,
-    context,
-    entry,
-    resolve: {
-      /**
-       * `getResolveOptions` returns additional resolution configuration for React Native.
-       * If it's removed, you won't be able to use `<file>.<platform>.<ext>` (eg: `file.ios.js`)
-       * convention and some 3rd-party libraries that specify `react-native` field
-       * in their `package.json` might not work correctly.
-       */
-      ...Repack.getResolveOptions(platform),
-
-      /**
-       * Uncomment this to ensure all `react-native*` imports will resolve to the same React Native
-       * dependency. You might need it when using workspaces/monorepos or unconventional project
-       * structure. For simple/typical project you won't need it.
-       */
-      // alias: {
-      //   'react-native': reactNativePath,
-      // },
-    },
-    /**
-     * Configures output.
-     * It's recommended to leave it as it is unless you know what you're doing.
-     * By default Webpack will emit files into the directory specified under `path`. In order for the
-     * React Native app use them when bundling the `.ipa`/`.apk`, they need to be copied over with
-     * `Repack.OutputPlugin`, which is configured by default inside `Repack.RepackPlugin`.
-     */
-    output: {
-      clean: true,
-      hashFunction: 'xxhash64',
-      path: path.join(dirname, 'build/generated', platform),
-      filename: 'index.bundle',
-      chunkFilename: '[name].chunk.bundle',
-      publicPath: Repack.getPublicPath({ platform, devServer }),
-    },
-    /** Configures optimization of the built bundle. */
-    optimization: {
-      /** Enables minification based on values passed from React Native Community CLI or from fallback. */
-      minimize,
-      /** Configure minimizer to process the bundle. */
-      chunkIds: 'named',
-    },
-    module: {
-      rules: [
-        Repack.REACT_NATIVE_LOADING_RULES,
-        Repack.NODE_MODULES_LOADING_RULES,
-        Repack.FLOW_TYPED_MODULES_LOADING_RULES,
-        /** Here you can adjust loader that will process your files. */
-        {
-          test: /\.[jt]sx?$/,
-          exclude: [/node_modules/],
-          type: 'javascript/auto',
-          use: {
-            loader: 'builtin:swc-loader',
-            /** @type {import('@rspack/core').SwcLoaderOptions} */
-            options: {
-              env: {
-                targets: {
-                  'react-native': '0.74',
-                },
-              },
-              jsc: {
-                assumptions: {
-                  setPublicClassFields: true,
-                  privateFieldsAsProperties: true,
-                },
-                externalHelpers: true,
-                transform: {
-                  react: {
-                    runtime: 'automatic',
-                    development: mode === 'development',
-                    refresh: mode === 'development' && Boolean(devServer),
-                  },
-                },
-              },
-            },
-          },
-        },
-        /**
-         * This loader handles all static assets (images, video, audio and others), so that you can
-         * use (reference) them inside your application.
-         *
-         * If you want to handle specific asset type manually, filter out the extension
-         * from `ASSET_EXTENSIONS`, for example:
-         * ```
-         * Repack.ASSET_EXTENSIONS.filter((ext) => ext !== 'svg')
-         * ```
-         */
-        {
-          test: Repack.getAssetExtensionsRegExp(Repack.ASSET_EXTENSIONS),
-          use: {
-            loader: '@callstack/repack/assets-loader',
-            options: {
-              platform,
-              devServerEnabled: Boolean(devServer),
-            },
-          },
-        },
-      ],
-    },
-    plugins: [
-      /**
-       * Configure other required and additional plugins to make the bundle
-       * work in React Native and provide good development experience with
-       * sensible defaults.
-       *
-       * `Repack.RepackPlugin` provides some degree of customization, but if you
-       * need more control, you can replace `Repack.RepackPlugin` with plugins
-       * from `Repack.plugins`.
-       */
-      new Repack.RepackPlugin({
-        context,
-        mode,
-        platform,
-        devServer,
-        output: {
-          bundleFilename,
-          sourceMapFilename,
-          assetsPath,
-        },
-      }),
+    context: __dirname,
+    entry: './index.js',
+  resolve: {
+    // 1. Understand the file path of ios and android file extensions
+    // 2. Configure the output to be as close to Metro as possible
+    ...Repack.getResolveOptions(),
+  },
+  output: {
+    // Unsure - for module federation HMR and runtime? 
+    uniqueName: 'react-native-host-app',
+  },
+  module: {
+    rules: [
+      ...Repack.getJsTransformRules(),
+      ...Repack.getAssetTransformRules(),
     ],
-  };
-};
+  },
+  plugins: [
+    new Repack.RepackPlugin({
+      platform,
+    }),
+    new Repack.plugins.ModuleFederationPluginV2({
+      name: 'HostApp',
+      filename: 'HostApp.container.js.bundle',
+      dts: false,
+      remotes: {
+        MiniApp: `MiniApp@http://localhost:9001/${platform}/MiniApp.container.js.bundle`,
+      },
+      shared: {
+        react: {
+          singleton: true,
+          version: '19.0.0',
+          eager: true,
+        },
+        'react-native': {
+          singleton: true,
+          version: '0.78.0',
+          eager: true,
+        }
+      },
+    }),
+    // Supports for new architecture - Hermes can also use JS, it's not a requirement, it will still work the same but it's for performance optimization
+    new Repack.plugins.HermesBytecodePlugin({
+      enabled: mode === 'production',
+      test: /\.(js)?bundle$/,
+      exclude: /index.bundle$/,
+    }),
+  ],
 
+  }
+};
 ```
 
 </details>
@@ -242,930 +139,429 @@ export default (env) => {
 
 #### Build configuration 
 
-Open the `rspack.config.js` file and modify the `build` configuration to include the following: 
+Open the `rspack.config.js` file in `HostApp` and modify the `build` configuration to include the following: 
 
 
-```js title="HostApp/rspack.config.js"
-import {createRequire} from 'node:module';
+```js title="HostApp/rspack.config.js"{4,15,68}
 import path from 'node:path';
-import rspack from '@rspack/core';
+import {fileURLToPath} from 'node:url';
 import * as Repack from '@callstack/repack';
-import TerserPlugin from 'terser-webpack-plugin';
-import * as mobileSdk from '@zephyr-merch/mobile-sdk';
-import Dotenv from 'dotenv-webpack';
 import {withZephyr} from 'zephyr-repack-plugin';
-
-const dirname = Repack.getDirname(import.meta.url);
-const {resolve} = createRequire(import.meta.url);
-const {getSharedDependencies} = mobileSdk;
-const STANDALONE = Boolean(process.env.STANDALONE);
-const USE_ZEPHYR = Boolean(process.env.ZC);
-/**
- * More documentation, installation, usage, motivation and differences with Metro is available at:
- * https://github.com/callstack/repack/blob/main/README.md
- *
- * The API documentation for the functions and plugins used in this file is available at:
- * https://re-pack.dev
- */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
- * Webpack configuration.
- * You can also export a static object or a function returning a Promise.
+ * Rspack configuration enhanced with Re.Pack defaults for React Native.
  *
- * @param env Environment options passed from either Webpack CLI or React Native Community CLI
- *            when running with `react-native start/bundle`.
+ * Learn about Rspack configuration: https://rspack.dev/config/
+ * Learn about Re.Pack configuration: https://re-pack.dev/docs/guides/configuration
  */
-export default env => {
-  const {
-    mode = 'development',
-    context = dirname,
-    entry = './index.js',
-    platform = process.env.PLATFORM,
-    minimize = mode === 'production',
-    devServer = undefined,
-    bundleFilename = undefined,
-    sourceMapFilename = undefined,
-    assetsPath = undefined,
-    reactNativePath = resolve('react-native'),
-  } = env;
 
-  if (!platform) {
-    throw new Error('Missing platform');
-  }
-
-  /**
-   * Using Module Federation might require disabling hmr.
-   * Uncomment below to set `devServer.hmr` to `false`.
-   *
-   * Keep in mind that `devServer` object is not available
-   * when running `webpack-bundle` command. Be sure
-   * to check its value to avoid accessing undefined value,
-   * otherwise an error might occur.
-   */
-  // if (devServer) {
-  //   devServer.hmr = false;
-  // }
-
-  /**
-   * Depending on your Babel configuration you might want to keep it.
-   * If you don't use `env` in your Babel config, you can remove it.
-   *
-   * Keep in mind that if you remove it you should set `BABEL_ENV` or `NODE_ENV`
-   * to `development` or `production`. Otherwise your production code might be compiled with
-   * in development mode by Babel.
-   */
-  process.env.BABEL_ENV = mode;
-
-  const config = {
-    mode,
-    /**
-     * This should be always `false`, since the Source Map configuration is done
-     * by `SourceMapDevToolPlugin`.
-     */
-    devtool: false,
-    context,
-    // If this is a miniapp, Repack runtime only compile the MF part
-    // If this is the host only pass in the entry point
-    entry: entry,
-    resolve: {
-      /**
-       * `getResolveOptions` returns additional resolution configuration for React Native.
-       * If it's removed, you won't be able to use `<file>.<platform>.<ext>` (eg: `file.ios.js`)
-       * convention and some 3rd-party libraries that specify `react-native` field
-       * in their `package.json` might not work correctly.
-       */
-      ...Repack.getResolveOptions(platform),
-
-      /**
-       * Uncomment this to ensure all `react-native*` imports will resolve to the same React Native
-       * dependency. You might need it when using workspaces/monorepos or unconventional project
-       * structure. For simple/typical project you won't need it.
-       */
-      // alias: {
-      //   'react-native': reactNativePath,
-      // },
-    },
-    /**
-     * Configures output.
-     * It's recommended to leave it as it is unless you know what you're doing.
-     * By default Webpack will emit files into the directory specified under `path`. In order for the
-     * React Native app use them when bundling the `.ipa`/`.apk`, they need to be copied over with
-     * `Repack.OutputPlugin`, which is configured by default inside `Repack.RepackPlugin`.
-     */
-    output: {
-      clean: true,
-      hashFunction: 'xxhash64',
-      path: path.join(dirname, 'build/generated', platform),
-      filename: 'index.bundle',
-      chunkFilename: '[name].chunk.bundle',
-      publicPath: Repack.getPublicPath({platform, devServer}),
-      uniqueName: 'zephyr-merch-host',
-    },
-    /**
-     * Configures optimization of the built bundle.
-     */
-    optimization: {
-      /** Enables minification based on values passed from React Native Community CLI or from fallback. */
-      minimize,
-      // /** Configure minimizer to process the bundle. */
-      // minimizer: [
-      //   new TerserPlugin({
-      //     test: /\.(js)?bundle(\?.*)?$/i,
-      //     /**
-      //      * Prevents emitting text file with comments, licenses etc.
-      //      * If you want to gather in-file licenses, feel free to remove this line or configure it
-      //      * differently.
-      //      */
-      //     extractComments: false,
-      //     terserOptions: {
-      //       format: {
-      //         comments: false,
-      //       },
-      //     },
-      //   }),
-      // ],
-      chunkIds: 'named',
-    },
-    module: {
-      /**
-       * This rule will process all React Native related dependencies with Babel.
-       * If you have a 3rd-party dependency that you need to transpile, you can add it to the
-       * `include` list.
-       *
-       * You can also enable persistent caching with `cacheDirectory` - please refer to:
-       * https://github.com/babel/babel-loader#options
-       */
-      rules: [
-        Repack.REACT_NATIVE_LOADING_RULES,
-        Repack.NODE_MODULES_LOADING_RULES,
-        Repack.FLOW_TYPED_MODULES_LOADING_RULES,
-        // {
-        //   test: /\.[cm]?[jt]sx?$/,
-        //   include: [
-        //     /node_modules(.*[/\\])+react-native/,
-        //     /node_modules(.*[/\\])+@react-native/,
-        //     /node_modules(.*[/\\])+@react-navigation/,
-        //     /node_modules(.*[/\\])+@react-native-community/,
-        //     /node_modules(.*[/\\])+expo/,
-        //     /node_modules(.*[/\\])+pretty-format/,
-        //     /node_modules(.*[/\\])+metro/,
-        //     /node_modules(.*[/\\])+abort-controller/,
-        //     /node_modules(.*[/\\])+@callstack[/\\]repack/,
-        //   ],
-        //   use: 'babel-loader',
-        // },
-
-        /** Here you can adjust loader that will process your files. */
-        {
-          test: /\.[jt]sx?$/,
-          exclude: [/node_modules/],
-          type: 'javascript/auto',
-          use: {
-            loader: 'builtin:swc-loader',
-            /** @type {import('@rspack/core').SwcLoaderOptions} */
-            options: {
-              env: {
-                targets: {
-                  'react-native': '0.74',
-                },
-              },
-              jsc: {
-                externalHelpers: true,
-                transform: {
-                  react: {
-                    runtime: 'automatic',
-                    development: mode === 'development',
-                    refresh: mode === 'development' && Boolean(devServer),
-                  },
-                },
-              },
-            },
-          },
-        },
-        /** Run React Native codegen, required for utilizing new architecture */
-        Repack.REACT_NATIVE_CODEGEN_RULES,
-        /**
-         * Here you can adjust loader that will process your files.
-         *
-         * You can also enable persistent caching with `cacheDirectory` - please refer to:
-         * https://github.com/babel/babel-loader#options
-         */
-        {
-          test: /\.[jt]sx?$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              /** Add React Refresh transform only when HMR is enabled. */
-              plugins:
-                devServer && devServer.hmr
-                  ? ['module:react-refresh/babel']
-                  : undefined,
-            },
-          },
-        },
-        /** Additional rule to enable HMR for local workspace packages */
-        {
-          test: /\.[jt]sx?$/,
-          include: [/zephyr-merch/],
-          use: 'builtin:react-refresh-loader',
-        },
-        /**
-         * This loader handles all static assets (images, video, audio and others), so that you can
-         * use (reference) them inside your application.
-         *
-         * If you want to handle specific asset type manually, filter out the extension
-         * from `ASSET_EXTENSIONS`, for example:
-         * ```
-         * Repack.ASSET_EXTENSIONS.filter((ext) => ext !== 'svg')
-         * ```
-         */
-        {
-          test: Repack.getAssetExtensionsRegExp(Repack.ASSET_EXTENSIONS),
-          use: {
-            loader: '@callstack/repack/assets-loader',
-            options: {
-              platform,
-              devServerEnabled: Boolean(devServer),
-              /**
-               * Defines which assets are scalable - which assets can have
-               * scale suffixes: `@1x`, `@2x` and so on.
-               * By default all images are scalable.
-               */
-              scalableAssetExtensions: Repack.SCALABLE_ASSETS,
-            },
-          },
-        },
-      ],
-    },
-    plugins: [
-      new Dotenv(),
-      /**
-       * Configure other required and additional plugins to make the bundle
-       * work in React Native and provide good development experience with
-       * sensible defaults.
-       *
-       * `Repack.RepackPlugin` provides some degree of customization, but if you
-       * need more control, you can replace `Repack.RepackPlugin` with plugins
-       * from `Repack.plugins`.
-       */
-      new Repack.RepackPlugin({
-        context,
-        mode,
-        platform,
-        devServer,
-        output: {
-          bundleFilename,
-          sourceMapFilename,
-          assetsPath,
-        },
-      }),
-      // silence missing @react-native-masked-view optionally required by @react-navigation/elements
-      new rspack.IgnorePlugin({
-        resourceRegExp: /^@react-native-masked-view/,
-      }),
-      new Repack.plugins.ModuleFederationPluginV2({
-        name: 'HostApp',
-        filename: 'HostApp.container.js.bundle',
-        remotes: {
-          MiniApp: `MiniApp@http://localhost:9000/${platform}/MiniApp.container.js.bundle`,
-        },
-
-        shared: getSharedDependencies({eager: true}),
-      }),
+export default withZephyr()(env => {
+  const { platform, mode } = env
+  return {
+    context: __dirname,
+    entry: './index.js',
+  resolve: {
+    // 1. Understand the file path of ios and android file extensions
+    // 2. Configure the output to be as close to Metro as possible
+    ...Repack.getResolveOptions(),
+  },
+  output: {
+    // Unsure - for module federation HMR and runtime? 
+    uniqueName: 'react-native-host-app',
+  },
+  module: {
+    rules: [
+      ...Repack.getJsTransformRules(),
+      ...Repack.getAssetTransformRules(),
     ],
-  };
+  },
+  plugins: [
+    new Repack.RepackPlugin({
+      platform,
+    }),
+    new Repack.plugins.ModuleFederationPluginV2({
+      name: 'HostApp',
+      filename: 'HostApp.container.js.bundle',
+      dts: false,
+      remotes: {
+        MiniApp: `MiniApp@http://localhost:9001/${platform}/MiniApp.container.js.bundle`,
+      },
+      shared: {
+        react: {
+          singleton: true,
+          version: '19.0.0',
+          eager: true,
+        },
+        'react-native': {
+          singleton: true,
+          version: '0.78.0',
+          eager: true,
+        }
+      },
+    }),
+    // Supports for new architecture - Hermes can also use JS, it's not a requirement, it will still work the same but it's for performance optimization
+    new Repack.plugins.HermesBytecodePlugin({
+      enabled: mode === 'production',
+      test: /\.(js)?bundle$/,
+      exclude: /index.bundle$/,
+    }),
+  ],
 
-  if (USE_ZEPHYR) {
-    return withZephyr()(config);
   }
+});
 
-  return config;
-};
 ```
 
 #### Modify consuming app 
 
-Within the `HostApp` folder, create a `screens` folder in `src` and create a `HomeScreen.tsx` file. 
+Within the `HostApp` folder, adjust `App.tsx` to include the following to consume the button from`MiniApp`: 
 
-```tsx title="src/screens/HomeScreen.tsx"
-import {useNavigation} from '@react-navigation/native';
+```tsx title="src/App.tsx"
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ */
+
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
-import {MainStackNavigationProp} from '../navigation/MainNavigator';
+import type { PropsWithChildren } from 'react';
+import {
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 
-const HomeScreen = () => {
-  const navigation = useNavigation<MainStackNavigationProp>();
+import {
+  Colors,
+  DebugInstructions,
+  Header,
+  LearnMoreLinks,
+  ReloadInstructions,
+} from 'react-native/Libraries/NewAppScreen';
 
+type SectionProps = PropsWithChildren<{
+  title: string;
+}>;
+
+// @ts-ignore federated dts not enabled yet
+const MiniApp = React.lazy(() => import('MiniApp/App'));
+
+function Section({ children, title }: SectionProps): React.JSX.Element {
+  const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>HomeScreen</Text>
-
-      <Button
-        color="rgba(127, 103, 190, 1)"
-        title="Navigate to Cart"
-        onPress={() => {
-          navigation.navigate('Cart');
-        }}
-      />
+    <View style={styles.sectionContainer}>
+      <Text
+        style={[
+          styles.sectionTitle,
+          {
+            color: isDarkMode ? Colors.white : Colors.black,
+          },
+        ]}>
+        {title}
+      </Text>
+      <Text
+        style={[
+          styles.sectionDescription,
+          {
+            color: isDarkMode ? Colors.light : Colors.dark,
+          },
+        ]}>
+        {children}
+      </Text>
     </View>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 40,
-  },
-});
+function App(): React.JSX.Element {
+  const isDarkMode = useColorScheme() === 'dark';
 
-export default HomeScreen;
-```
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
 
-Create a `CartScreen.tsx` file in the `screens` folder. 
-
-```tsx title="src/screens/CartScreen.tsx"
-
-import {useNavigation} from '@react-navigation/native';
-import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
-import {MainStackNavigationProp} from '../navigation/MainNavigator';
-
-const HomeScreen = () => {
-  const navigation = useNavigation<MainStackNavigationProp>();
+  /*
+   * To keep the template simple and small we're adding padding to prevent view
+   * from rendering under the System UI.
+   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
+   * https://github.com/AppAndFlow/react-native-safe-area-context
+   *
+   * You can read more about it here:
+   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
+   */
+  const safePadding = '5%';
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>HomeScreen</Text>
-
-      <Button
-        color="rgba(127, 103, 190, 1)"
-        title="Navigate to Cart"
-        onPress={() => {
-          navigation.navigate('Cart');
-        }}
+    <View style={backgroundStyle}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
       />
+      <ScrollView
+        style={backgroundStyle}>
+        <View style={{ paddingRight: safePadding }}>
+          <Header />
+        </View>
+        <View
+          style={{
+            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            paddingHorizontal: safePadding,
+            paddingBottom: safePadding,
+          }}>
+          <Section title="Step One">
+            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
+            screen and then come back to see your edits.
+            <MiniApp />
+          </Section>
+          <Section title="See Your Changes">
+            <ReloadInstructions />
+          </Section>
+          <Section title="Debug">
+            <DebugInstructions />
+          </Section>
+          <Section title="Learn More">
+            Read the docs to discover what to do next:
+          </Section>
+          <LearnMoreLinks />
+        </View>
+      </ScrollView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  sectionContainer: {
+    marginTop: 32,
+    paddingHorizontal: 24,
   },
-  label: {
-    fontSize: 20,
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+  },
+  highlight: {
     fontWeight: '700',
-    marginBottom: 40,
   },
 });
 
-export default HomeScreen;
+export default App;
 
 ```
 
-Create a `navigation` folder in `src` and create a `MainNavigator.tsx` file. 
-
-```tsx title="src/navigation/MainNavigator.tsx"
-import React from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import ErrorBoundary from '../components/ErrorBoundary';
-// @ts-expect-error DTS disabled
-const CartNavigator = React.lazy(() => import('MobileCart/CartNavigator'));
-
-const FallbackComponent = () => (
-  <View style={styles.container}>
-    <ActivityIndicator color="rgba(56, 30, 114, 1)" size="large" />
-  </View>
-);
-
-const CartScreen = () => {
-  return (
-    <React.Suspense fallback={<FallbackComponent />}>
-      <CartNavigator />
-    </React.Suspense>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default CartScreen;
-```
 
 ## Modify the `MiniApp` 
 
+Open the `App.tsx` file in `MiniApp` and modify it as below to expose a button to the `HostApp`: 
+
+
+```tsx title="src/App.tsx"
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ */
+
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+} from 'react-native';
+
+import {
+  Colors,
+} from 'react-native/Libraries/NewAppScreen';
+
+function App(): React.JSX.Element {
+  const isDarkMode = useColorScheme() === 'dark';
+  const [count, setCount] = useState(0);
+
+  const handlePress = () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <TouchableOpacity
+      style={styles.button}
+      onPress={handlePress}
+    >
+      <Text
+        style={[
+          styles.buttonText,
+          {
+            color: isDarkMode ? Colors.white : Colors.black,
+          },
+        ]}>
+        MiniApp Button +{count}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#007AFF',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 120,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});
+
+export default App;
+
+```
+
 #### Build configuration 
+
 Open the `rspack.config.js` in `MiniApp` and modify it as below: 
 
-```js title="MiniApp/rspack.config.js"
-import { createRequire } from 'node:module';
+```js title="MiniApp/rspack.config.js"{4,19,68}
 import path from 'node:path';
-import rspack from '@rspack/core';
+import {fileURLToPath} from 'node:url';
 import * as Repack from '@callstack/repack';
-import TerserPlugin from 'terser-webpack-plugin';
-import { getSharedDependencies } from '@zephyr-merch/mobile-sdk';
-import Dotenv from "dotenv-webpack"
-import { withZephyr } from "zephyr-repack-plugin"
+import {withZephyr} from 'zephyr-repack-plugin';
 
-const dirname = Repack.getDirname(import.meta.url);
-const { resolve } = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 const STANDALONE = Boolean(process.env.STANDALONE);
-const USE_ZEPHYR = Boolean(process.env.ZC);
-/**
- * More documentation, installation, usage, motivation and differences with Metro is available at:
- * https://github.com/callstack/repack/blob/main/README.md
- *
- * The API documentation for the functions and plugins used in this file is available at:
- * https://re-pack.dev
- */
 
 /**
- * Webpack configuration.
- * You can also export a static object or a function returning a Promise.
+ * Rspack configuration enhanced with Re.Pack defaults for React Native.
  *
- * @param env Environment options passed from either Webpack CLI or React Native Community CLI
- *            when running with `react-native start/bundle`.
+ * Learn about Rspack configuration: https://rspack.dev/config/
+ * Learn about Re.Pack configuration: https://re-pack.dev/docs/guides/configuration
  */
-export default (env) => {
-  const {
-    mode = 'development',
-    context = dirname,
-    entry = './index.js',
-    platform = process.env.PLATFORM,
-    minimize = mode === 'production',
-    devServer = undefined,
-    bundleFilename = undefined,
-    sourceMapFilename = undefined,
-    assetsPath = undefined,
-    reactNativePath = resolve('react-native'),
-  } = env;
 
-  if (!platform) {
-    throw new Error('Missing platform');
-  }
-
-  /**
-   * Using Module Federation might require disabling hmr.
-   * Uncomment below to set `devServer.hmr` to `false`.
-   *
-   * Keep in mind that `devServer` object is not available
-   * when running `webpack-bundle` command. Be sure
-   * to check its value to avoid accessing undefined value,
-   * otherwise an error might occur.
-   */
-  // if (devServer) {
-  //   devServer.hmr = false;
-  // }
-
-  /**
-   * Depending on your Babel configuration you might want to keep it.
-   * If you don't use `env` in your Babel config, you can remove it.
-   *
-   * Keep in mind that if you remove it you should set `BABEL_ENV` or `NODE_ENV`
-   * to `development` or `production`. Otherwise your production code might be compiled with
-   * in development mode by Babel.
-   */
-  process.env.BABEL_ENV = mode;
-
-  const config = {
+export default withZephyr()(env => {
+  const {platform, mode} = env;
+  return {
     mode,
-    /**
-     * This should be always `false`, since the Source Map configuration is done
-     * by `SourceMapDevToolPlugin`.
-     */
-    devtool: false,
-    context,
-     // empty entry when building as federated miniapp
-    entry: {},
+    context: __dirname,
+    entry: './index.js',
     resolve: {
-      /**
-       * `getResolveOptions` returns additional resolution configuration for React Native.
-       * If it's removed, you won't be able to use `<file>.<platform>.<ext>` (eg: `file.ios.js`)
-       * convention and some 3rd-party libraries that specify `react-native` field
-       * in their `package.json` might not work correctly.
-       */
-      ...Repack.getResolveOptions(platform),
-
-      /**
-       * Uncomment this to ensure all `react-native*` imports will resolve to the same React Native
-       * dependency. You might need it when using workspaces/monorepos or unconventional project
-       * structure. For simple/typical project you won't need it.
-       */
-      // alias: {
-      //   'react-native': reactNativePath,
-      // },
+      ...Repack.getResolveOptions(),
     },
-    /**
-     * Configures output.
-     * It's recommended to leave it as it is unless you know what you're doing.
-     * By default Webpack will emit files into the directory specified under `path`. In order for the
-     * React Native app use them when bundling the `.ipa`/`.apk`, they need to be copied over with
-     * `Repack.OutputPlugin`, which is configured by default inside `Repack.RepackPlugin`.
-     */
     output: {
-      clean: true,
-      hashFunction: 'xxhash64',
-      path: path.join(dirname, 'build/generated', platform),
-      filename: 'index.bundle',
-      chunkFilename: '[name].chunk.bundle',
-      publicPath: Repack.getPublicPath({ platform, devServer }),
-      uniqueName: 'mini-app',
-    },
-    /**
-     * Configures optimization of the built bundle.
-     */
-    optimization: {
-      /** Enables minification based on values passed from React Native Community CLI or from fallback. */
-      minimize,
-      // /** Configure minimizer to process the bundle. */
-      // minimizer: [
-      //   new TerserPlugin({
-      //     test: /\.(js)?bundle(\?.*)?$/i,
-      //     /**
-      //      * Prevents emitting text file with comments, licenses etc.
-      //      * If you want to gather in-file licenses, feel free to remove this line or configure it
-      //      * differently.
-      //      */
-      //     extractComments: false,
-      //     terserOptions: {
-      //       format: {
-      //         comments: false,
-      //       },
-      //     },
-      //   }),
-      // ],
-      chunkIds: 'named',
+      uniqueName: 'react-native-mini-app',
     },
     module: {
-      /**
-       * This rule will process all React Native related dependencies with Babel.
-       * If you have a 3rd-party dependency that you need to transpile, you can add it to the
-       * `include` list.
-       *
-       * You can also enable persistent caching with `cacheDirectory` - please refer to:
-       * https://github.com/babel/babel-loader#options
-       */
       rules: [
-        Repack.REACT_NATIVE_LOADING_RULES,
-        Repack.NODE_MODULES_LOADING_RULES,
-        Repack.FLOW_TYPED_MODULES_LOADING_RULES,
-        // {
-        //   test: /\.[cm]?[jt]sx?$/,
-        //   include: [
-        //     /node_modules(.*[/\\])+react-native/,
-        //     /node_modules(.*[/\\])+@react-native/,
-        //     /node_modules(.*[/\\])+@react-navigation/,
-        //     /node_modules(.*[/\\])+@react-native-community/,
-        //     /node_modules(.*[/\\])+expo/,
-        //     /node_modules(.*[/\\])+pretty-format/,
-        //     /node_modules(.*[/\\])+metro/,
-        //     /node_modules(.*[/\\])+abort-controller/,
-        //     /node_modules(.*[/\\])+@callstack[/\\]repack/,
-        //   ],
-        //   use: 'babel-loader',
-        // },
-
-         /** Here you can adjust loader that will process your files. */
-         {
-          test: /\.[jt]sx?$/,
-          exclude: [/node_modules/],
-          type: 'javascript/auto',
-          use: {
-            loader: 'builtin:swc-loader',
-            /** @type {import('@rspack/core').SwcLoaderOptions} */
-            options: {
-              env: {
-                targets: {
-                  'react-native': '0.74',
-                },
-              },
-              jsc: {
-                externalHelpers: true,
-                transform: {
-                  react: {
-                    runtime: 'automatic',
-                    development: mode === 'development',
-                    refresh: mode === 'development' && Boolean(devServer),
-                  },
-                },
-              },
-            },
-          },
-        },
-          /** Run React Native codegen, required for utilizing new architecture */
-          Repack.REACT_NATIVE_CODEGEN_RULES,
-        /**
-         * Here you can adjust loader that will process your files.
-         *
-         * You can also enable persistent caching with `cacheDirectory` - please refer to:
-         * https://github.com/babel/babel-loader#options
-         */
-        {
-          test: /\.[jt]sx?$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              /** Add React Refresh transform only when HMR is enabled. */
-              plugins:
-                devServer && devServer.hmr
-                  ? ['module:react-refresh/babel']
-                  : undefined,
-            },
-          },
-        },
-         /** Additional rule to enable HMR for local workspace packages */
-         {
-          test: /\.[jt]sx?$/,
-          include: [/zephyr-merch/],
-          use: 'builtin:react-refresh-loader',
-        },
-        /**
-        /**
-         * This loader handles all static assets (images, video, audio and others), so that you can
-         * use (reference) them inside your application.
-         *
-         * If you want to handle specific asset type manually, filter out the extension
-         * from `ASSET_EXTENSIONS`, for example:
-         * ```
-         * Repack.ASSET_EXTENSIONS.filter((ext) => ext !== 'svg')
-         * ```
-         */
-        {
-          test: Repack.getAssetExtensionsRegExp(Repack.ASSET_EXTENSIONS),
-          use: {
-            loader: '@callstack/repack/assets-loader',
-            options: {
-              platform,
-              devServerEnabled: Boolean(devServer),
-              /**
-               * Defines which assets are scalable - which assets can have
-               * scale suffixes: `@1x`, `@2x` and so on.
-               * By default all images are scalable.
-               */
-              scalableAssetExtensions: Repack.SCALABLE_ASSETS,
-            },
-          },
-        },
+        ...Repack.getJsTransformRules(),
+        ...Repack.getAssetTransformRules({inline: true}),
       ],
     },
     plugins: [
-      new Dotenv(),
-      /**
-       * Configure other required and additional plugins to make the bundle
-       * work in React Native and provide good development experience with
-       * sensible defaults.
-       *
-       * `Repack.RepackPlugin` provides some degree of customization, but if you
-       * need more control, you can replace `Repack.RepackPlugin` with plugins
-       * from `Repack.plugins`.
-       */
-      new Repack.RepackPlugin({
-        context,
-        mode,
-        platform,
-        devServer,
-        output: {
-          bundleFilename,
-          sourceMapFilename,
-          assetsPath,
-        },
-      }),
-       // silence missing @react-native-masked-view optionally required by @react-navigation/elements
-       new rspack.IgnorePlugin({
-        resourceRegExp: /^@react-native-masked-view/,
-      }),
-
+      new Repack.RepackPlugin(),
       new Repack.plugins.ModuleFederationPluginV2({
         name: 'MiniApp',
         filename: 'MiniApp.container.js.bundle',
         dts: false,
         exposes: {
-          './CartNavigator': './navigation/CartNavigator',
-        }, 
-        shared: getSharedDependencies({eager: STANDALONE})
-        
+          './App': './App.tsx',
+        },
+        shared: {
+          react: {
+            singleton: true,
+            version: '19.0.0',
+            eager: STANDALONE,
+          },
+          'react-native': {
+            singleton: true,
+            version: '0.78.0',
+            eager: STANDALONE,
+          },
+        },
+      }),
+      new Repack.plugins.HermesBytecodePlugin({
+        enabled: mode === 'production',
+        test: /\.(js)?bundle$/,
+        exclude: /index.bundle$/,
       }),
     ],
   };
 
-  if (USE_ZEPHYR) {
-    return withZephyr()(config);
-  }
-
-  return config;
-};
-```
-
-#### Add exposed module 
-
-Within MiniApp, create a `navigation` folder and create the content below: 
-
-```tsx title="src/navigation/CartNavigator.tsx"
-
-import React from 'react';
-import {StyleSheet} from 'react-native';
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
-
-import CartScreen from '../screens/CartScreen';
-
-export type MainStackParamList = {
-  Cart: undefined;
-};
-
-export type MainStackNavigationProp =
-  NativeStackNavigationProp<MainStackParamList>;
-
-const Main = createNativeStackNavigator<MainStackParamList>();
-
-const MainNavigator = () => {
-  return (
-    <Main.Navigator
-      screenOptions={{
-        headerTitle: 'MiniApp',
-        headerBackTitleVisible: false,
-        headerStyle: styles.header,
-        headerTitleStyle: styles.headerTitle,
-        headerTintColor: 'rgba(255,255,255,1)',
-      }}>
-      <Main.Screen name="Cart" component={CartScreen} />
-    </Main.Navigator>
-  );
-};
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: 'rgba(79, 55, 139, 1)',
-  },
-  headerTitle: {
-    color: 'rgba(255,255,255,1)',
-  },
+ 
 });
 
-export default MainNavigator;
+```
+## Set up scripts 
+
+In HostApp's `package.json`, add the following scripts: 
+
+
+```json title="HostApp/package.json"
+
+ "scripts": {
+    "android": "react-native run-android --no-packager",
+    "ios": "react-native run-ios --no-packager",
+    "lint": "eslint .",
+    "pods": "(cd ios && bundle install && bundle exec pod install)",
+    "pods:update": "(cd ios && bundle exec pod update)",
+    "start": "react-native start",
+    "test": "jest"
+  },
 ```
 
-For `MiniApp` screen, create a `CartScreen.tsx` file. 
+In MiniApp's `package.json`, add the following scripts: 
 
-```tsx title="src/screens/CartScreen.tsx"
-
-import React from 'react';
-import {
-  Image,
-  ImageRequireSource,
-  ScrollView,
-  StyleSheet,
-  FlatList,
-  Text,
-  View,
-} from 'react-native';
-
-const pics = (i: number) => {
-  return `https://picsum.photos/200/300?random=${i}`;
-};
-
-const data = Array(3)
-  .fill('')
-  .map((_, i) => ({id: i, title: `Picture ${i}`, source: pics(i)}));
-
-const Row = ({title, source}: {title: string; source: string}) => (
-  <View style={styles.row}>
-    <View style={styles.titleContainer}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.subtitle}>
-        The quick brown fox jumps over the lazy dog
-      </Text>
-    </View>
-    <Image source={{uri: source}} style={styles.image} />
-  </View>
-);
-
-const CartScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text>CartScreen</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 100,
-    paddingRight: 20,
-  },
-  image: {
-    width: 90,
-    height: 90,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '500',
-  },
-  subtitle: {
-    fontSize: 12,
-    fontWeight: '200',
-  },
-  titleContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingLeft: 20,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: 'rgba(127, 103, 190, 1)',
-  },
-});
-
-export default CartScreen;
-
-```
-
-That's all the modifications within application code itself! 
-
-#### Manage a monorepo 
-
-At the root of the monorepo, create a `pnpm-workspace.yaml` file. 
-
-```yaml title="pnpm-workspace.yaml"
-packages:
-  - '*'
-```
-
-You can use the helpful `npm-run-all` package to run multiple scripts at once. 
-
-```bash
-pnpm add npm-run-all
-```
-
-And at the root `package.json`, add the following: 
-
-:::tip 
-
-You can use the `run-p` command to run scripts in parallel.  
-Alternatively, you can use [mprocs](https://github.com/pvolok/mprocs) to run scripts in parallel (with a UI). 
-
-:::
-
-```json title="package.json"
-
+```json title="MiniApp/package.json"
 "scripts": {
-     "start:ios": "run-p start:host-app:ios start:mini-app:ios",
-     "start:android": "run-p start:host-app:android start:mini-app:android",
-     "start:host-app": "pnpm --filter HostApp start",
-    "start:mini-app": "pnpm --filter MiniApp start",
-    "run:host-app:ios": "pnpm --filter HostApp run ios",
-    "run:host-app:android": "pnpm --filter HostApp run android",
-    "start:host-app:ios": "pnpm --filter HostApp start --platform ios",
-    "start:host-app:android": "pnpm --filter HostApp start --platform android",
-    "start:mini-app:ios": "pnpm --filter MiniApp start --platform ios",
-    "start:mini-app:android": "pnpm --filter MiniApp start --platform android",
-}
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start --port 9001",
+    "start:standalone": "STANDALONE=1 react-native start --port 8081",
+    "lint": "eslint .",
+    "test": "jest",
+    "pods:update": "(cd ios && bundle exec pod update)",
+    "adbreverse": "adb reverse tcp:9001 tcp:9001"
+  },
 ```
+
 
 ## Running the application 
 
-To run the application, you can use the following commands: 
 
-Firstly we need to bundle the ios application. 
+Take running the ios app as an example. Firstly we need to bundle the ios application and start the emulator:
 
 ```bash
-pnpm run:host-app:ios
+pnpm --filter HostApp run ios
 ```
 
-Then we can run the dev server for both host and mini app. 
+Then we can run the dev server for both host and mini app. The same command will also deploy the application, you should deploy the `MiniApp` first
 
 ```bash
-pnpm start:host-app:ios
-pnpm start:mini-app:ios
+pnpm --filter MiniApp start --platform ios
+```
+
+Without Zephyr, running MiniApps within a React Native application require you to run the dev server for both host and mini app. But with Zephyr, you can run any application standalone. 
+
+```bash 
+pnpm --filter MiniApp start:standalone --platform ios
 ```
 
 <BuildAuthInfo />
 
-You should see the applicaiton running in iOS emulator: 
+You should see the applicaiton running in the iOS emulator: 
 
-<Image src="/ios-screen-host.png" alt="Zephyr Cloud Minimal example running in iOS emulator" />
+<Image src="/host-app-ios.webp" alt="Zephyr Cloud Minimal example running in iOS emulator" />
+
+The process should be the same for Android. 
