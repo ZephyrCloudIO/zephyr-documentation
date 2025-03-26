@@ -4,13 +4,13 @@ import { pluginClientRedirects } from "@rspress/plugin-client-redirects";
 import type { Nav, Sidebar, SocialLink } from "@rspress/shared";
 import fileTree from "rspress-plugin-file-tree";
 import ga from "rspress-plugin-google-analytics";
+import readingTime from "rspress-plugin-reading-time";
+import sitemap from "rspress-plugin-sitemap";
 import { defineConfig } from "rspress/config";
 import { withZephyr } from "zephyr-rspack-plugin";
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
-import sitemap from "rspress-plugin-sitemap";
-import readingTime from "rspress-plugin-reading-time";
 
 const TEMP_SEARCH_INDEX_PATH = path.join(__dirname, "temp-search-index.json");
 const getSearchIndexHash = () => {
@@ -325,9 +325,7 @@ export default defineConfig({
   },
 
   builderConfig: {
-    plugins: [
-      zephyrRsbuildPlugin()
-    ],
+    plugins: [zephyrRsbuildPlugin()],
     output: {
       copy: {
         patterns: [
@@ -353,7 +351,7 @@ export default defineConfig({
   },
 
   plugins: [
-    sitemap({domain:"https://docs.zephyr-cloud.io"}),
+    sitemap({ domain: "https://docs.zephyr-cloud.io" }),
     readingTime(),
     {
       name: "zephyr-search-enhancer",
