@@ -10,7 +10,7 @@ import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
 import sitemap from "rspress-plugin-sitemap";
-import readingTime from "rspress-plugin-reading-time/components/ReadingTime";
+import readingTime from "rspress-plugin-reading-time";
 
 const TEMP_SEARCH_INDEX_PATH = path.join(__dirname, "temp-search-index.json");
 const getSearchIndexHash = () => {
