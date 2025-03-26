@@ -4,6 +4,8 @@ import { pluginClientRedirects } from "@rspress/plugin-client-redirects";
 import type { Nav, Sidebar, SocialLink } from "@rspress/shared";
 import fileTree from "rspress-plugin-file-tree";
 import ga from "rspress-plugin-google-analytics";
+import readingTime from "rspress-plugin-reading-time";
+import sitemap from "rspress-plugin-sitemap";
 import { defineConfig } from "rspress/config";
 import { withZephyr } from "zephyr-rspack-plugin";
 import { Categories, Errors } from "./lib/error-codes-messages";
@@ -327,6 +329,8 @@ export default defineConfig({
     output: {
       copy: {
         patterns: [
+          { from: "robots.txt" },
+          { from: "sitemap.xml" },
           { from: "docs/public" },
           {
             from: "temp-search-index.json",
@@ -347,6 +351,8 @@ export default defineConfig({
   },
 
   plugins: [
+    sitemap({ domain: "https://docs.zephyr-cloud.io" }),
+    readingTime(),
     {
       name: "zephyr-search-enhancer",
       modifySearchIndexData(rows) {
