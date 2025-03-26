@@ -9,6 +9,8 @@ import { withZephyr } from "zephyr-rspack-plugin";
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
+import sitemap from "rspress-plugin-sitemap";
+import readingTime from "rspress-plugin-reading-time/components/ReadingTime";
 
 const TEMP_SEARCH_INDEX_PATH = path.join(__dirname, "temp-search-index.json");
 const getSearchIndexHash = () => {
@@ -323,7 +325,9 @@ export default defineConfig({
   },
 
   builderConfig: {
-    plugins: [zephyrRsbuildPlugin()],
+    plugins: [
+      zephyrRsbuildPlugin()
+    ],
     output: {
       copy: {
         patterns: [
@@ -347,6 +351,8 @@ export default defineConfig({
   },
 
   plugins: [
+    sitemap({domain:"https://docs.zephyr-cloud.io"}),
+    readingTime(),
     {
       name: "zephyr-search-enhancer",
       modifySearchIndexData(rows) {
