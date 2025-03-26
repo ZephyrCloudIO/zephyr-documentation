@@ -331,6 +331,8 @@ export default defineConfig({
     output: {
       copy: {
         patterns: [
+          { from: "robots.txt" },
+          { from: "sitemap.xml" },
           { from: "docs/public" },
           {
             from: "temp-search-index.json",
