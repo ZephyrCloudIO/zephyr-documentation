@@ -10,7 +10,7 @@ import { RspackIcon } from "../components/icons/rspack";
 import { ViteIcon } from "../components/icons/vite";
 import { WebpackIcon } from "../components/icons/webpack";
 
-export const version = "0.0.37";
+export const version = "0.0.38";
 
 export interface CardItemProps {
   title: string;

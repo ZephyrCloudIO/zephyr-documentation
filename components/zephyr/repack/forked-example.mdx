@@ -75,6 +75,13 @@ pnpm install
 
 Because `mobile-checkout` is the remote of `mobile-cart`, you will need to build `mobile-checkout` first. 
 
+:::note{title="Platform inference"}
+Passing in `--platform ios` or `--platform android` is recommended as it will start the dev server for the specific platform. Zephyr resolves MiniApps by `platform` inferred from the `react-native start` command. 
+
+If you opted to only run `react-native start`, you will be spawning two dev servers, one for iOS and one for Android, regardless whether the emulator is running iOS or Android. 
+:::
+
+
 ```bash 
 ZC=1 pnpm --filter MobileCheckout run start --platform ios
 ```
