@@ -516,7 +516,8 @@ In HostApp's `package.json`, add the following scripts:
     "lint": "eslint .",
     "pods": "(cd ios && bundle install && bundle exec pod install)",
     "pods:update": "(cd ios && bundle exec pod update)",
-    "start": "react-native start",
+    "start:ios": "react-native start --platform ios",
+    "start:android": "react-native start --platform android",
     "test": "jest"
   },
 ```
@@ -527,7 +528,8 @@ In MiniApp's `package.json`, add the following scripts:
 "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start --port 9001",
+    "start:ios": "react-native start --port 9001 --platform ios",
+    "start:android": "react-native start --port 9001 --platform android",
     "start:standalone": "STANDALONE=1 react-native start --port 8081",
     "lint": "eslint .",
     "test": "jest",
@@ -546,6 +548,13 @@ Take running the ios app as an example. Firstly we need to bundle the ios applic
 pnpm --filter HostApp run ios
 ```
 
+:::note{title="Platform inference"}
+Passing in `--platform ios` or `--platform android` is recommended as it will start the dev server for the specific platform. Zephyr resolves MiniApps by `platform` inferred from the `react-native start` command. 
+
+If you opted to only run `react-native start`, you will be spawning two dev servers, one for iOS and one for Android, regardless whether the emulator is running iOS or Android. 
+
+:::
+
 Then we can run the dev server for both host and mini app. The same command will also deploy the application, you should deploy the `MiniApp` first
 
 ```bash
@@ -557,6 +566,8 @@ Without Zephyr, running MiniApps within a React Native application require you t
 ```bash 
 pnpm --filter MiniApp start:standalone --platform ios
 ```
+
+
 
 <BuildAuthInfo />
 
