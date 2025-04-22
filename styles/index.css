@@ -67,7 +67,6 @@
 
   /*!* Will be used in overview page *!*/
   --rp-c-text-code: #c9def1;
-
 }
 
 :root {
@@ -119,8 +118,6 @@ dd {
   padding: 0.8px 6px;
   color: var(--rp-c-text-1);
 }
-
-
 
 @keyframes move {
   0% {
@@ -238,8 +235,6 @@ dd {
   .h3 {
     @apply lg:text-2xl text-xl text-center py-6 font-semibold;
   }
-  
-
 
   .link {
     @apply underline decoration-[var(--rp-c-brand)] hover:brightness-125 hover:text-[var(--rp-c-brand)] transition-all underline-offset-4 decoration-dashed;
