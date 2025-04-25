@@ -8,6 +8,8 @@ import readingTime from "rspress-plugin-reading-time";
 import sitemap from "rspress-plugin-sitemap";
 import { defineConfig } from "rspress/config";
 import { withZephyr } from "zephyr-rspack-plugin";
+import type { Configuration } from "@rspack/core";
+
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
@@ -29,7 +31,9 @@ const searchIndexHelper = getSearchIndexHash();
 const zephyrRsbuildPlugin = () => ({
   name: "zephyr-rsbuild-plugin",
   setup(api: {
-    modifyRspackConfig: (arg0: (config: any) => Promise<void>) => void;
+    modifyRspackConfig: (
+      arg0: (config: Configuration) => Promise<void>
+    ) => void;
   }) {
     api.modifyRspackConfig(async (config) => {
       let searchIndexExists = false;
