@@ -28,12 +28,14 @@ const searchIndexHelper = getSearchIndexHash();
 
 const zephyrRsbuildPlugin = () => ({
   name: "zephyr-rsbuild-plugin",
-  setup(api) {
+  setup(api: {
+    modifyRspackConfig: (arg0: (config: any) => Promise<void>) => void;
+  }) {
     api.modifyRspackConfig(async (config) => {
       let searchIndexExists = false;
       searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);
 
-      await withZephyr()(config);
+      config.name === "web" && (await withZephyr()(config));
     });
   },
 });
@@ -298,7 +300,7 @@ export default defineConfig({
   description: "Documentation for Zephyr Cloud",
   icon: "/favicon.ico",
   lang: "en-US",
-  ssg: false,
+  ssg: true,
   globalStyles: path.join(__dirname, "styles/index.css"),
   mediumZoom: { selector: ".rspress-doc img" },
 
