@@ -8,6 +8,7 @@ import readingTime from "rspress-plugin-reading-time";
 import sitemap from "rspress-plugin-sitemap";
 import { defineConfig } from "rspress/config";
 import { withZephyr } from "zephyr-rspack-plugin";
+
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
 import { capitalizeFirstLetter } from "./lib/utils/casing";
@@ -33,7 +34,7 @@ const zephyrRsbuildPlugin = () => ({
       let searchIndexExists = false;
       searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);
 
-      await withZephyr()(config);
+      config.name === "web" && (await withZephyr()(config));
     });
   },
 });
@@ -298,7 +299,7 @@ export default defineConfig({
   description: "Documentation for Zephyr Cloud",
   icon: "/favicon.ico",
   lang: "en-US",
-  ssg: false,
+  ssg: true,
   globalStyles: path.join(__dirname, "styles/index.css"),
   mediumZoom: { selector: ".rspress-doc img" },
 
