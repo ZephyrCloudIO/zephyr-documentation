@@ -18,7 +18,7 @@ pnpm init
 
 And then run the repack init command twice: 
 ```bash 
-npx @callstack/repack-init@rc
+npx @callstack/repack-init
 ```
 
 For the first app we will call it **`HostApp`**
@@ -54,19 +54,18 @@ npx pod-install
 npm run ios
 ```
 
-At this stage, both of your HostApp and MiniApp's `rspack.config.js` files should looks like this: 
+At this stage, both of your HostApp and MiniApp's `rspack.config.mjs` files should looks like this: 
 
 <details>
 <summary> Default build config <Badge variant="default">Info</Badge></summary>
 
-```js title="rspack.config.js"
-import path from 'node:path';
-import {fileURLToPath} from 'node:url';
-import * as Repack from '@callstack/repack';
+```js title="rspack.config.mjs"
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import * as Repack from "@callstack/repack";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const USE_ZEPHYR = Boolean(process.env.ZC);
 
 /**
  * Rspack configuration enhanced with Re.Pack defaults for React Native.
@@ -75,19 +74,11 @@ const USE_ZEPHYR = Boolean(process.env.ZC);
  * Learn about Re.Pack configuration: https://re-pack.dev/docs/guides/configuration
  */
 
-export default env => {
-  const { platform, mode } = env
-  return {
-    context: __dirname,
-    entry: './index.js',
+export default {
+  context: __dirname,
+  entry: "./index.js",
   resolve: {
-    // 1. Understand the file path of ios and android file extensions
-    // 2. Configure the output to be as close to Metro as possible
     ...Repack.getResolveOptions(),
-  },
-  output: {
-    // Unsure - for module federation HMR and runtime? 
-    uniqueName: 'react-native-host-app',
   },
   module: {
     rules: [
@@ -95,39 +86,7 @@ export default env => {
       ...Repack.getAssetTransformRules(),
     ],
   },
-  plugins: [
-    new Repack.RepackPlugin({
-      platform,
-    }),
-    new Repack.plugins.ModuleFederationPluginV2({
-      name: 'HostApp',
-      filename: 'HostApp.container.js.bundle',
-      dts: false,
-      remotes: {
-        MiniApp: `MiniApp@http://localhost:9001/${platform}/MiniApp.container.js.bundle`,
-      },
-      shared: {
-        react: {
-          singleton: true,
-          version: '19.0.0',
-          eager: true,
-        },
-        'react-native': {
-          singleton: true,
-          version: '0.78.0',
-          eager: true,
-        }
-      },
-    }),
-    // Supports for new architecture - Hermes can also use JS, it's not a requirement, it will still work the same but it's for performance optimization
-    new Repack.plugins.HermesBytecodePlugin({
-      enabled: mode === 'production',
-      test: /\.(js)?bundle$/,
-      exclude: /index.bundle$/,
-    }),
-  ],
-
-  }
+  plugins: [new Repack.RepackPlugin()],
 };
 ```
 
@@ -139,10 +98,10 @@ export default env => {
 
 #### Build configuration 
 
-Open the `rspack.config.js` file in `HostApp` and modify the `build` configuration to include the following: 
+Open the `rspack.config.mjs` file in `HostApp` and modify the `build` configuration to include the following: 
 
 
-```js title="HostApp/rspack.config.js"{4,15,68}
+```js title="HostApp/rspack.config.mjs"{4,15,68}
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import * as Repack from '@callstack/repack';
@@ -430,9 +389,9 @@ export default App;
 
 #### Build configuration 
 
-Open the `rspack.config.js` in `MiniApp` and modify it as below: 
+Open the `rspack.config.mjs` in `MiniApp` and modify it as below: 
 
-```js title="MiniApp/rspack.config.js"{4,19,68}
+```js title="MiniApp/rspack.config.mjs"{4,19,68}
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import * as Repack from '@callstack/repack';
@@ -516,6 +475,7 @@ In HostApp's `package.json`, add the following scripts:
     "lint": "eslint .",
     "pods": "(cd ios && bundle install && bundle exec pod install)",
     "pods:update": "(cd ios && bundle exec pod update)",
+    "start": "react-native start",
     "start:ios": "react-native start --platform ios",
     "start:android": "react-native start --platform android",
     "test": "jest"
@@ -528,6 +488,7 @@ In MiniApp's `package.json`, add the following scripts:
 "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "start": "react-native start --port 9001",
     "start:ios": "react-native start --port 9001 --platform ios",
     "start:android": "react-native start --port 9001 --platform android",
     "start:standalone": "STANDALONE=1 react-native start --port 8081",
