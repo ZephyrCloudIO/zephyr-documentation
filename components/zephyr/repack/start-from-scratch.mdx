@@ -537,3 +537,58 @@ You should see the applicaiton running in the iOS emulator:
 <Image src="/host-app-ios.webp" alt="Zephyr Cloud Minimal example running in iOS emulator" />
 
 The process should be the same for Android. 
+
+## Running the application in release mode without Zephyr
+
+By default, the HostApp loads miniapp bundles from a local development server (e.g. localhost). To run the app in production/release mode without using the Zephyr development environment, you must replace those local URLs with the Zephyr Cloud URLs for each miniapp. This ensures the HostApp fetches the miniapp bundles directly from the Zephyr-hosted endpoints. The process involves configuring your Zephyr environment, retrieving the correct remote URLs, and updating the HostApp’s module federation configuration. Once completed, you can build and launch the app in release mode normally (e.g. via Xcode or react-native release build), and it will load miniapps from the Zephyr Cloud URLs instead of localhost.
+
+To successfully run the HostApp in release mode using Zephyr-hosted miniapps, you need to have a Zephyr environment configured for your project (such as production or staging). Each miniapp (remote module), along with the HostApp itself, must be registered within this environment. For step-by-step setup guidance, refer to the [Zephyr Environment Guide](../../how-to/environments.mdx)
+
+### Steps
+
+Follow these steps to configure and run the HostApp in release mode without Zephyr:
+
+Configure the Zephyr environment:
+
+1. Configure the Zephyr environment:
+
+   - In the Zephyr Cloud dashboard, create or select the target environment (for example, production or staging).
+
+2. Retrieve the remote URLs:
+
+   - After the environment is configured, open its details page in the Zephyr dashboard for each platform. Zephyr will display the hosted URLs for the HostApp and each miniapp.
+
+   - Copy the provided HostApp URL. It usually follows this pattern:
+     `https://{platform}-{appname}-{yourusername}-ze.zephyrcloud.app/`
+
+3. Update the HostApp configuration:
+
+   - In your HostApp project directory, open the HostApp/rspack.config.mjs file. Locate the remotes object, which defines how to load each miniapp remotely.
+
+   - Replace each remote’s localhost URL with the Zephyr Cloud URL. For example:
+
+   ```js title="HostApp/rspack.config.mjs"
+   const remotes = {
+     MiniApp: `MiniApp@https://android-miniapp-yourusername-ze.zephyrcloud.app/MiniApp.container.js.bundle`,
+   };
+   ```
+
+   - In the example above, replace MiniApp with your actual miniapp name (used both as the object key and inside the URL path), and replace yourusername with your Zephyr username/organization. The ${platform} placeholder will be replaced by Rspack with android or ios at build time. Ensure the URL has a trailing slash before ${platform} as shown.
+
+   - If you have multiple miniapps, add each one to the remotes object in the same way, using its own name and Zephyr URL. For example:
+
+   ```js title="HostApp/rspack.config.mjs"
+   const remotes = {
+     MiniApp1: `MiniApp1@https://ios-miniapp1-yourusername-ze.zephyrcloud.app/MiniApp1.container.js.bundle`,
+     MiniApp2: `MiniApp2@https://ios-miniapp2-yourusername-ze.zephyrcloud.app/MiniApp2.container.js.bundle`,
+     // add more miniapps as needed
+   };
+   ```
+
+4. Build and run the HostApp in release mode:
+
+   - With the configuration updated, build and launch the HostApp using your normal release process.
+
+   - The HostApp will now load each miniapp bundle from the specified Zephyr Cloud URLs instead of localhost. Verify that the app launches correctly and that each miniapp is fetched successfully from the remote URL.
+
+By following these steps, you can run your HostApp in production mode without the Zephyr development environment, using the remote module bundles hosted on Zephyr Cloud.
