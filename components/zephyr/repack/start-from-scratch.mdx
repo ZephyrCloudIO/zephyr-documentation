@@ -540,7 +540,9 @@ The process should be the same for Android.
 
 ## Running the application in release mode with Zephyr
 
-By default, the HostApp loads miniapp bundles from a local development server (e.g. localhost). To run the app in production/release mode without using the Zephyr development environment, you must replace those local URLs with the Zephyr Cloud URLs for each miniapp. This ensures the HostApp fetches the miniapp bundles directly from the Zephyr-hosted endpoints. The process involves configuring your Zephyr environment - and zephyr will auto-retrieving the correct remote URLs as well as updating the HostApp’s module federation configuration. Once completed, you can build and launch the app in release mode normally (e.g. via Xcode or react-native release build), and it will load miniapps from the Zephyr Cloud URLs instead of localhost.
+When you are using Zephyr with Re.Pack, the HostApp auto-loads MiniApps' bundles from Zephyr. To run the app in production/release mode with Zephyr, the process involves configuring your Zephyr environment - and `zephyr-repack-plugin` will auto-retrieving the latest deployed remote URLs as well as updating the HostApp’s module federation configuration during the bundling. Once completed, you can build and launch the app in release mode normally (e.g. via Xcode or react-native release build), and it will load MiniApps from the Zephyr Cloud URLs instead of localhost.
+
+We will soon launch `react-native-zephyr-sdk` to auto-rollback, roll-forward MiniApps during runtime.  To use `react-native-zephyr-sdk`, you must use `zephyr-repack-plugin` during build time. 
 
 To successfully run the HostApp in release mode using Zephyr-hosted MiniApps, you need to have a Zephyr environment configured for your project (such as production or staging). Each MiniApps (remote module), along with the HostApp itself, must be registered within this environment. For step-by-step setup guidance, refer to the [Zephyr Environment Guide](../../how-to/environments.mdx)
 
