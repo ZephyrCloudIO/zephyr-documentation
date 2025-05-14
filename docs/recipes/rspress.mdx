@@ -13,6 +13,8 @@ If you don't have `nvm` to manage your node versions yet, head to [the official 
 nvm use 18
 ```
 
+:::
+
 ## Generating a Rspress project
 
 ```bash filename="Terminal"
@@ -81,6 +83,6 @@ Total: 13.7 kB (gzip: 142.3 kB)
 
 :::warning
 
-\*\*The total size for the (web) thread represents the original files but the uploaded total size means the SSG files already processed. If the SSG flag is disabled the Rspress plugin relies in the Rspack plugin execution.
+The total size for the web thread reflects the original files. When the SSG flag is enabled, the uploaded total size corresponds to the already-processed SSG files. If the SSG flag is disabled, the Rspress plugin relies on the Rspack plugin execution, and the total size represents the original, unprocessed files.
 
 :::

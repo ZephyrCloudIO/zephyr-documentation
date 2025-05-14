@@ -193,6 +193,10 @@ const sidebar: Sidebar = {
           link: "/recipes/react-rspack-nx",
         },
         {
+          text: "Rspress",
+          link: "/recipes/rspress",
+        },
+        {
           text: "React + Rspack + Turborepo",
           link: "/recipes/turborepo-react",
         },
