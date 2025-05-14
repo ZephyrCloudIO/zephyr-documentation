@@ -25,6 +25,7 @@ and then run commands to make sure you have necessary dependencies installed.
 
 ```bash filename="Terminal"
 cd my-rspress-site
+npm install zephyr-rspress-plugin
 npm install
 ```
 
@@ -32,7 +33,7 @@ npm install
 
 You should see the website running on localhost. Open `rspress.config.ts` in your editor and add the following modifications:
 
-```ts filename="vite.config.ts"
+```bash {16-18} filename="rspress.config.ts"
 import path from 'node:path';
 import { defineConfig } from 'rspress/config';
 import { withZephyr } from 'zephyr-rspress-plugin'; // Add this line
@@ -86,3 +87,9 @@ Total: 13.7 kB (gzip: 142.3 kB)
 The total size for the web thread reflects the original files. When the SSG flag is enabled, the uploaded total size corresponds to the already-processed SSG files. If the SSG flag is disabled, the Rspress plugin relies on the Rspack plugin execution, and the total size represents the original, unprocessed files.
 
 :::
+
+## Next Steps
+
+Now that the initial setup is complete, you can check other [cloud providers](/cloud) to deploy your application. Or how to customize your [environment settings](/how-to/environments).
+
+You can also check out the [Rspress documentation](https://rspress.dev/guide/start/introduction) for more information on how to use Rspress.
