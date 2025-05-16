@@ -221,6 +221,15 @@ export const SiteConfig: CardProps = {
         <ModuleFederationIcon />,
       ],
     },
+    {
+      // react-vite-ts
+      title: "Enable SSG on Rspress",
+      framework: "react",
+      description: "Deploy a SSG application with Zephyr + Rspress.",
+      href: "/recipes/rspress",
+      variant: "small",
+      icons: [<RspackIcon />],
+    },
     // {
     //   // create-default-webpack-mf
     //   title: "React + Webpack + Lerna + Module Federation",
