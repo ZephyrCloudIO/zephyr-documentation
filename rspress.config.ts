@@ -9,6 +9,7 @@ import readingTime from "rspress-plugin-reading-time";
 import sitemap from "rspress-plugin-sitemap";
 import { defineConfig } from "rspress/config";
 import { withZephyr } from "zephyr-rspack-plugin";
+import dotenv from "dotenv";
 
 import { Categories, Errors } from "./lib/error-codes-messages";
 import { PAGE_CODE_REGEX, getError as getZeError } from "./lib/error-helpers";
@@ -35,7 +36,7 @@ const zephyrRsbuildPlugin = () => ({
       let searchIndexExists = false;
       searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);
 
-      config.name === "web" && (await withZephyr()(config));
+      // config.name === "web" && (await withZephyr()(config));
     });
   },
 });
