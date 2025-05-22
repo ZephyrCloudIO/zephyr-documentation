@@ -35,7 +35,7 @@ const zephyrRsbuildPlugin = () => ({
       let searchIndexExists = false;
       searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);
 
-      // config.name === "web" && (await withZephyr()(config));
+      config.name === "web" && (await withZephyr()(config));
     });
   },
 });
