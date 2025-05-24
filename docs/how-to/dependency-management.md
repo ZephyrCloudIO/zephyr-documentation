@@ -124,7 +124,3 @@ Zephyr necessitates that you build the most distant remote first to accurately c
 ### Best Practices
 
 1. **Document Intent**: Use version tags to document your intended version requirements, even though they don't affect resolution yet
-2. **Consistent Declaration Format**: Use the `zephyr:app-uid@version` format consistently across your organization
-3. **Monitor Dependencies**: Since all dependencies resolve to latest, monitor your remote applications for breaking changes
-4. **Test Frequently**: With automatic latest version resolution, ensure your integration tests run frequently
-5. **Dependency Comments**: Add comments in your package.json explaining critical dependencies

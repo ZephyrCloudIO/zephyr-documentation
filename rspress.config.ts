@@ -112,7 +112,7 @@ const sidebar: Sidebar = {
         },
         {
           text: "Dependency Management",
-          link: "/how-to/dependency-mgmt",
+          link: "/how-to/dependency-management",
         },
         {
           text: "Fork Our Examples",
