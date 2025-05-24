@@ -81,7 +81,9 @@ This configuration tells Zephyr:
 - Include `user-profile` remote (mapped to `user-profile` app UID)
 - Include `payment-widget` remote (mapped to `payments-team-widget` app UID)
 
-**Note**: All will resolve to their respective latest versions.
+:::info Note
+All will resolve to their respective latest versions for now.
+:::
 
 ### Build-Time Behavior
 
