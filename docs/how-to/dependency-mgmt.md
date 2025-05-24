@@ -1,7 +1,7 @@
 # Dependency Management (Beta)
 
 :::danger
-This features is in beta and may change in future releases.
+This feature is in beta and may change in future releases.
 :::
 
 A key initial design goal for Zephyr Cloud was to enable incremental adoption. Upon installing the Zephyr package, it operates in an "observe only" mode. This means it starts to build a graph of your federated applications without requiring changes to your CI/CD pipeline or extensive configuration efforts.
