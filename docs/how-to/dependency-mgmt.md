@@ -83,10 +83,6 @@ This configuration tells Zephyr:
 
 **Note**: All will resolve to their respective latest versions.
 
-### Schema Validation
-
-Zephyr validates your `zephyr:dependencies` field against a JSON schema. The dependency names must follow this pattern: `^[a-zA-Z0-9_-]+$`
-
 ### Build-Time Behavior
 
 During the build process, Zephyr:
