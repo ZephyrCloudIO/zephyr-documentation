@@ -23,6 +23,22 @@ export default withZephyr()({
 
 We will talk about bundlers in this article to clear some confusions, answer the questions we get asked the most: **How Zephyr works?** and explaining how Zephyr build and deploy your application to the edge in millie-seconds.
 
+## Network Architecture Overview
+
+Zephyr's network architecture is designed to provide flexibility in how you deploy and manage your applications:
+
+![Zephyr Infraestructure Architecture](/infra-overview.png)
+
+The architecture shows two primary paths:
+
+1. **Developer Environment**: When running `npm run build`, the Zephyr plugin integrates with your bundler to handle the build process and deployment.
+
+2. **Zephyr Platform**: The Dashboard UI and API Platform provide management capabilities for your applications.
+
+Both paths can utilize either:
+- **Default (Zephyr-owned)**: All infrastructure components are managed by Zephyr
+- **BYOC (User-owned)**: You manage your own deployment workers and edge storage while leveraging Zephyr's API Gateway and DNS management
+
 ## Building without interfering
 
 > Silence is a virtue
@@ -36,6 +52,10 @@ Zephyr agent works on the bundler level, rather than a framework level, hence ac
 ### Lifecycle Events
 
 Zephyr agent starts here.
+
+![Zephyr Agent](/lifeclycle-events.png)
+
+When you run `npm run build`, Zephyr agent will be initiated and start listening to the bundler's lifecycle events. It will not interfere with the build process, but rather listen to the events and collect information about your application.
 
 When we are collecting your application's details, we are understanding your github's organization, repository name and branch name to see if you have the correct access on Zephyr Cloud to deploy this application through our platform. We are also understanding your bundler's configuration details, applications' dependencies, name and versions.
 
@@ -60,8 +80,38 @@ When you are building your application for the first time, we will hash your ass
 
 Whether you are deploying to our managed cloud, or on your own cloud, Zephyr will employ a series of capability providers to facilitate deployment, typically in the form of AWS Lambda function, or Cloudflare workers.
 
+
+Zephyr supports two deployment models:
+
+![Zephyr Default Integration](/default-integration.png)
+
+1. **Default Integration**: Uses Zephyr's managed infrastructure where all components (Worker Gateway, Build-ID Generator, Zephyr Worker, and Edge Datastores) are hosted and managed by Zephyr.
+
+![Zephyr BYOC Integration](/byoc-integration.png)
+
+2. **BYOC (Bring Your Own Cloud) Integration**: Allows you to deploy Zephyr Workers and Edge Datastores in your own infrastructure while still leveraging Zephyr's Worker Gateway and Build-ID Generator. This gives you more control over your data and compliance requirements.
+
 These capability providers will be deployed, and updated in our managed cloud as well as in your cloud. They will analyze the file types, hashed assets and then further on handling the deployment.
 
 The assets will be updated and deployed to the cloud's storage.
 
 _Different cloud provider's implementation specific varies._
+
+### Serving
+
+Once your application is deployed, it needs to be served efficiently to end users. Zephyr uses edge workers to handle incoming requests and serve your application with optimal performance.
+
+![Edge Worker Request Flow](/edge-worker-request-flow.png)
+
+Serving an application consists of:
+
+1. When a user accesses your application, the request goes through DNS resolution to reach the edge worker.
+
+2. The edge worker interacts with three key storage systems:
+   - **Environment Store**: Contains environment-specific configurations including application ID, version, snapshot ID, domain, and asset mappings
+   - **Snapshots Store**: Stores versioned deployment snapshots with all file references and metadata
+   - **Files Store**: Contains the actual file content and assets
+
+3. The edge worker checks if requested assets exist in the current snapshot. If not found, it returns a 404 error; otherwise, it serves the content directly from the files store.
+
+This architecture ensures fast, globally distributed serving of your applications with proper version control and environment isolation.

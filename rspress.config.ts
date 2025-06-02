@@ -30,7 +30,9 @@ const searchIndexHelper = getSearchIndexHash();
 
 const zephyrRsbuildPlugin = () => ({
   name: "zephyr-rsbuild-plugin",
-  setup(api) {
+  setup(api: {
+    modifyRspackConfig: (arg0: (config: any) => Promise<void>) => void;
+  }) {
     api.modifyRspackConfig(async (config) => {
       let searchIndexExists = false;
       searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);
@@ -338,7 +340,7 @@ export default defineConfig({
     source: {
       define: {
         "process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID": JSON.stringify(
-          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID,
+          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID
         ),
       },
     },
