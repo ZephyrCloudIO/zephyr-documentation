@@ -12,7 +12,7 @@
     "dev": "rspress dev --port 3030",
     "generate:plan": "nx release plan",
     "lint": "biome check",
-    "lint:fix": "biome check --fix",
+    "format": "biome check --fix && biome format --write",
     "prepare": "husky",
     "preview": "rspress preview",
     "typecheck": "tsc --noEmit"
