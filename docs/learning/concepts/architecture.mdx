@@ -5,7 +5,7 @@
 
 # Architecture
 
-Zephyr is a distributed edge deployment platform that integrates directly with JavaScript bundlers to provide instant deployment and global distribution of web applications.
+Zephyr is a distributed edge deployment platform that integrates directly with JavaScript build tools including but not limited to `rspack`, `webpack`, `rollup`, `rolldown`, `vite`, `parcel` and `repack` - to provide instant deployment and global distribution of web applications.
 
 This document details the technical architecture, design decisions, and implementation strategies that enable sub-second deployments and millisecond-latency serving.
 
@@ -43,7 +43,7 @@ The Zephyr platform consists of four primary subsystems that work together to pr
 
   These plugins intercept build lifecycle events to analyze outputs, extract metadata, and initiate the deployment process. The integration is designed to be transparent, adding no overhead to the build process and requiring no changes to existing configurations. You can see a list of existing plugins and their usages [here](https://docs.zephyr-cloud.io/recipes). 
 
-- **Control Plane**: The centralized management system comprising the API platform and dashboard UI.
+- **Control Plane**: The centralized management system comprising the Zephyr Cloud's API platform and dashboard UI.
 
   It handles authentication, authorization, project management, and deployment orchestration. The control plane maintains the source of truth for all deployments and provides both programmatic and visual interfaces for management.
 
