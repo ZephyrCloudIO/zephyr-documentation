@@ -39,7 +39,7 @@ export default withZephyr()({
 
 The Zephyr platform consists of four primary subsystems that work together to provide seamless deployment and serving capabilities:
 
-- **Build Integration Layer**: The entry point for developers, implemented as plugins for popular bundlers (Webpack, Rspack, Vite, etc...).
+- **Build Integration Plane**: The entry point for developers, implemented as plugins for popular bundlers (Webpack, Rspack, Vite, etc...).
 
   These plugins intercept build lifecycle events to analyze outputs, extract metadata, and initiate the deployment process. The integration is designed to be transparent, adding no overhead to the build process and requiring no changes to existing configurations.
 
@@ -51,13 +51,17 @@ The Zephyr platform consists of four primary subsystems that work together to pr
 
   Implemented as edge workers across multiple cloud providers, it handles request routing, asset serving, and dynamic configuration. The data plane operates independently of the control plane, ensuring high availability even during control plane maintenance.
 
-- **Storage Layer**: A distributed storage system built entirely on edge KV stores.
+- **Storage Plane**: A distributed storage system built entirely on edge KV stores.
 
   All deployment data is stored in globally distributed KV stores that provide sub-millisecond access times. The storage layer implements content-addressed storage with automatic replication across multiple regions, ensuring fast serving through edge workers regardless of user location.
 
+:::info Provider-Specific Implementations
+In BYOC deployments, the KV store implementation varies by cloud provider and its capabilities.
+:::
+
 ## Build Integration Architecture
 
-The build integration layer represents the most critical component of Zephyr's architecture, as it must balance several competing requirements: zero performance impact, complete transparency, and comprehensive data extraction.
+The build integration plane represents the most critical component of Zephyr's architecture, as it must balance several competing requirements: zero performance impact, complete transparency, and comprehensive data extraction.
 
 ### Plugin Design Philosophy
 
@@ -134,24 +138,28 @@ Once the snapshot is confirmed available in all required regions, the system upd
 
 ![Edge Worker Request Flow](/edge-worker-request-flow.png)
 
-The serving architecture is optimized for minimal latency and maximum availability, leveraging a globally distributed edge network to serve applications as close to users as possible.
+The serving plane is optimized for minimal latency and maximum availability, leveraging a globally distributed edge network to serve applications as close to users as possible.
 
 ### Request Processing Pipeline
 
 When a user request arrives at an edge location, it undergoes a multi-stage processing pipeline designed for efficiency and correctness. The initial DNS resolution uses GeoDNS to route requests to the nearest healthy edge location, with automatic failover to secondary locations if the primary is unavailable. 
 
-:::info
-Depending on the configuration of your application and Edge Worker, this may be a Zephyr-managed DNS or a customer-managed DNS.
+:::info Note on DNS Configuration
+DNS setup varies based on deployment model and provider.
 :::
 
-Upon reaching the edge worker, the request is parsed to extract the hostname and path. The worker then performs a series of lookups against different storage tiers, each optimized for specific access patterns. The Environment Store, implemented as a distributed KV store, provides millisecond lookup of the current deployment configuration for a given hostname. This configuration includes the active snapshot ID, versioning information etc... 
+Upon reaching the edge worker, the request is parsed to extract the hostname and path. The worker then performs a series of lookups against the storage plane, with each storage type optimized for specific access patterns. The Environment Store, implemented as a distributed KV store, provides millisecond lookup of the current deployment configuration for a given hostname. This configuration includes the active snapshot ID, versioning information etc... 
 
 ### Storage Architecture
 
-The storage system implements a three-tier architecture, each tier optimized for different access patterns and data characteristics:
+The storage plane implements a three-tier architecture, each tier optimized for different access patterns and data characteristics:
 
 - **Environment Store**: A globally replicated KV store containing hostname-to-configuration mappings. Each entry is approximately 1KB and includes the active snapshot ID, custom headers, redirect rules, and feature flags. The store implements strong consistency for writes with eventual consistency for reads, ensuring configuration changes propagate globally within seconds.
 
 - **Snapshots Store**: An immutable store containing deployment manifests. Each snapshot includes a complete asset manifest with paths, content hashes, and metadata. Snapshots are typically 10-100KB and are cached aggressively at edge locations. The immutable nature of snapshots enables perfect caching with no invalidation complexity.
 
 - **Files Store**: A content-addressed object store containing the actual file contents. Files are stored with their content hash as the key, enabling perfect deduplication across deployments.
+
+:::info Storage Implementation by Provider
+Each provider offers different performance characteristics, pricing models, and regional availability.
+:::
