@@ -31,6 +31,7 @@ const searchIndexHelper = getSearchIndexHash();
 const zephyrRsbuildPlugin = () => ({
   name: "zephyr-rsbuild-plugin",
   setup(api: {
+    // biome-ignore lint/suspicious/noExplicitAny: `modifyRspackConfig` is a valid method
     modifyRspackConfig: (arg0: (config: any) => Promise<void>) => void;
   }) {
     api.modifyRspackConfig(async (config) => {
@@ -340,7 +341,7 @@ export default defineConfig({
     source: {
       define: {
         "process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID": JSON.stringify(
-          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID
+          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID,
         ),
       },
     },
