@@ -75,7 +75,7 @@ The plugins operate on a principle of "silent observation" - they attach to exis
 
 ### Lifecycle Integration Points
 
-![Zephyr Agent Lifecycle](/lifeclycle-events.png)
+![Zephyr Agent Lifecycle](/lifecycle-events.png)
 
 The Zephyr agent activates during the bundler initialization phase and attaches to specific lifecycle hooks that vary by bundler:
 
@@ -100,7 +100,6 @@ The asset classification step is going to change in the near future to support a
 - **Differential Upload Optimization**: The upload process implements several optimizations to minimize deployment time. Content-based deduplication ensures that unchanged assets are never re-uploaded. Block-level differencing identifies modified sections within large files, uploading only the changed portions.
 
 :::info Asset Map Architecture
-
 The asset map serves as the definitive record of a deployment, containing not just file listings but comprehensive metadata about each asset. This includes content hashes for cache validation, compression settings for optimal serving, MIME types for correct content negotiation, and dependency relationships for intelligent prefetching. The asset map is immutable once created, ensuring deployments can be perfectly reproduced.
 :::
 
@@ -133,6 +132,38 @@ The deployment system is designed for reliability, speed, and flexibility, suppo
 The deployment process is designed for atomicity and reliability. When a deployment is initiated, the system first validates that all required assets are available and correctly hashed. It then creates an immutable snapshot record that captures the complete state of the deployment. The snapshot is replicated to multiple regions before any traffic routing changes occur.
 
 Once the snapshot is confirmed available in all required regions, the system updates the environment configuration in a single atomic operation. This approach ensures that users always see a consistent version of the application, with no possibility of mixed asset versions. The previous version remains available for instant rollback if needed.
+
+### Application UID
+
+![Application UID Structure](/url-structure.png)
+
+Every application in Zephyr is identified by a unique Application UID that follows a deterministic structure:
+
+```
+{application}.{project}.{organization}
+```
+
+This UID is automatically derived from:
+- **application**: The `name` field in your `package.json`.
+- **project**: The repository name from your git context.
+- **organization**: The GitHub/GitLab organization name.
+
+:::info Organization Exceptions
+If the VCS is within a custom organization or enterprise account, the organization name is derived from the custom domain name.
+:::
+
+For example, an application with:
+- `package.json` name: `"shell-vibe"`
+- Repository: `swalker326`
+- Organization: `zephyr-cloud`
+
+Would have the Application UID: `shell-vibe.swalker326.zephyr-cloud`
+
+This UID serves as the primary key throughout Zephyr's infrastructure and enables:
+- Consistent identification across all deployment environments
+- Direct mapping to storage keys in the KV stores
+- Permission boundaries for access control
+- Automatic URL generation for deployments
 
 ## Serving Architecture
 
