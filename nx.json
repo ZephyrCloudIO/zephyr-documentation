@@ -3,13 +3,17 @@
   "defaultProject": "zephyr-documentation",
   "targetDefaults": {
     "build": {
-      "outputs": ["{projectRoot}/doc_build"]
+      "outputs": [
+        "{projectRoot}/doc_build"
+      ]
     }
   },
   "defaultBase": "main",
   "nxCloudAccessToken": "Nzk0Y2MxMzYtY2I5Yy00NDkwLWE3MGEtMmYwZmQ4OGIxMWUyfHJlYWQtd3JpdGU=",
   "release": {
-    "projects": ["*"],
+    "projects": [
+      "*"
+    ],
     "versionPlans": true,
     "changelog": {
       "projectChangelogs": {

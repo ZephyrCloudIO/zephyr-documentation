@@ -37,3 +37,5 @@ yarn.lock
 package-lock.yaml
 
 temp-search-index.json
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
