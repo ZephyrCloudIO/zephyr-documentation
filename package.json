@@ -12,7 +12,7 @@
     "dev": "rspress dev --port 3030",
     "generate:plan": "nx release plan",
     "lint": "biome check",
-    "lint:fix": "biome check --fix",
+    "format": "biome check --fix && biome format --write",
     "prepare": "husky",
     "preview": "rspress preview",
     "typecheck": "tsc --noEmit"
@@ -46,7 +46,7 @@
     "rspress-plugin-reading-time": "^0.3.0",
     "rspress-plugin-sitemap": "^1.1.1",
     "tailwind-merge": "^3.0.2",
-    "zephyr-rspack-plugin": "^0.0.38",
+    "zephyr-rspack-plugin": "^0.0.50",
     "zod": "^3.24.2"
   },
   "devDependencies": {
