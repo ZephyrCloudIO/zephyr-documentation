@@ -404,24 +404,6 @@ For production deployments, combine different selectors for optimal stability:
 }
 ```
 
-### Platform-Specific Applications
-
-When building cross-platform applications, leverage platform resolution:
-
-```json title="Cross-platform package.json"
-{
-  "name": "mobile-commerce",
-  "zephyr:dependencies": {
-    // Platform-aware dependencies
-    "navigation": "zephyr:router-lib@latest",
-    "storage": "zephyr:data-layer@latest",
-
-    // Platform-specific overrides handled automatically
-    "ui-kit": "zephyr:universal-components@^4.0.0"
-  }
-}
-```
-
 ### Debugging Resolution Issues
 
 The resolution system provides several mechanisms for troubleshooting dependency resolution failures:
