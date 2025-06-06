@@ -277,7 +277,7 @@ The resolution engine implements automatic fallback to the 'web' platform when p
 
 ### Environment-Based Resolution
 
-Dependencies can also be resolved based on deployment environments:
+Dependencies can also be resolved based on deployment environments and tags:
 
 ```json title="package.json"
 {
