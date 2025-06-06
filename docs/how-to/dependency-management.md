@@ -141,6 +141,26 @@ The selectors provide fine-grained control:
 Zephyr uses the official semver specification for version matching. When multiple versions match a range, the highest matching version is selected.
 :::
 
+#### Wildcard Version
+
+The wildcard `"*"` selector matches any available version of a dependency, similar to `workspace:*` but with different resolution behavior:
+
+```json title="package.json"
+{
+  "zephyr:dependencies": {
+    "header": "header-component@*",
+    "footer": "footer-module@*"
+  }
+}
+```
+
+The `"*"` wildcard:
+
+- Matches any published version of the dependency
+- Uses the same workspace resolution logic as `workspace:*` when in development
+- Falls back to the latest available version if no workspace match is found
+- Provides a simpler syntax for cases where any version is acceptable
+
 #### Workspace Resolution
 
 The most powerful feature of Zephyr's dependency system is workspace resolution - the ability to automatically resolve dependencies based on your current build context:
