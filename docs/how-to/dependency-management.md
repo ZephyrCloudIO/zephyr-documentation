@@ -86,7 +86,7 @@ The `zephyr:` prefix is optional. Both `"ui-library@latest"` and `"zephyr:ui-lib
 The `zephyr:dependencies` field serves to:
 
 1. **Declare** which remote applications your module depends on
-2. **Create local aliases** for remote applications (local-name can differ from the app-uid)
+2. **Create local aliases** for remote applications, mapping the local name in your module federation configuration to the remote application name.
 3. **Map** remote applications from different repositories or organizations
 4. **Enable** Zephyr to validate that dependencies exist and are accessible
 5. **Support** multiple version resolution strategies for different deployment scenarios
@@ -245,7 +245,7 @@ The build context represents a structured collection of environmental metadata t
 
 ```typescript
 interface BuildContext {
-  target: string; // Platform target: 'web', 'node', 'ios', 'android` etc 
+  target: string; // Platform target: 'web', 'node', 'ios', 'android` etc
   isCI: boolean; // Whether building in CI/CD environment
   branch: string; // Current git branch name
   username: string; // Developer or CI username
@@ -363,7 +363,7 @@ The following patterns and strategies optimize dependency resolution for differe
 
 ### Development Workflow with Workspace Resolution
 
-The `workspace:*` selector enables automatic version coordination across feature branches:
+The `workspace:*` selector enables automatic local version coordination across branches:
 
 ```json title="Feature branch package.json"
 {
