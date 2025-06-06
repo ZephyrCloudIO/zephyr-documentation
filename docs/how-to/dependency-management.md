@@ -1,16 +1,25 @@
 # Dependency Management
 
-A key initial design goal for Zephyr Cloud was to enable incremental adoption. Upon installing the Zephyr package, it operates in an "sample only" mode. This means it starts to analyze the dependencies of your federated applications without requiring changes to your CI/CD pipeline or extensive configuration efforts.
+Zephyr implements a comprehensive dependency resolution system that enables micro-frontend applications to dynamically resolve and load their dependencies at build time, eliminating the need for hardcoded remote URLs and manual version coordination between teams.
 
-## How Dependency Resolution Works
+The dependency management system operates through a combination of build-time analysis and intelligent resolution strategies. During the build process, Zephyr plugins capture contextual information about the build environment and use this data to resolve abstract dependency declarations into concrete URLs and versions.
 
-When you build a micro-frontend application, one of the most complex challenges is ensuring that all remote dependencies are available at the correct versions. Zephyr's dependency resolution system solves this by providing a sophisticated resolution engine that works at build time to ensure your applications always load the right dependencies.
+## Dependency Resolution Architecture
 
-The resolution process follows a deterministic order, attempting multiple strategies until a valid dependency is found. This approach ensures that your applications can handle various deployment scenarios - from simple latest version deployments to complex multi-environment setups with feature branches.
+The resolution engine implements a multi-strategy approach to dependency resolution, attempting different resolution methods in a deterministic order until a valid dependency is found. Applications can adapt to various deployment scenarios without configuration changes.
+
+Each resolution strategy is designed for specific use cases:
+
+- **Workspace resolution** enables automatic version matching based on build context
+- **Semantic versioning** provides fine-grained control over acceptable version ranges
+- **Label-based resolution** allows targeting specific deployment stages
+- **Platform-specific resolution** ensures correct implementations for different runtime environments
+
+The system maintains backward compatibility while enabling advanced workflows that were previously difficult to implement in distributed architectures.
 
 ## Zephyr Dependencies Configuration
 
-Zephyr provides a dependency management system through the `zephyr:dependencies` field in your `package.json`. This allows you to specify remote module federation dependencies that your application needs.
+Zephyr provides a dependency management system through the `zephyr:dependencies` field in your `package.json` to specify remote module federation dependencies that your application needs.
 
 ### Basic Usage
 
@@ -75,7 +84,7 @@ For more precise version control, Zephyr supports the full semver specification:
 }
 ```
 
-These selectors provide fine-grained control:
+The selectors provide fine-grained control:
 
 - `^1.2.3` - Compatible with version 1.2.3 (allows 1.x.x updates)
 - `~2.0.0` - Approximately equivalent to 2.0.0 (allows 2.0.x updates)
@@ -107,7 +116,7 @@ When you use `workspace:*`, Zephyr intelligently resolves dependencies based on:
 - The build target platform
 - The developer's local environment
 
-This enables powerful workflows where feature branches automatically use matching versions of dependencies, eliminating the need for manual version updates during development.
+Feature branches automatically use matching versions of dependencies, eliminating the need for manual version updates during development.
 
 ### Example: Multi-Remote Setup
 
@@ -124,7 +133,7 @@ This enables powerful workflows where feature branches automatically use matchin
 }
 ```
 
-This configuration tells Zephyr:
+The configuration specifies:
 
 - Include `product-catalog` remote (mapped to `product-catalog` app name)
 - Include `shopping-cart` remote (mapped to `cart-service` app name)
@@ -147,11 +156,11 @@ If you have a poly-repo support (remotes live on different repositories than the
 
 ## Build Context and Dynamic Resolution
 
-One of Zephyr's most sophisticated features is its ability to understand and utilize build context for dependency resolution. This enables scenarios where the same codebase can automatically resolve to different dependency versions based on where and how it's being built.
+The dependency resolution system leverages build context to enable dynamic version selection based on environmental factors. A single codebase can resolve to different dependency versions depending on the build environment, target platform, and deployment context.
 
-### Understanding Build Context
+### Build Context Architecture
 
-Build context is a collection of metadata about your current build environment that Zephyr uses to make intelligent resolution decisions:
+The build context represents a structured collection of environmental metadata that the resolution engine uses to make deterministic version selections:
 
 ```typescript
 interface BuildContext {
@@ -162,11 +171,11 @@ interface BuildContext {
 }
 ```
 
-This context is automatically captured by Zephyr plugins during the build process and can be used for advanced dependency resolution strategies.
+The Zephyr plugins automatically capture this context during the build initialization phase. The resolution engine then uses these values to select appropriate dependency versions through pattern matching and fallback chains.
 
 ### Platform-Specific Resolution
 
-Zephyr supports building applications for multiple platforms, and dependencies can be resolved differently based on the target platform:
+The resolution engine implements platform-aware dependency selection, allowing applications to receive platform-optimized implementations of their dependencies:
 
 ```json title="package.json"
 {
@@ -177,13 +186,13 @@ Zephyr supports building applications for multiple platforms, and dependencies c
 }
 ```
 
-When building for different platforms:
+The platform resolution follows a hierarchical approach:
 
-- **Web builds** will receive web-optimized versions of dependencies
-- **React Native builds** will receive mobile-specific implementations
-- **Node.js builds** will receive server-compatible versions
+- **Web platform**: Default target, optimized for browser environments
+- **React Native platform**: Mobile-specific implementations with native module support
+- **Node.js platform**: Server-side implementations without browser dependencies
 
-If a platform-specific version isn't available, Zephyr automatically falls back to the 'web' platform version, ensuring your build never fails due to missing platform variants.
+The resolution engine implements automatic fallback to the 'web' platform when platform-specific versions are unavailable, ensuring build reliability while maintaining platform optimization when available.
 
 ### Environment-Based Resolution
 
@@ -202,9 +211,9 @@ Zephyr will resolve these to the appropriate environment-specific versions, with
 
 ## Resolution Order and Strategies
 
-When Zephyr encounters a dependency declaration, it follows a deterministic resolution order to find the best matching version. Understanding this order helps you design your versioning strategy effectively.
+The resolution engine processes dependency declarations through a deterministic pipeline of resolution strategies. Each strategy is attempted in order until a valid resolution is found or all strategies are exhausted.
 
-### Resolution Priority
+### Resolution Pipeline
 
 1. **Exact Version Match**: If the selector specifies an exact version (e.g., `1.2.3`), Zephyr looks for that specific version.
 
@@ -218,8 +227,8 @@ When Zephyr encounters a dependency declaration, it follows a deterministic reso
 
 6. **Default Environment**: As a final fallback, Zephyr checks the default environment for the application.
 
-:::danger Important
-Every application must have a unique environment created in Zephyr Cloud. If no environment is specified, Zephyr will fail to resolve the dependency.
+:::warning Environment Requirement
+Applications must have at least one environment created in Zephyr Cloud to be resolvable as dependencies. Without an environment, resolution will fail. Create environments through the Zephyr dashboard after building your application.
 :::
 
 ### Build-Time Behavior
@@ -237,47 +246,43 @@ During the build process, Zephyr:
 Resolved dependencies are cached during the build process to ensure consistency. If the same dependency is referenced multiple times, it will resolve to the same version throughout the build.
 :::
 
-### Error Handling and Fallbacks
+### Error Handling and Fallback Chain
 
-Zephyr's resolution system is designed to be resilient. If a dependency cannot be resolved:
+The resolution engine implements a multi-level fallback system to maximize resolution success rates:
 
-1. It first attempts platform fallbacks (e.g., falling back to 'web' platform)
-2. Then tries environment fallbacks (e.g., falling back to default environment)
-3. Finally, provides detailed error messages to help diagnose the issue
-
-```bash title="Resolution Error Example"
-[Zephyr Error] Failed to resolve dependency 'zephyr:ui-components@^3.0.0':
-- No versions found matching semver range '^3.0.0'
-- Available versions: 2.5.0, 2.4.1, 2.3.0
-- Suggestion: Update version constraint or publish a new version
-```
+1. **Platform fallback**: When platform-specific resolution fails, automatically attempts with 'web' platform
+2. **Environment fallback**: Falls back to the application's default environment when other strategies fail
+3. **Structured error codes**: Returns specific error codes to help diagnose resolution failures
 
 ## Dependency Graph
 
-Zephyr necessitates that you build the most distant remote first to accurately construct the dependency graph. Failing to do so will result in the following error:
+Zephyr requires building applications in dependency order - the most distant remotes must be built first to accurately construct the dependency graph. When a dependency cannot be resolved, you'll see detailed error messages:
 
-```bash title="Terminal"
-[ConfigurationError: [zephyr]: Could not resolve remote entry points for urls:
+```bash title="Resolution Error Example"
+Failed to resolve remote dependency: ui-components.design-system.my-org version ^3.0.0
 
-        - remote1.zephyr-examples.zackarychapple
-        - remote2.zephyr-examples.zackarychapple
+This could be due to one of the following reasons:
+- The remote application 'ui-components' has not been built with Zephyr yet
+- The specified version '^3.0.0' does not exist
+- You don't have access to this application
+- The application exists but no environment has been created
 
-        Please build them with Zephyr first or add as Unmanaged applications.
-
-        Note: you can read application uid as follows:
-                 - remote1 - project.json 'name' field of remote application
-                 - zephyr-examples - git repository name
-                 - zackarychapple - git organization name
-
-        Or join and ask a question in our discord: https://zephyr-cloud.io/discord
-      ]
+Steps to resolve:
+1. Ensure the remote application is built with Zephyr first
+2. For newly created applications, create an environment in the dashboard
+3. Check that the version exists by visiting the dashboard
+4. Verify you have access to my-org/design-system/ui-components
 ```
+
+For applications using multiple remotes, unresolved dependencies will be listed together, helping you identify which applications need to be built first.
 
 ## Best Practices
 
+The following patterns and strategies optimize dependency resolution for different deployment scenarios and team workflows.
+
 ### Development Workflow with Workspace Resolution
 
-The `workspace:*` selector is particularly powerful for feature branch development:
+The `workspace:*` selector enables automatic version coordination across feature branches:
 
 ```json title="Feature branch package.json"
 {
@@ -290,11 +295,11 @@ The `workspace:*` selector is particularly powerful for feature branch developme
 }
 ```
 
-With this configuration:
+The configuration enables:
 
-- On `feature/new-checkout` branch, dependencies automatically resolve to matching feature branch versions
-- In CI/CD pipelines, dependencies resolve to the appropriate environment versions
-- Developers can work on multiple related services without manual version updates
+- Feature branches resolve to matching feature branch versions of dependencies
+- CI/CD environments receive environment-appropriate versions
+- Local development automatically uses developer-specific builds
 
 ### Version Strategy for Production
 
@@ -338,16 +343,16 @@ When building cross-platform applications, leverage platform resolution:
 
 ### Debugging Resolution Issues
 
-When troubleshooting dependency resolution:
+The resolution system provides several mechanisms for troubleshooting dependency resolution failures:
 
-1. **Check Available Versions**: Ensure the version you're requesting exists
-2. **Verify Access Rights**: Confirm you have access to the application in Zephyr Cloud
-3. **Review Build Context**: Use Zephyr's debug mode to see the captured build context
-4. **Test Fallback Behavior**: Understand how your dependencies behave with fallbacks
+1. **Version availability verification**: Query the available versions for the target application
+2. **Access control validation**: Verify organization and project access permissions
+3. **Build context inspection**: Enable debug logging to examine captured context values
+4. **Fallback chain analysis**: Trace the resolution attempts through each fallback level
 
 ```bash title="Debug mode example"
-# Enable debug logging to see resolution decisions
-DEBUG=zephyr* npm run build
+# View detailed remote resolution logs
+DEBUG=zephyr:remotes npm run build
 ```
 
 ### Migration Strategies
