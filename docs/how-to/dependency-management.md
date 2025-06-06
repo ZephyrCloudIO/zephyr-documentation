@@ -124,4 +124,4 @@ Zephyr necessitates that you build the most distant remote first to accurately c
 
 ### Best Practices
 
-1. **Document Intent**: Use version tags to document your intended version requirements, even though they don't affect resolution yet
+**Document Intent**: Use version tags to document your intended version requirements, even though they don't affect resolution yet
