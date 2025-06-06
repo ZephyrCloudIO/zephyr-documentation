@@ -282,7 +282,7 @@ Dependencies can also be resolved based on deployment environments and tags:
 ```json title="package.json"
 {
   "zephyr:dependencies": {
-    "analytics": "zephyr:analytics-service@production",
+    "analytics": "zephyr:analytics-service@production", // first zephyr will try to find if there is an environment called `production`, and if not, zephyr will find if there is a tag called `production`
     "feature-flags": "zephyr:feature-service@staging"
   }
 }
