@@ -245,7 +245,7 @@ The build context represents a structured collection of environmental metadata t
 
 ```typescript
 interface BuildContext {
-  target: string; // Platform target: 'web', 'node', 'react-native'
+  target: string; // Platform target: 'web', 'node', 'ios', 'android` etc 
   isCI: boolean; // Whether building in CI/CD environment
   branch: string; // Current git branch name
   username: string; // Developer or CI username
