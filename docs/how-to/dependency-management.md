@@ -138,7 +138,7 @@ The selectors provide fine-grained control:
 - `>=1.0.0 <2.0.0` - Any version within the specified range
 
 :::info Semver Resolution
-Zephyr uses the official semver specification for version matching. When multiple versions match a range, the highest matching version is selected.
+Zephyr uses the [official semver specification](https://semver.org/) for version matching. When multiple versions match a range, the highest matching version is selected.
 :::
 
 #### Wildcard Version
