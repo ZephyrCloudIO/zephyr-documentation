@@ -30,7 +30,10 @@ const searchIndexHelper = getSearchIndexHash();
 
 const zephyrRsbuildPlugin = () => ({
   name: "zephyr-rsbuild-plugin",
-  setup(api) {
+  setup(api: {
+    // biome-ignore lint/suspicious/noExplicitAny: `modifyRspackConfig` is a valid method
+    modifyRspackConfig: (arg0: (config: any) => Promise<void>) => void;
+  }) {
     api.modifyRspackConfig(async (config) => {
       let searchIndexExists = false;
       searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);

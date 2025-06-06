@@ -7,6 +7,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/cn";
+import { useEffect, useState } from "react";
 import { useDark } from "rspress/runtime";
 import Theme from "rspress/theme";
 import { Footer } from "../components/footer";
@@ -14,7 +15,29 @@ import { type CardItemProps, version } from "../lib/site.config";
 
 export const CurrentVersion = () => {
   const dark = useDark();
-  return (
+  const [currentVersion, setCurrentVersion] = useState(version);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function getLatestVersion() {
+      try {
+        setIsLoading(true);
+        const response = await fetch(
+          "https://registry.npmjs.org/zephyr-webpack-plugin/latest",
+        );
+        const data = await response.json();
+        setCurrentVersion(data.version);
+      } catch (error) {
+        console.error("Error fetching package info:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    getLatestVersion();
+  }, []);
+
+  return isLoading ? null : (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>
@@ -25,7 +48,7 @@ export const CurrentVersion = () => {
           >
             <div className="py-1 mb-4 px-3 bg-blue-400 border-[0.4px] border-zinc-400/80 rounded-md">
               <p className="text-xs flex font-semibold text-[var(--rp-c-text-1)] font-mono">
-                Current version: {version}
+                Current version: {currentVersion}
               </p>
             </div>
           </a>
