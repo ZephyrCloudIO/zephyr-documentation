@@ -114,6 +114,10 @@ const sidebar: Sidebar = {
           link: "/how-to/mf-guide",
         },
         {
+          text: "Dependency Management",
+          link: "/how-to/dependency-management",
+        },
+        {
           text: "Fork Our Examples",
           link: "/how-to/fork-our-examples",
         },
