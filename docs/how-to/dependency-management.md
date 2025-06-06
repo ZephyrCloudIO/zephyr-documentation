@@ -58,7 +58,9 @@ Add a `zephyr:dependencies` field to your `package.json` to specify remote appli
   }
 }
 ```
+
 You will see more examples [later in this guide](#standard-version-selectors)
+
 ### Understanding Dependency Mapping
 
 In the `zephyr:dependencies` configuration, there are three key concepts:
