@@ -35,7 +35,7 @@ For example, if you have:
 
 - `package.json` name: `"ui-components"`
 - Repository: `design-system`
-- Organization: `my-company`
+- Git organization: `my-company`
 
 The Application UID would be: `ui-components.design-system.my-company`
 
