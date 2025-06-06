@@ -123,7 +123,7 @@ Details for each input after clicking **Add Integration** under **Akamai**:
 <dt>Set Integration as Default</dt>
 <dd>
   When set as default, all Zephyr deployments will use this integration until a
-  new one (default integration) is set. Won't work until akamai worker and property become activated.
+  new one (default integration) is set. Deploy with integration won't work until Akamai worker and property become activated.
 </dd>
 
 ### Validate domain and setup DNS
@@ -138,7 +138,7 @@ Details for each input after clicking **Add Integration** under **Akamai**:
 
   | Subdomain                         | Type  | Value                                      |
   |-----------------------------------|-------|--------------------------------------------|
-  | _acme-challenge.ze.yourdomain.com | CNAME | &lt;value from veerifitcation record&gt;   |
+  | _acme-challenge.ze.yourdomain.com | CNAME | &lt;value from verification record&gt;   |
   | ze.yourdomain.com                 | CNAME | ze.yourdomain.com.edgesuite.net.           |
   | *.ze.yourdomain.com               | CNAME | ze.yourdomain.com.edgesuite.net.           |
 
@@ -207,8 +207,8 @@ To delete an existing Akamai integration, follow these steps:
 
 ### Remove EdgeKV namespace
 
-Can me done only with [akamai api](https://techdocs.akamai.com/edgekv/reference/delete-namespace).
+Can be done only with [Akamai API](https://techdocs.akamai.com/edgekv/reference/delete-namespace).
 
 ### Revoke EdgeKV access token
 
-Can me done with [akamai cli](https://github.com/akamai/cli-edgeworkers/blob/master/docs/edgekv_cli.md#revoke-access-token) or [akamai api](https://techdocs.akamai.com/edgekv/reference/delete-namespace).
+Can be done with [Akamai CLI](https://github.com/akamai/cli-edgeworkers/blob/master/docs/edgekv_cli.md#revoke-access-token) or [Akamai API](https://techdocs.akamai.com/edgekv/reference/delete-namespace).
