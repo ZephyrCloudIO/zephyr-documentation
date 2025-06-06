@@ -64,7 +64,7 @@ Add a `zephyr:dependencies` field to your `package.json` to specify remote appli
 In the `zephyr:dependencies` configuration, there are three key concepts:
 
 1. **Local Name** (left side): The name you'll use in your code to import the remote module (e.g., `header`, `shoppingCart`)
-2. **Application UID** (right side, before @): The remote application's identifier (e.g., `ui-library`, `cart-service`)
+2. **Application UID** (right side, before @): The remote application's identifier (e.g., if they are in the same repository as host app, use `ui-library`, if they are in different repositories, use `cart-service.repo-name.org-name`)
 3. **Version Selector** (right side, after @): The version constraint (e.g., `latest`, `stable`, `v2.1`)
 
 The mapping works as follows:
