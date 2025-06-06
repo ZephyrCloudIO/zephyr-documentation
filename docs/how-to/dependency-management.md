@@ -17,32 +17,78 @@ Each resolution strategy is designed for specific use cases:
 
 The system maintains backward compatibility while enabling advanced workflows that were previously difficult to implement in distributed architectures.
 
+## Understanding Application UIDs
+
+Before working with dependencies, it's essential to understand how Zephyr identifies applications. Every application has a unique Application UID following this structure:
+
+```
+{application}.{project}.{organization}
+```
+
+Where:
+
+- **application**: The `name` field from the remote application's `package.json`
+- **project**: The git repository name
+- **organization**: The GitHub/GitLab organization or username
+
+For example, if you have:
+
+- `package.json` name: `"ui-components"`
+- Repository: `design-system`
+- Organization: `my-company`
+
+The Application UID would be: `ui-components.design-system.my-company`
+
 ## Zephyr Dependencies Configuration
 
 Zephyr provides a dependency management system through the `zephyr:dependencies` field in your `package.json` to specify remote module federation dependencies that your application needs.
 
 ### Basic Usage
 
-Add a `zephyr:dependencies` field to your `package.json` to specify remote applications your module depends on (more examples provided below):
+Add a `zephyr:dependencies` field to your `package.json` to specify remote applications your module depends on:
 
 ```json title="package.json"
 {
   "name": "my-host-app",
   "version": "1.0.0",
   "zephyr:dependencies": {
-    "remote-app": "zephyr:remote-app@latest",
-    "another-remote": "zephyr:my-org-remote@stable",
-    "versioned-remote": "zephyr:versioned-remote@v2.1"
+    "header": "ui-library@latest",
+    "shoppingCart": "cart-service@stable",
+    "analytics": "zephyr:analytics-module@v2.1"
   }
 }
 ```
 
-The `zephyr:dependencies` field currently serves to:
+### Understanding Dependency Mapping
+
+In the `zephyr:dependencies` configuration, there are three key concepts:
+
+1. **Local Name** (left side): The name you'll use in your code to import the remote module (e.g., `header`, `shoppingCart`)
+2. **Application UID** (right side, before @): The remote application's identifier (e.g., `ui-library`, `cart-service`)
+3. **Version Selector** (right side, after @): The version constraint (e.g., `latest`, `stable`, `v2.1`)
+
+The mapping works as follows:
+
+```json
+{
+  "zephyr:dependencies": {
+    "local-name": "application-uid@version"
+    // Your code imports as 'local-name'
+    // Resolves to application with UID 'application-uid'
+  }
+}
+```
+
+:::info Registry Prefix
+The `zephyr:` prefix is optional. Both `"ui-library@latest"` and `"zephyr:ui-library@latest"` work identically, as `zephyr` is the default registry. While the prefix is currently optional, we recommend including it for future compatibility when Zephyr supports multiple registries (e.g., `npm:`, `github:`, or custom enterprise registries).
+:::
+
+The `zephyr:dependencies` field serves to:
 
 1. **Declare** which remote applications your module depends on
-2. **Rename** local names (aliases) to remote applications
-3. **Map** remote applications living in a separate repository or organization
-4. **Enable** Zephyr to validate that dependencies exist
+2. **Create local aliases** for remote applications (local-name can differ from the app-uid)
+3. **Map** remote applications from different repositories or organizations
+4. **Enable** Zephyr to validate that dependencies exist and are accessible
 5. **Support** multiple version resolution strategies for different deployment scenarios
 
 ### Supported Declaration Formats
@@ -53,21 +99,21 @@ Zephyr's dependency resolution engine supports multiple version selector formats
 
 ```json title="package.json"
 {
-  // ...
   "zephyr:dependencies": {
-    "local-name": "zephyr:actual-app-uid@latest",
-    "ui-components": "zephyr:design-system@stable",
-    "shared-utils": "zephyr:utility-library@v2.1",
-    "beta-feature": "zephyr:experimental-module@next"
+    // Local alias -> Remote application @ version tag
+    "header": "header-component@latest",
+    "uiKit": "design-system@stable",
+    "utils": "shared-utilities@v2.1",
+    "experimental": "beta-features@next"
   }
 }
 ```
 
-The format `zephyr:app-uid@version` allows you to:
+Version tags allow you to:
 
-- Use a different local name (`local-name`) than the actual remote app UID (`actual-app-uid`)
-- Target specific version tags like `@latest`, `@stable`, `@next`, or custom tags
-- Reference specific versions by tag name (e.g., `@v2.1`)
+- Target lifecycle stages: `@latest`, `@stable`, `@next`
+- Reference specific releases: `@v2.1`, `@release-3.0`
+- Use custom environment tags: `@production`, `@staging`
 
 #### Semantic Version Ranges
 
@@ -125,34 +171,49 @@ Feature branches automatically use matching versions of dependencies, eliminatin
   "name": "ecommerce-host",
   "version": "1.0.0",
   "zephyr:dependencies": {
-    "product-catalog": "zephyr:product-catalog@latest",
-    "shopping-cart": "zephyr:cart-service@stable",
-    "user-profile": "zephyr:user-profile@latest",
-    "payment-widget": "zephyr:payments-team-widget@latest"
+    // Local name     -> Remote application UID @ version
+    "catalog": "product-catalog@latest",
+    "cart": "cart-service@stable",
+    "userProfile": "user-profile@latest",
+    "paymentWidget": "payments-widget@latest"
   }
 }
 ```
 
-The configuration specifies:
+In your code, you would import these as:
 
-- Include `product-catalog` remote (mapped to `product-catalog` app name)
-- Include `shopping-cart` remote (mapped to `cart-service` app name)
-- Include `user-profile` remote (mapped to `user-profile` app name)
-- Include `payment-widget` remote (mapped to `payments-team-widget` app name)
+```javascript
+// The local names are what you use in your imports
+import Catalog from "catalog/ProductList";
+import Cart from "cart/ShoppingCart";
+import UserProfile from "userProfile/Profile";
+import PaymentWidget from "paymentWidget/Checkout";
+```
 
-### Building Across Different Repositories
+### Cross-Repository Dependencies
 
-If you have a poly-repo support (remotes live on different repositories than the remote), you will need to specify that in order for Zephyr to resolve to the right remotes. The reason behind it is because Zephyr application names are unique only in the same project. Different project might contain the same name so we need specification to resolve. The whole application UID will be needed this time.
+When depending on applications from different repositories or organizations, use the full Application UID format to avoid ambiguity:
 
 ```json title="package.json"
 {
   "name": "ecommerce-host",
   "version": "1.0.0",
   "zephyr:dependencies": {
-    "product-catalog": "zephyr:product-catalog.product-project.ecommerce-org@latest"
+    // Short form (works within same project/org)
+    "header": "header-component@latest",
+
+    // Full UID form (required for cross-repo/org dependencies)
+    "catalog": "product-catalog.shop-repo.acme-corp@latest"
+    //          └─ app name ──┘└─ repo ─┘└─ org ─┘
   }
 }
 ```
+
+Use the full UID format when:
+
+- The remote application is in a different repository
+- The remote application is in a different organization
+- You need to disambiguate between applications with the same name
 
 ## Build Context and Dynamic Resolution
 
@@ -258,7 +319,7 @@ The resolution engine implements a multi-level fallback system to maximize resol
 
 Zephyr requires building applications in dependency order - the most distant remotes must be built first to accurately construct the dependency graph. When a dependency cannot be resolved, you'll see detailed error messages:
 
-```bash title="Resolution Error Example"
+```bash filename="Terminal"
 Failed to resolve remote dependency: ui-components.design-system.my-org version ^3.0.0
 
 This could be due to one of the following reasons:
@@ -350,7 +411,7 @@ The resolution system provides several mechanisms for troubleshooting dependency
 3. **Build context inspection**: Enable debug logging to examine captured context values
 4. **Fallback chain analysis**: Trace the resolution attempts through each fallback level
 
-```bash title="Debug mode example"
+```bash filename="Terminal"
 # View detailed remote resolution logs
 DEBUG=zephyr:remotes npm run build
 ```
