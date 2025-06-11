@@ -209,6 +209,81 @@ To delete an existing Akamai integration, follow these steps:
 
 Can be done only with [Akamai API](https://techdocs.akamai.com/edgekv/reference/delete-namespace).
 
+```javascript filename="Example"
+const EdgeGrid = require('akamai-edgegrid');
+
+const { homedir } = require('node:os');
+const { promisify } = require('node:util');
+
+const edgercPath = homedir() + '/.edgerc';
+const edgercSection = 'default';
+const eg = new EdgeGrid({
+path: edgercPath,
+  section: edgercSection,
+});
+
+const namespaceId = process.env.NAMESPACE;
+const network = process.env.NETWORK || 'production'; // staging or production
+
+eg.auth({
+  path: `/edgekv/v1/networks/${network}/namespaces/${namespaceId}`,
+    method: 'DELETE',
+    headers: {
+    'Content-Type': 'application/json',
+      Accept: 'application/json',
+  },
+  body: {},
+});
+
+const send = promisify(eg.send.bind(eg));
+  send()
+  .then(({ data }) => {
+    console.log('Namespace deleting result', data);
+  })
+  .catch((error) => {
+    console.error('Namespace deleting error', error);
+    process.exit(1);
+  });
+
+```
+
 ### Revoke EdgeKV access token
 
 Can be done with [Akamai CLI](https://github.com/akamai/cli-edgeworkers/blob/master/docs/edgekv_cli.md#revoke-access-token) or [Akamai API](https://techdocs.akamai.com/edgekv/reference/delete-namespace).
+
+```javascript filename="Example"
+const EdgeGrid = require('akamai-edgegrid');
+
+const { homedir } = require('node:os');
+const { promisify } = require('node:util');
+
+const edgercPath = homedir() + '/.edgerc';
+const edgercSection = 'default';
+const eg = new EdgeGrid({
+path: edgercPath,
+  section: edgercSection,
+});
+
+const tokenName = process.env.TOKEN_NAME;
+
+eg.auth({
+  path: `/edgekv/v1/tokens/${tokenName}`,
+    method: 'DELETE',
+    headers: {
+    'Content-Type': 'application/json',
+      Accept: 'application/json',
+  },
+  body: {},
+});
+
+const send = promisify(eg.send.bind(eg));
+send()
+  .then(({ data }) => {
+    console.log('Token revoking result', data);
+  })
+  .catch((error) => {
+    console.error('Token revoking error', error);
+    process.exit(1);
+  });
+
+```
