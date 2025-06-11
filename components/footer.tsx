@@ -35,9 +35,8 @@ const footerConfig = {
 const appId = process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID;
 if (appId) {
   Intercom({
-    app_id: appId,
-    utm_source: "documentation",
     ...INTERCOM_SETTINGS,
+    ...(appId ? { app_id: appId } : {}),
   });
 }
 

@@ -1,4 +1,5 @@
 export const INTERCOM_SETTINGS = {
+  app_id: "xyxkmxlj",
   page_title: "Zephyr Cloud",
   action_color: "#eee",
   vertical_padding: 80,
@@ -13,5 +14,4 @@ export const INTERCOM_SETTINGS = {
     name: "Zephyr Cloud",
     src: "https://zephyr-cloud.io/logo.png",
   },
-  utm_source: "documentation",
 };
