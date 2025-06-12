@@ -58,12 +58,17 @@ Before proceeding, you will need some data from Akamai:
 | Property Manager (PAPI)           | READ-WRITE   |
 
 - Copy or download token and add `[default]` as a header, so token will look like:
+
+:::warning Secure Your Credentials
+Keep your API token secure. Never commit credentials to version control or share them publicly.
+:::
+
 ```
 [default]
-client_secret = <secret>
-host = <host>
-access_token = <access_token>
-client_token = <client_token>
+client_secret = YOUR_CLIENT_SECRET
+host = YOUR_AKAMAI_HOST
+access_token = YOUR_ACCESS_TOKEN
+client_token = YOUR_CLIENT_TOKEN
 ```
 
 #### 2. Contract id
@@ -251,7 +256,7 @@ const send = promisify(eg.send.bind(eg));
 
 ### Revoke EdgeKV access token
 
-Can be done with [Akamai CLI](https://github.com/akamai/cli-edgeworkers/blob/master/docs/edgekv_cli.md#revoke-access-token) or [Akamai API](https://techdocs.akamai.com/edgekv/reference/delete-namespace).
+Can be done with [Akamai CLI](https://github.com/akamai/cli-edgeworkers/blob/master/docs/edgekv_cli.md#revoke-access-token) or [Akamai API](https://techdocs.akamai.com/edgekv/reference/delete-token).
 
 ```javascript filename="Example"
 const EdgeGrid = require('akamai-edgegrid');
