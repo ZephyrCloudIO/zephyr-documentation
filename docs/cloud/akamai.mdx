@@ -123,7 +123,7 @@ Details for each input after clicking **Add Integration** under **Akamai**:
 <dt>Set Integration as Default</dt>
 <dd>
   When set as default, all Zephyr deployments will use this integration until a
-  new one (default integration) is set. Deploy with integration won't work until Akamai worker and property become activated.
+  new one (default integration) is set. Deployment using integration won't work until Akamai worker and property become activated.
 </dd>
 
 ### Validate domain and setup DNS
@@ -138,11 +138,13 @@ Details for each input after clicking **Add Integration** under **Akamai**:
 
   | Subdomain                         | Type  | Value                                      |
   |-----------------------------------|-------|--------------------------------------------|
-  | _acme-challenge.ze.yourdomain.com | CNAME | &lt;value from verification record&gt;   |
+  | _acme-challenge.ze.yourdomain.com | CNAME | < value from verification record >         |
   | ze.yourdomain.com                 | CNAME | ze.yourdomain.com.edgesuite.net.           |
   | *.ze.yourdomain.com               | CNAME | ze.yourdomain.com.edgesuite.net.           |
 
 ### Wait until worker and property become activated
+
+It may take up to 30 minutes.
 
 </Steps>
 
@@ -201,7 +203,7 @@ To delete an existing Akamai integration, follow these steps:
 
 ### Remove edge hostname
 
-1. Click on ** Edge Hostnames** in the menu
+1. Click on **Edge Hostnames** in the menu
 2. Click on three **...** in the **Actions** column in the active version line
 3. Choose **Delete Edge Hostname**
 
