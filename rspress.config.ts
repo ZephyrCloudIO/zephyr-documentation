@@ -240,7 +240,7 @@ const sidebar: Sidebar = {
       link: "/supported",
     },
     {
-      text: "Trouble Shooting",
+      text: "Troubleshooting",
       link: "/errors",
       collapsed: true,
       collapsible: true,
