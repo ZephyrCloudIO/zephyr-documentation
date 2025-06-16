@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { pluginClientRedirects } from "@rspress/plugin-client-redirects";
 import type { Nav, Sidebar, SocialLink } from "@rspress/shared";
+import dotenv from "dotenv";
 import fileTree from "rspress-plugin-file-tree";
 import ga from "rspress-plugin-google-analytics";
 import readingTime from "rspress-plugin-reading-time";
@@ -29,7 +30,10 @@ const searchIndexHelper = getSearchIndexHash();
 
 const zephyrRsbuildPlugin = () => ({
   name: "zephyr-rsbuild-plugin",
-  setup(api) {
+  setup(api: {
+    // biome-ignore lint/suspicious/noExplicitAny: `modifyRspackConfig` is a valid method
+    modifyRspackConfig: (arg0: (config: any) => Promise<void>) => void;
+  }) {
     api.modifyRspackConfig(async (config) => {
       let searchIndexExists = false;
       searchIndexExists = fs.existsSync(TEMP_SEARCH_INDEX_PATH);
@@ -108,6 +112,10 @@ const sidebar: Sidebar = {
         {
           text: "Micro-Frontends with Zephyr",
           link: "/how-to/mf-guide",
+        },
+        {
+          text: "Dependency Management",
+          link: "/how-to/dependency-management",
         },
         {
           text: "Fork Our Examples",
@@ -232,7 +240,7 @@ const sidebar: Sidebar = {
       link: "/supported",
     },
     {
-      text: "Trouble Shooting",
+      text: "Troubleshooting",
       link: "/errors",
       collapsed: true,
       collapsible: true,
@@ -297,6 +305,8 @@ const sidebar: Sidebar = {
   ],
 };
 
+dotenv.config();
+
 export default defineConfig({
   root: path.join(__dirname, "docs"),
   title: "Zephyr Cloud Docs",
@@ -332,6 +342,13 @@ export default defineConfig({
   },
 
   builderConfig: {
+    source: {
+      define: {
+        "process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID": JSON.stringify(
+          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID,
+        ),
+      },
+    },
     plugins: [zephyrRsbuildPlugin()],
     output: {
       copy: {
