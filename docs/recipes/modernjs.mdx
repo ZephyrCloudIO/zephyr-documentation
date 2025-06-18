@@ -73,29 +73,49 @@ pnpm dlx @modern-js/create@latest
 
 ## Configure Zephyr
 
-Once created, navigate to your project directory and install dependencies:
+::: info
 
+Since modern.js is a framework built on top of Webpack or Rspack, you need to install both the Zephyr ModernJS plugin and the Rspack or Webpack plugin, depending on your bundler choice.
+
+:::
+
+Once created, navigate to your project directory and install dependencies:
 
 <Tabs values={[{label:"npm"}, {label: 'yarn'}, {label: 'pnpm'}]}>
 <Tab>
 ```bash filename="Terminal"
 cd your-project-name
 npm install
-npm install zephyr-modernjs-plugin@latest
+
+# if using rspack
+npm install zephyr-modernjs-plugin@latest zephyr-rspack-plugin@latest
+
+# if using webpack
+npm install zephyr-modernjs-plugin@latest zephyr-webpack-plugin@latest
 ```
 </Tab>
 <Tab>
 ```bash filename="Terminal"
 cd your-project-name
 yarn
-yarn add zephyr-modernjs-plugin@latest
+
+# if using rspack
+yarn add zephyr-modernjs-plugin@latest zephyr-rspack-plugin@latest
+
+# if using webpack
+yarn add zephyr-modernjs-plugin@latest zephyr-webpack-plugin@latest
 ```
 </Tab>
 <Tab>
 ```bash filename="Terminal"
 cd your-project-name
 pnpm i
-pnpm add zephyr-modernjs-plugin@latest
+
+# if using rspack
+pnpm add zephyr-modernjs-plugin@latest zephyr-rspack-plugin@latest
+
+# if using webpack
+pnpm add zephyr-modernjs-plugin@latest zephyr-webpack-plugin@latest
 ```
 </Tab>
 </Tabs>
