@@ -1,0 +1,120 @@
+# Building with GitLab Runner
+Zephyr requires an authenticated user in order to publish updates. In order to configure your GitLab Runner pipeline to build and deploy with Zephyr, you will need to add a token to the CI/CD variables.
+
+## Adding the GitLab CI/CD Variable
+You will need to create a token on your [API token](https://app.zephyr-cloud.io/profile/settings/user-tokens) page. After creating this token, you will need to add it as a CI/CD variable in your GitLab project.
+
+### Steps to add the token:
+1. Navigate to your GitLab project
+2. Go to **Settings** → **CI/CD**
+3. Expand the **Variables** section
+4. Click **Add variable**
+5. Set the following values:
+   - **Key**: `ZE_SECRET_TOKEN`
+   - **Value**: Your Zephyr API token
+   - **Type**: Variable
+   - **Environment scope**: All (or specify specific environments)
+   - **Protect variable**: Check if you want to use it only in protected branches
+   - **Mask variable**: Check to hide the value in job logs
+
+## Using the token in GitLab CI/CD
+
+In your `.gitlab-ci.yml` file, the token will be automatically available as an environment variable:
+
+```yml title=.gitlab-ci.yml
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  variables:
+    ZE_SECRET_TOKEN: $ZE_SECRET_TOKEN
+```
+
+For more explicit control, you can also reference it directly:
+
+```yml title=.gitlab-ci.yml
+deploy:
+  stage: deploy
+  script:
+    - npm install
+    - npm run build
+  environment:
+    name: production
+  variables:
+    ZE_SECRET_TOKEN: $ZE_SECRET_TOKEN
+```
+
+## Plugin behavior when secret token presents
+When the Zephyr plugin is triggered on an environment that holds the `ZE_SECRET_TOKEN` environment variable, it will use this token to authenticate with the Zephyr API and bypass the usual log in step. 
+
+You will notice that with a log in the console, the plugin will print the following message:
+
+```shell
+ ZEPHYR   Token found in environment. Using secret token for authentication
+```
+
+## Example GitLab CI/CD Pipeline
+
+Here's a complete example of a GitLab CI/CD pipeline using Zephyr:
+
+```yml title=.gitlab-ci.yml
+stages:
+  - install
+  - build
+  - deploy
+
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .npm/
+    - node_modules/
+
+install:
+  stage: install
+  script:
+    - npm ci --cache .npm --prefer-offline
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+build:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 day
+  variables:
+    ZE_SECRET_TOKEN: $ZE_SECRET_TOKEN
+
+deploy:
+  stage: deploy
+  script:
+    - npm run deploy
+  only:
+    - main
+  environment:
+    name: production
+  variables:
+    ZE_SECRET_TOKEN: $ZE_SECRET_TOKEN
+```
+
+## Troubleshooting
+
+### Token not found
+If you see an error about authentication failing, ensure:
+- The variable name is exactly `ZE_SECRET_TOKEN`
+- The variable is available in the environment where your job is running
+- The token has not expired
+
+### Protected variables
+If using protected variables, ensure your pipeline is running on a protected branch or tag.
+
+### Masked variables
+When a variable is masked, it won't appear in job logs. This is recommended for security but can make debugging harder. Temporarily unmask if you need to troubleshoot.
