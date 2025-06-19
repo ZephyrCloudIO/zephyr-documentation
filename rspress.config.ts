@@ -130,6 +130,10 @@ const sidebar: Sidebar = {
           link: "/how-to/github-automations",
         },
         {
+          text: "Gitlab automations",
+          link: "/how-to/gitlab-automations",
+        },
+        {
           text: "End-to-end Testing",
           link: "/how-to/end-to-end-testing",
         },
