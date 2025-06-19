@@ -165,6 +165,10 @@ const sidebar: Sidebar = {
       link: "/cloud",
       items: [
         {
+          text: "Akamai",
+          link: "/cloud/akamai",
+        },
+        {
           text: "Cloudflare",
           link: "/cloud/cloudflare",
         },
