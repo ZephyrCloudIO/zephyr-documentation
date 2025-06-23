@@ -7,6 +7,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/cn";
+import { DividerVerticalIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { useDark } from "rspress/runtime";
 import Theme from "rspress/theme";
@@ -68,12 +70,30 @@ export const CurrentVersion = () => {
 
 const AfterNavTitle = () => {
   return (
-    <div className="flex gap-4 items-center justify-center">
+    <div className="flex gap-4 items-center  justify-center">
       <a
         href="/"
-        className="text-sm font-nebu-semibold text-[var(--rp-c-text-1)] font-bold  transition-all hover:text-[var(--rp-c-text-2)]"
+        className="text-md  text-[var(--rp-c-text-1)] font-semibold font-nebu-semibold   transition-all hover:text-[var(--rp-c-text-2)]"
       >
         Docs
+      </a>
+      <DividerVerticalIcon className="w-4 h-4 " />
+      <a
+        href="/general/get-started"
+        rel="noreferrer"
+        className="text-sm font-semibold"
+      >
+        Get Started
+      </a>
+      <a
+        href="/features/mf-guide"
+        rel="noreferrer"
+        className="text-sm h-full hover:bg-[calc(var(--rp-c-text-2)/40)] font-semibold"
+      >
+        Features
+      </a>
+      <a href="/tutorials" rel="noreferrer" className="text-sm font-semibold">
+        Tutorials
       </a>
     </div>
   );

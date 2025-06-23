@@ -24,12 +24,13 @@
 
   /*--rp-c-text-code: #476573;*/
 
-  --rp-c-brand: #5889d5;
-  --rp-c-brand-light: #00aaff;
+  --rp-c-brand: #803fd4;
+  --rp-c-brand-light: #ad84e3;
   --rp-c-brand-lighter: #ecf4ff;
-  --rp-c-brand-dark: #287dde;
-  --rp-c-brand-darker: #3367af;
-  --rp-c-brand-tint: rgba(127, 163, 255, 0.16);
+  --rp-c-brand-dark: #521f94;
+  --rp-c-brand-darker: #340e66;
+  --rp-c-brand-tint: rgb(128, 63, 212, 0.14);
+  --rp-c-link: #e1d0f6;
 
   /*--rp-c-gray: #8e8e8e;*/
   --rp-c-gray-light-1: #aeaeae;

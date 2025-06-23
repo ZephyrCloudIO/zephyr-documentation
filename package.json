@@ -63,20 +63,21 @@
     "@types/node": "^22.13.13",
     "@types/react": "^19.0.12",
     "autoprefixer": "^10.4.21",
+    "dotenv": "^16.5.0",
     "globals": "^16.0.0",
     "nx": "21.1.2",
     "postcss": "^8.5.3",
     "postcss-loader": "^8.1.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.2",
-    "dotenv": "^16.5.0"
+    "typescript": "^5.8.2"
   },
   "optionalDependencies": {
     "@rspress/mdx-rs-linux-x64-gnu": "^0.6.6"
   },
   "pnpm": {
     "patchedDependencies": {
-      "rspress-plugin-google-analytics@0.3.0": "patches/rspress-plugin-google-analytics@0.3.0.patch"
+      "rspress-plugin-google-analytics@0.3.0": "patches/rspress-plugin-google-analytics@0.3.0.patch",
+      "@rspress/theme-default": "patches/@rspress__theme-default.patch"
     },
     "onlyBuiltDependencies": [
       "@biomejs/biome",
