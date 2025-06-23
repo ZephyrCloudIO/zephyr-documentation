@@ -1,0 +1,63 @@
+diff --git a/dist/bundle.css b/dist/bundle.css
+index 5d3288642b3aacdde9f44747854047832cf79a6a..f1d39cddeb4a8c012c1f434b596d2b626118151e 100644
+--- a/dist/bundle.css
++++ b/dist/bundle.css
+@@ -1,7 +1,7 @@
+ .aside-link {
+-  border-radius: var(--rp-radius-small) 0 0 var(--rp-radius-small);
++  border-radius: 0 0 0 0;
+   margin-bottom: 1px;
+-  padding: .25rem 0;
++  padding: 0.4rem 0.2rem;
+ }
+ 
+ .aside-link:hover {
+@@ -15,7 +15,7 @@
+ 
+ .aside-link-text {
+   overflow-wrap: break-word;
+-  padding: 0 12px;
++  padding: 6px 12px;
+   font-size: .8125rem;
+   line-height: 1.25rem;
+ }
+@@ -53,7 +53,7 @@
+ 
+ .navContainer_d18b1 {
+   background: var(--rp-c-bg);
+-  height: var(--rp-nav-height);
++  border-bottom: 0.4px solid var(--rp-c-text-1);
+   z-index: var(--rp-z-index-nav);
+   transition: transform .3s, opacity .3s;
+   top: 0;
+@@ -243,7 +243,7 @@
+ }
+ 
+ .menuItem_ac22e, .menuItemActive_de63c {
+-  border-radius: 0 var(--rp-radius) var(--rp-radius) 0;
++  border-radius: 0 0 0 0;
+   font-size: 13px;
+   line-height: 19px;
+ }
+diff --git a/dist/bundle.js b/dist/bundle.js
+index ef6850600f48b035786e29398a6e5ea9eb2dc020..a1c92257c8666e49eed84af3753200cb19bcb5ca 100644
+--- a/dist/bundle.js
++++ b/dist/bundle.js
+@@ -601,7 +601,7 @@ function SidebarGroup(props) {
+                     collapsible && toggleCollapse(e);
+                 },
+                 style: {
+-                    borderRadius: 0 === depth ? '0 var(--rp-radius) var(--rp-radius) 0' : void 0,
++                    borderRadius: 0 === depth ? '0 0 0 0' : void 0,
+                     cursor: collapsible || item.link ? 'pointer' : 'normal'
+                 },
+                 children: [
+@@ -689,7 +689,7 @@ function SidebarItem(props) {
+             style: {
+                 fontSize: 0 === depth ? '14px' : '13px',
+                 marginLeft: 0 === depth ? 0 : '18px',
+-                borderRadius: '0 var(--rp-radius) var(--rp-radius) 0',
++                borderRadius: '0 0 0 0',
+                 ...0 === depth ? highlightTitleStyle : {}
+             },
+             children: [

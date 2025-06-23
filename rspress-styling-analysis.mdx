@@ -1,0 +1,153 @@
+# RSPress Styling and Component Analysis
+
+## Overview
+
+This document outlines the global styling and component files that control the RSPress docsite's appearance, based on analysis of the `@rspress` packages.
+
+## Main Theme Package Location
+
+**Path**: `/Users/lois/Documents/Github/work/repos/zephyr-documentation/node_modules/.pnpm/@rspress+theme-default@1.43.9/node_modules/@rspress/theme-default/`
+
+This is the core theme package for RSPress that contains all default styling and components.
+
+## CSS Files
+
+### Main Global Styles
+
+**File**: `node_modules/.pnpm/@rspress+theme-default@1.43.9/node_modules/@rspress/theme-default/dist/bundle.css`
+
+Contains ALL global styles for the RSPress theme, including:
+- CSS custom properties (CSS variables) for colors, spacing, typography
+- Component styles for navigation, sidebar, content areas
+- Responsive design rules
+- Dark mode styles
+- Code syntax highlighting styles
+
+### Key CSS Variables
+
+```css
+:root {
+  --rp-nav-height: 72px;
+  --rp-sidebar-width: 320px;
+  --rp-aside-width: 268px;
+  --rp-c-bg: #fff;
+  --rp-c-bg-soft: #f9f9f9;
+  --rp-c-bg-mute: #f1f1f1;
+  --rp-c-brand: #0095ff;
+  --rp-c-text-1: #213547;
+  --rp-radius: 1rem;
+  /* And many more... */
+}
+
+.dark {
+  --rp-c-bg: #191d24;
+  --rp-c-bg-soft: #292e37;
+  /* Dark mode overrides */
+}
+```
+
+## Component Files
+
+### Main Theme Entry Point
+
+**File**: `node_modules/.pnpm/@rspress+theme-default@1.43.9/node_modules/@rspress/theme-default/dist/index.js`
+
+Imports the CSS bundle and exports all theme components.
+
+### Bundled Components
+
+**File**: `node_modules/.pnpm/@rspress+theme-default@1.43.9/node_modules/@rspress/theme-default/dist/bundle.js`
+
+Contains all React components for the theme including:
+- Navigation components
+- Sidebar components
+- Content layout components
+- Search components
+- Dark mode toggle
+- Code blocks and syntax highlighting
+
+### Theme Assets
+
+**Directory**: `node_modules/.pnpm/@rspress+theme-default@1.43.9/node_modules/@rspress/theme-default/dist/assets/`
+
+Contains icon components:
+- `arrow-down.js`
+- `menu.js`
+- `search.js`
+- And other UI icons
+
+## Project-Level Customization Files
+
+### Custom Theme Override
+
+**File**: `/Users/lois/Documents/Github/work/repos/zephyr-documentation/theme/index.tsx`
+
+Custom theme wrapper that extends the default RSPress theme.
+
+### Custom Global Styles
+
+**File**: `/Users/lois/Documents/Github/work/repos/zephyr-documentation/styles/index.css`
+
+Project-specific CSS that overrides RSPress default variables:
+
+```css
+:root {
+  --rp-c-brand: #5889d5;
+  --rp-c-brand-dark: #287dde;
+  /* Custom color overrides */
+}
+```
+
+### Custom Fonts
+
+**File**: `/Users/lois/Documents/Github/work/repos/zephyr-documentation/styles/fonts.css`
+
+Custom font definitions (Nebulica font family).
+
+## Configuration Files
+
+### RSPress Configuration
+
+**File**: `/Users/lois/Documents/Github/work/repos/zephyr-documentation/rspress.config.ts`
+
+Key configuration:
+- `globalStyles: path.join(__dirname, "styles/index.css")` - Links custom styles
+- `themeConfig` - Controls theme behavior and appearance
+
+## Key Areas for Style Customization
+
+1. **Color Scheme**: Modify CSS variables in your custom `styles/index.css` to override default colors
+2. **Layout**: The `bundle.css` contains all layout styles for nav, sidebar, and content areas
+3. **Typography**: Font families and sizes are controlled via CSS variables
+4. **Component Styling**: Individual component styles are in the `bundle.css` with modular CSS class names
+5. **Dark Mode**: Dark mode styles are defined in `.dark` selector blocks
+
+## Recommended Approach for Patching
+
+Since the theme files are in `node_modules`, I recommend:
+
+1. **Continue using your custom `styles/index.css`** to override CSS variables
+2. **Use the `theme/index.tsx` file** to wrap or extend components
+3. **Consider creating patches** for the `@rspress/theme-default` package if deeper modifications are needed
+
+The main styling control happens through the CSS custom properties system, which allows for extensive customization without modifying the core theme files directly.
+
+## Package Structure Summary
+
+```
+@rspress/
+├── core/           # Core RSPress functionality
+├── runtime/        # Runtime components and utilities
+├── shared/         # Shared utilities and types
+└── theme-default/  # 🎯 Main styling and components here
+    ├── dist/
+    │   ├── bundle.css     # 🎯 All global styles
+    │   ├── bundle.js      # 🎯 All React components
+    │   ├── index.js       # Theme entry point
+    │   └── assets/        # Icon components
+    └── ...
+```
+
+---
+
+*This analysis was generated to help identify where RSPress styling and components are located for customization purposes.*

@@ -67,17 +67,6 @@ const socialLinks: SocialLink[] = [
 
 const nav: Nav = [
   {
-    text: "Get Started",
-    link: "/general/get-started",
-    activeMatch: "/general/get-started/",
-  },
-  {
-    text: "Learning",
-    link: "/learning",
-    activeMatch: "/learning",
-  },
-
-  {
     text: "Zephyr Cloud →",
     link: "https://app.zephyr-cloud.io",
   },
@@ -87,10 +76,15 @@ const sidebar: Sidebar = {
   "/": [
     {
       text: "General",
+      link: "/",
       items: [
         {
           text: "Why Zephyr Cloud",
           link: "/general/why-zephyr-cloud",
+        },
+        {
+          text: "Architecture",
+          link: "/general/architecture",
         },
         {
           text: "Get Started",
@@ -107,134 +101,56 @@ const sidebar: Sidebar = {
       ],
     },
     {
-      text: "How to",
+      text: "Features",
+      link: "/features/mf-guide",
       items: [
         {
           text: "Micro-Frontends with Zephyr",
-          link: "/how-to/mf-guide",
+          link: "/features/mf-guide",
         },
         {
           text: "Dependency Management",
-          link: "/how-to/dependency-management",
+          link: "/features/dependency-management",
         },
         {
           text: "Fork Our Examples",
-          link: "/how-to/fork-our-examples",
+          link: "/features/fork-our-examples",
         },
         {
           text: "Environments",
-          link: "/how-to/environments",
+          link: "/features/environments",
         },
         {
           text: "GitHub automations",
-          link: "/how-to/github-automations",
+          link: "/features/github-automations",
         },
         {
           text: "Gitlab automations",
-          link: "/how-to/gitlab-automations",
+          link: "/features/gitlab-automations",
         },
         {
           text: "End-to-end Testing",
-          link: "/how-to/end-to-end-testing",
+          link: "/features/end-to-end-testing",
         },
         {
           text: "Chrome Extension",
-          link: "/how-to/browser-extension",
+          link: "/features/browser-extension",
         },
         {
           text: "Version rollback and roll-forward",
-          link: "/how-to/versioning-tags",
+          link: "/features/versioning-tags",
         },
         {
           text: "Generate an API Token",
-          link: "/how-to/api-token",
+          link: "/features/api-token",
         },
         {
           text: "Version Statuses",
-          link: "/how-to/version-statuses",
+          link: "/features/version-statuses",
         },
         {
           text: "Allow IP addresses",
-          link: "/how-to/allow-ip-addresses",
-        },
-      ],
-    },
-
-    {
-      text: "Cloud Providers",
-      link: "/cloud",
-      items: [
-        {
-          text: "Cloudflare",
-          link: "/cloud/cloudflare",
-        },
-        {
-          text: "Fastly",
-          link: "/cloud/fastly",
-        },
-        {
-          text: "Netlify",
-          link: "/cloud/netlify",
-        },
-      ],
-    },
-    {
-      text: "Recipes",
-      link: "/recipes",
-      collapsed: false,
-      collapsible: true,
-      items: [
-        {
-          text: "Existing App",
-          link: "/recipes/existing-app",
-        },
-        {
-          text: "React Native + Re.Pack + MF",
-          link: "/recipes/repack-mf",
-        },
-        {
-          text: "React + Vite",
-          link: "/recipes/react-vite",
-        },
-        {
-          text: "Vite + Rspack + webpack + MF",
-          link: "/recipes/vite-rspack-webpack-mf",
-        },
-        {
-          text: "React + Rspack + Nx",
-          link: "/recipes/react-rspack-nx",
-        },
-        {
-          text: "Rspress",
-          link: "/recipes/rspress",
-        },
-        {
-          text: "React + Rspack + Turborepo",
-          link: "/recipes/turborepo-react",
-        },
-        {
-          text: "React Native",
-          link: "/recipes/react-native",
-        },
-        {
-          text: "Migrate from Webpack to Rspack in Nx",
-          link: "/recipes/migrate-nx-webpack-to-rspack",
-        },
-        {
-          text: "Nx MF App",
-          link: "/recipes/nx-mf-app",
-        },
-        {
-          text: "ModernJS",
-          link: "/recipes/modernjs",
-        },
-        {
-          text: "Rolldown React",
-          link: "/recipes/rolldown-react",
-        },
-        {
-          text: "Parcel React",
-          link: "/recipes/parcel-react",
+          link: "/features/allow-ip-addresses",
         },
       ],
     },
@@ -305,6 +221,90 @@ const sidebar: Sidebar = {
     {
       text: "Additional Resources",
       link: "/learning/resources",
+    },
+  ],
+  "/tutorials": [
+    {
+      text: "Tutorials",
+      collapsed: false,
+      collapsible: true,
+      items: [
+        {
+          text: "Existing App",
+          link: "/tutorials/existing-app",
+        },
+        {
+          text: "React Native + Re.Pack + MF",
+          link: "/tutorials/repack-mf",
+        },
+        {
+          text: "React + Vite",
+          link: "/tutorials/react-vite",
+        },
+        {
+          text: "Vite + Rspack + webpack + MF",
+          link: "/tutorials/vite-rspack-webpack-mf",
+        },
+        {
+          text: "React + Rspack + Nx",
+          link: "/tutorials/react-rspack-nx",
+        },
+        {
+          text: "Rspress",
+          link: "/tutorials/rspress",
+        },
+        {
+          text: "React + Rspack + Turborepo",
+          link: "/tutorials/turborepo-react",
+        },
+        {
+          text: "React Native",
+          link: "/tutorials/react-native",
+        },
+        {
+          text: "Migrate from Webpack to Rspack in Nx",
+          link: "/tutorials/migrate-nx-webpack-to-rspack",
+        },
+        {
+          text: "Nx MF App",
+          link: "/tutorials/nx-mf-app",
+        },
+        {
+          text: "ModernJS",
+          link: "/tutorials/modernjs",
+        },
+        {
+          text: "Rolldown React",
+          link: "/tutorials/rolldown-react",
+        },
+        {
+          text: "Parcel React",
+          link: "/tutorials/parcel-react",
+        },
+      ],
+    },
+    {
+      text: "Cloud Providers",
+      link: "/cloud",
+      items: [
+        {
+          text: "Cloudflare",
+          link: "/cloud/cloudflare",
+        },
+        {
+          text: "Fastly",
+          link: "/cloud/fastly",
+        },
+        {
+          text: "Netlify",
+          link: "/cloud/netlify",
+        },
+      ],
+    },
+
+    {
+      text: "Additional Resources",
+      link: "/tutorials/resources",
     },
   ],
 };
