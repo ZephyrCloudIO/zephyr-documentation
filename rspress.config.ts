@@ -73,7 +73,7 @@ const nav: Nav = [
   },
   {
     text: "Learning",
-    link: "/learning",
+    link: "/learning/concepts/architecture",
     activeMatch: "/learning",
   },
 
