@@ -1,4 +1,4 @@
-import RepackTabs from '@/components/zephyr/repack/repack-docs';
+import RepackTabs from "@/components/zephyr/repack/repack-docs";
 
 # React Native, Re.Pack and Module Federations
 
@@ -27,19 +27,140 @@ Several key points that were handled by Re.Pack to make this integration attaina
 
 ## Get Started
 
-
 <RepackTabs />
 
+## Over-the-air updates
 
-## Resolving platforms  
+Once your federated React Native app is deployed and running in production, you'll want to push updates to your mini-apps without requiring users to download a new version from the app store. This is where Zephyr's over-the-air (OTA) update capabilities come in handy.
 
-Behind `zephyr-repack-plugin`, we auto-handle the platform resolution. When you are building a React Native app, the plugin would recognise the platform and finding, resolving the correct dependencies for the platform. For example if you are building for iOS, the plugin would resolve the iOS dependencies and vice versa for Android. No additional configuration is required to resolve the platform. 
+The `react-native-zephyr-sdk` package provides a simple way to check for and download updated versions of your mini-apps at runtime. This allows you to deploy bug fixes, feature updates, and new mini-apps instantly to your users.
+
+:::info
+
+This sdk is a runtime dependency and it's best to be paired with `zephyr-repack-plugin` for optimal usage.
+
+:::
+
+### Installation
+
+Install the SDK along with its peer dependencies:
+
+```bash
+npm install react-native-zephyr-sdk@latest
+npm install react-native-mmkv@>=3.1.0
+```
+
+### Basic Usage
+
+First, initialize the SDK in your host app. We recommend using a shared storage instance name to ensure consistency across your federated modules:
+
+```javascript title="utils/zephyr-sdk.ts"
+import { ReactNativeZephyrSDK } from "react-native-zephyr-sdk";
+import { ScriptManager } from "@callstack/repack/client";
+// Initialize SDK
+const storage = new MMKV({
+  id: "federation-storage",
+});
+const sdk = new ReactNativeZephyrSDK({
+  storage,
+});
+
+// You can also initialise the sdk with Repack
+ScriptManager.setStorage(storage);
+```
+
+### Checking for Updates
+
+If you are using `zephyr-repack-plugin` to build your app, ensure you follow the [dependency resolution guide](/how-to/dependency-management), and you can check if a newer version of your mini-app is available at runtime:
+
+```javascript title="Component.tsx"
+import { registerRemotes, loadRemote } from "@module-federation/runtime";
+
+const remoteName = "YourMiniAppName";
+// Check for remote app updates
+const result = await sdk.getRemoteApp(remoteName);
+
+const Component = useCallback(() => {
+  if (result.isUpdated) {
+  // Update available - the SDK will handle downloading
+  console.log("Update downloaded successfully");
+  // use module federation to load the remote app
+  registerRemotes([
+    {
+      name: remoteName,
+      entry: result.availableRemoteUrl,
+    },
+  ]);
+  return loadRemote(remoteName);
+
+} else {
+   // if no update is available, we can use the current remote's entry in storage
+   const currentRemote = await sdk.getCurrentRemoteUrl("YourMiniAppName");
+   registerRemotes([
+    {
+      name: remoteName,
+      entry: currentRemote,
+    },
+  ]);
+  // No update available or error occurred
+  console.log("No update available");
+  return loadRemote(remoteName);
+}
+}, []);
+
+
+```
+
+### Version Resolution
+
+The SDK supports multiple version resolution formats:
+
+- **Semantic versioning**: `"^1.0.0"` - Gets the latest compatible version
+- **Workspace matching**: Automatically resolves versions from your workspace
+- **Zephyr Registry references**: Direct references to specific registry versions
+- **Scoped packages**: Support for `@scope/package-name` naming conventions
+
+You can follow the below example to use the version resolution with the sdk:
+
+```javascript title="Component.tsx"
+import { ReactNativeZephyrSDK } from "react-native-zephyr-sdk";
+
+const sdk = new ReactNativeZephyrSDK();
+// Semantic versioning
+const result = await sdk.getRemoteApp("YourMiniAppName@1.0.0");
+
+// Environment name
+const result2 = await sdk.getRemoteApp("YourMiniAppName@environment-name");
+
+// Tag name
+const result3 = await sdk.getRemoteApp("YourMiniAppName@tag-name");
+
+// Resolve agnostically to the latest deployed version of the remote
+const result4 = await sdk.getRemoteApp("YourMiniAppName@workspace:*");
+```
+
+### Integration with Re.Pack
+
+The SDK works seamlessly with Re.Pack's module federation setup. When a new version is downloaded, Re.Pack's runtime will automatically use the updated mini-app on the next load. This means you can update your mini-apps without restarting the main application.
+
+You can read more about repack's implementation in [Repack's documentation](https://re-pack.dev/docs/getting-started/quick-start).
+
+### Best Practices
+
+1. **Check for updates on app start**: Initialize update checks when your app launches to ensure users get the latest versions
+2. **Handle update failures gracefully**: Always have fallback logic in case updates fail to download
+3. **Use shared storage**: Configure the same storage instance name across all your federated modules for consistency
+4. **Version your shared dependencies**: Make sure your shared dependencies are compatible across different mini-app versions
+
+## Resolving platforms
+
+Behind `zephyr-repack-plugin`, we auto-handle the platform resolution. When you are building a React Native app, the plugin would recognise the platform and finding, resolving the correct dependencies for the platform. For example if you are building for iOS, the plugin would resolve the iOS dependencies and vice versa for Android. No additional configuration is required to resolve the platform.
 
 For each version that's built and deployed, you can find the platform on the Tag page of the application version, displayed as `IOS` or `ANDROID` next to `Target` field. The platform's name is also part of the tag name that's being created on each deployment.
 
 ![platform-tag](/repack/platform-resolve.png)
 
-## Manage dependencies 
+## Manage dependencies
 
 Sharing dependencies in a federated mobile application differs slightly from a federated web application. It requires more effort due to the native aspects of React Native dependencies.
 
@@ -51,10 +172,9 @@ The same rule applies to all dependencies that include native code. For example,
 
 For shared JavaScript-only dependencies, it's not necessary to mark them as shared, as Re.Pack can handle downloading them from the mini-app. However, for better network efficiency, it is recommended to include them as shared dependencies.
 
-All this effort requires significant maintenance of the dependencies list in `rspack`/`webpack` and `package.json` for each application. This process can be simplified by using Microsoft’s `rnx-align-deps` library with a custom preset and helper functions to generate the shared dependencies list. 
+All this effort requires significant maintenance of the dependencies list in `rspack`/`webpack` and `package.json` for each application. This process can be simplified by using Microsoft’s `rnx-align-deps` library with a custom preset and helper functions to generate the shared dependencies list.
 
-
-## Handle Navigation 
+## Handle Navigation
 
 Handling navigation in a React Native federated application differs slightly from web apps, as it does not rely solely on a links-based routing system and the browser's history API. Instead, it incorporates native navigation concepts such as UINavigationController on iOS and Fragment on Android.
 
@@ -76,11 +196,7 @@ On the downside, this approach increased coupling, which resulted in challenges 
 
 There is also a third solution: using a single NavigationContainer in the host application while exposing navigators from the mini applications. This approach reduces coupling, allowing mini applications to maintain control over their navigators. However, it can lead to undesirable navigation structures, such as deeply nested stack navigators, and a complex linking setup that requires synchronization between the host and mini applications.
 
-
-
-
-
-#### Contributor 
+#### Contributor
 
 Huge thanks for [Callstack](https://callstack.com) for working with us to make this possible.
 
