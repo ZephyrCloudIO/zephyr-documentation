@@ -1,7 +1,7 @@
-import React from "react";
 import { AkamaiIcon } from "@/components/icons/akamai";
 import { CloudflareIcon } from "@/components/icons/cloudflare";
 import { FastlyIcon } from "@/components/icons/fastly";
+import type React from "react";
 import ModuleFederationIcon from "../components/icons/module-federation";
 // import { QwikIcon } from '../components/icons/qwik';
 // import { AngularIcon } from '../components/icons/angular';
