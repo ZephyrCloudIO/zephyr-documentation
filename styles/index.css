@@ -137,7 +137,7 @@ dd {
 @tailwind components;
 @tailwind utilities;
 
-/* Fix prev/next navigation buttons - outside of @layer for higher specificity */
+/* Fix prev/next navigation buttons - must be outside @layer for proper specificity */
 .rspress-doc-footer footer > div:last-child {
   display: flex !important;
   flex-direction: row !important;
@@ -167,26 +167,8 @@ dd {
 }
 
 @layer base {
-  /* Fix prev/next navigation buttons - force side-by-side layout */
-  .rspress-doc-footer footer > div:last-child {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    gap: 1rem !important;
-  }
-
-  .rspress-doc-footer [class*="prev_"],
-  .rspress-doc-footer [class*="next_"] {
-    flex: 1 !important;
-    max-width: 48% !important;
-  }
-
-  .rspress-doc-footer [class*="prev_"] {
-    text-align: left !important;
-  }
-
-  .rspress-doc-footer [class*="next_"] {
-    text-align: right !important;
+  hr {
+    @apply border-b-[0.4px] items-center w-full opacity-20 !py-4 flex;
   }
 
   hr {

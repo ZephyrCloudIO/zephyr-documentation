@@ -7,6 +7,7 @@ export function AkamaiIcon(props: SVGProps<SVGSVGElement>) {
 			width="32"
 			height="32"
 			viewBox="0 0 153.9 167.3"
+			aria-label="Akamai"
 			{...props}
 		>
 			<g>
