@@ -1,0 +1,69 @@
+---
+title: 'Updating Deployment Integrations'
+description: 'Step-by-step guide to update your deployment integrations and keep them current'
+---
+
+import { Button } from '../../components/ui/button.tsx';
+import { Steps, Badge } from '@theme';
+import { Separator } from '../../components/ui/separator.tsx';
+
+# Updating Deployment Integrations
+
+Keep your deployment integrations up-to-date to ensure access to the latest features, performance improvements, and security updates.
+
+## How to Update Your Integration
+
+<Steps>
+
+### Navigate to Organization Settings
+
+Log in to the [Zephyr Dashboard](https://app.zephyr-cloud.io) and navigate to your organization-level settings.
+
+### Access Deployment Integrations
+
+In your organization settings, locate the **Deployment Integrations** section where all your configured cloud provider integrations are listed.
+
+### Edit Integration
+
+Click the **Edit** button on the integration you wish to update. This will open the integration configuration screen.
+
+### Check for Updates
+
+At the bottom of the integration configuration screen, you'll see the current worker version information. If an update is available, you'll be presented with an **Update Worker Version** button.
+
+### Apply Update
+
+Click the **Update Worker Version** button to apply the latest version. The update process typically takes a few minutes and will not affect your currently deployed applications.
+
+</Steps>
+
+## Update Best Practices
+
+- **Regular Updates**: Check for integration updates monthly or when new Zephyr features are announced
+- **Team Communication**: Notify your development team when updates are applied, even though their workflow won't change
+- **Monitor Deployments**: Keep an eye on your first few deployments after an update to ensure everything works as expected
+
+## Rollback Information
+
+:::warning Important Rollback Note
+
+If you need to perform a rollback of your deployment integration, you must do so through your specific cloud provider's interface, not through the Zephyr dashboard. 
+
+Each cloud provider has different rollback procedures. Consult your cloud provider's documentation for specific rollback instructions.
+
+:::
+
+## Troubleshooting
+
+If you encounter issues after updating an integration:
+
+1. **Check Integration Status**: Verify the integration shows as "Active" in your dashboard
+2. **Review Recent Deployments**: Look for any error messages in your deployment logs
+3. **Test with Simple Deploy**: Try deploying a simple application to isolate the issue
+4. **Get Help**: If problems persist, reach out to us on [Discord](https://zephyr-cloud.io/discord) with your integration details
+
+## Next Steps
+
+- Return to [Cloud Providers](/cloud) overview
+- Explore [deployment environments](/how-to/environments) for better testing workflows
+- Set up [automated deployments](/how-to/github-automations) with your updated integrations
