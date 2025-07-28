@@ -15,7 +15,7 @@ export function Code(props: CodeProps) {
   const { defaultWrapCode } = siteData.markdown;
   const [codeWrap, setCodeWrap] = useState(defaultWrapCode);
   const wrapButtonRef = useRef<HTMLButtonElement>(null);
-  const codeBlockRef = useRef<HTMLDivElement>();
+  const codeBlockRef = useRef<HTMLDivElement>(null);
 
   const { className } = props;
   const language = className?.replace(/language-/, "");
