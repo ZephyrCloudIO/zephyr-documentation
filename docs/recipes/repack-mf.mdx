@@ -279,7 +279,10 @@ ZC=1 pnpm --filter MiniApp bundle:android
    - Bundle the HostApp:
 
    ```bash 
-   ZC=1 pnpm --filter HostApp bundle
+## bundle towards ios 
+   ZC=1 pnpm --filter HostApp bundle:ios
+## bundle towards android
+   ZC=1 pnpm --filter HostApp bundle:android
    ```
 
    - Command run with `ZC=1` will deploy the bundles to Zephyr Cloud.
