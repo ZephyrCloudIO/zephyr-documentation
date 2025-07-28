@@ -72,12 +72,6 @@ const nav: Nav = [
     activeMatch: "/general/get-started/",
   },
   {
-    text: "Learning",
-    link: "/learning",
-    activeMatch: "/learning",
-  },
-
-  {
     text: "Zephyr Cloud →",
     link: "https://app.zephyr-cloud.io",
   },
@@ -101,6 +95,14 @@ const sidebar: Sidebar = {
           link: "/general/create-mf-app",
         },
         {
+          text: "Architecture",
+          link: "/general/architecture",
+        },
+        {
+          text: "Additional Resources",
+          link: "/general/resources",
+        },
+        {
           text: "FAQ",
           link: "/general/question",
         },
@@ -108,6 +110,8 @@ const sidebar: Sidebar = {
     },
     {
       text: "How to",
+      collapsed: true,
+      collapsible: true,
       items: [
         {
           text: "Micro-Frontends with Zephyr",
@@ -128,6 +132,10 @@ const sidebar: Sidebar = {
         {
           text: "GitHub automations",
           link: "/how-to/github-automations",
+        },
+        {
+          text: "Gitlab automations",
+          link: "/how-to/gitlab-automations",
         },
         {
           text: "End-to-end Testing",
@@ -155,11 +163,16 @@ const sidebar: Sidebar = {
         },
       ],
     },
-
     {
       text: "Cloud Providers",
       link: "/cloud",
+      collapsed: true,
+      collapsible: true,
       items: [
+        {
+          text: "Akamai",
+          link: "/cloud/akamai",
+        },
         {
           text: "Cloudflare",
           link: "/cloud/cloudflare",
@@ -171,6 +184,10 @@ const sidebar: Sidebar = {
         {
           text: "Netlify",
           link: "/cloud/netlify",
+        },
+        {
+          text: "Updating Integrations",
+          link: "/cloud/updating-integrations",
         },
       ],
     },
@@ -259,48 +276,6 @@ const sidebar: Sidebar = {
               label: error.message,
             })),
         })),
-    },
-  ],
-  "/learning": [
-    {
-      text: "Concepts",
-      collapsed: false,
-      collapsible: true,
-      items: [
-        {
-          text: "Terminologies",
-          link: "/learning/concepts/terminologies",
-        },
-        {
-          text: "Architecture",
-          link: "/learning/concepts/architecture",
-        },
-
-        {
-          text: "Micro-Frontend",
-          link: "/learning/concepts/micro-frontend",
-        },
-        {
-          text: "Module Federation",
-          link: "/learning/concepts/module-federation",
-        },
-      ],
-    },
-
-    {
-      text: "Walk-through",
-      collapsed: true,
-      collapsible: true,
-      items: [
-        {
-          text: "Learn webpack with React",
-          link: "/learning/react-webpack",
-        },
-      ],
-    },
-    {
-      text: "Additional Resources",
-      link: "/learning/resources",
     },
   ],
 };
@@ -429,7 +404,15 @@ export default defineConfig({
         { from: "^/guide/general/get-started", to: "/general/get-started" },
         {
           from: "^/concepts/architecture",
-          to: "/learning/concepts/architecture",
+          to: "/general/architecture",
+        },
+        {
+          from: "^/learning/concepts/architecture",
+          to: "/general/architecture",
+        },
+        {
+          from: "^/learning/resources",
+          to: "/general/resources",
         },
         {
           from: "/guide/integrations/cloudflare",

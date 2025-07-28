@@ -165,6 +165,16 @@ This UID serves as the primary key throughout Zephyr's infrastructure and enable
 - Permission boundaries for access control
 - Automatic URL generation for deployments
 
+### Default Privacy Settings
+
+Organizations, projects, and applications in Zephyr are **private by default** in the dashboard. This means:
+- Private organizations can only be navigated to in the dashboard by their members
+- Private projects are only visible to members of the organization
+- Private applications only appear in the dashboards of authorized organization members
+- If set to public, anyone with the dashboard URL can navigate to and view these resources
+
+Note: This privacy setting only affects dashboard visibility. Deployed application URLs remain publicly accessible regardless of these settings.
+
 ## Serving Architecture
 
 ![Edge Worker Request Flow](/edge-worker-request-flow.png)

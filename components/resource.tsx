@@ -22,9 +22,9 @@ export const VideoResource = () => {
         </TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[400px]">Content</TableHead>
-            <TableHead className="text-left w-[200px]">Author</TableHead>
-            <TableHead className="text-center">Description</TableHead>
+            <TableHead className="w-[35%]">Content</TableHead>
+            <TableHead className="w-[15%]">Author</TableHead>
+            <TableHead className="w-[50%]">Description</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -35,12 +35,12 @@ export const VideoResource = () => {
                   {item.title}
                 </a>
               </TableCell>
-              <TableCell className="items-center text-left">
+              <TableCell>
                 <a href={item.twitter} className="text-[var(--rp-c-brand)] ">
                   {item.author}
                 </a>
               </TableCell>
-              <TableCell className="items-center">{item.description}</TableCell>
+              <TableCell>{item.description}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -62,9 +62,9 @@ export const BlogPosts = () => {
         </TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[400px]">Content</TableHead>
-            <TableHead className="text-left w-[200px]">Author</TableHead>
-            <TableHead className="text-center">Description</TableHead>
+            <TableHead className="w-[35%]">Content</TableHead>
+            <TableHead className="w-[15%]">Author</TableHead>
+            <TableHead className="w-[50%]">Description</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -75,12 +75,12 @@ export const BlogPosts = () => {
                   {item.title}
                 </a>
               </TableCell>
-              <TableCell className="items-center text-left">
+              <TableCell>
                 <a href={item.twitter} className="text-[var(--rp-c-brand)] ">
                   {item.author}
                 </a>
               </TableCell>
-              <TableCell className="items-center">{item.description}</TableCell>
+              <TableCell>{item.description}</TableCell>
             </TableRow>
           ))}
         </TableBody>
