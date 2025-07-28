@@ -270,7 +270,10 @@ Configure the Zephyr environment:
   - Bundle the MiniApp:
 
    ```bash 
-   ZC=1 pnpm --filter MiniApp bundle
+## bundle towards ios 
+ZC=1 pnpm --filter MiniApp bundle:ios
+## bundle towards android 
+ZC=1 pnpm --filter MiniApp bundle:android
    ```
    
    - Bundle the HostApp:
