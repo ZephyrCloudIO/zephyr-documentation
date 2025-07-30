@@ -1,0 +1,178 @@
+---
+title: 'Configure AWS on Zephyr'
+description: 'Configuring AWS as your deployment integration provider on Zephyr'
+---
+
+import { Steps } from '@theme';
+import { Button } from '../../components/ui/button.tsx';
+
+# Configure AWS on Zephyr
+
+< Short description >
+
+## Prerequisites
+
+:::info
+
+- A registered AWS account, contract must include edge workers and edgekv
+- A registered Zephyr account
+- A registered domain
+
+:::
+
+## Configure and enable AWS
+
+<Steps>
+### Log in to the Zephyr Dashboard
+<a href="https://app.zephyr-cloud.io">
+<Button variant="outline" className="hover:bg-zinc-100 hover:text-black">Dashboard</Button>
+</a>
+After signing in, select your organization.
+<br/>
+
+### Locate AWS under Deployment Integration
+
+- Select **Settings** from the top navigation tabs.
+- On the left sidebar, select **Deployment Integration**.
+- Choose **Available** to find AWS, then click on **Add integration**.
+
+### Retrieve Credentials and Configure AWS
+
+Before proceeding, you will need some data from AWS:
+
+#### 1. Credentials
+
+- Go to **IAM -> User groups** in menu and click **Create group** button
+- Type group name
+- Choose the following permissions:
+
+| Permission name                     |
+| :---------------------------------- |
+| AmazonCloudWatchEvidentlyFullAccess |
+| AmazonDynamoDBFullAccess            |
+| AmazonS3FullAccess                  |
+| AWSLambda_FullAccess                |
+| CloudFrontFullAccess                |
+| CloudWatchLogsFullAccess            |
+| IAMFullAccess                       |
+| SecretsManagerReadWrite             |
+
+- Click **Create user group** button
+- Go to **IAM -> Users** in menu and click **Create user** button
+- Type user name and click next button
+- Choose **Add user to group**, choose your group and click next button
+- Click **Create user** button
+- Click on your user name
+- Go to **Security credentials** tab
+- Click **Create access key** button
+- Choose **Command Line Interface (CLI)** and click **Next** button
+- Click **Create access key**
+- Download you credentials and add `[default]` as a header, so token will look like:
+
+:::warning Secure Your Credentials
+Keep your credentials secure. Never commit credentials to version control or share them publicly.
+:::
+
+```
+[default]
+aws_access_key_id = YOUR_ACCESS_KEY_ID
+aws_secret_access_key = YOUR_ACCESS_KEY_SECRET
+```
+
+#### 2. Certificate arn
+
+- Go to **Certificate manager** in menu and click **Request** button
+- Choose **Request a public certificate** and click **Next** button
+- Add `ze.yourdomain.com` and `*.ze.yourdomain.com` as **Fully qualified domain name** and use defaults for the rest of inputs - **Disable export**, **DNS validation - recommended**, **RSA 2048**
+- Validate with DNS CNAME
+- Wait until domain becomes validated
+- Copy `ARN` value
+
+### Configuration Inputs
+
+Details for each input after clicking **Add Integration** under **AWS**:
+
+<dt>Integration Name</dt>
+<dd>
+  A unique name within your organization, used as a slug.
+</dd>
+
+<dt>Integration Display Name</dt>
+<dd>
+  The name of the integration shown on the dashboard.
+</dd>
+
+<dt>API Token</dt>
+<dd>
+  Obtainable from AWS. [See instructions](#1-api-token) for creating your API token.
+</dd>
+
+<dt>Domain</dt>
+<dd>
+  Your domain.
+</dd>
+
+<dt>Certificate arn</dt>
+<dd>
+  Certificate arn for domain (ze.your.domain)
+</dd>
+
+<dt>Set Integration as Default</dt>
+<dd>
+  When set as default, all Zephyr deployments will use this integration until a
+  new one (default integration) is set. Deployment using integration won't work until AWS worker and property become activated.
+</dd>
+
+### Validate domain and setup DNS
+
+- Go to Cloudfront -> Distributions
+- Find you domain
+- Copy value from `Domain name (standard)` column and add DNS records described in the table below
+
+| Subdomain                         | Type  | Value                                      |
+|-----------------------------------|-------|--------------------------------------------|
+| ze.yourdomain.com                 | CNAME | < Domain name value >                      |
+| *.ze.yourdomain.com               | CNAME | < Domain name value >                      |
+
+</Steps>
+
+### What Will Be Created on Your AWS Account?
+
+When AWS is added as your provider on Zephyr, these properties will be created on your AWS account:
+
+#### 1. S3 bucket
+
+- `ze-yourdomain-com-bucket`
+
+#### 2. DynamoDB tables
+
+- ze-yourdomain-com_envs
+- ze-yourdomain-com_snapshots
+
+#### 3. Labmda@Edge
+
+- `ze-aws-worker` (for uploading and serving assets)
+
+#### 4 Cloudfront functions
+
+- `ze-yourdomain-com-viewer-request`
+
+#### 5 Secret store
+  - `ze-yourdomain-com-viewer-request`
+
+#### TBD
+
+## Clean Uninstall and Reset
+
+:::danger Warning
+
+- Zephyr Cloud does not manage deletion of API tokens or any AWS account properties.
+- Assets and information on your AWS account are immutable by default. During a **clean uninstall**, previously deployed assets and information are unrecoverable.
+
+:::
+
+To delete an existing AWS integration, follow these steps:
+
+#### 1. Remove DNS records related to your integration
+
+TBD
