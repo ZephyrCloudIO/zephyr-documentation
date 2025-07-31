@@ -144,27 +144,34 @@ Details for each input after clicking **Add Integration** under **AWS**:
 
 When AWS is added as your provider on Zephyr, these properties will be created on your AWS account:
 
-#### 1. S3 bucket
+#### 1. IAM roles and policies
 
-- `ze-yourdomain-com-bucket`
+- `ze-yourdomain-com_lambda_edge_policy` - lambda edge policy
+- `ze-yourdomain-com_lambda_role_name` - lambda role name
+- `ze-yourdomain-com-store-access-secrets` - secret store policy
 
 #### 2. DynamoDB tables
 
-- ze-yourdomain-com_envs
-- ze-yourdomain-com_snapshots
+- `ze-yourdomain-com_envs`
+- `ze-yourdomain-com_snapshots`
 
-#### 3. Labmda@Edge
+#### 3. Secret store
 
-- `ze-aws-worker` (for uploading and serving assets)
+- `ze-yourdomain-com-store`
 
-#### 4 Cloudfront functions
+#### 4. S3 bucket
+
+- `ze-yourdomain-com-bucket`
+
+#### 5. Labmda@Edge function
+
+- `ze-yourdomain-com` (for uploading and serving assets)
+
+#### 6. Cloudfront function
 
 - `ze-yourdomain-com-viewer-request`
 
-#### 5 Secret store
-  - `ze-yourdomain-com-viewer-request`
-
-#### TBD
+#### 7. Cloudfront
 
 ## Clean Uninstall and Reset
 
