@@ -189,6 +189,10 @@ const sidebar: Sidebar = {
           text: "Netlify",
           link: "/cloud/netlify",
         },
+        {
+          text: "Updating Integrations",
+          link: "/cloud/updating-integrations",
+        },
       ],
     },
     {

@@ -1,4 +1,7 @@
+import { AkamaiIcon } from "@/components/icons/akamai";
 import { CloudflareIcon } from "@/components/icons/cloudflare";
+import { FastlyIcon } from "@/components/icons/fastly";
+import type React from "react";
 import ModuleFederationIcon from "../components/icons/module-federation";
 // import { QwikIcon } from '../components/icons/qwik';
 // import { AngularIcon } from '../components/icons/angular';
@@ -19,7 +22,7 @@ export interface CardItemProps {
   developed?: boolean;
   description?: string;
   className?: string;
-  icons?: JSX.Element[];
+  icons?: React.ReactElement[];
   variant?: "small" | "default" | "large";
 }
 
@@ -305,6 +308,22 @@ export const SiteConfig: CardProps = {
       variant: "small",
       href: "/cloud/netlify",
       icons: [<NetlifyIcon className="w-12 h-10 " />],
+    },
+    {
+      title: "Fastly",
+      description:
+        "Configure Fastly integration with edge computing capabilities and global CDN",
+      variant: "small",
+      href: "/cloud/fastly",
+      icons: [<FastlyIcon className="w-12 h-10" />],
+    },
+    {
+      title: "Akamai",
+      description:
+        "Set up Akamai integration with EdgeWorkers and EdgeKV for global performance",
+      variant: "small",
+      href: "/cloud/akamai",
+      icons: [<AkamaiIcon className="w-12 h-10" />],
     },
   ],
 };
