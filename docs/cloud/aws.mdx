@@ -488,13 +488,13 @@ cf_refs_for_lambda_version() {
 # Wait until Lambda@Edge version can be deleted (no CF references + replicas gone), then delete it.
 delete_lambda_version_with_wait() {
   local version_arn="$1"
-  local max_tries="${2:-120}"   # up to ~20–30 min в сумме при 10–15 сек интервале
+  local max_tries="${2:-120}"   # up to ~20–30 min total with 10–15 sec interval
   local sleep_s="${3:-15}"
 
   log " delete version: $version_arn"
 
   for ((i=1; i<=max_tries; i++)); do
-    # 1) Убедимся, что CloudFront больше не ссылается на эту версию
+    # 1) Make sure CloudFront no longer references this version
     local refs
     refs="$(cf_refs_for_lambda_version "$version_arn")" || refs=0
     if [[ "$refs" != "0" ]]; then
@@ -503,7 +503,7 @@ delete_lambda_version_with_wait() {
       continue
     fi
 
-    # 2) Попытаемся удалить. Если вернёт replicated error — подождём и повторим.
+    # 2) Try to delete. If it returns a replicated error — wait and retry.
     if aws lambda delete-function --function-name "$version_arn" >/dev/null 2>&1; then
       log "   deleted: $version_arn"
       return 0
