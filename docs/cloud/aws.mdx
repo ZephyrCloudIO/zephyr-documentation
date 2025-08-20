@@ -252,9 +252,9 @@ export AWS_DEFAULT_REGION="$AWS_REGION_MAIN"
 
 log "==> PHASE 1 started"
 
-# --- 1) CloudFront: detach function associations and disable distribution ---
+# --- 1) CloudFront: detach functions, disable, delete, wait until gone ---
 if [[ -n "$CF_DIST_ID" && "$CF_DIST_ID" != "DISTRIBUTION_ID" ]]; then
-  log "Detaching functions and disabling CloudFront Distribution: $CF_DIST_ID"
+  log "Detaching functions, disabling and deleting CloudFront Distribution: $CF_DIST_ID"
   DIST_CONF_JSON="$(aws cloudfront get-distribution-config --id "$CF_DIST_ID" 2>/dev/null || true)"
   if [[ -n "$DIST_CONF_JSON" ]]; then
     ETAG=$(echo "$DIST_CONF_JSON" | jq -r '.ETag')
@@ -277,13 +277,40 @@ if [[ -n "$CF_DIST_ID" && "$CF_DIST_ID" != "DISTRIBUTION_ID" ]]; then
       --if-match "$ETAG" \
       --distribution-config "$NEW_CONF" >/dev/null
 
-    log "Waiting for Distribution status to become Deployed (after disable)"
+    log "Waiting for Distribution status=Deployed (after disable)"
     for i in {1..90}; do
       STATUS=$(aws cloudfront get-distribution --id "$CF_DIST_ID" 2>/dev/null | jq -r '.Distribution.Status' || echo "unknown")
       log " attempt $i: status=$STATUS"
       [[ "$STATUS" == "Deployed" ]] && break
       sleep 10
     done
+
+    # Refresh ETag after disable
+    NEW_ETAG=$(aws cloudfront get-distribution-config --id "$CF_DIST_ID" | jq -r '.ETag')
+
+    log "Deleting CloudFront Distribution: $CF_DIST_ID"
+    if aws cloudfront delete-distribution --id "$CF_DIST_ID" --if-match "$NEW_ETAG" >/dev/null 2>&1; then
+      log "Delete request accepted. Waiting until distribution is fully removed…"
+      # wait up to ~30 minutes (180 * 10s)
+      for i in {1..180}; do
+        # If get-distribution returns error containing NoSuchDistribution — it's gone
+        if OUT=$(aws cloudfront get-distribution --id "$CF_DIST_ID" 2>&1); then
+          # still exists; log status
+          STATUS=$(echo "$OUT" | jq -r '.Distribution.Status' 2>/dev/null || echo "unknown")
+          log " attempt $i: still present (status=$STATUS)"
+        else
+          if echo "$OUT" | grep -qi 'NoSuchDistribution'; then
+            log "Distribution $CF_DIST_ID no longer exists."
+            break
+          fi
+          # Some other transient error
+          log " attempt $i: transient error: $(echo "$OUT" | head -n1)"
+        fi
+        sleep 10
+      done
+    else
+      log "Delete request failed. See previous error."
+    fi
   else
     log "Could not get distribution config — maybe already deleted. Skipping."
   fi
