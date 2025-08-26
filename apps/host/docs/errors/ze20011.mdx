@@ -1,0 +1,49 @@
+---
+title: "ZE20011: Error"
+description: "ZE20011: Error"
+label: "ZE20011: Error"
+---
+
+import { SourceCode } from '@theme';
+import { Steps } from '@theme';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { ErrorLink } from '../../components/errors/link.tsx';
+
+
+
+
+
+This error occurs when attempting to access a URL that doesn't exist. It may be due to a mistyped URL, a changed URL, or the project being deleted or moved.
+
+It was either by a mistyped `project_uid` _(subdomain)_ or the URL path doesn't exist:
+
+`https://<project_uid>.valorkin.dev/<path>`
+
+## Debugging the error
+
+<Steps>
+
+### Make sure you are using the latest deployment URL for your tag.
+
+Re-run your build and ensure you clicked on the latest deployment URL for your tag and not an older one that was in your copy-paste history.
+
+```bash
+npm run build
+
+ZEPHYR   Hi arthurfiorette!
+ZEPHYR   Building to project.repository.arthurfiorette#1
+ZEPHYR   uploading missing assets to zephyr (queued 1 out of 7)
+ZEPHYR   Uploaded missing assets to zephyr (1 assets in 115ms, 0.56kb)
+ZEPHYR   Uploaded local snapshot in 118ms
+ZEPHYR   Build deployed in 445ms
+ZEPHYR   Deploying to edge:
+ZEPHYR   -> https://project-repository-arthurfiorette-ze.valorkin.dev
+ZEPHYR   -> https://arthurfiorette-project-commitid-ze.valorkin.dev
+```
+
+You can now use all the URLs shown in the output to access your recently deployed project.
+
+- `https://project-repository-arthurfiorette-ze.valorkin.dev`
+- `https://arthurfiorette-project-commitid-ze.valorkin.dev`
+
+</Steps>

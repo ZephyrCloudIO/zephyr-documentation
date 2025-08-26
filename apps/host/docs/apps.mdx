@@ -1,0 +1,23 @@
+---
+pageType: custom
+sidebar: false
+outline: false
+lastUpdated: false
+---
+
+import { NavigationGrid } from '../components/navigation';
+
+<div className="max-w-6xl mx-auto px-4 py-8">
+  <h1 className="text-4xl font-bold text-[var(--rp-c-text-1)] mb-4">Documentation Apps</h1>
+  <p className="text-lg text-[var(--rp-c-text-2)] mb-8">Explore our micro-frontend documentation applications, each serving specialized content areas.</p>
+  
+  <NavigationGrid />
+  
+  <div className="mt-8 p-6 bg-[var(--rp-c-bg-soft)] border border-[var(--rp-c-divider-light)] rounded-lg">
+    <h3 className="text-lg font-semibold text-[var(--rp-c-text-1)] mb-2">About Module Federation</h3>
+    <p className="text-[var(--rp-c-text-2)] text-sm">
+      These documentation apps demonstrate Zephyr's module federation capabilities. Each app runs independently 
+      and can be developed, deployed, and scaled separately while maintaining a cohesive user experience.
+    </p>
+  </div>
+</div>

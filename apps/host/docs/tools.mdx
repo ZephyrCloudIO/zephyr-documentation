@@ -1,0 +1,161 @@
+import ToolsDocs from 'sidepanel_docs/tools';
+
+<ToolsDocs />
+
+## What are Zephyr Developer Tools?
+
+Our developer tools are designed to enhance your productivity when building micro-frontend applications. From browser extensions to CLI tools, we provide everything you need for an efficient development experience.
+
+## Core Tools
+
+<div className="grid grid-cols-1 gap-4 mt-6">
+  <div className="border rounded-lg p-4">
+    <h3>🌐 Browser Extension</h3>
+    <p>Manage environments, versions, and deployments directly from your browser</p>
+    <a href="/how-to/browser-extension" className="text-blue-600">Install Extension →</a>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h3>🏢 Environment Management</h3>
+    <p>Switch between development, staging, and production environments</p>
+    <a href="/how-to/environments" className="text-blue-600">Learn More →</a>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h3>🔄 Version Management</h3>
+    <p>Track versions, rollback changes, and manage releases</p>
+    <a href="/how-to/versioning-tags" className="text-blue-600">Get Started →</a>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h3>🔑 API Tokens</h3>
+    <p>Secure access to Zephyr APIs for automation and integrations</p>
+    <a href="/how-to/api-token" className="text-blue-600">Generate Token →</a>
+  </div>
+</div>
+
+## Development Workflow
+
+### Browser Extension Features
+Our Chrome extension provides:
+- **Live Environment Switching** - Test different versions without redeployment
+- **Version History** - See all deployed versions and their status
+- **Quick Rollbacks** - Instantly revert to previous working versions
+- **Environment Variables** - Manage configuration across environments
+- **Performance Metrics** - Monitor loading times and bundle sizes
+
+### CLI Commands
+```bash
+# Install the Zephyr CLI
+npm install -g zephyr-cli
+
+# Initialize a new project
+zephyr init
+
+# Build and deploy
+zephyr build
+zephyr deploy
+
+# Manage environments
+zephyr env list
+zephyr env switch staging
+
+# Version management
+zephyr version list
+zephyr version rollback v1.2.3
+```
+
+## Testing & Quality Assurance
+
+<div className="grid grid-cols-2 gap-4 mt-6">
+  <div className="border rounded-lg p-4">
+    <h3>🧪 End-to-End Testing</h3>
+    <p>Test your micro-frontends with Playwright and Cypress</p>
+    <a href="/how-to/end-to-end-testing" className="text-blue-600">Set Up Testing →</a>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h3>📋 Fork Examples</h3>
+    <p>Start with working examples and modify for your needs</p>
+    <a href="/how-to/fork-our-examples" className="text-blue-600">Browse Examples →</a>
+  </div>
+</div>
+
+## Development Best Practices
+
+### Local Development
+- **Hot Reload** - See changes instantly during development
+- **Module Federation Dev Server** - Test remote modules locally
+- **Source Maps** - Debug with original source code
+- **Error Boundaries** - Graceful handling of module failures
+
+### Debugging Tools
+- **Browser DevTools Integration** - Inspect module loading and dependencies
+- **Network Analysis** - Monitor module fetch performance
+- **Bundle Analysis** - Understand your application's bundle composition
+- **Performance Profiling** - Identify bottlenecks and optimization opportunities
+
+## IDE Integration
+
+### VS Code Extensions
+- **Zephyr IntelliSense** - Autocomplete for Zephyr configuration
+- **Module Federation Helper** - Navigate between federated modules
+- **Dependency Visualization** - See module relationships graphically
+
+### Configuration Files
+- **TypeScript Support** - Full type safety for configurations
+- **JSON Schema Validation** - Catch configuration errors early
+- **Auto-completion** - Smart suggestions for configuration options
+
+## Monitoring & Analytics
+
+### Real-Time Metrics
+- **Module Load Times** - Monitor performance across environments
+- **Error Rates** - Track failures and their impact
+- **User Analytics** - Understand how users interact with your modules
+- **Bundle Size Tracking** - Monitor application size over time
+
+### Alerts & Notifications
+- **Deployment Notifications** - Get notified of successful/failed deployments
+- **Performance Alerts** - Warning when metrics exceed thresholds
+- **Error Monitoring** - Real-time error reporting and tracking
+
+## Team Collaboration
+
+### Multi-Environment Support
+- **Development** - Individual developer environments
+- **Staging** - Shared testing environment
+- **Production** - Live user-facing environment
+- **Custom Environments** - Create environments for specific needs
+
+### Access Control
+- **Team Management** - Control who can deploy to which environments
+- **API Token Scoping** - Limit token permissions by environment
+- **Audit Logging** - Track all changes and deployments
+
+## Advanced Features
+
+### Custom Integrations
+- **Webhook Support** - Integrate with your existing tools
+- **REST API** - Build custom automation and integrations
+- **GraphQL API** - Query deployment data and metrics
+- **SDK Libraries** - Pre-built integrations for popular platforms
+
+### Enterprise Features
+- **Single Sign-On (SSO)** - Integrate with your identity provider
+- **Advanced Security** - Enhanced security controls and compliance
+- **Priority Support** - Dedicated support for enterprise customers
+- **Custom Deployment Strategies** - Blue-green, canary, and custom patterns
+
+## Getting Started
+
+1. **Install the Browser Extension** - Get the Chrome extension from the Chrome Web Store
+2. **Set Up Your Environment** - Configure development, staging, and production
+3. **Generate API Tokens** - Create tokens for CI/CD integration
+4. **Explore Examples** - Fork our examples to see the tools in action
+
+## Next Steps
+
+- [🏗️ Build](/build) - Create applications to deploy
+- [🚀 Deploy](/deploy) - Deploy your applications to the cloud
+- [📚 Reference](/reference) - Detailed API and configuration reference

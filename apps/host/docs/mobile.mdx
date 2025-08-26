@@ -1,0 +1,119 @@
+import MobileDocs from 'mobile_docs/mobile';
+
+<MobileDocs />
+
+## What is Zephyr Mobile?
+
+Zephyr Mobile extends our micro-frontend platform to React Native, enabling you to share code, components, and business logic between web and mobile applications. Build once, deploy everywhere.
+
+## React Native Integration
+
+Our React Native integration works seamlessly with Re.Pack, providing Module Federation capabilities for mobile applications.
+
+<div className="grid grid-cols-1 gap-4 mt-6">
+  <div className="border rounded-lg p-4">
+    <h3>📱 React Native Overview</h3>
+    <p>Complete guide to building React Native apps with Zephyr</p>
+    <a href="/recipes/react-native" className="text-blue-600">Learn More →</a>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h3>📦 Re.Pack Module Federation</h3>
+    <p>Set up Module Federation for React Native with Re.Pack</p>
+    <a href="/recipes/repack-mf" className="text-blue-600">Get Started →</a>
+  </div>
+</div>
+
+## Key Features
+
+- **Code Sharing** - Share components between web and mobile
+- **Module Federation** - Dynamic loading of remote modules
+- **Hot Reload** - Fast development with live updates  
+- **Cross-Platform** - Deploy to iOS and Android
+- **Bundle Splitting** - Optimize app size and loading
+
+## Architecture Benefits
+
+### Micro-Frontend Architecture for Mobile
+- **Independent Teams** - Different teams can work on different parts of the app
+- **Incremental Updates** - Update parts of your app without full redeployment
+- **Technology Diversity** - Mix different React Native libraries and approaches
+- **Scalability** - Easily add new features and modules
+
+### Shared Business Logic
+- **Consistent Experience** - Same logic across web and mobile
+- **Reduced Maintenance** - Single source of truth for business rules
+- **Faster Development** - Reuse existing web components
+
+## Getting Started
+
+### Prerequisites
+- Node.js and npm/yarn
+- React Native development environment
+- Xcode (for iOS development)
+- Android Studio (for Android development)
+
+### Quick Setup
+
+1. **Install Zephyr CLI**
+```bash
+npm install -g zephyr-cli
+```
+
+2. **Create a new React Native project**
+```bash
+npx react-native init MyMobileApp
+cd MyMobileApp
+```
+
+3. **Add Zephyr integration**
+```bash
+zephyr init --mobile
+```
+
+4. **Configure Re.Pack**
+Follow our [Re.Pack Module Federation guide](/recipes/repack-mf) for detailed setup instructions.
+
+## Common Use Cases
+
+### Multi-Team Development
+- **Feature Teams** - Each team owns a specific feature module
+- **Platform Teams** - Shared infrastructure and common components
+- **Independent Deployment** - Teams can deploy updates independently
+
+### Progressive Migration
+- **Gradual Adoption** - Migrate existing apps piece by piece
+- **Risk Mitigation** - Test new features with limited user groups
+- **Legacy Integration** - Keep existing code while adding new modules
+
+### Cross-Platform Consistency
+- **Shared Components** - Use the same UI components on web and mobile
+- **Business Logic** - Share complex business rules and validations
+- **Data Layer** - Consistent API integration and state management
+
+## Best Practices
+
+### Performance
+- **Bundle Optimization** - Only load what you need
+- **Caching Strategy** - Cache modules for faster subsequent loads
+- **Network Awareness** - Handle offline scenarios gracefully
+
+### Development
+- **Module Boundaries** - Clear interfaces between modules
+- **Testing Strategy** - Test modules independently
+- **Version Management** - Coordinate module versions across teams
+
+## Examples and Tutorials
+
+Explore our comprehensive React Native documentation:
+- [Bootstrapping Your Native Application](/recipes/react-native/bootstrapping-your-native-application)
+- [Configuring Host Applications](/recipes/react-native/configuring-host)
+- [Configuring Remote Modules](/recipes/react-native/configuring-remote)
+- [iOS Setup with Rspack](/recipes/react-native/rspack-ios-setup)
+- [State Manager Sharing](/recipes/react-native/state-manager-sharing-between-react-native-applications)
+
+## Next Steps
+
+- [🏗️ Build](/build) - Learn about our web platform
+- [🚀 Deploy](/deploy) - Deploy mobile apps to app stores
+- [🔧 Developer Tools](/tools) - Mobile development workflow

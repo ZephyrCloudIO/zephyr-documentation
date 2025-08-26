@@ -1,0 +1,20 @@
+---
+title: "ZE10011: Package.json is not in a valid json format"
+description: "Package.json is not in a valid json format."
+label: "Package.json is not in a valid json format."
+---
+
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { ErrorLink } from '../../components/errors/link.tsx';
+
+# ZE10011: Package.json is not in a valid json format
+
+{/* <ErrorInfo code="ZE10011" terminal /> */}
+
+After we recursively loop for the current working directory where the bundler's config lives and locate the `package.json` file, we then perform a parsing function to make sure your `package.json` is a valid [JSON](https://www.json.org/json-en.html) format.
+
+If the `package.json` we located is not in a valid JSON format (hey your npm script or dependencies installation will fail if it is not), we will throw the <ErrorLink code="ZE10011" /> error.
+
+## Debugging the error
+
+Although it's unlikely, do make sure your `package.json`'s format is in correct JSON format.

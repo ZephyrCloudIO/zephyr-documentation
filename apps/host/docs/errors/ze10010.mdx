@@ -1,0 +1,60 @@
+---
+title: "ZE10010: Package.json not found"
+description: "Package.json not found"
+label: "Package.json not found"
+---
+
+import { SourceCode } from '@theme';
+import { Steps } from '@theme';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { ErrorLink } from '../../components/errors/link.tsx';
+
+# ZE10010: Package.json not found
+
+This method is implemented across all bundlers' plugins (see our [supported bundlers and their relevant packages](/supported)).
+
+When we start the deployment process after your build, we first look for a `package.json` file in current directory (the same level) where bundler's configuration file lives based on your bundler's configuration and if not - we will find your current working directory ourselves. How we find your `package.json` file could be determined by two factors:
+
+<Steps>
+
+### Clear cache
+
+Data we cached on your local machine for this specific project in `~/.zephyr` folder, if you have built from this directory.
+
+### Ensure you have a valid `package.json` file in your project directory.
+
+If the above method failed to locate your `package.json` path, we will then recursively look for a `package.json` file in the parent directory of the current one, and keep going one level up until we find a match.
+
+</Steps>
+
+## Debugging the error
+
+Ensure that there is one `package.json` file within either the directory where bundler's configuration lives, or it's parent one.
+
+## Example folder structure
+
+<SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/react-vite-ts" />
+
+<br />
+<br />
+
+```text
+.
+├── README.md
+├── index.html
+├── package-lock.json
+├── package.json
+├── public
+│   └── vite.svg
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── index.css
+│   ├── main.tsx
+│   └── vite-env.d.ts
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+```

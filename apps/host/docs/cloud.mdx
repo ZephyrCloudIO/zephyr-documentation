@@ -1,0 +1,46 @@
+import CloudDocs from 'cloud_docs/cloud';
+
+<CloudDocs />
+
+Zephyr's Bring Your Own Cloud (BYOC) feature allows users to use their own cloud infrastructure instead of relying on Zephyr's managed cloud. User's applications deployed through Zephyr are usually deployed through user's own cloud providers.
+
+With BYOC, users are able to _manage configuration_, _understand the underlying infrastruture_, _utilizing familiar features_ and _having a clear billing_ among cloud infrastructures.
+
+Users belong to an organization can manage and configure cloud providers on Zephyr's [dashboard](https://app.zephyr-cloud.io), and user's organization gets connected with cloud provider account by creating an integration under **Deployment Integration** tab.
+
+## Choose your Cloud provider 
+
+<CardLayout>
+<CloudProviderCards/>
+</CardLayout>
+
+## About Deployment Integrations
+
+Deployment integrations are the bridge between Zephyr and your cloud provider infrastructure. Once configured, these integrations enable:
+
+- **Seamless Deployments**: Deploy your applications directly to your cloud provider's edge network
+- **Version Management**: Manage multiple versions of your applications with rollback capabilities
+- **Performance Optimization**: Leverage your cloud provider's global CDN and edge computing features
+- **Cost Control**: Use your existing cloud provider billing and resource management
+
+## Managing Your Integrations
+
+After setting up your cloud provider integration, you can manage it through your organization settings:
+
+- **Monitor Status**: View the health and status of your integrations
+- **Update Configurations**: Modify settings and credentials as needed
+- **Update Worker Versions**: Keep your integrations up-to-date with the latest features and improvements
+
+For detailed instructions on updating your deployment integrations, see our [Updating Integrations](/cloud/updating-integrations) guide.
+
+## Benefits of Regular Updates
+
+Zephyr regularly releases updates to deployment integrations that provide:
+
+- **New Features**: Access to the latest Zephyr capabilities and cloud provider features
+- **Performance Improvements**: Faster deployments and better resource utilization  
+- **Security Updates**: Latest security patches and compliance improvements
+- **Bug Fixes**: Resolution of known issues and edge cases
+- **Compatibility**: Support for new versions of bundlers and frameworks
+
+The beauty of Zephyr's integration system is that these updates happen at the infrastructure level, meaning your development team can benefit from improvements without modifying their build processes, deployment scripts, or workflows.

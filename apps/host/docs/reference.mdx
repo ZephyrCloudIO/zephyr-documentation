@@ -1,0 +1,294 @@
+# Reference Documentation
+
+Complete reference for Zephyr Cloud platform, APIs, and configurations.
+
+## What's in Reference?
+
+This section contains comprehensive documentation for all Zephyr Cloud features, supported platforms, troubleshooting guides, and learning resources.
+
+## Platform Support
+
+<div className="grid grid-cols-2 gap-4 mt-6">
+  <div className="border rounded-lg p-4">
+    <h3>🎯 Supported Platforms</h3>
+    <p>Complete list of supported frameworks, bundlers, and platforms</p>
+    <a href="/supported" className="text-blue-600">View Support Matrix →</a>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h3>📊 Version Statuses</h3>
+    <p>Understanding deployment statuses and version states</p>
+    <a href="/how-to/version-statuses" className="text-blue-600">Learn About Statuses →</a>
+  </div>
+</div>
+
+## Supported Technologies
+
+### Frontend Frameworks
+- **React** - Full support including hooks, context, and concurrent features
+- **Vue.js** - Vue 2 and Vue 3 with Composition API
+- **Angular** - All versions with dependency injection
+- **Svelte** - Including SvelteKit applications
+- **Vanilla JavaScript** - Pure JS and TypeScript applications
+
+### Build Tools & Bundlers
+- **Webpack** - v4 and v5 with Module Federation
+- **Vite** - Fast development and production builds
+- **Rspack** - Rust-based bundler for performance
+- **Parcel** - Zero-configuration bundling
+- **Rollup** - Optimized for libraries
+- **esbuild** - Ultra-fast JavaScript bundler
+- **Rolldown** - Next-generation bundler
+
+### Monorepo Tools
+- **Nx** - Enterprise-grade monorepo management
+- **Lerna** - Multi-package repository management
+- **Turborepo** - High-performance build system
+- **Rush** - Scalable monorepo management
+- **pnpm Workspaces** - Efficient package management
+
+### Mobile Platforms
+- **React Native** - iOS and Android applications
+- **Re.Pack** - Module Federation for React Native
+- **Expo** - Managed React Native development
+- **Metro** - React Native bundler integration
+
+## Learning Resources
+
+<div className="grid grid-cols-1 gap-4 mt-6">
+  <div className="border rounded-lg p-4">
+    <h3>📚 Learning Resources</h3>
+    <p>Tutorials, guides, and educational materials</p>
+    <a href="/general/resources" className="text-blue-600">Browse Resources →</a>
+  </div>
+  
+  <div className="border rounded-lg p-4">
+    <h3>❓ Frequently Asked Questions</h3>
+    <p>Common questions and detailed answers</p>
+    <a href="/general/question" className="text-blue-600">View FAQ →</a>
+  </div>
+</div>
+
+## API Reference
+
+### REST API
+Complete REST API documentation for programmatic access:
+
+```bash
+# Authentication
+POST /api/v1/auth/login
+GET /api/v1/auth/me
+
+# Applications
+GET /api/v1/applications
+POST /api/v1/applications
+PUT /api/v1/applications/{id}
+DELETE /api/v1/applications/{id}
+
+# Deployments
+GET /api/v1/deployments
+POST /api/v1/deployments
+GET /api/v1/deployments/{id}
+
+# Environments
+GET /api/v1/environments
+POST /api/v1/environments
+PUT /api/v1/environments/{id}
+```
+
+### GraphQL API
+Query deployment data and metrics:
+
+```graphql
+query GetApplications {
+  applications {
+    id
+    name
+    status
+    versions {
+      id
+      version
+      deployedAt
+      environment
+    }
+  }
+}
+
+mutation DeployApplication($input: DeployInput!) {
+  deployApplication(input: $input) {
+    id
+    status
+    deploymentUrl
+  }
+}
+```
+
+## Configuration Reference
+
+### Zephyr Configuration File
+Complete configuration options for `zephyr.config.js`:
+
+```javascript
+export default {
+  // Application settings
+  name: 'my-app',
+  version: '1.0.0',
+  
+  // Module Federation
+  remotes: {
+    'remote-app': 'https://remote-app.example.com/remoteEntry.js'
+  },
+  
+  // Build settings
+  build: {
+    target: 'es2020',
+    minify: true,
+    sourcemap: true
+  },
+  
+  // Deployment
+  deploy: {
+    provider: 'cloudflare',
+    domain: 'my-app.example.com',
+    environments: ['development', 'staging', 'production']
+  }
+}
+```
+
+### Package.json Integration
+Configure Zephyr in your package.json:
+
+```json
+{
+  "name": "my-micro-frontend",
+  "scripts": {
+    "build": "zephyr build",
+    "deploy": "zephyr deploy",
+    "dev": "zephyr dev"
+  },
+  "zephyr": {
+    "framework": "react",
+    "bundler": "vite"
+  }
+}
+```
+
+## CLI Reference
+
+### Global Commands
+```bash
+# Project initialization
+zephyr init [--framework] [--bundler]
+
+# Development
+zephyr dev [--port] [--host]
+zephyr build [--mode] [--target]
+
+# Deployment
+zephyr deploy [--env] [--tag]
+zephyr rollback [version]
+
+# Management
+zephyr env list
+zephyr env switch <name>
+zephyr version list
+zephyr logs [--lines]
+```
+
+### Configuration Commands
+```bash
+# Authentication
+zephyr login
+zephyr logout
+zephyr whoami
+
+# Projects
+zephyr project create <name>
+zephyr project list
+zephyr project switch <name>
+
+# Tokens
+zephyr token create [--name] [--scope]
+zephyr token list
+zephyr token revoke <id>
+```
+
+## Error Codes & Troubleshooting
+
+When something goes wrong, Zephyr provides detailed error codes to help you diagnose issues:
+
+### Error Code Categories
+- **ZE10xxx** - Build and compilation errors
+- **ZE20xxx** - Deployment and infrastructure errors  
+- **ZE30xxx** - Runtime and module loading errors
+
+### Common Issues
+- **Module Loading Failures** - Remote modules can't be loaded
+- **Build Failures** - Compilation or bundling issues
+- **Deployment Errors** - Cloud provider configuration problems
+- **Network Issues** - Connectivity and DNS problems
+
+For detailed troubleshooting, see our [error code reference](/errors).
+
+## Security & Compliance
+
+### Security Features
+- **API Token Authentication** - Secure access to Zephyr services
+- **IP Allowlisting** - Restrict access by IP address
+- **HTTPS Enforcement** - All traffic encrypted in transit
+- **Content Security Policy** - Protection against XSS attacks
+
+### Compliance
+- **GDPR** - European data protection compliance
+- **SOC 2** - Security and availability standards
+- **ISO 27001** - Information security management
+
+## Performance Guidelines
+
+### Bundle Optimization
+- **Code Splitting** - Split code at module boundaries
+- **Tree Shaking** - Remove unused code
+- **Compression** - Gzip and Brotli compression
+- **Caching** - Aggressive caching strategies
+
+### Runtime Performance
+- **Lazy Loading** - Load modules on demand
+- **Preloading** - Anticipate user actions
+- **Error Boundaries** - Graceful failure handling
+- **Memory Management** - Prevent memory leaks
+
+## Enterprise Features
+
+### Advanced Security
+- **Single Sign-On (SSO)** - SAML and OAuth integration
+- **Role-Based Access Control** - Fine-grained permissions
+- **Audit Logging** - Complete audit trail
+- **Compliance Reporting** - Automated compliance reports
+
+### Scaling & Performance
+- **Global Edge Network** - Worldwide content distribution
+- **Auto-scaling** - Automatic capacity management
+- **Load Balancing** - Distribute traffic efficiently
+- **Performance Monitoring** - Real-time metrics and alerts
+
+## Support & Community
+
+### Getting Help
+- **Documentation** - Comprehensive guides and references
+- **Community Forum** - Ask questions and share knowledge
+- **GitHub Issues** - Report bugs and request features
+- **Discord Chat** - Real-time community support
+
+### Professional Support
+- **Email Support** - Technical support via email
+- **Priority Support** - Faster response times for enterprises
+- **Professional Services** - Implementation and consulting
+- **Training** - On-site and remote training options
+
+## Next Steps
+
+Explore other sections of our documentation:
+- [🏗️ Build](/build) - Create applications with Zephyr
+- [🚀 Deploy](/deploy) - Deploy to cloud providers
+- [📱 Mobile](/mobile) - React Native development
+- [🔧 Developer Tools](/tools) - Enhance your workflow

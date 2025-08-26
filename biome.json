@@ -12,7 +12,6 @@
       "dist",
       "components/icons",
       "lib/scripts",
-      ".nx",
       "doc_build"
     ]
   },

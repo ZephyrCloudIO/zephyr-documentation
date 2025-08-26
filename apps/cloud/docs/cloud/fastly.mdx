@@ -1,0 +1,95 @@
+---
+title: Configure Fastly on Zephyr
+description: Configuring Fastly as your deployment integration provider on Zephyr
+---
+
+import { Button } from '@zephyr-docs/shared';
+import { Steps, Badge } from '@theme';
+import { Separator } from '@zephyr-docs/shared';
+
+# Configure Fastly on Zephyr
+
+## Overview
+
+Fastly's best-in-class edge cloud platform helps you modernize and automate to meet your biggest challenges. Integration with Zephyr enables better margins, higher developer productivity, faster innovation cycles, and enhanced reliability.
+
+## Prerequisites
+
+:::info
+
+- A registered Fastly account on the _'Usage'_ plan
+- A registered Zephyr account
+- A Fastly site project with a [custom domain](https://docs.fastly.com/en/guides/working-with-domains) configured
+- A registered domain
+
+:::
+
+## Integration Setup
+
+:::info 
+API Token Configuration
+
+- Create your API token [here](https://manage.fastly.com/account/personal/tokens). For detailed steps on creating an API token, refer to the [Fastly API token documentation](https://www.fastly.com/documentation/guides/account-info/account-management/using-api-tokens/).
+- Required permissions:
+  - Type: any
+  - Scope: Global API access
+
+:::
+
+<Steps>
+
+### Enable Fastly Integration
+
+1. Navigate to the Organization Level in Zephyr
+2. Select **Settings** tab, choose **Deployment integration** and then click on **Available**
+3. On this page choose **Fastly Integration** and click on **Add integration**
+3. Complete the form with:
+   - API Token
+   - Site ID
+4. Click **Add Integration**
+
+### Configure DNS Domain
+
+1. In Fastly, go to **Security > Subscriptions**
+2. Click "Secure another domain"
+3. Add two domains:
+   - `ze.yourdomain.com`
+   - `*.ze.yourdomain.com`
+4. Click "Add" then "Submit" 
+5. You'll see a "Pending verification" status
+6. You will see CNAME records here that you'll need for the next step
+
+### Set Up DNS Records
+
+1. Go to your domain provider (e.g., GoDaddy)
+2. Add the verification CNAME record from the fastly Subscription Details page. [**Step 6 of the previous section**](#configure-dns-domain)
+3. Wait for domain verification in Fastly
+4. Click "View/Edit" once verified
+5. Create two CNAME records:
+
+| Subdomain | Type | Priority | Target |
+|-----------|------|----------|--------|
+| ze.yourdomain.com | CNAME | - | t.sni.global.fastly.net |
+| *.ze.yourdomain.com | CNAME | - | t.sni.global.fastly.net |
+
+*Note: Actual target values will be shown in your Fastly dashboard*
+
+</Steps>
+
+## System Components
+
+The integration creates:
+- Config store for jwt-secret
+- KV stores:
+  - ze-snapshots
+  - ze-envs
+  - ze-files
+- Compute service: ze-worker
+
+## Usage Instructions
+
+1. Create a new Fastly deployment integration
+2. Build a new application with Zephyr
+3. During deployment:
+   - System retrieves site information using provided parameters
+   - Zephyr Plugin uploads build assets to KV stores

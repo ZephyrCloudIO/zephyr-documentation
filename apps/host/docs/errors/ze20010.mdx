@@ -1,0 +1,42 @@
+---
+title: "ZE20010: Error"
+description: "ZE20010: Error"
+label: "ZE20010: Error"
+---
+
+import { SourceCode } from '@theme';
+import { Steps } from '@theme';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { ErrorLink } from '../../components/errors/link.tsx';
+
+
+
+
+
+This error occurs when a problem between Zephyr's plugin and our servers happens during file upload and a asset for the remote module is not uploaded.
+
+## Debugging the error
+
+<Steps>
+
+### Retry your deployment
+
+If you encounter this error, you can try to deploy your application again. This error can be transient and may not occur on subsequent deployments.
+
+```bash
+npm run build
+```
+
+### Check your network connection
+
+Ensure that your network connection is stable and that there are no issues with your internet connection. A poor network connection can cause issues with file uploads.
+
+</Steps>
+
+## Ask for Support
+
+::: caution
+
+**Still having problems?** [Try joining our Discord server and get help from the community](https://zephyr-cloud.io/discord)
+
+:::

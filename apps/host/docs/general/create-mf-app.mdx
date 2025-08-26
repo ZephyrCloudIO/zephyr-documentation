@@ -1,0 +1,361 @@
+---
+title: Create module federation app
+description: Zephyr Cloud Documentation - Creating a basic module federation app and deploy it through Zephyr. 
+---
+
+import { SourceCode } from '@theme';
+import { Tabs, TabsList, TabsTrigger, TabsContent, PreCode, Code, BuildAuthInfo } from '@zephyr-docs/shared';
+import { ZephyrInfo } from "../../components/zephyr/console-output";
+
+# Create a module federation app
+<SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/examples/create-mf-app-rspack" />
+
+
+Developed by [Jack Herrington](https://twitter.com/jherr) , co-author of the "Practical Module Federation" [book](https://module-federation.myshopify.com/products/practical-module-federation) and technology-focused [YouTuber](https://www.youtube.com/@jherr).
+
+`create-mf-app` is a tool that creates a Module Federation application, API server, or library based on one of multiple different templates.
+
+## Generating Application
+
+This guide provides a comprehensive walkthrough on how to use the `create-mf-app` tool to create a Module Federation application and integrate it with Zephyr. 
+
+To execute `npm` package binaries, use the `npx` command as follows:
+
+```bash title="Terminal"
+npx create-mf-app
+```
+
+
+Choose a name for your application. Ensure you designate one host and at least one remote, choosing names that reflect their roles accordingly.
+
+```bash title="Terminal"
+? Pick the name of your app: (host)
+```
+
+Select the type of application:
+
+```bash title="Terminal"
+? Project Type: (Use arrow keys)
+❯ Application
+  API Server
+  Library
+```
+
+You may use the default port option:
+
+```bash title="Terminal"
+? Port number: (8080)
+```
+
+We conducted tests using React, but other frameworks may also be compatible. See a list of supported framework [here](/supported#supported-frameworks)
+
+```bash title="Terminal"
+? Framework: (Use arrow keys)
+lit-html
+preact
+❯ react
+react-esm
+solid-js
+svelte
+vanilla
+(Move up and down to reveal more choices)
+```
+
+We prefer TypeScript, but Zephyr is compatible with both TypeScript and JavaScript.
+
+```bash title="Terminal"
+? Language:
+❯ typescript
+javascript
+```
+Both CSS and Tailwind are viable options for styling:
+
+```bash title="Terminal"
+? CSS: (Use arrow keys)
+❯ CSS
+Tailwind
+```
+
+While both packing options are viable, we strongly recommend **Rspack** for its performance. See [benchmark of Rspack](https://www.rspack.dev/).
+
+```bash title="Terminal"
+? Bundler: (Use arrow keys)
+Webpack
+❯ Rspack
+```
+
+## Adding Zephyr to Your Module Federation App
+
+Installing Zephyr plugin:
+
+```bash title="Terminal"
+cd create-mf-app-rspack-host
+npm install zephyr-webpack-plugin@latest --save
+```
+
+### Zephyr Configuration Integration
+
+Incorporate the Zephyr configuration into your existing setup by wrapping the current configuration object with Zephyr's functionality. To use **zephyr-webpack-plugin** with Rspack, replace the original content in `rspack.config.js` with:
+
+```js title="rspack.config.js" {5,12,119}
+const rspack = require('@rspack/core')
+const refreshPlugin = require('@rspack/plugin-react-refresh')
+const isDev = process.env.NODE_ENV === 'development'
+const path = require('path');
+const { withZephyr } = require('zephyr-webpack-plugin')
+
+const printCompilationMessage = require('./compilation.config.js');
+
+/**
+ * @type {import('@rspack/cli').Configuration}
+ */
+module.exports = withZephyr()({
+  context: __dirname,
+  entry: {
+    main: './src/index.ts',
+  },
+
+  devServer: {
+    port: 8080,
+    historyApiFallback: true,
+    watchFiles: [path.resolve(__dirname, 'src')],
+    onListening: function (devServer) {
+      const port = devServer.server.address().port
+
+      printCompilationMessage('compiling', port)
+
+      devServer.compiler.hooks.done.tap('OutputMessagePlugin', (stats) => {
+        setImmediate(() => {
+          if (stats.hasErrors()) {
+            printCompilationMessage('failure', port)
+          } else {
+            printCompilationMessage('success', port)
+          }
+        })
+      })
+    }
+  },
+
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.svg$/,
+        type: 'asset',
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: {
+                  tailwindcss: {},
+                  autoprefixer: {},
+                },
+              },
+            },
+          },
+        ],
+        type: 'css',
+      },
+      {
+        test: /\.(jsx?|tsx?)$/,
+        use: [
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              sourceMap: true,
+              jsc: {
+                parser: {
+                  syntax: 'typescript',
+                  tsx: true,
+                },
+                transform: {
+                  react: {
+                    runtime: 'automatic',
+                    development: isDev,
+                    refresh: isDev,
+                  },
+                },
+              },
+              env: {
+                targets: [
+                  'chrome >= 87',
+                  'edge >= 88',
+                  'firefox >= 78',
+                  'safari >= 14',
+                ],
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
+  plugins: [
+    new rspack.container.ModuleFederationPlugin({
+      name: 'create_mf_app_host',
+      filename: 'remoteEntry.js',
+      exposes: {},
+      shared: {
+        react: { eager: true },
+        'react-dom': { eager: true },
+        'react-router-dom': { eager: true },
+      },
+    }),
+    new rspack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    }),
+    new rspack.ProgressPlugin({}),
+    new rspack.HtmlRspackPlugin({
+      template: './src/index.html',
+    }),
+    isDev ? new refreshPlugin() : null,
+  ].filter(Boolean),
+})
+
+```
+
+### Zephyr Dependencies in package.json optional
+
+For example, consider the [react-tractor-sample](https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/react-tractor-sample) repository. It includes an application called team-red, which depends on two other applications: team-green and team-blue.
+
+To specify the version of each dependency, you can define zephyrDependencies in the package.json file like this:
+
+```json title=package.json
+{
+  "name": "team-red",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "nx run team-red:build --skip-nx-cache"
+  },
+  "private": true,
+  "zephyrDependencies": {
+    "team-blue": "0.1.0",
+    "team-green": "0.1.0"
+  }
+}
+```
+If you omit the zephyrDependencies configuration, the latest versions of the remote applications will be used by default.
+
+### Setting a Git Origin
+
+1. **Initialize the Git Repository:**
+
+Initialize the Git repository to start tracking your project:
+
+```bash title="Terminal"
+git init
+```
+
+2. **Stage Files for Commit:**
+
+Add all files to the staging area in preparation for the initial commit:
+
+```bash title="Terminal"
+git add .
+```
+
+3. **Create an Initial Commit:**
+
+Commit the staged files to your repository with a descriptive message:
+
+```bash title="Terminal"
+git commit -m "Initial commit with Zephyr"
+```
+
+4. **Set the Default Branch Name:**
+
+Define 'main' as the default branch for your repository:
+
+```bash title="Terminal"
+git branch -M main
+```
+
+5. **Add a Remote Origin:**
+Zephyr requires a Git origin to establish a unique project, application, and version combination. Replace `User` and `UserRepo` with your GitHub username and repository name (You can download Github CLI [here](https://cli.github.com/)):
+
+<Tabs defaultValue="gh" className="w-full flex flex-col justify-start">
+  <TabsList>
+    <TabsTrigger value="gh">Using Github CLI</TabsTrigger>
+    <TabsTrigger value="git">Using Git</TabsTrigger>
+  </TabsList>
+  <TabsContent value="gh">
+
+```bash title="Terminal"
+gh repo create
+```
+  </TabsContent>
+  <TabsContent value="git">
+
+```bash title="Terminal"
+git remote add origin https://github.com/User/UserRepo.git
+```
+  </TabsContent>
+</Tabs>
+
+
+6. **Push to GitHub (Optional):**
+
+Optionally, you can push your code to GitHub to store your changes remotely:
+
+```bash filename="Terminal"
+git push -u origin main
+```
+
+:::warning{title="Error Handling"}
+
+If you encounter errors due to unset Git configurations, ensure you have set both your Git `user.name` and `user.email`, and that you have a valid 'git remote origin' set up.
+```bash 
+[ConfigurationError: [zephyr]: git is not configured properly
+
+    - please set git user.name and user.email
+
+    - please set valid 'git remote origin'
+
+]
+```
+If this error show up - create a new repository and copy the link to that repository, do: 
+```bash title="Terminal"
+git remote add origin git@github.com:User/UserRepo.git
+```
+:::
+
+## Using Zephyr
+
+Zephyr operates as a side effect of the build process, allowing you to execute the build in watch mode for continuous updates.
+
+
+```bash title="Terminal"
+npm run build --watch
+```
+
+<BuildAuthInfo />
+
+### Understanding Build Outputs
+
+During the build process, Zephyr related informations are displayed as follows:
+
+1. Your user id.
+2. Your application URL 
+3. Progress details and statistics from bundlers and us. 
+4. Deployed URL. 
+
+To understand how our URLs are structured, please refer to our [versioning documentation](/how-to/versioning-tags).
+
+<PreCode>
+
+<ZephyrInfo/>
+
+</PreCode>
+
+
+## Next Steps
+
+You can now proceed to add remotes and start building your federated application as planned.
+
+For insights on building micro-frontends with Rspack and Create MF App, Jack offers an informative [video tutorial](https://www.youtube.com/watch?v=32_EikGKESk). We have also curated a resource page related to micro-frontend and module federation [here](/general/resources).

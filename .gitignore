@@ -25,9 +25,6 @@ dist-ssr
 *.sw?
 doc_build
 
-.nx/cache
-.nx/workspace-data
-
 .env
 
 # Local Netlify folder
@@ -37,5 +34,3 @@ yarn.lock
 package-lock.yaml
 
 temp-search-index.json
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
