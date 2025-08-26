@@ -53,7 +53,7 @@ export const SiteConfig: CardProps = {
       title: "Adding Zephyr to existing application",
       description:
         "One line of code to add Zephyr to your existing application. Use Nx + React + Webpack as an example.",
-      href: "/how-to/existing-app",
+      href: "/recipes/existing-app",
       variant: "small",
     },
     // {
