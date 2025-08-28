@@ -74,6 +74,7 @@
   "optionalDependencies": {
     "@rspress/mdx-rs-linux-x64-gnu": "^0.6.6"
   },
+  "packageManager": "pnpm@10.15.0",
   "pnpm": {
     "patchedDependencies": {
       "rspress-plugin-google-analytics@0.3.0": "patches/rspress-plugin-google-analytics@0.3.0.patch"
