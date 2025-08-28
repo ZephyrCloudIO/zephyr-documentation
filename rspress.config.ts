@@ -214,6 +214,10 @@ const sidebar: Sidebar = {
           link: "/recipes/react-vite",
         },
         {
+          text: "React + Rsbuild",
+          link: "/recipes/react-rsbuild",
+        },
+        {
           text: "Vite + Rspack + webpack + MF",
           link: "/recipes/vite-rspack-webpack-mf",
         },

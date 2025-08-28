@@ -172,6 +172,13 @@ export const SiteConfig: CardProps = {
     //   icons: [<ReactIcon />, <NxIcon />, <ViteIcon />],
     // },
     {
+      title: "React + Rsbuild",
+      description: "Use Zephyr with React and Rsbuild.",
+      href: "/recipes/react-rsbuild",
+      variant: "small",
+      icons: [<ReactIcon />, <RspackIcon />],
+    },
+    {
       title: "React + Rspack + Nx",
       description: "Use Zephyr with React, Nx and Rspack.",
       href: "/recipes/react-rspack-nx",
@@ -404,6 +411,11 @@ export const supportedFramework = [
 ];
 
 export const supportedBundler = [
+  {
+    name: "Rsbuild",
+    icon: "",
+    supported: "prod",
+  },
   {
     name: "Rspack",
     icon: "",
