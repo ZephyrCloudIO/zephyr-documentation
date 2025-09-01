@@ -4,22 +4,23 @@
   "description": "Zephyr Cloud documentation with module federation",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"pnpm dev:host\" \"pnpm dev:ai\" \"pnpm dev:cloud\" \"pnpm dev:mobile\" \"pnpm dev:sidepanel\" \"pnpm dev:web\"",
-    "dev:host": "cd apps/host && pnpm dev --port 3030",
-    "dev:ai": "pnpm --filter ai dev --port 3001",
-    "dev:cloud": "cd apps/cloud && pnpm dev --port 3002",
-    "dev:mobile": "cd apps/mobile && pnpm dev --port 3003",
-    "dev:sidepanel": "cd apps/sidepanel && pnpm dev --port 3004",
-    "dev:web": "cd apps/web && pnpm dev --port 3005",
-    "build": "pnpm --filter ai build && pnpm --filter cloud build && pnpm --filter mobile build && pnpm --filter sidepanel build && pnpm --filter web build && pnpm --filter zephyr-cloud-docs build",
-    "build:host": "cd apps/host && pnpm build",
-    "build:ai": "cd apps/ai && pnpm build",
-    "build:cloud": "cd apps/cloud && pnpm build",
-    "build:mobile": "cd apps/mobile && pnpm build",
-    "build:sidepanel": "cd apps/sidepanel && pnpm build",
-    "build:web": "cd apps/web && pnpm build",
-    "install:all": "pnpm install && pnpm --filter ai install && pnpm --filter cloud install && pnpm --filter mobile install && pnpm --filter sidepanel install && pnpm --filter web install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "mprocs",
+    "dev:host": "pnpm --filter host dev",
+    "dev:ai": "pnpm --filter ai dev",
+    "dev:cloud": "pnpm --filter cloud dev",
+    "dev:mobile": "pnpm --filter mobile dev",
+    "dev:sidepanel": "pnpm --filter sidepanel dev",
+    "dev:web": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "build:host": "pnpm --filter host build",
+    "build:ai": "pnpm --filter ai build",
+    "build:cloud": "pnpm --filter cloud build",
+    "build:mobile": "pnpm --filter mobile build",
+    "build:sidepanel": "pnpm --filter sidepanel build",
+    "build:web": "pnpm --filter web build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "format": "pnpm -r format"
   },
   "keywords": [
     "module-federation",
@@ -30,7 +31,9 @@
   "author": "Zephyr Cloud",
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
-    "concurrently": "^9.2.1",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "mprocs": "^0.7.3"
   }
 }

@@ -6,7 +6,7 @@ This guide aims to walk you through how you can deploy a Micro-Frontend applicat
 
 :::info Prerequisites
 
-- We expect you to have finished our [Get Started](/general/get-started) guide.
+- We expect you to have finished our Get Started guide.
 - Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
 - A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
 - npm >=10
@@ -428,7 +428,6 @@ module.exports = (_, argv) =>
           },
         },
         {
-          test: /\.(css|s[ac]ss)$/i,
           use: ['style-loader', 'css-loader', 'postcss-loader'],
         },
         {

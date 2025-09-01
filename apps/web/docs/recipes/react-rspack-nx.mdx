@@ -7,7 +7,7 @@ import SupportedBrowser from "../../components/browser-table";
 import { DrawingPinIcon } from '@radix-ui/react-icons';
 import { Image } from '@zephyr-docs/shared';
 import { Keyboard } from '@zephyr-docs/shared';
-import { SourceCode } from '@theme';
+import { SourceCode } from '@rspress/core/theme';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@zephyr-docs/shared';
 import { Card } from '@zephyr-docs/shared';
 import { BuildAuthInfo } from '@zephyr-docs/shared';
@@ -16,7 +16,7 @@ import { BuildAuthInfo } from '@zephyr-docs/shared';
 
 :::info Prerequisites
 
-- We expect you to have finished our [Get Started](/general/get-started) guide.
+- We expect you to have finished our Get Started guide.
 - Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
 - A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
 - npm >=10
@@ -78,7 +78,7 @@ You can see your application in the browser.
 
 #### 3. Naming each application
 
-To understand why these configuration are necessary - [Read the complete checklist to deploy Micro-Frontend with Zephyr](/how-to/mf-guide). 
+To understand why these configuration are necessary - read the complete checklist to deploy Micro-Frontend with Zephyr. 
 
 Open the new directory in your selected editor and add `package.json` as a structure below: 
 
@@ -210,7 +210,7 @@ rm rf ~/.zephyr
 Now that you have logged in and deployed your apps; you should see the versions of the host application, and the versions of our two remotes (remote1 & remote2). Make some changes locally, watch them redeploy and select the new version from the drop down (you may need to refresh the browser to see the latest, if live reload is not checked)
 
 :::info
-Our chrome extension is only supported on Chromium based browsers. See a list of [supported browser](/supported#browser-support).
+Our chrome extension is only supported on Chromium based browsers. Please check our documentation for supported browsers.
 :::
 
 

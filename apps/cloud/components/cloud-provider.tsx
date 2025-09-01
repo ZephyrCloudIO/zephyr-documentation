@@ -1,12 +1,11 @@
-import { SiteConfig } from "../../host/lib/site.config";
-import type { CardItemProps } from "../../host/lib/site.config";
+import { SiteConfig, type CardItemProps } from '@zephyr-docs/shared';
 import {
   AkamaiIcon,
   CloudflareIcon,
   FastlyIcon,
   NetlifyIcon,
-  Card
-} from "@zephyr-docs/shared";
+  Card,
+} from '@zephyr-docs/shared';
 
 export const CloudProviderCards = () => {
   return (
@@ -19,11 +18,11 @@ export const CloudProviderCards = () => {
 };
 
 const item = {
-  title: "Add Environments",
-  href: "/how-to/environments",
+  title: 'Add Environments',
+  href: '/how-to/environments',
   description:
-    "Configure custom domain for your application with your deployment integration platform.",
-  variant: "default",
+    'Configure custom domain for your application with your deployment integration platform.',
+  variant: 'default',
   icons: [<CloudflareIcon />, <NetlifyIcon />, <FastlyIcon />, <AkamaiIcon />],
 } satisfies CardItemProps;
 

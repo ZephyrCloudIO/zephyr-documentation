@@ -8,6 +8,7 @@ import { Steps, Badge } from '@rspress/core/theme';
 import { Separator } from '@zephyr-docs/shared';
 import { CustomDomain } from '../../components/cloud-provider.tsx';
 
+
 # Configure Cloudflare on Zephyr
 
 Originally launched as an email spam tracker, Cloudflare today offers extensive capabilities for users to register, manage domains as a registrar, and monitor, secure, and configure an entire IT infrastructure.
@@ -73,7 +74,7 @@ Before proceeding, you will need two details and one DNS configuration from Clou
 - Return to your domain’s home page (the **Overview** page should still be open) and click on **DNS** on the left sidebar.
 - Click **Add record** on the _Records_ page and enter the following details:
 
-![dns](../public/cf-dns-entry-cname.png)
+![dns](/cf-dns-entry-cname.png)
 
 <details>
 <summary>Click to view DNS record details</summary>
@@ -133,7 +134,7 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 
 ### Testing Cloudflare Integration
 
-Visit our [recipes](/recipes) to test an application. Your next deployment should use your designated domain! (If not, [talk to us on Discord](https://zephyr-cloud.io/discord)).
+Your next deployment should use your designated domain! (If not, [talk to us on Discord](https://zephyr-cloud.io/discord)).
 
 When using our managed cloud (Cloudflare) or custom Cloudflare integration, avoid including capital letters in names for `package.json`, module federation configuration, or assets to prevent issues with Cloudflare queries.
 
@@ -180,7 +181,7 @@ In your Cloudflare dashboard, navigate to **Workers & Pages** and then **KV** to
 - `ze_envs`: stores application environment and access rights.
 - `ze_snapshot`: stores application snapshots compared against the previous build.
 - If deploying an application previously on our managed cloud, run `rm -rf ~/.zephyr` before deployment.
-- If you encounter issues deploying Micro-frontend applications, see our [Micro-frontend deployment guide](/how-to/mf-guide).
+- If you encounter issues deploying Micro-frontend applications, refer to our deployment documentation.
 
 :::
 

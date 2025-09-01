@@ -1,0 +1,130 @@
+import { SourceCode } from '@rspress/core/theme';
+import { Image, Separator } from '@zephyr-docs/shared';
+
+
+To start with our example, you can [**fork our example**](https://github.com/ZephyrCloudIO/zephyr-repack-example) or use our creation command. This is a comprehensive example where, if you are building with Zephyr using React Native, this structure is normally where you would start. 
+
+<SourceCode href="https://github.com/ZephyrCloudIO/zephyr-repack-example" /> 👈🏻 the code and how it looks like 👇🏻 
+
+<Image src="/ios_demo.gif" alt="Zephyr Cloud React Native App IOS Demo" />
+
+### Structure
+
+Our React Native application is currently powered by [Re.Pack](https://re-pack.dev) built by [Callstack](https://callstack.com) and [Module Federation](https://module-federation.io). Re.Pack handled the CLI overwrite in React Native, cross-platform runtime for Module Federation and utility rule sets for React Native. 
+
+When you are deploying, building your application with Zephyr, Zephyr will [resolve your remote dependencies automatically](https://docs.zephyr-cloud.io/how-to/mf-guide) (powered by dependency delegate in Zephyr plugins), handle the build and deploy process for you. You can read more about the project's structure in repository's [README.md](https://github.com/ZephyrCloudIO/zephyr-repack-example/blob/main/README.md). 
+
+
+![repack_architecture](/architecture_overview.png)
+
+
+Within the repository, you can see several folders: 
+
+- `apps`: contains all the remotes, host and e2e tests 
+    - `mobile-host`: manage most of the navigation and routing of the whole application and is the provider of authentication. state, and API for remote applications. 
+    - `mobile-checkout`: a remote of `mobile-cart`, provide checkout screen. 
+    - `mobile-cart`: a remote of `mobile-host`, provide cart screen after users added items to cart and click on cart button. 
+    - `mobile-inventory`: a remote of `mobile-host`, provide inventory screen for users to view and select items.  
+    - `mobile-orders`: a remote of `mobile-host`, provide orders screen for users to view and manage their orders
+- `packages`: contains all the shared packages including 
+    - `mobile-sdk`: core app utilities including auth, api, data and UI
+    - `mobile-core`: handle dependency management and utilities
+    - `mobile-eslint-config`: eslint config for mobile
+- `patches`: contains pathces for npm dependenciess to ensure application runs smoothly 
+
+
+
+
+
+
+## Creation command
+
+Alternatively, you can also use our creation command to scaffold your project. 
+
+```bash
+npx create-zephyr-apps@latest
+```
+
+And select the following options: 
+
+```
+◇  Where should we create your project?
+│  ./react-native-playground
+│
+◇  What type of project you are creating?
+│  React Native
+│
+◇  Project successfully created at react-native-playground
+```
+
+
+
+Once your have the project locally, you can run below commands in sequence to start the development server. **Note that in all Zephyr's applications, you need to run a build for remotes to help zephyr understand what are the remote applications.** 
+
+
+## Running the project 
+
+Commands to run the project smoothly for iOS development: 
+
+```bash 
+# Installing the dependencies 
+pnpm install 
+
+```
+
+Because `mobile-checkout` is the remote of `mobile-cart`, you will need to build `mobile-checkout` first. 
+
+:::note{title="Platform inference"}
+Passing in `--platform ios` or `--platform android` is recommended as it will start the dev server for the specific platform. Zephyr resolves MiniApps by `platform` inferred from the `react-native start` command. 
+
+If you opted to only run `react-native start`, you will be spawning two dev servers, one for iOS and one for Android, regardless whether the emulator is running iOS or Android. 
+:::
+
+
+```bash 
+ZC=1 pnpm --filter MobileCheckout run start --platform ios
+```
+
+`ZC=1` is the environment variable how we set up the project to kick off Zephyr deployment. 
+
+After `mobile-checkout` is built and deployed (make sure the deployed URL kicked back, if not you can report the bug in our [Discord](https://zephyr-cloud.io/discord)), you can run `mobile-cart` (a remote for `mobile-inventory`). 
+
+```bash 
+ZC=1 pnpm --filter MobileCart run start --platform ios
+```
+
+Subsequently, you can now run `mobile-inventory` and deploy it. 
+
+```bash 
+ZC=1 pnpm --filter MobileInventory run start --platform ios
+```
+After `mobile-inventory` is deployed, you can now run `mobile-orders`(the last remote we have yet deployed) and deploy it. 
+
+```bash 
+ZC=1 pnpm --filter MobileOrders run start --platform ios
+```
+
+Once all the remotes are deployed, you can now run `mobile-host` to see the whole application. 
+
+First of all you need to bundle the host application and kick off the iOS emulator. 
+
+```bash 
+ZC=1 pnpm --filter MobileHost run ios
+```
+
+But after that whether you run all the dev server with the command below: 
+
+
+```bash 
+ZC=1 pnpm run start
+```
+
+Or you only want to run the host application without any remotes, you can run the command below: 
+
+```bash 
+ZC=1 pnpm --filter MobileHost run start --platform ios
+```
+
+Everything would work smoothly - vice versa for Android development. 
+
+

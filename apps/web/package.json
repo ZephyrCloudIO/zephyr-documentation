@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@module-federation/rspress-plugin": "^0.18.3",
-    "@rspress/core": "2.0.0-beta.28",
+    "@radix-ui/react-icons": "1.3.2",
+    "@rspress/core": "2.0.0-beta.29",
     "@zephyr-docs/shared": "workspace:*"
   },
   "devDependencies": {

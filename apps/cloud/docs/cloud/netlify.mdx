@@ -4,7 +4,7 @@ description: Configuring Netlify as your deployment integration provider on Zeph
 ---
 
 import { Button } from '@zephyr-docs/shared';
-import { Steps, Badge } from '@theme';
+import { Steps, Badge } from '@rspress/core/theme';
 import { Separator } from '@zephyr-docs/shared';
 import { CustomDomain } from '../../components/cloud-provider.tsx'
 
@@ -202,7 +202,7 @@ Make every repository deployed through Zephyr attempt to deploy through this
 
 ### How to test it
 
-Navigate to our [recipes](/recipes) to try one of the application, you should see your next deployment deployed through your designated domain! (if not come [talk to us](https://zephyr-cloud.io/discord))
+Navigate to our recipes to try one of the application, you should see your next deployment deployed through your designated domain! (if not come [talk to us](https://zephyr-cloud.io/discord))
 
 
 </Steps>
@@ -247,7 +247,6 @@ Sign in to your Netlify team's main dashboard page and select your site project,
 - `site:ze_envs` stores you application's environment, access right etc.
 - `site:ze_snapshot` stores your application's snapshots comparing against previous build.
 - If you are deploying an application that's previously deployed through our managed cloud, you will need to run `rm -rf ~/.zephyr` before deployment.
-- If you faced issues while deploying Micro-frontend application, you can follow your complete guide on [how to deploy Micro-frontend applications on Zephyr](/how-to/mf-guide).
 
 :::
 

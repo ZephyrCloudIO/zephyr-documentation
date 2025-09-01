@@ -3,7 +3,7 @@ title: Nx + Module Federation example
 description: Zephyr Cloud Documentation - Creating a module federation app in Nx as an example
 ---
 
-import { SourceCode } from '@theme';
+import { SourceCode } from '@rspress/core/theme';
 import { BuildAuthInfo } from '@zephyr-docs/shared';
 
 # React + Webpack + Nx
@@ -14,7 +14,7 @@ Special thanks to [Colum](https://x.com/FerryColum) at Nx for his feedback on us
 
 :::info Prerequisites
 
-- We expect you to have finished our [Get Started](/general/get-started) guide.
+- We expect you to have finished our Get Started guide.
 - Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
 - A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io).
 - npm >=10
@@ -29,7 +29,6 @@ nvm use 20
 
 ## Generating a New Nx Workspace
 
-[Nx](https://nx.dev), a leading Monorepo and CI tool, offers an extensive array of [generators](https://nx.dev/recipes/module) that facilitate various development needs.
 
 :::warning 
 
@@ -392,7 +391,7 @@ webpack compiled successfully (533e09796edd0232)
 ```
 
 :::info
-The build process generates a series of URLs for each deployment. For a comprehensive understanding of these build outputs, please consult our [versioning documentation](/how-to/versioning-tags).
+The build process generates a series of URLs for each deployment. For a comprehensive understanding of these build outputs, please consult our versioning documentation.
 
 ```bash filename="Terminal"
 [shell.zephyr-examples.zephyrcloudio](valorkin)[3016]: deployed to https://valorkin_3016-shell-zephyr-examples-zephyrcloudio-ze.valorkin.dev

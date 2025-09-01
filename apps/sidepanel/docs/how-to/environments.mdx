@@ -2,7 +2,7 @@
 
 :::warning Requirements
 
-Custom domains _(cnames)_ are only available for applications deployed through a [Custom Deployment Integration Provider](../cloud.mdx).
+Custom domains _(cnames)_ are only available for applications deployed through a Custom Deployment Integration Provider.
 
 :::
 
@@ -49,9 +49,7 @@ c. Run a build command to deploy your application and confirm the latest deploye
 
 <dt>`Custom DNS name`</dt>
 <dd>
-  Enter the full URL for the custom domain. If you followed the [Cloud Provider
-  Configuration Guide](/cloud), you can input custom domains like
-  `sub.domain.com` without needing `https://`.
+  Enter the full URL for the custom domain. If you have configured a Cloud Provider, you can input custom domains like `sub.domain.com` without needing `https://`.
 </dd>
 
 <dt>`Description`</dt>
@@ -71,11 +69,11 @@ Our Cloudflare integration does not needs any extra steps to configure a custom 
 
 After adding a new domain, you can see in your worker's configuration a custom entry for it was added:
 
-![route](../public/cf-domains.png)
+![route](/cf-domains.png)
 
 And that a custom DNS entry was automatically added to your domain:
 
-![dns](../public/cf-dns-entry.png)
+![dns](/cf-dns-entry.png)
 
 ## Netlify
 
@@ -83,7 +81,7 @@ And that a custom DNS entry was automatically added to your domain:
 
 Attach a domain to a Netlify site project and set the Netlify integration as the **Default deployment integration** on Zephyr’s dashboard. You can confirm domain management status under your Netlify Team account’s **Domain** settings.
 
-If needed, refer to the [Netlify Configuration Guide](/cloud/netlify) and confirm that you meet all requirements [listed here](/cloud/netlify#wildcard-subdomain-on-netlify).
+If needed, refer to the Netlify Configuration Guide and confirm that you meet all requirements for wildcard subdomains on Netlify.
 
 :::
 

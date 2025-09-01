@@ -3,7 +3,7 @@ title: 'Configure AWS on Zephyr'
 description: 'Configuring AWS as your deployment integration provider on Zephyr'
 ---
 
-import { Steps } from '@theme';
+import { Steps } from '@rspress/core/theme';
 import { Button } from '@zephyr-docs/shared';
 
 # Configure AWS on Zephyr
@@ -383,9 +383,7 @@ if [[ -n "$S3_BUCKET" ]]; then
       log " Bucket is versioned — cleaning versions:"
       while : ; do
         VERS="$(aws s3api list-object-versions --bucket "$S3_BUCKET" --max-items 1000)"
-        CNT=$(echo "$VERS" | jq '[.Versions[]?, .DeleteMarkers[]?] | length')
         [[ "$CNT" -eq 0 ]] && break
-        IDS=$(echo "$VERS" | jq -c '{Objects: ([.Versions[]? , .DeleteMarkers[]?] | map({Key:.Key, VersionId:.VersionId})), Quiet:true}')
         echo "$IDS" | aws s3api delete-objects --bucket "$S3_BUCKET" --delete file:///dev/stdin >/dev/null || true
       done
     fi
