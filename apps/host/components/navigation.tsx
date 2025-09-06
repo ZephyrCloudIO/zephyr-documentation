@@ -1,50 +1,61 @@
-import { NavigationCard, NavigationCardContent, NavigationCardDescription, NavigationCardHeader, NavigationCardTitle } from '@zephyr-docs/shared';
+import {
+  NavigationCard,
+  NavigationCardContent,
+  NavigationCardDescription,
+  NavigationCardHeader,
+  NavigationCardTitle,
+} from "@zephyr-docs/shared";
 
 const apps = [
   {
-    name: "AI Documentation", 
+    name: "AI Documentation",
     description: "AI and machine learning integration guides",
     href: "http://localhost:3001",
-    icon: "🤖"
+    icon: "🤖",
   },
   {
     name: "Cloud Documentation",
-    description: "Cloud deployment and infrastructure guides", 
+    description: "Cloud deployment and infrastructure guides",
     href: "http://localhost:3002",
-    icon: "☁️"
+    icon: "☁️",
   },
   {
-    name: "Mobile Documentation", 
+    name: "Mobile Documentation",
     description: "Mobile development and React Native guides",
-    href: "http://localhost:3003", 
-    icon: "📱"
+    href: "http://localhost:3003",
+    icon: "📱",
   },
   {
     name: "Sidepanel Documentation",
     description: "Browser extension and sidepanel guides",
     href: "http://localhost:3004",
-    icon: "🔧"
+    icon: "🔧",
   },
   {
     name: "Web Documentation",
-    description: "Web development and frontend guides", 
+    description: "Web development and frontend guides",
     href: "http://localhost:3005",
-    icon: "🌐"
-  }
+    icon: "🌐",
+  },
 ];
 
 export function NavigationGrid() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
       {apps.map((app) => (
-        <NavigationCard key={app.name} className="hover:shadow-lg transition-shadow">
+        <NavigationCard
+          key={app.name}
+          className="hover:shadow-lg transition-shadow"
+        >
           <NavigationCardHeader>
             <div className="text-4xl mb-2">{app.icon}</div>
             <NavigationCardTitle>{app.name}</NavigationCardTitle>
-            <NavigationCardDescription>{app.description}</NavigationCardDescription>
+            <NavigationCardDescription>
+              {app.description}
+            </NavigationCardDescription>
           </NavigationCardHeader>
           <NavigationCardContent>
-            <a 
+            <a
               href={app.href}
               target="_blank"
               rel="noopener noreferrer"

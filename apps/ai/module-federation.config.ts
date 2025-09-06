@@ -5,6 +5,6 @@ export default createModuleFederationConfig({
   name: 'ai_docs',
   exposes: {
     './intro': './docs/index.mdx',
-    './hello': './docs/hello.mdx'
+    './hello': './docs/hello.mdx',
   },
 });

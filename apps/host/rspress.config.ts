@@ -1,14 +1,14 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { pluginModuleFederation } from "@module-federation/rspress-plugin";
+import { defineConfig } from "@rspress/core";
 import { pluginClientRedirects } from "@rspress/plugin-client-redirects";
 import type { Nav, Sidebar, SocialLink } from "@rspress/shared";
 import dotenv from "dotenv";
 import ga from "rspress-plugin-google-analytics";
 import sitemap from "rspress-plugin-sitemap";
-import { defineConfig } from "@rspress/core";
 // import { withZephyr } from "zephyr-rspack-plugin";
 import { withZephyr } from "zephyr-rspress-plugin";
-import { pluginModuleFederation } from "@module-federation/rspress-plugin";
 import mfConfig from "./module-federation.config";
 
 import { Categories } from "./lib/error-codes-messages";
@@ -692,7 +692,7 @@ export default defineConfig({
     source: {
       define: {
         "process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID": JSON.stringify(
-          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID
+          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID,
         ),
       },
     },

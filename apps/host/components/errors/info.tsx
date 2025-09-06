@@ -22,7 +22,7 @@ export function ErrorInfo({
 
   if ((browser && terminal) || (!browser && !terminal)) {
     throw new Error(
-      "Please provide only one of the following: browser or terminal"
+      "Please provide only one of the following: browser or terminal",
     );
   }
 

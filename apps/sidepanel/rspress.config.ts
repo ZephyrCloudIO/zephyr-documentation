@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import { defineConfig } from '@rspress/core';
-import { pluginModuleFederation } from "@module-federation/rspress-plugin";
-import mfConfig from "./module-federation.config";
+import { pluginModuleFederation } from '@module-federation/rspress-plugin';
+import mfConfig from './module-federation.config';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
@@ -9,8 +9,8 @@ export default defineConfig({
   icon: '/rspress-icon.png',
   builderConfig: {
     output: {
-      assetPrefix: 'http://localhost:3004/'
-    }
+      assetPrefix: 'http://localhost:3004/',
+    },
   },
   logo: {
     light: '/rspress-light-logo.png',
@@ -25,7 +25,5 @@ export default defineConfig({
       },
     ],
   },
-  plugins: [
-    pluginModuleFederation(mfConfig),
-  ],
+  plugins: [pluginModuleFederation(mfConfig)],
 });

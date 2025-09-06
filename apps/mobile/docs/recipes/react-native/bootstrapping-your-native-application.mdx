@@ -10,7 +10,7 @@ With Module Federation, the application is also asynchrnously loading external m
 If you don't boostrap your application then your code for importing and running a component would look like this:
 
 ```tsx
-const MyComponent = React.lazy(() => import("my-remote/MyComponent"));
+const MyComponent = React.lazy(() => import('my-remote/MyComponent'));
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
 If you bootstrap your application so that the application is given time to load the federated modules before executing the application code then you can import the federated modules synchronously, like this:
 
 ```tsx
-import MyComponent from "my-remote/MyComponent";
+import MyComponent from 'my-remote/MyComponent';
 
 function App() {
   return <MyComponent />;
@@ -36,15 +36,15 @@ function App() {
 Add a file named `bootstrap.js` to the root of your application with the following code.
 
 ```ts
-import { Script, ScriptManager } from "@callstack/repack/client";
-import React from "react";
+import { Script, ScriptManager } from '@callstack/repack/client';
+import React from 'react';
 
 // tell repack how to deal with the async app chunk
 // in dev mode we will obtain it from the dev server
 // in production we will load the chunk from the filesystem
 // since it will be packaged into the app's assets
 ScriptManager.shared.addResolver((scriptId) => {
-  if (scriptId !== "async-app") return;
+  if (scriptId !== 'async-app') return;
   return {
     url: __DEV__
       ? Script.getDevServerURL(scriptId)
@@ -54,7 +54,7 @@ ScriptManager.shared.addResolver((scriptId) => {
 
 // make the App component lazy
 const App = React.lazy(
-  () => import(/* webpackChunkName: "async-app" */ "./App")
+  () => import(/* webpackChunkName: "async-app" */ './App'),
 );
 
 // create a bootstrap component that will be used to render the App
@@ -75,9 +75,9 @@ What this code does is create a Suspense boundary around the root `App` componen
 Update your entry point file (e.g. `index.js`) to use the `Bootstrap` component.
 
 ```ts
-import { AppRegistry } from "react-native";
-import { name as appName } from "./app.json";
-import Bootstrap from "./bootstrap";
+import { AppRegistry } from 'react-native';
+import { name as appName } from './app.json';
+import Bootstrap from './bootstrap';
 
 AppRegistry.registerComponent(appName, () => Bootstrap);
 ```

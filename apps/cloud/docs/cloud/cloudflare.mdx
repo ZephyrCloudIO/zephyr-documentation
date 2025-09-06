@@ -8,7 +8,6 @@ import { Steps, Badge } from '@rspress/core/theme';
 import { Separator } from '@zephyr-docs/shared';
 import { CustomDomain } from '../../components/cloud-provider.tsx';
 
-
 # Configure Cloudflare on Zephyr
 
 Originally launched as an email spam tracker, Cloudflare today offers extensive capabilities for users to register, manage domains as a registrar, and monitor, secure, and configure an entire IT infrastructure.
@@ -102,13 +101,15 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 <dd>The name of the integration shown on the dashboard.</dd>
 
 <dt>Delimiter</dt>
-<dd>Choose the delimiter for application subdomains: `-` (your deploy URL will be `*-ze.your.domain`) or `.` (your deploy URL will be `*.ze.your.domain`) </dd>
+<dd>
+  Choose the delimiter for application subdomains: `-` (your deploy URL will be
+  `*-ze.your.domain`) or `.` (your deploy URL will be `*.ze.your.domain`){' '}
+</dd>
 
 <dt>API Token</dt>
 <dd>
-  Obtainable from Cloudflare. [See
-  instructions](#2-api-token) for creating
-  your API token.
+  Obtainable from Cloudflare. [See instructions](#2-api-token) for creating your
+  API token.
 </dd>
 
 <dt>Zone ID</dt>
@@ -167,7 +168,7 @@ A CNAME record will be added to your domain with the following details:
 
 | Type  | Name |       Content        | Proxy Status | TTL  |
 | :---: | :--: | :------------------: | :----------: | :--: |
-| CNAME | `*`  | `ze.zephyrcloud.app` |  ✔ Proxied   | Auto |
+| CNAME | `*`  | `ze.zephyrcloud.app` |  ✔ Proxied  | Auto |
 
 ### Deployment and Inspecting Assets
 

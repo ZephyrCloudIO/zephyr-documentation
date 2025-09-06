@@ -7,6 +7,7 @@ Applications deployed through Zephyr can have an unlimited number of versions. A
 ## Semantic Versioning Overview
 
 Semantic versioning is structured as `MAJOR.MINOR.PATCH`:
+
 - **MAJOR:** Introduces breaking changes.
 - **MINOR:** Adds new, backward-compatible features.
 - **PATCH:** Makes backward-compatible bug fixes.
@@ -18,46 +19,43 @@ Semantic versioning is structured as `MAJOR.MINOR.PATCH`:
 3. **Issue Tracking:** Simplifies the process of tracking bugs and changes back to specific releases.
 4. **Dependency Management:** Crucial for effectively managing dependencies, particularly in complex projects.
 
-## Version Rollback And Roll-forward 
+## Version Rollback And Roll-forward
 
-You can rollback or roll-forward an application's version on Zephyr's [dashboard](https://app.zephyr-cloud.io) and [Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) towards a tag or a specific environment. 
+You can rollback or roll-forward an application's version on Zephyr's [dashboard](https://app.zephyr-cloud.io) and [Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) towards a tag or a specific environment.
 
 You can read more about [how tag rules are created](#how-tags-are-created) and [how to create an environment to have a custom domain](/how-to/environments) in other sections of our documnetation.
 
+### Dashboard
 
-### Dashboard 
+1. Navigate to Zephyr's dashboard, sign in to an organization and find the application you'd like to make changes to under **Applications** page.
+2. Next click on **Versions** and scroll down to the **Versions history**.
+3. Select a version and click on **Deploy**. You can verify whether it is a version you'd like to promote by clicking on its link.
+4. Select either a specific **Tag** or an **Environment** on the pop up.
+5. Type in **Deploy** in the last input field and click on **Yes, I am sure** to confirm the changes.
 
-1. Navigate to Zephyr's dashboard, sign in to an organization and find the application you'd like to make changes to under **Applications** page. 
-2. Next click on **Versions** and scroll down to the **Versions history**. 
-3. Select a version and click on **Deploy**. You can verify whether it is a version you'd like to promote by clicking on its link. 
-4. Select either a specific **Tag** or an **Environment** on the pop up. 
-5. Type in **Deploy** in the last input field and click on **Yes, I am sure** to confirm the changes. 
-
-:::note Custom Domain 
+:::note Custom Domain
 
 If you want to rollback or roll-forward a version towards a custom domain, you can know more by walking through [how to configure custom domain on Zephyr](/how-to/environments).
 
 :::
 
-
 ## Tag Management
 
 To streamline the tagging process and ensure seamless integration with continuous integration and delivery (CI/CD) pipelines, Zephyr adopts specific rules for generating tags based on branch names during CI processes. This approach not only automates tag creation but also aligns with the development workflow to accurately reflect the state of the software at any given point.
 
-
-### How Tags are created 
+### How Tags are created
 
 #### Auto-generated
 
-On your first successful build, we find your branch name to auto-create a tag. 
+On your first successful build, we find your branch name to auto-create a tag.
 
-After the first successful build, each build's version fits in thiscriteria will be attached as latest version under this tag. 
+After the first successful build, each build's version fits in thiscriteria will be attached as latest version under this tag.
 
 #### Manually created on Dashboard
 
-On [Zephyr's Dashboard](https://app.zephyr-cloud.io), you can find **Tags** under each application's **Settings** page. 
+On [Zephyr's Dashboard](https://app.zephyr-cloud.io), you can find **Tags** under each application's **Settings** page.
 
-After clicking on **Create Tag**, you will need to input a **Tag name** and choose rules under **Tag conditions**. Currently four related rule sets are available: 
+After clicking on **Create Tag**, you will need to input a **Tag name** and choose rules under **Tag conditions**. Currently four related rule sets are available:
 
 <div className="pl-4">
 <dl>
@@ -65,36 +63,41 @@ After clicking on **Create Tag**, you will need to input a **Tag name** and choo
 <dd>After selection any future deployment from this selected user will be locked into to this tag as the latest.</dd>
 
 <dt>`Version`</dt>
-<dd>Select a specific version to pin to this tag. Version number is an integer at the end of a deployment URL.</dd> 
+<dd>
+  Select a specific version to pin to this tag. Version number is an integer at
+  the end of a deployment URL.
+</dd>
 
 <dt>`Branch`</dt>
-<dd>Your git's branch. Any future deployment from this branch will be locked into this tag as the latest. </dd>
+<dd>
+  Your git's branch. Any future deployment from this branch will be locked into
+  this tag as the latest.{' '}
+</dd>
 
 <dt>`CI`</dt>
 <dd>Checking if environment is a CI environment. Only deployment through CI will be locked into this tag.</dd>
 </dl>
 </div>
 
-You can select a combination of rule set by clicking on **+ Add** under **Tag conditions**. 
+You can select a combination of rule set by clicking on **+ Add** under **Tag conditions**.
 
 :::details{title="How will a combination of tag rules work with deployment"}
 
-Take an example, you just created a new tag rule with 3 rules: 
-- Username: Zack 
-- Branch: fix-ui 
+Take an example, you just created a new tag rule with 3 rules:
+
+- Username: Zack
+- Branch: fix-ui
 - Version: 200
 - is-CI: true
 
-Zack's deployment, version 200 under the branch "fix-ui" will be locked into this tag. Since the version rule is set to a fixed version. 
+Zack's deployment, version 200 under the branch "fix-ui" will be locked into this tag. Since the version rule is set to a fixed version.
 :::
 
+#### Edit existing tags
 
-#### Edit existing tags 
+Under application's **Settings** page select **Tags** and then the desired **Tag name** you want to edit.
 
-Under application's **Settings** page select **Tags** and then the desired **Tag name** you want to edit. 
-
-Click on **+ Add** button to add new rules, edit or delete pre-existing rules. 
-
+Click on **+ Add** button to add new rules, edit or delete pre-existing rules.
 
 ### Tagging Strategy in CI
 

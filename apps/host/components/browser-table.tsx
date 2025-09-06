@@ -1,5 +1,4 @@
 import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
-import { supportedBrowser } from "../lib/site.config";
 import {
   Table,
   TableBody,
@@ -8,7 +7,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@zephyr-docs/shared';
+} from "@zephyr-docs/shared";
+import { supportedBrowser } from "../lib/site.config";
 
 export default function SupportedBrowser() {
   return (

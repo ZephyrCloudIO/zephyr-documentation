@@ -1,4 +1,4 @@
-import { Search, ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Search } from "lucide-react";
 import { useState } from "react";
 
 const mfeApps = [
@@ -122,10 +122,10 @@ export function MainSidebar() {
                       app.badge === "BETA"
                         ? "bg-blue-600 text-blue-100"
                         : app.badge === "NEW"
-                        ? "bg-orange-600 text-orange-100"
-                        : app.badge === "ALPHA"
-                        ? "bg-green-600 text-green-100"
-                        : "bg-gray-600 text-gray-100"
+                          ? "bg-orange-600 text-orange-100"
+                          : app.badge === "ALPHA"
+                            ? "bg-green-600 text-green-100"
+                            : "bg-gray-600 text-gray-100"
                     }`}
                   >
                     {app.badge}

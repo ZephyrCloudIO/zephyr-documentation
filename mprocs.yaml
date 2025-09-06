@@ -2,23 +2,23 @@ procs:
   host:
     cmd: ["pnpm", "--filter", "host", "dev"]
     cwd: .
-  
+
   ai:
     cmd: ["pnpm", "--filter", "ai", "dev"]
     cwd: .
-  
+
   cloud:
     cmd: ["pnpm", "--filter", "cloud", "dev"]
     cwd: .
-  
+
   mobile:
     cmd: ["pnpm", "--filter", "mobile", "dev"]
     cwd: .
-  
+
   sidepanel:
     cmd: ["pnpm", "--filter", "sidepanel", "dev"]
     cwd: .
-  
+
   web:
     cmd: ["pnpm", "--filter", "web", "dev"]
     cwd: .

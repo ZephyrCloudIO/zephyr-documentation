@@ -1,5 +1,4 @@
 import { useNavigate } from "@rspress/runtime";
-import { Categories, Errors } from "../../lib/error-codes-messages";
 import {
   Table,
   TableBody,
@@ -8,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@zephyr-docs/shared";
+import { Categories, Errors } from "../../lib/error-codes-messages";
 
 export function ErrorTables({
   category,

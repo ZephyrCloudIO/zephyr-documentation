@@ -8,7 +8,7 @@ import {
   ReactIcon,
   RspackIcon,
   ViteIcon,
-  WebpackIcon
+  WebpackIcon,
 } from "@zephyr-docs/shared";
 import type React from "react";
 

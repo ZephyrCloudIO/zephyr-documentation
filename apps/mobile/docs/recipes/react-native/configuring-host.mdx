@@ -53,7 +53,7 @@ Because we need to share dependencies between the host and the remotes, we need 
 To do this we add this line:
 
 ```ts
-import pkg from './package.json' with { type: "json" };
+import pkg from './package.json' with { type: 'json' };
 ```
 
 To the top of the `rspack.config.mjs` file.
@@ -120,7 +120,7 @@ We can demonstrate the usage of the federated module by importing a new componen
 Here is an example of how to import a new component:
 
 ```tsx
-const CartList = React.lazy(() => import("Cart/CartList"));
+const CartList = React.lazy(() => import('Cart/CartList'));
 ```
 
 Use the `React.lazy` function to import the component from the remote dynamically.

@@ -1,4 +1,9 @@
 import {
+  Layout as DefaultLayout,
+  NotFoundLayout as DefaultNotFoundLayout,
+} from "@rspress/core/theme";
+import { useDark } from "@rspress/runtime";
+import {
   Card,
   CardLayout,
   SectionSelector,
@@ -6,11 +11,9 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  cn
+  cn,
 } from "@zephyr-docs/shared";
 import { useEffect, useState } from "react";
-import { useDark } from "@rspress/runtime";
-import { Layout as DefaultLayout, NotFoundLayout as DefaultNotFoundLayout } from "@rspress/core/theme";
 import { Footer } from "../components/footer";
 import { type CardItemProps, version } from "../lib/site.config";
 

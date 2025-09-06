@@ -51,11 +51,11 @@ Before proceeding, you will need some data from Akamai:
 
 | API                               | Access Level |
 | :-------------------------------- | :----------: |
-| CPcode and Reporting group (cprg) | READ-WRITE   |
-| Edge Hostnames API (hapi)         | READ-WRITE   |
-| EdgeKV                            | READ-WRITE   |
-| EdgeWorkers                       | READ-WRITE   |
-| Property Manager (PAPI)           | READ-WRITE   |
+| CPcode and Reporting group (cprg) |  READ-WRITE  |
+| Edge Hostnames API (hapi)         |  READ-WRITE  |
+| EdgeKV                            |  READ-WRITE  |
+| EdgeWorkers                       |  READ-WRITE  |
+| Property Manager (PAPI)           |  READ-WRITE  |
 
 - Copy or download token and add `[default]` as a header, so token will look like:
 
@@ -85,50 +85,48 @@ client_token = YOUR_CLIENT_TOKEN
 
 Find you product [here](https://techdocs.akamai.com/property-mgr/reference/id-prefixes#common-product-ids) and choose product id regarding contract - **prd_Fresca** or **prd_SPM**
 
-
 ### Configuration Inputs
 
 Details for each input after clicking **Add Integration** under **Akamai**:
 
 <dt>Integration Name</dt>
-<dd>
-  A unique name within your organization, used as a slug.
-</dd>
+<dd>A unique name within your organization, used as a slug.</dd>
 
 <dt>Integration Display Name</dt>
-<dd>
-  The name of the integration shown on the dashboard.
-</dd>
+<dd>The name of the integration shown on the dashboard.</dd>
 
 <dt>API Token</dt>
 <dd>
-  Obtainable from Akamai. [See instructions](#1-api-token) for creating your API token.
+  Obtainable from Akamai. [See instructions](#1-api-token) for creating your API
+  token.
 </dd>
 
 <dt>Domain</dt>
-<dd>
-  Your domain.
-</dd>
+<dd>Your domain.</dd>
 
 <dt>Akamai contract id</dt>
 <dd>
-  Obtainable from Akamai. [See instructions](#2-contract-id) for getting your contract id.
+  Obtainable from Akamai. [See instructions](#2-contract-id) for getting your
+  contract id.
 </dd>
 
 <dt>Akamai group id</dt>
 <dd>
-  Obtainable from Akamai. [See instructions](#3-group-id) for getting your group id.
+  Obtainable from Akamai. [See instructions](#3-group-id) for getting your group
+  id.
 </dd>
 
 <dt>Akamai product id</dt>
 <dd>
-  Obtainable from Akamai. [See instructions](#4-product-id) for getting your product id.
+  Obtainable from Akamai. [See instructions](#4-product-id) for getting your
+  product id.
 </dd>
 
 <dt>Set Integration as Default</dt>
 <dd>
   When set as default, all Zephyr deployments will use this integration until a
-  new one (default integration) is set. Deployment using integration won't work until Akamai worker and property become activated.
+  new one (default integration) is set. Deployment using integration won't work
+  until Akamai worker and property become activated.
 </dd>
 
 ### Validate domain and setup DNS
@@ -141,11 +139,11 @@ Details for each input after clicking **Add Integration** under **Akamai**:
 - Go to your domain provider (e.g., GoDaddy)
 - Add some CNAME records
 
-  | Subdomain                         | Type  | Value                                      |
-  |-----------------------------------|-------|--------------------------------------------|
-  | _acme-challenge.ze.yourdomain.com | CNAME | < value from verification record >         |
-  | ze.yourdomain.com                 | CNAME | ze.yourdomain.com.edgesuite.net.           |
-  | *.ze.yourdomain.com               | CNAME | ze.yourdomain.com.edgesuite.net.           |
+  | Subdomain                          | Type  | Value                              |
+  | ---------------------------------- | ----- | ---------------------------------- |
+  | \_acme-challenge.ze.yourdomain.com | CNAME | < value from verification record > |
+  | ze.yourdomain.com                  | CNAME | ze.yourdomain.com.edgesuite.net.   |
+  | \*.ze.yourdomain.com               | CNAME | ze.yourdomain.com.edgesuite.net.   |
 
 ### Wait until worker and property become activated
 
@@ -226,7 +224,7 @@ const { promisify } = require('node:util');
 const edgercPath = homedir() + '/.edgerc';
 const edgercSection = 'default';
 const eg = new EdgeGrid({
-path: edgercPath,
+  path: edgercPath,
   section: edgercSection,
 });
 
@@ -235,16 +233,16 @@ const network = process.env.NETWORK || 'production'; // staging or production
 
 eg.auth({
   path: `/edgekv/v1/networks/${network}/namespaces/${namespaceId}`,
-    method: 'DELETE',
-    headers: {
+  method: 'DELETE',
+  headers: {
     'Content-Type': 'application/json',
-      Accept: 'application/json',
+    Accept: 'application/json',
   },
   body: {},
 });
 
 const send = promisify(eg.send.bind(eg));
-  send()
+send()
   .then(({ data }) => {
     console.log('Namespace deleting result', data);
   })
@@ -252,7 +250,6 @@ const send = promisify(eg.send.bind(eg));
     console.error('Namespace deleting error', error);
     process.exit(1);
   });
-
 ```
 
 ### Revoke EdgeKV access token
@@ -268,7 +265,7 @@ const { promisify } = require('node:util');
 const edgercPath = homedir() + '/.edgerc';
 const edgercSection = 'default';
 const eg = new EdgeGrid({
-path: edgercPath,
+  path: edgercPath,
   section: edgercSection,
 });
 
@@ -276,10 +273,10 @@ const tokenName = process.env.TOKEN_NAME;
 
 eg.auth({
   path: `/edgekv/v1/tokens/${tokenName}`,
-    method: 'DELETE',
-    headers: {
+  method: 'DELETE',
+  headers: {
     'Content-Type': 'application/json',
-      Accept: 'application/json',
+    Accept: 'application/json',
   },
   body: {},
 });
@@ -293,5 +290,4 @@ send()
     console.error('Token revoking error', error);
     process.exit(1);
   });
-
 ```

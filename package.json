@@ -2,7 +2,10 @@
   "name": "zephyr-documentation",
   "version": "1.0.0",
   "description": "Zephyr Cloud documentation with module federation",
-  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZephyrCloudIO/zephyr-documentation.git"
+  },
   "scripts": {
     "dev": "mprocs",
     "dev:host": "pnpm --filter host dev",
@@ -31,9 +34,11 @@
   "author": "Zephyr Cloud",
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
-    "typescript": "^5.9.2"
-  },
-  "dependencies": {
+    "@commitlint/config-conventional": "^19.8.0",
+    "husky": "^9.1.7",
+    "typescript": "^5.9.2",
+    "commitlint": "^19.8.0",
+    "zephyr-rspress-plugin": "^0.0.56",
     "mprocs": "^0.7.3"
   }
 }

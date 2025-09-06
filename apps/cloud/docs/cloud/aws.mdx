@@ -98,34 +98,28 @@ aws_secret_access_key = YOUR_ACCESS_KEY_SECRET
 Details for each input after clicking **Add Integration** under **AWS**:
 
 <dt>Integration Name</dt>
-<dd>
-  A unique name within your organization, used as a slug.
-</dd>
+<dd>A unique name within your organization, used as a slug.</dd>
 
 <dt>Integration Display Name</dt>
-<dd>
-  The name of the integration shown on the dashboard.
-</dd>
+<dd>The name of the integration shown on the dashboard.</dd>
 
 <dt>API Token</dt>
 <dd>
-  Obtainable from AWS. [See instructions](#1-api-token) for creating your API token.
+  Obtainable from AWS. [See instructions](#1-api-token) for creating your API
+  token.
 </dd>
 
 <dt>Domain</dt>
-<dd>
-  Your domain.
-</dd>
+<dd>Your domain.</dd>
 
 <dt>Certificate arn</dt>
-<dd>
-  Certificate arn for domain (ze.your.domain)
-</dd>
+<dd>Certificate arn for domain (ze.your.domain)</dd>
 
 <dt>Set Integration as Default</dt>
 <dd>
   When set as default, all Zephyr deployments will use this integration until a
-  new one (default integration) is set. Deployment using integration won't work until AWS worker and property become activated.
+  new one (default integration) is set. Deployment using integration won't work
+  until AWS worker and property become activated.
 </dd>
 
 ### Validate domain and setup DNS
@@ -134,10 +128,10 @@ Details for each input after clicking **Add Integration** under **AWS**:
 - Find you domain
 - Copy value from `Domain name (standard)` column and add DNS records described in the table below
 
-| Subdomain                         | Type  | Value                                      |
-|-----------------------------------|-------|--------------------------------------------|
-| ze.yourdomain.com                 | CNAME | < Domain name value >                      |
-| *.ze.yourdomain.com               | CNAME | < Domain name value >                      |
+| Subdomain            | Type  | Value                 |
+| -------------------- | ----- | --------------------- |
+| ze.yourdomain.com    | CNAME | < Domain name value > |
+| \*.ze.yourdomain.com | CNAME | < Domain name value > |
 
 </Steps>
 
@@ -679,7 +673,7 @@ log "==> PHASE 2 completed."
 #### Collect necessary data
 
 | Variable          | Where to find in the AWS dashboard | Description                                          |
-|-------------------|------------------------------------|------------------------------------------------------|
+| ----------------- | ---------------------------------- | ---------------------------------------------------- |
 | DDB_TABLES        | DynamoDB -> Tables                 | envs and snaphots table names                        |
 | LOG_GROUPS        | Cloudwatch -> Log groups           | Cloudwatch log groups of Lambda@Edge function        |
 | CF_DIST_ID        | Cloudfront -> Distributions        | Cloudfron distribution id                            |

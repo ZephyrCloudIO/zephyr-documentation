@@ -14,6 +14,6 @@ export default createModuleFederationConfig({
     './aws': './docs/cloud/aws.mdx',
     './akamai': './docs/cloud/akamai.mdx',
     './fastly': './docs/cloud/fastly.mdx',
-    './updating-integrations': './docs/cloud/updating-integrations.mdx'
+    './updating-integrations': './docs/cloud/updating-integrations.mdx',
   },
 });

@@ -49,7 +49,9 @@ c. Run a build command to deploy your application and confirm the latest deploye
 
 <dt>`Custom DNS name`</dt>
 <dd>
-  Enter the full URL for the custom domain. If you have configured a Cloud Provider, you can input custom domains like `sub.domain.com` without needing `https://`.
+  Enter the full URL for the custom domain. If you have configured a Cloud
+  Provider, you can input custom domains like `sub.domain.com` without needing
+  `https://`.
 </dd>
 
 <dt>`Description`</dt>
@@ -90,7 +92,6 @@ If needed, refer to the Netlify Configuration Guide and confirm that you meet al
 2. Trim the version URL by removing `https://` and the trailing slash.
 
 3. Add a new `CNAME` record:
-
    - For the primary domain (`www`), set **Name** to `www` and **Value** to the edited version URL. Delete the root domain under the **NETLIFY** type.
    - For a subdomain, enter **Name** (e.g., `sub`) and **Value** as the edited version URL.
 

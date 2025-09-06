@@ -1,10 +1,5 @@
 import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
-import {
-  supportedBundler,
-  supportedCloud,
-  supportedFramework,
-} from "../lib/site.config";
-import { HammerIcon } from '@zephyr-docs/shared';
+import { HammerIcon } from "@zephyr-docs/shared";
 import {
   Table,
   TableBody,
@@ -13,7 +8,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@zephyr-docs/shared';
+} from "@zephyr-docs/shared";
+import {
+  supportedBundler,
+  supportedCloud,
+  supportedFramework,
+} from "../lib/site.config";
 
 export function Supported({
   items,

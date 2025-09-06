@@ -1,7 +1,7 @@
-import { Search, ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Search } from "lucide-react";
 import { useState } from "react";
-import { MFEContent } from "./mfe-content";
 import { HeroSection } from "./hero-section";
+import { MFEContent } from "./mfe-content";
 
 const mfeApps = [
   {
@@ -146,10 +146,10 @@ export function DynamicContentLayout() {
                         app.badge === "BETA"
                           ? "bg-blue-600 text-blue-100"
                           : app.badge === "NEW"
-                          ? "bg-orange-600 text-orange-100"
-                          : app.badge === "ALPHA"
-                          ? "bg-green-600 text-green-100"
-                          : "bg-gray-600 text-gray-100"
+                            ? "bg-orange-600 text-orange-100"
+                            : app.badge === "ALPHA"
+                              ? "bg-green-600 text-green-100"
+                              : "bg-gray-600 text-gray-100"
                       }`}
                     >
                       {app.badge}
@@ -161,7 +161,11 @@ export function DynamicContentLayout() {
                 {expandedMfe === app.name && (
                   <div className="ml-6 mt-1 space-y-1">
                     <a
-                      href={app.name === "AI" ? "/ai-docs" : `/${app.name.toLowerCase()}-docs`}
+                      href={
+                        app.name === "AI"
+                          ? "/ai-docs"
+                          : `/${app.name.toLowerCase()}-docs`
+                      }
                       className="block px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-md transition-colors"
                     >
                       Documentation

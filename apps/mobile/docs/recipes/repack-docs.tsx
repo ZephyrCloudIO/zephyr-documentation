@@ -1,6 +1,6 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@zephyr-docs/shared";
-import ForkedExample from "./forked-example.mdx";
-import StartFromScratch from "./start-from-scratch.mdx";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@zephyr-docs/shared';
+import ForkedExample from './forked-example.mdx';
+import StartFromScratch from './start-from-scratch.mdx';
 export default function RepackTabs() {
   return (
     <Tabs defaultValue="tab1">

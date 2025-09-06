@@ -27,19 +27,17 @@ Several key points that were handled by Re.Pack to make this integration attaina
 
 ## Get Started
 
-
 <RepackTabs />
 
+## Resolving platforms
 
-## Resolving platforms  
-
-Behind `zephyr-repack-plugin`, we auto-handle the platform resolution. When you are building a React Native app, the plugin would recognise the platform and finding, resolving the correct dependencies for the platform. For example if you are building for iOS, the plugin would resolve the iOS dependencies and vice versa for Android. No additional configuration is required to resolve the platform. 
+Behind `zephyr-repack-plugin`, we auto-handle the platform resolution. When you are building a React Native app, the plugin would recognise the platform and finding, resolving the correct dependencies for the platform. For example if you are building for iOS, the plugin would resolve the iOS dependencies and vice versa for Android. No additional configuration is required to resolve the platform.
 
 For each version that's built and deployed, you can find the platform on the Tag page of the application version, displayed as `IOS` or `ANDROID` next to `Target` field. The platform's name is also part of the tag name that's being created on each deployment.
 
 ![platform-tag](/repack/platform-resolve.png)
 
-## Manage dependencies 
+## Manage dependencies
 
 Sharing dependencies in a federated mobile application differs slightly from a federated web application. It requires more effort due to the native aspects of React Native dependencies.
 
@@ -51,10 +49,9 @@ The same rule applies to all dependencies that include native code. For example,
 
 For shared JavaScript-only dependencies, it's not necessary to mark them as shared, as Re.Pack can handle downloading them from the mini-app. However, for better network efficiency, it is recommended to include them as shared dependencies.
 
-All this effort requires significant maintenance of the dependencies list in `rspack`/`webpack` and `package.json` for each application. This process can be simplified by using Microsoft’s `rnx-align-deps` library with a custom preset and helper functions to generate the shared dependencies list. 
+All this effort requires significant maintenance of the dependencies list in `rspack`/`webpack` and `package.json` for each application. This process can be simplified by using Microsoft’s `rnx-align-deps` library with a custom preset and helper functions to generate the shared dependencies list.
 
-
-## Handle Navigation 
+## Handle Navigation
 
 Handling navigation in a React Native federated application differs slightly from web apps, as it does not rely solely on a links-based routing system and the browser's history API. Instead, it incorporates native navigation concepts such as UINavigationController on iOS and Fragment on Android.
 
@@ -80,8 +77,7 @@ There is also a third solution: using a single NavigationContainer in the host a
 
 When you are using Zephyr with Re.Pack, the HostApp auto-loads MiniApps' bundles from Zephyr. To run the app in production/release mode with Zephyr, the process involves configuring your Zephyr environment - and `zephyr-repack-plugin` will auto-retrieving the latest deployed remote URLs as well as updating the HostApp’s module federation configuration during the bundling. Once completed, you can build and launch the app in release mode normally (e.g. via Xcode or react-native release build), and it will load MiniApps from the Zephyr Cloud URLs instead of localhost.
 
-We will soon launch `react-native-zephyr-sdk` to auto-rollback, roll-forward MiniApps during runtime.  To use `react-native-zephyr-sdk`, you must use `zephyr-repack-plugin` during build time. 
-
+We will soon launch `react-native-zephyr-sdk` to auto-rollback, roll-forward MiniApps during runtime. To use `react-native-zephyr-sdk`, you must use `zephyr-repack-plugin` during build time.
 
 ### Steps
 
@@ -91,162 +87,159 @@ Configure the Zephyr environment:
 
 1. Change your configs to divide debug builds and release builds:
 
-   #### HostApp's configuration  
+   #### HostApp's configuration
 
    ```js title="HostApp/rspack.config.mjs"{9,17,72}
-      import path from 'node:path';
-      import {fileURLToPath} from 'node:url';
-      import * as Repack from '@callstack/repack';
-      import {withZephyr} from 'zephyr-repack-plugin';
-      const __filename = fileURLToPath(import.meta.url);
-      const __dirname = path.dirname(__filename);
+   import path from 'node:path';
+   import { fileURLToPath } from 'node:url';
+   import * as Repack from '@callstack/repack';
+   import { withZephyr } from 'zephyr-repack-plugin';
+   const __filename = fileURLToPath(import.meta.url);
+   const __dirname = path.dirname(__filename);
 
-
-      const USE_ZEPHYR = Boolean(process.env.ZC);
-      /**
-      * Rspack configuration enhanced with Re.Pack defaults for React Native.
-      *
-      * Learn about Rspack configuration: https://rspack.dev/config/
-      * Learn about Re.Pack configuration: https://re-pack.dev/docs/guides/configuration
-      */
-
-      const config = env => {
-        const { platform, mode } = env
-        return {
-          context: __dirname,
-          entry: './index.js',
-          resolve: {
-            // 1. Understand the file path of ios and android file extensions
-            // 2. Configure the output to be as close to Metro as possible
-            ...Repack.getResolveOptions(),
-          },
-          output: {
-            // Unsure - for module federation HMR and runtime? 
-            uniqueName: 'react-native-host-app',
-          },
-          module: {
-            rules: [
-              ...Repack.getJsTransformRules(),
-              ...Repack.getAssetTransformRules(),
-            ],
-          },
-          plugins: [
-            new Repack.RepackPlugin({
-              platform,
-            }),
-            new Repack.plugins.ModuleFederationPluginV2({
-              name: 'HostApp',
-              filename: 'HostApp.container.js.bundle',
-              dts: false,
-              remotes: {
-                MiniApp: `MiniApp@http://localhost:9001/${platform}/MiniApp.container.js.bundle`,
-              },
-              shared: {
-                react: {
-                  singleton: true,
-                  version: '19.0.0',
-                  eager: true,
-                },
-                'react-native': {
-                  singleton: true,
-                  version: '0.78.0',
-                  eager: true,
-                }
-              },
-           }),
-          // Supports for new architecture - Hermes can also use JS, it's not a requirement, it will still work the same but it's for performance optimization
-          new Repack.plugins.HermesBytecodePlugin({
-            enabled: mode === 'production',
-            test: /\.(js)?bundle$/,
-            exclude: /index.bundle$/,
-            }),
-          ],
-        }
-      };
-
-      export default USE_ZEPHYR ? withZephyr()(config) : config;
-   ```
-
-    #### MiniApp's configuration  
-
-   ```js title="MiniApp/rspack.config.mjs"{9,19,68}
-    import path from 'node:path';
-    import {fileURLToPath} from 'node:url';
-    import * as Repack from '@callstack/repack';
-    import {withZephyr} from 'zephyr-repack-plugin';
-
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-
-    const USE_ZEPHYR = Boolean(process.env.ZC);
-    const STANDALONE = Boolean(process.env.STANDALONE);
-
-    /**
+   const USE_ZEPHYR = Boolean(process.env.ZC);
+   /**
     * Rspack configuration enhanced with Re.Pack defaults for React Native.
     *
     * Learn about Rspack configuration: https://rspack.dev/config/
     * Learn about Re.Pack configuration: https://re-pack.dev/docs/guides/configuration
     */
 
-    const config = env => {
-      const {platform, mode} = env;
-      return {
-        mode,
-        context: __dirname,
-        entry: './index.js',
-        resolve: {
-          ...Repack.getResolveOptions(),
-        },
-        output: {
-          uniqueName: 'react-native-mini-app',
-        },
-        module: {
-          rules: [
-            ...Repack.getJsTransformRules(),
-            ...Repack.getAssetTransformRules({inline: true}),
-          ],
-        },
-        plugins: [
-          new Repack.RepackPlugin(),
-          new Repack.plugins.ModuleFederationPluginV2({
-            name: 'MiniApp',
-            filename: 'MiniApp.container.js.bundle',
-            dts: false,
-            exposes: {
-              './App': './App.tsx',
-            },
-            shared: {
-              react: {
-                singleton: true,
-                version: '19.0.0',
-                eager: STANDALONE,
-              },
-              'react-native': {
-                singleton: true,
-                version: '0.78.0',
-                eager: STANDALONE,
-              },
-            },
-          }),
-          new Repack.plugins.HermesBytecodePlugin({
-            enabled: mode === 'production',
-            test: /\.(js)?bundle$/,
-            exclude: /index.bundle$/,
-          }),
-          ],
-        };
-      };
+   const config = (env) => {
+     const { platform, mode } = env;
+     return {
+       context: __dirname,
+       entry: './index.js',
+       resolve: {
+         // 1. Understand the file path of ios and android file extensions
+         // 2. Configure the output to be as close to Metro as possible
+         ...Repack.getResolveOptions(),
+       },
+       output: {
+         // Unsure - for module federation HMR and runtime?
+         uniqueName: 'react-native-host-app',
+       },
+       module: {
+         rules: [
+           ...Repack.getJsTransformRules(),
+           ...Repack.getAssetTransformRules(),
+         ],
+       },
+       plugins: [
+         new Repack.RepackPlugin({
+           platform,
+         }),
+         new Repack.plugins.ModuleFederationPluginV2({
+           name: 'HostApp',
+           filename: 'HostApp.container.js.bundle',
+           dts: false,
+           remotes: {
+             MiniApp: `MiniApp@http://localhost:9001/${platform}/MiniApp.container.js.bundle`,
+           },
+           shared: {
+             react: {
+               singleton: true,
+               version: '19.0.0',
+               eager: true,
+             },
+             'react-native': {
+               singleton: true,
+               version: '0.78.0',
+               eager: true,
+             },
+           },
+         }),
+         // Supports for new architecture - Hermes can also use JS, it's not a requirement, it will still work the same but it's for performance optimization
+         new Repack.plugins.HermesBytecodePlugin({
+           enabled: mode === 'production',
+           test: /\.(js)?bundle$/,
+           exclude: /index.bundle$/,
+         }),
+       ],
+     };
+   };
 
-    export default USE_ZEPHYR ? withZephyr()(config) : config;
+   export default USE_ZEPHYR ? withZephyr()(config) : config;
+   ```
 
-    ```
+   #### MiniApp's configuration
 
-    - `ZC` is used to indicate that the bundles are for Zephyr Cloud.
+   ```js title="MiniApp/rspack.config.mjs"{9,19,68}
+   import path from 'node:path';
+   import { fileURLToPath } from 'node:url';
+   import * as Repack from '@callstack/repack';
+   import { withZephyr } from 'zephyr-repack-plugin';
 
-    - Now, when you run or bundle with `ZC=1`, the bundles will be deployed to Zephyr Cloud.
+   const __filename = fileURLToPath(import.meta.url);
+   const __dirname = path.dirname(__filename);
+
+   const USE_ZEPHYR = Boolean(process.env.ZC);
+   const STANDALONE = Boolean(process.env.STANDALONE);
+
+   /**
+    * Rspack configuration enhanced with Re.Pack defaults for React Native.
+    *
+    * Learn about Rspack configuration: https://rspack.dev/config/
+    * Learn about Re.Pack configuration: https://re-pack.dev/docs/guides/configuration
+    */
+
+   const config = (env) => {
+     const { platform, mode } = env;
+     return {
+       mode,
+       context: __dirname,
+       entry: './index.js',
+       resolve: {
+         ...Repack.getResolveOptions(),
+       },
+       output: {
+         uniqueName: 'react-native-mini-app',
+       },
+       module: {
+         rules: [
+           ...Repack.getJsTransformRules(),
+           ...Repack.getAssetTransformRules({ inline: true }),
+         ],
+       },
+       plugins: [
+         new Repack.RepackPlugin(),
+         new Repack.plugins.ModuleFederationPluginV2({
+           name: 'MiniApp',
+           filename: 'MiniApp.container.js.bundle',
+           dts: false,
+           exposes: {
+             './App': './App.tsx',
+           },
+           shared: {
+             react: {
+               singleton: true,
+               version: '19.0.0',
+               eager: STANDALONE,
+             },
+             'react-native': {
+               singleton: true,
+               version: '0.78.0',
+               eager: STANDALONE,
+             },
+           },
+         }),
+         new Repack.plugins.HermesBytecodePlugin({
+           enabled: mode === 'production',
+           test: /\.(js)?bundle$/,
+           exclude: /index.bundle$/,
+         }),
+       ],
+     };
+   };
+
+   export default USE_ZEPHYR ? withZephyr()(config) : config;
+   ```
+
+   - `ZC` is used to indicate that the bundles are for Zephyr Cloud.
+
+   - Now, when you run or bundle with `ZC=1`, the bundles will be deployed to Zephyr Cloud.
 
 2. Add bundle scripts to the HostApp and MiniApp:
-
    - In the HostApp and MiniApp, add the following scripts to the package.json files:
 
    ```json title="HostApp/package.json"
@@ -265,31 +258,29 @@ Configure the Zephyr environment:
    }
    ```
 
-2. Bundle HostApp and MiniApps, and deploy to Zephyr Cloud:
+3. Bundle HostApp and MiniApps, and deploy to Zephyr Cloud:
 
-  - Bundle the MiniApp:
+- Bundle the MiniApp:
 
-   ```bash 
-## bundle towards ios 
+```bash
+## bundle towards ios
 ZC=1 pnpm --filter MiniApp bundle:ios
-## bundle towards android 
-ZC=1 pnpm --filter MiniApp bundle:android
-   ```
-   
-   - Bundle the HostApp:
-
-   ```bash 
-## bundle towards ios 
-   ZC=1 pnpm --filter HostApp bundle:ios
 ## bundle towards android
-   ZC=1 pnpm --filter HostApp bundle:android
-   ```
+ZC=1 pnpm --filter MiniApp bundle:android
+```
 
-   - Command run with `ZC=1` will deploy the bundles to Zephyr Cloud.
+- Bundle the HostApp:
 
+```bash
+## bundle towards ios
+ZC=1 pnpm --filter HostApp bundle:ios
+## bundle towards android
+ZC=1 pnpm --filter HostApp bundle:android
+```
+
+- Command run with `ZC=1` will deploy the bundles to Zephyr Cloud.
 
 3. Build and run the HostApp in release mode:
-
    - For Android, you can use the following command from the HostApp android directory:
 
    ```bash
@@ -298,14 +289,11 @@ ZC=1 pnpm --filter MiniApp bundle:android
 
    {/* TODO: set ZC for iOS */}
    {/* - For iOS, you can use the following command: */}
-
    - The HostApp will now load each MiniApp's bundle from the specified Zephyr Cloud URLs instead of localhost. Verify that the app launches correctly and that each MiniApp is fetched successfully from the remote URL.
 
 By following these steps, you can run your HostApp in production mode with Zephyr, using the remote bundles (MiniApps) deployed on Zephyr Cloud.
 
-
-
-#### Contributor 
+#### Contributor
 
 Huge thanks for [Callstack](https://callstack.com) for working with us to make this possible.
 
