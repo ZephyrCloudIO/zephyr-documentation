@@ -1,0 +1,212 @@
+/**
+ * Some common css theme variables and they will be used in the tailwind theme as well.
+ */
+
+@import 'tailwindcss';
+
+@import url('./fonts.css');
+:root {
+  /*--rp-nav-height: 72px;*/
+  /*--rp-sidebar-width: 320px;*/
+  /*--rp-aside-width: 268px;*/
+}
+
+:root {
+  --rp-c-bg: #ffffff;
+  --rp-c-bg-soft: #f9f9f9;
+  --rp-c-bg-mute: #f1f1f1;
+
+  /*--rp-c-divider: rgba(60, 60, 60, 0.29);*/
+  --rp-c-divider-light: rgba(60, 60, 60, 0.12);
+
+  --rp-c-text-1: #213547;
+  /*--rp-c-text-2: rgba(60, 60, 60, 0.66);*/
+  /*--rp-c-text-3: rgba(60, 60, 60, 0.33);*/
+  /*--rp-c-text-4: rgba(60, 60, 60, 0.18);*/
+
+  /*--rp-c-text-code: #476573;*/
+
+  --rp-c-brand: #5889d5;
+  --rp-c-brand-light: #00aaff;
+  --rp-c-brand-lighter: #ecf4ff;
+  --rp-c-brand-dark: #287dde;
+  --rp-c-brand-darker: #3367af;
+  --rp-c-brand-tint: rgba(127, 163, 255, 0.16);
+
+  /*--rp-c-gray: #8e8e8e;*/
+  --rp-c-gray-light-1: #aeaeae;
+  --rp-c-gray-light-2: #c7c7c7;
+  --rp-c-gray-light-3: #d1d1d1;
+  /*--rp-c-gray-light-4: #e5e5e5;*/
+  /*--rp-c-gray-light-5: #f2f2f2;*/
+
+  --rp-c-dark: #000000;
+  --rp-c-dark-light-1: #2f2f2f;
+  --rp-c-dark-light-2: #3a3a3a;
+  /*--rp-c-dark-light-3: #4a4a4a;*/
+  /*--rp-c-dark-light-4: #5c5c5c;*/
+  /*--rp-c-dark-light-5: #6b6b6b;*/
+
+  --rp-radiu-none: 0rem;
+  --rp-radius: 1rem;
+  /*--rp-radius-small: 0.5rem;*/
+  --rp-radius-large: 1.5rem;
+}
+
+.dark {
+  --rp-c-bg: #010101;
+  --rp-c-bg-soft: #111111;
+  --rp-c-bg-mute: #1e1e1e;
+  --rp-c-bg-alt: #000;
+
+  --rp-c-divider: rgba(84, 84, 84, 0.65);
+  --rp-c-divider-light: rgba(84, 84, 84, 0.48);
+
+  --rp-c-text-1: rgba(255, 255, 255, 0.87);
+  --rp-c-text-2: rgba(235, 235, 235, 0.66);
+  --rp-c-text-3: rgba(235, 235, 235, 0.38);
+  --rp-c-text-4: rgba(235, 235, 235, 0.18);
+
+  /*!* Will be used in overview page *!*/
+  --rp-c-text-code: #c9def1;
+}
+
+:root {
+  /*--rp-z-index-local-nav: 10;*/
+  /*--rp-z-index-nav: 20;*/
+  /*--rp-z-index-backdrop: 30;*/
+  /*--rp-z-index-sidebar: 40;*/
+}
+
+:root {
+  /*--rp-shadow-1: 0 1px 4px rgba(0, 0, 0, 0.02), 0 1px 0 rgba(0, 0, 0, 0.06);*/
+  /*--rp-shadow-2: 0 3px 12px rgba(0, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.07);*/
+  /*--rp-shadow-3: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);*/
+  /*--rp-shadow-4: 0 14px 44px rgba(0, 0, 0, 0.12), 0 3px 9px rgba(0, 0, 0, 0.12);*/
+  /*--rp-shadow-5: 0 18px 56px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.16);*/
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+dt {
+  font-weight: bold;
+  padding: 0em 0em;
+  color: var(--rp-c-text-1);
+}
+
+dd {
+  display: inline-block;
+  padding: 0.02em 2em;
+  color: var(--rp-c-text-1);
+}
+
+.glow {
+  animation: move 5s linear infinite;
+  background: radial-gradient(#6d9d9d, #ffffff, transparent);
+  offset-path: rect(0% auto 100% auto);
+}
+
+.keyboard-shortcut {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.015rem;
+  border: 1px solid var(--rp-c-text-2);
+  border-radius: 3px;
+  box-shadow: 0 1px 0 0 var(--rp-c-text-2);
+  padding: 0.8px 6px;
+  color: var(--rp-c-text-1);
+}
+
+@keyframes move {
+  0% {
+    offset-distance: 0%;
+  }
+
+  50% {
+    offset-distance: 50%;
+  }
+
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+/* Fix prev/next navigation buttons - must be outside @layer for proper specificity */
+.rspress-doc-footer footer > div:last-child {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+}
+
+.rspress-doc-footer [class*='prev_'],
+.rspress-doc-footer [class*='next_'] {
+  flex: 1 1 50% !important;
+  width: 50% !important;
+  min-width: 0 !important;
+}
+
+.rspress-doc-footer [class*='prev_'] {
+  text-align: left !important;
+}
+
+.rspress-doc-footer [class*='next_'] {
+  text-align: right !important;
+}
+
+.rspress-doc-footer [class*='prev_'] a,
+.rspress-doc-footer [class*='next_'] a {
+  width: 100% !important;
+  display: block !important;
+}
+
+@layer base {
+  hr {
+    @apply border-b-[0.4px] items-center w-full opacity-20 !py-4 flex;
+  }
+
+  hr {
+    @apply border-b-[0.4px] items-center w-full opacity-20 !py-4 flex;
+  }
+
+  ol {
+    & a {
+      & h2 {
+        @apply lg:text-lg text-base font-bold tracking-tight !my-0;
+      }
+
+      & p {
+        @apply text-sm tracking-tight;
+      }
+    }
+  }
+
+  p {
+    & strong {
+      @apply !py-4;
+    }
+  }
+
+  sup {
+    @apply text-xs text-[var(--rp-c-brand)];
+  }
+
+  div::selection,
+  p::selection,
+  h1::selection,
+  h2::selection,
+  h3::selection,
+  h4::selection,
+  h5::selection,
+  h6::selection,
+  span::selection,
+  a::selection,
+  li::selection,
+  code::selection {
+    background-color: var(--rp-c-brand-tint);
+  }
+}

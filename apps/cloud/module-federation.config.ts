@@ -4,16 +4,19 @@ export default createModuleFederationConfig({
   filename: 'remoteEntry.js',
   name: 'cloud_docs',
   exposes: {
-    './intro': './docs/index.md',
-    './guide': './docs/guide/index.md',
-    './hello': './docs/hello.md',
-    './cloud': './docs/cloud.mdx',
-    './deploy': './docs/deploy.mdx',
-    './cloudflare': './docs/cloud/cloudflare.mdx',
-    './netlify': './docs/cloud/netlify.mdx',
-    './aws': './docs/cloud/aws.mdx',
-    './akamai': './docs/cloud/akamai.mdx',
-    './fastly': './docs/cloud/fastly.mdx',
-    './updating-integrations': './docs/cloud/updating-integrations.mdx',
+    // Main cloud documentation entry points
+    './CloudDocs': './docs/index.mdx',
+    './CloudOverview': './docs/cloud.mdx',
+    
+    // Cloud provider specific documentation
+    './CloudProviders': './docs/cloud',
+    './CloudflareProvider': './docs/cloud/cloudflare.mdx',
+    './NetlifyProvider': './docs/cloud/netlify.mdx',
+    './AWSProvider': './docs/cloud/aws.mdx',
+    './AkamaiProvider': './docs/cloud/akamai.mdx',
+    './FastlyProvider': './docs/cloud/fastly.mdx',
+    
+    // Cloud management and operations
+    './UpdatingIntegrations': './docs/cloud/updating-integrations.mdx',
   },
 });

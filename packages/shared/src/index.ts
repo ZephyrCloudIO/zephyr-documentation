@@ -14,6 +14,7 @@ export * from "./components/ui/pre";
 export * from "./components/ui/progress";
 export * from "./components/ui/section-selector";
 export * from "./components/ui/separator";
+export * from "./components/ui/sidebar-layout";
 export * from "./components/ui/table";
 export * from "./components/ui/tabs";
 export * from "./components/ui/tooltip";

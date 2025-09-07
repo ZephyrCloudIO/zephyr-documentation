@@ -10,10 +10,11 @@
     "resolveJsonModule": true,
     "moduleResolution": "bundler",
     "useDefineForClassFields": true,
+    "emitDeclarationOnly": true,
     "allowImportingTsExtensions": true,
     "composite": true
   },
-  "include": ["docs", "theme", "rspress.config.ts", "components"],
+  "include": ["docs", "theme", "rspress.config.ts", "components", "module-federation.config.ts"],
   "mdx": {
     "checkMdx": true
   }
