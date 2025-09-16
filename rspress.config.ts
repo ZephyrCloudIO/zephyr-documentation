@@ -210,6 +210,10 @@ const sidebar: Sidebar = {
           link: "/recipes/repack-mf",
         },
         {
+          text: "React Native + Metro + MF",
+          link: "/recipes/metro-mf",
+        },
+        {
           text: "React + Vite",
           link: "/recipes/react-vite",
         },
@@ -328,7 +332,7 @@ export default defineConfig({
     source: {
       define: {
         "process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID": JSON.stringify(
-          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID,
+          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID
         ),
       },
     },
