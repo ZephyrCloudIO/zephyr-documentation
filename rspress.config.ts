@@ -79,11 +79,11 @@ const sidebar: Sidebar = {
         },
         {
           text: "Prerequisites",
-          link: "/introduction/installation",
+          link: "/getting-started/installation",
         },
         {
           text: "Quick Start",
-          link: "/introduction/quick-start",
+          link: "/getting-started/quick-start",
         },
       ],
     },
@@ -133,23 +133,23 @@ const sidebar: Sidebar = {
       items: [
         {
           text: "create-zephyr-apps",
-          link: "/features/create-zephyr-apps",
+          link: "/tools/create-zephyr-apps",
         },
         {
           text: "Zephyr Codemod",
-          link: "/features/zephyr-codemod",
+          link: "/tools/zephyr-codemod",
         },
         {
           text: "Zephyr Sidepanel",
-          link: "/features/browser-extension",
+          link: "/tools/browser-extension",
         },
         {
           text: "Zephyr Devtools",
-          link: "/features/browser-devtools",
+          link: "/tools/browser-devtools",
         },
         {
           text: "Module Federation Devtools",
-          link: "/features/module-federation-devtools",
+          link: "/tools/module-federation-devtools",
         },
       ],
     },
@@ -311,7 +311,7 @@ const sidebar: Sidebar = {
       items: [
         {
           text: "Core Concepts",
-          link: "/introduction/concepts",
+          link: "/reference/concepts",
         },
         {
           text: "Version Statuses",
@@ -327,15 +327,15 @@ const sidebar: Sidebar = {
         },
         {
           text: "Why Zephyr Cloud",
-          link: "/about/why-zephyr-cloud",
+          link: "/reference/why-zephyr-cloud",
         },
         {
           text: "Architecture",
-          link: "/about/architecture",
+          link: "/reference/architecture",
         },
         {
           text: "IP Allowlists",
-          link: "/features/allow-ip-addresses",
+          link: "/reference/allow-ip-addresses",
         },
       ],
     },
