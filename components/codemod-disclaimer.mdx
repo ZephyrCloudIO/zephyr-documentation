@@ -1,21 +1,35 @@
 :::tip{title="Quick Setup with Codemod"}
-Before manually installing plugins, you can use our codemod to automatically configure Zephyr for your project:
+Automatically configure Zephyr for your project:
 
+<Tabs values={[{label:"curl"}, {label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
 ```bash
 curl -fsSL https://with.zephyr-cloud.io | node
 ```
-
-Or use with your preferred package manager:
-
+</Tab>
+<Tab>
 ```bash
-npx with-zephyr
-# or
-pnpm dlx with-zephyr
-# or
+pnpx with-zephyr
+```
+</Tab>
+<Tab>
+```bash
+bunx with-zephyr
+```
+</Tab>
+<Tab>
+```bash
 yarn dlx with-zephyr
 ```
+</Tab>
+<Tab>
+```bash
+npx with-zephyr
+```
+</Tab>
+</Tabs>
 
-This will automatically detect your bundler and configure Zephyr for you. For more information about the codemod, see [with-zephyr on npm](https://www.npmjs.com/package/with-zephyr).
+This detects your bundler and configures Zephyr automatically. [Learn more →](https://www.npmjs.com/package/with-zephyr)
 
-If you prefer manual setup, continue with the guide below.
+For manual setup, continue below.
 :::

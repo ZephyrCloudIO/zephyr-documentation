@@ -40,3 +40,33 @@ export const HomeRecipes = () => {
     </>
   );
 };
+
+export const HomeBundlers = () => {
+  return (
+    <>
+      {SiteConfig.bundlers.map((item, i) => {
+        return <Card key={i} item={item} />;
+      })}
+    </>
+  );
+};
+
+export const HomeCloud = () => {
+  return (
+    <>
+      {SiteConfig.cloud.map((item, i) => {
+        return <Card key={i} item={item} />;
+      })}
+    </>
+  );
+};
+
+export const HomeMetaFrameworks = () => {
+  return (
+    <>
+      {SiteConfig.metaFrameworks.map((item, i) => {
+        return <Card key={i} item={item} />;
+      })}
+    </>
+  );
+};

@@ -1,0 +1,72 @@
+---
+title: Versions
+description: Manage application versions and deployments in Zephyr Cloud
+---
+
+# Versions
+
+Every time you build your application with Zephyr, a new version is created. Versions are immutable snapshots of your application at a specific point in time, containing everything needed to run your application exactly as it was built.
+
+## How Versions Work
+
+When Zephyr creates a version, it captures a complete snapshot of your application including all build artifacts, resolved remote dependencies, git commit information, build context, and configuration. Each version receives a unique identifier and permanent URL that provides direct access to that exact build state.
+
+Versions serve as the foundation of Zephyr's deployment system. Unlike traditional deployments that overwrite previous versions, Zephyr preserves every build, allowing you to access any previous state of your application instantly. This means you can share specific builds with team members, test different iterations simultaneously, or roll back to any previous version without losing work.
+
+## Version Lifecycle
+
+### Build Creation
+
+When you run your build command, Zephyr quietly observes the process through bundler plugins. It watches your build without changing anything - your output remains exactly the same whether Zephyr is there or not.
+
+During the build, Zephyr captures everything: your compiled files, dependencies, module federation setup, and git information. It creates a detailed map of all your assets and gives each file a unique fingerprint using SHA-256 hashing.
+
+After your build completes, Zephyr uploads only new or changed files to its global edge network. This smart uploading saves time by skipping files that haven't changed.
+
+### Version Access and Persistence
+
+Every version gets a permanent URL that works forever. Zephyr creates a unique version identifier by combining your username, build ID, and application name. This means each build gets its own distinct version, even if you're building the same code in different situations.
+
+When Zephyr creates a version, it takes a complete snapshot of your deployment. This snapshot includes everything: who built it, when it was built, which git branch and commit it came from, what dependencies it uses, and a detailed list of all files with their fingerprints. This gives you complete visibility into every version's history.
+
+### Immutability and Management
+
+Once a version is created, it can never be changed. This is a key feature - when you share a version URL with someone, you know they'll see exactly the same thing you saw, no matter when they visit it.
+
+Versions stick around forever by default, but you can delete old ones you don't need anymore to save storage space. Most people keep their production versions forever and clean up development builds regularly. Since versions never change, you can confidently bookmark them or share them with your team.
+
+## Working with Versions
+
+### Viewing and Managing Versions
+
+The Zephyr dashboard makes it easy to manage your versions. Go to your application and click the Versions tab to see a list of all your builds, showing the commit, branch, who built it, when, and file sizes. This gives you a complete picture of your app's history.
+
+Click on any version to see more details: what was included in the build, how dependencies were resolved, git information, and the direct URL to access that version.
+
+### Testing and Sharing Versions
+
+Each version has its own URL that you can share with anyone. This is incredibly useful - you can send a teammate a specific build to test, use an exact version in your QA environment, or go back to any previous build without affecting what's live in production.
+
+This is especially helpful for debugging. Found a bug? Share the exact version URL with your team so they can see the same issue. Since version URLs never break, links in bug reports or Slack messages always work.
+
+### Version Lifecycle Management
+
+You control which versions to keep. You might clean up development builds regularly to save storage space, but keep production versions forever in case you need to roll back. The dashboard lets you delete specific versions while keeping the important ones.
+
+Remember, once you delete a version, it's gone forever. Think carefully about which versions you really don't need anymore.
+
+## Version URLs and Access
+
+Every version gets its own permanent URL that works immediately after your build finishes. These URLs are served lightning-fast from Zephyr's global edge network.
+
+These URLs never change or expire - you can bookmark them, share them, or use them in scripts. When someone visits a version URL, they get exactly what you built, served super fast from the nearest location. Zephyr's smart caching means the same files are never stored twice.
+
+You can easily use these URLs in your development process, testing pipelines, or anywhere you need to reference a specific build.
+
+## Integration with Tags and Environments
+
+Versions are the building blocks for everything else in Zephyr. Tags are like bookmarks that can point to different versions, and environments are places where specific versions get served to users.
+
+When you create a tag, you're pointing it at a specific version. When you set up an environment, you're choosing which version users will see. This lets you promote the same version from staging to production, or update tags to point to newer builds.
+
+When apps depend on each other, they reference specific versions. This means your app will always use the exact same dependencies, no matter when or where it runs.

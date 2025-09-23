@@ -1,0 +1,175 @@
+import { Tabs, Tab } from '@theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Ember.js
+
+Deploy your Ember.js applications to Zephyr Cloud using Vite and Embroider. This setup combines Ember's powerful conventions with Vite's fast build system and Zephyr's deployment capabilities.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/introduction/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Vite plugin in your Ember project:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm add --dev vite-plugin-zephyr
+```
+</Tab>
+<Tab>
+```bash
+bun add --dev vite-plugin-zephyr
+```
+</Tab>
+<Tab>
+```bash
+yarn add --dev vite-plugin-zephyr
+```
+</Tab>
+<Tab>
+```bash
+npm install --save-dev vite-plugin-zephyr
+```
+</Tab>
+</Tabs>
+
+## Configuration
+
+Add the Zephyr plugin to your Vite configuration:
+
+```javascript
+// vite.config.mjs
+import { defineConfig } from 'vite';
+import { extensions, classicEmberSupport, ember } from '@embroider/vite';
+import { babel } from '@rollup/plugin-babel';
+import { withZephyr } from 'vite-plugin-zephyr';
+
+export default defineConfig({
+  plugins: [
+    classicEmberSupport(),
+    ember(),
+    babel({
+      babelHelpers: 'runtime',
+      extensions,
+    }),
+    withZephyr(),
+  ],
+  resolve: {
+    preserveSymlinks: false,
+  },
+  optimizeDeps: {
+    disabled: false,
+    esbuildOptions: {
+      preserveSymlinks: false,
+    },
+  },
+});
+```
+
+## Project Structure
+
+Your Ember application should follow this structure when using Embroider with Vite:
+
+```
+my-ember-app/
+├── app/
+│   ├── components/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   └── templates/
+├── config/
+├── tests/
+├── vite.config.mjs
+└── package.json
+```
+
+## Development Workflow
+
+Start your development server:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm start
+```
+</Tab>
+<Tab>
+```bash
+bun start
+```
+</Tab>
+<Tab>
+```bash
+yarn start
+```
+</Tab>
+<Tab>
+```bash
+npm start
+```
+</Tab>
+</Tabs>
+
+Build for production:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm build
+```
+</Tab>
+<Tab>
+```bash
+bun run build
+```
+</Tab>
+<Tab>
+```bash
+yarn build
+```
+</Tab>
+<Tab>
+```bash
+npm run build
+```
+</Tab>
+</Tabs>
+
+## Embroider Requirements
+
+This configuration requires Embroider, Ember's modern build system. Ensure your `package.json` includes:
+
+```json
+{
+  "devDependencies": {
+    "@embroider/vite": "^1.1.5",
+    "@embroider/core": "^4.1.0",
+    "@embroider/compat": "^4.1.0",
+    "@embroider/router": "^3.0.1",
+    "vite": "^6.3.5",
+    "vite-plugin-zephyr": "latest"
+  }
+}
+```
+
+## Key Features
+
+- **Fast Development**: Leverages Vite's instant HMR for rapid development
+- **Modern Build System**: Uses Embroider for optimized production builds
+- **Ember Conventions**: Maintains Ember's file-based routing and component structure
+- **TypeScript Support**: Full TypeScript support through Ember's TypeScript integration
+
+## Next Steps
+
+- [Join our Discord](https://zephyr-cloud.io/discord) for support
+- Learn more about [Embroider](https://github.com/embroider-build/embroider)
+- Explore [Ember.js documentation](https://emberjs.com/)

@@ -73,7 +73,7 @@ const AfterNavTitle = () => {
         href="/"
         className="text-sm font-nebu-semibold text-[var(--rp-c-text-1)] font-bold  transition-all hover:text-[var(--rp-c-text-2)]"
       >
-        Docs
+        Zephyr Cloud Docs
       </a>
     </div>
   );

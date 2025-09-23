@@ -1,0 +1,123 @@
+---
+title: Zephyr Devtools
+description: Advanced debugging and performance analysis for your micro-frontend applications
+---
+
+import { Tabs, Tab } from '@theme';
+import { Button } from "../../components/ui/button"
+
+# Zephyr Devtools
+
+The Zephyr Devtools provide advanced debugging and performance analysis capabilities for your micro-frontend applications. Built into the Zephyr Chrome Extension, the devtools give you deep insights into module federation behavior, performance metrics, and dependency relationships.
+
+## Installation & Access
+
+The devtools are part of the **Zephyr Chrome Extension**:
+
+<a href="https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn" target="_blank" rel="noreferrer">
+<Button variant="outline">Download Browser Extension Now</Button>
+</a>
+
+1. **Install** the [Zephyr Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+2. **Open Chrome DevTools** (F12 or right-click → Inspect)
+3. **Find the "Zephyr" tab** in DevTools
+
+The extension provides both a **side panel** for deployment management and dedicated **DevTools panels** for debugging.
+
+## DevTools Features
+
+<Tabs>
+<Tab label="Applications">
+
+**Module Detection & Management**
+- Automatically detects federated modules via `__FEDERATION__` globals
+- Live module override and version switching
+- Real-time module status monitoring
+- Per-module live reload controls
+
+</Tab>
+<Tab label="Performance">
+
+**Comprehensive Metrics Collection**
+- Bundle size analysis with compression ratios
+- Network timing breakdown (TTFB, download times)
+- Web Vitals tracking (First Paint, Layout Shift)
+- HAR data analysis for detailed network insights
+
+</Tab>
+<Tab label="Dependencies">
+
+**Module Relationship Visualization**
+- Dependency tree visualization
+- Module federation relationship mapping
+- Shared dependency analysis
+- Import/export tracking
+
+</Tab>
+<Tab label="Settings">
+
+**DevTools Configuration**
+- Debug mode toggles
+- Performance monitoring controls
+- Extension behavior settings
+
+</Tab>
+</Tabs>
+
+## Key Capabilities
+
+### Module Federation Debugging
+
+**Automatic Module Detection**: The devtools scan for webpack containers, remoteEntry.js scripts, and Module Federation globals to identify all federated modules in your application.
+
+**Runtime Module Management**: Switch between different versions of modules without redeploying, perfect for testing and debugging integration issues.
+
+**Live Reload Control**: Enable selective live reload for individual modules while developing, allowing precise control over your development workflow.
+
+### Performance Analysis
+
+**Bundle Analysis**: Get detailed insights into your bundle sizes, compression ratios, and chunk counts to identify optimization opportunities.
+
+**Network Timing**: See complete timing breakdowns for module loading, including connection establishment, TTFB, and download times.
+
+**Web Vitals Monitoring**: Track Core Web Vitals and other performance metrics to ensure your micro-frontend architecture maintains good user experience.
+
+### Development Workflow Integration
+
+**Environment Awareness**: The devtools understand your Zephyr deployment environments and provide context-aware debugging information.
+
+**Real-time Updates**: WebSocket connections provide live updates about module changes and deployment status.
+
+**Chrome DevTools API Integration**: Deep integration with Chrome's performance and network APIs for comprehensive debugging data.
+
+## How It Differs from the Side Panel
+
+The Zephyr extension provides two complementary interfaces:
+
+**Side Panel** (Browser Action):
+- Environment and deployment management
+- Version switching and live reload
+- Authentication and settings
+- Always accessible deployment controls
+
+**DevTools Panels** (Chrome DevTools):
+- Deep debugging and performance analysis
+- Module federation internals inspection
+- Advanced dependency visualization
+- Development-focused debugging tools
+
+## Practical Use Cases
+
+### Performance Debugging
+When your application loads slowly, use the Performance tab to identify bottleneck modules, analyze bundle sizes, and optimize loading strategies.
+
+### Module Integration Testing
+Use the Applications tab to switch between different versions of federated modules, testing integration scenarios without deploying changes.
+
+### Dependency Analysis
+Visualize complex module relationships in the Dependencies tab to understand how your micro-frontends interact and identify potential optimization opportunities.
+
+### Development Workflow
+Combine the side panel's deployment controls with the devtools' debugging capabilities for a complete development and debugging workflow.
+
+The Zephyr Devtools transform micro-frontend debugging from guesswork into precise, data-driven analysis, making it easier to build and maintain complex federated applications.

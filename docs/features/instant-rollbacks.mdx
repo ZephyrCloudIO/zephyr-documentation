@@ -1,0 +1,176 @@
+---
+title: Instant Rollbacks
+description: Quickly revert to previous application versions with zero downtime
+---
+
+# Instant Rollbacks
+
+Instant rollbacks let you immediately revert to a previous version of your application when something goes wrong. Whether you discover a bug in production or need to quickly undo a problematic deployment, rollbacks get your application back to a working state in seconds.
+
+## Understanding Instant Rollbacks
+
+Rollbacks in Zephyr are different from traditional deployment systems. Instead of rebuilding and redeploying your previous code, Zephyr simply switches your application's traffic back to an earlier version that's already running on the edge network.
+
+This makes rollbacks truly instant - there's no waiting for builds, uploads, or propagation delays. Your users see the previous version immediately, often faster than they would notice the problem that made you want to roll back in the first place.
+
+### How Rollbacks Work
+
+When you deploy a new version of your application, Zephyr doesn't replace your previous version. Instead, it keeps the old version running alongside the new one on the edge network. When you deploy, Zephyr simply updates the routing to point traffic to the new version.
+
+This means rolling back is just updating the routing again - switching the pointer back to the previous version. Since both versions are already running, the change happens immediately with zero downtime.
+
+## When to Use Rollbacks
+
+Rollbacks are perfect for situations where you need to quickly undo a recent deployment:
+
+**Critical bugs in production**: When users are encountering errors that weren't caught in testing, a rollback gets them back to a working experience while you investigate the issue.
+
+**Performance problems**: If a new version is slower or consuming too many resources, rolling back immediately restores normal performance.
+
+**Breaking changes**: When a deployment breaks integrations or dependent systems, rolling back provides breathing room to coordinate a proper fix.
+
+**Feature issues**: If a new feature is causing confusion or problems for users, rolling back lets you gather feedback and iterate before re-deploying.
+
+## Performing a Rollback
+
+Rolling back is straightforward through the Zephyr dashboard:
+
+1. **Navigate to your application** and go to the deployment view
+2. **Find the current deployment** you want to roll back
+3. **Click the "Rollback" button** next to the deployment
+4. **Confirm the action** in the popup that shows you which version you're rolling back to
+5. **Wait for confirmation** that the rollback completed successfully
+
+The rollback typically completes in seconds. You'll see real-time updates in the dashboard, and if you're using the browser extension, it will notify you when the rollback is live.
+
+### Rollback Targets
+
+You can roll back different types of deployments:
+
+**Environment rollbacks**: Roll back a specific environment like production or staging. This affects only that environment while leaving others unchanged.
+
+**Tag rollbacks**: Roll back a tag like "latest" or "stable". This may affect multiple environments that use that tag, depending on your configuration.
+
+## What Happens During a Rollback
+
+When you initiate a rollback, several things happen quickly behind the scenes:
+
+### Immediate Changes
+
+**Traffic routing**: The edge network immediately starts directing traffic to the previous version instead of the current one.
+
+**DNS updates**: If you're using custom domains, the routing updates propagate to all edge locations.
+
+**Live notifications**: Connected dashboards and browser extensions receive real-time updates about the rollback status.
+
+### Safety Checks
+
+Before performing a rollback, Zephyr verifies several things:
+
+**Version availability**: The previous version must still be available and not marked as failed or deprecated.
+
+**Compatibility**: The previous version must be compatible with your current deployment configuration.
+
+**Access permissions**: You must have the proper permissions to roll back deployments in that environment.
+
+### Audit and History
+
+**Deployment history**: The rollback is recorded in your deployment history with details about who performed it and when.
+
+**Version status**: The current version is marked as rolled back, while the previous version becomes active again.
+
+**Audit logs**: Complete records are maintained for compliance and troubleshooting purposes.
+
+## Rollback Safety and Limitations
+
+### What You Can Roll Back
+
+You can only roll back to the immediately previous version that was successfully deployed to the same target. Zephyr doesn't support rolling back multiple versions at once - if you need to go back further, you'll need to re-deploy that specific version.
+
+The previous version must still be marked as "available" in the system. Versions can become unavailable if their assets are deleted or if they're marked as deprecated due to security issues.
+
+### What Rollbacks Don't Affect
+
+Rolling back only changes which version users see - it doesn't affect:
+
+**Database changes**: Any database migrations or data changes from the current version remain in place. You may need to handle these separately.
+
+**External services**: If your application made changes to external systems or APIs, those changes persist after rollback.
+
+**User data**: Any data created or modified while the current version was live remains unchanged.
+
+**Configuration**: Environment variables and other configuration stay the same unless they're tied to the specific version.
+
+## Best Practices for Rollbacks
+
+### Design for Rollbacks
+
+**Database compatibility**: Structure your database changes to be backward compatible so rollbacks don't break data access.
+
+**Feature flags**: Use feature flags to control new functionality, allowing you to disable features without full rollbacks.
+
+**Gradual rollouts**: Deploy to staging or limited production environments first, so problems are caught before wide deployment.
+
+### When Not to Roll Back
+
+**Data integrity issues**: If the current version has already processed important data, rolling back might cause inconsistencies.
+
+**Security fixes**: If the current version includes security fixes, rolling back might expose vulnerabilities again.
+
+**External dependencies**: If other systems depend on changes in the current version, rolling back might break those integrations.
+
+### Post-Rollback Actions
+
+**Investigate the issue**: Use the time after rollback to understand what went wrong with the current version.
+
+**Fix and re-deploy**: Address the problems in your code and deploy a fixed version rather than leaving the rollback in place permanently.
+
+**Communicate**: Let your team and users know about the rollback and expected timeline for the fix.
+
+## Monitoring and Alerting
+
+### Real-Time Updates
+
+The Zephyr dashboard shows rollback status in real-time. You'll see confirmation when the rollback completes and can verify that traffic is flowing to the correct version.
+
+If you're using the browser extension, it will show notifications about rollback progress and completion.
+
+### Verification
+
+After a rollback, you can verify it worked by:
+
+**Checking the dashboard**: Confirm that the previous version is now marked as the current deployment.
+
+**Testing functionality**: Verify that the application behaves as expected with the previous version.
+
+**Monitoring metrics**: Watch your application metrics to confirm that the issues from the current version are resolved.
+
+## Integration with Development Workflows
+
+### CI/CD Integration
+
+Rollbacks work seamlessly with your existing deployment pipelines. After rolling back, you can continue to push new versions through your normal process.
+
+Your CI/CD system can also trigger rollbacks programmatically through Zephyr's API if it detects deployment issues automatically.
+
+### Team Collaboration
+
+Multiple team members can see rollback status in real-time through the shared dashboard. This prevents confusion about which version is currently live and who is handling the incident response.
+
+The audit history helps teams coordinate their response and learn from deployment issues to improve future releases.
+
+## Advanced Rollback Scenarios
+
+### Multi-Environment Rollbacks
+
+If you use tags that deploy to multiple environments, rolling back a tag affects all connected environments. This can be useful for coordinating rollbacks across staging and production simultaneously.
+
+You can also roll back environments individually if you need more granular control over which deployments are affected.
+
+### Dependency Management
+
+When rolling back applications that depend on each other, consider the compatibility of different versions. The previous version of one application might not work correctly with the current version of its dependencies.
+
+Zephyr's remote dependency system helps manage this by allowing you to specify version constraints and compatibility rules.
+
+Instant rollbacks give you the confidence to deploy frequently, knowing that any issues can be resolved immediately. They're an essential safety net that enables rapid iteration while maintaining reliability for your users.

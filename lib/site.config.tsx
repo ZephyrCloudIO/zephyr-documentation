@@ -12,6 +12,15 @@ import { ReactIcon } from "../components/icons/react";
 import { RspackIcon } from "../components/icons/rspack";
 import { ViteIcon } from "../components/icons/vite";
 import { WebpackIcon } from "../components/icons/webpack";
+import { RsbuildIcon } from "../components/icons/rsbuild";
+import { RolldownIcon } from "../components/icons/rolldown";
+import { RollupIcon } from "../components/icons/rollup";
+import { ParcelIcon } from "../components/icons/parcel";
+import { RepackIcon } from "../components/icons/repack";
+import { EmberIcon } from "../components/icons/ember";
+import { ModernjsIcon } from "../components/icons/modernjs";
+import { RspressIcon } from "../components/icons/rspress";
+import { RslibIcon } from "../components/icons/rslib";
 
 export const version = "0.0.38";
 
@@ -65,23 +74,32 @@ export const SiteConfig: CardProps = {
   ] as CardItemProps[],
   getStarted: [
     {
-      title: "Add Zephyr to your existing project",
-      description: "Available for Webpack, Rspack and Vite",
-      href: "/recipes/existing-app",
+      title: "🚀 Rsbuild (Recommended)",
+      description: "Extremely fast builds with Rspack. Zero-config setup with sensible defaults.",
+      href: "/integrations/react-rsbuild",
       variant: "small",
+      icons: [<ReactIcon />, <RspackIcon />],
     },
     {
-      title: "Fork our examples",
-      description:
-        "With pre-configured application, available in both standalone applications and micro-frontends.",
-      href: "/how-to/fork-our-examples",
+      title: "⚡ Vite",
+      description: "Lightning-fast development with instant hot reload and modern ESM.",
+      href: "/integrations/react-vite",
       variant: "small",
+      icons: [<ReactIcon />, <ViteIcon />],
     },
     {
-      title: "Start from scratch",
-      description: "Using React and Rspack",
-      href: "/general/get-started#start-from-scratch",
+      title: "📱 Metro (React Native)",
+      description: "Fast, scalable bundler for React Native applications with native performance.",
+      href: "/bundlers/metro",
       variant: "small",
+      icons: [<ReactIcon />],
+    },
+    {
+      title: "🔧 Re.Pack (React Native)",
+      description: "Advanced React Native bundling with Rspack-based tooling and hot reload.",
+      href: "/integrations/react-native-repack",
+      variant: "small",
+      icons: [<ReactIcon />],
     },
   ],
   features: [
@@ -299,6 +317,64 @@ export const SiteConfig: CardProps = {
       href: "/concepts/micro-frontend",
     },
   ] as CardItemProps[],
+  bundlers: [
+    {
+      title: "Webpack",
+      description: "Traditional setup with full ecosystem",
+      variant: "small",
+      href: "/bundlers/webpack",
+      icons: [<WebpackIcon className="w-6 h-6" />],
+    },
+    {
+      title: "Rspack",
+      description: "Next-generation bundling performance",
+      variant: "small",
+      href: "/bundlers/rspack",
+      icons: [<RspackIcon className="w-6 h-6" />],
+    },
+    {
+      title: "Rsbuild",
+      description: "Zero-config setup with Rspack",
+      variant: "small",
+      href: "/bundlers/rsbuild",
+      icons: [<RsbuildIcon className="w-6 h-6" />],
+    },
+    {
+      title: "Vite",
+      description: "Fast development with instant HMR",
+      variant: "small",
+      href: "/bundlers/vite",
+      icons: [<ViteIcon className="w-6 h-6" />],
+    },
+    {
+      title: "Rolldown",
+      description: "Vite-compatible bundler built in Rust",
+      variant: "small",
+      href: "/bundlers/rolldown",
+      icons: [<RolldownIcon className="w-6 h-6" />],
+    },
+    {
+      title: "Rollup",
+      description: "ES module bundler for libraries",
+      variant: "small",
+      href: "/bundlers/rollup",
+      icons: [<RollupIcon className="w-6 h-6" />],
+    },
+    {
+      title: "Parcel",
+      description: "Zero configuration build tool",
+      variant: "small",
+      href: "/bundlers/parcel",
+      icons: [<ParcelIcon className="w-6 h-6" />],
+    },
+    {
+      title: "Re.Pack",
+      description: "React Native bundling with Rspack",
+      variant: "small",
+      href: "/bundlers/repack",
+      icons: [<RepackIcon className="w-8 h-8" />],
+    },
+  ],
   cloud: [
     {
       title: "Cloudflare",
@@ -306,7 +382,7 @@ export const SiteConfig: CardProps = {
         "Configure Cloudflare integration with Page project, KV namespaces and Workers",
       variant: "small",
       href: "/cloud/cloudflare",
-      icons: [<CloudflareIcon className=" w-12 h-10" />],
+      icons: [<CloudflareIcon className="w-6 h-6" />],
     },
     {
       title: "Netlify",
@@ -314,7 +390,7 @@ export const SiteConfig: CardProps = {
         "Manage your Netlify integration with Netlify function, site, and Blob storage",
       variant: "small",
       href: "/cloud/netlify",
-      icons: [<NetlifyIcon className="w-12 h-10 " />],
+      icons: [<NetlifyIcon className="w-6 h-6" />],
     },
     {
       title: "Fastly",
@@ -322,7 +398,7 @@ export const SiteConfig: CardProps = {
         "Configure Fastly integration with edge computing capabilities and global CDN",
       variant: "small",
       href: "/cloud/fastly",
-      icons: [<FastlyIcon className="w-12 h-10" />],
+      icons: [<FastlyIcon className="w-6 h-6" />],
     },
     {
       title: "Akamai",
@@ -330,7 +406,37 @@ export const SiteConfig: CardProps = {
         "Set up Akamai integration with EdgeWorkers and EdgeKV for global performance",
       variant: "small",
       href: "/cloud/akamai",
-      icons: [<AkamaiIcon className="w-12 h-10" />],
+      icons: [<AkamaiIcon className="w-6 h-6" />],
+    },
+  ],
+  metaFrameworks: [
+    {
+      title: "Ember.js",
+      description: "Productive framework for ambitious web apps",
+      variant: "small",
+      href: "/meta-frameworks/emberjs",
+      icons: [<EmberIcon className="w-8 h-8" />],
+    },
+    {
+      title: "ModernJS",
+      description: "Modern web engineering solution",
+      variant: "small",
+      href: "/meta-frameworks/modernjs",
+      icons: [<ModernjsIcon className="w-8 h-8" />],
+    },
+    {
+      title: "Rspress",
+      description: "Fast static site generator powered by Rspack",
+      variant: "small",
+      href: "/meta-frameworks/rspress",
+      icons: [<RspressIcon className="w-6 h-6" />],
+    },
+    {
+      title: "Rslib",
+      description: "Library build tool based on Rsbuild",
+      variant: "small",
+      href: "/meta-frameworks/rslib",
+      icons: [<RslibIcon className="w-6 h-6" />],
     },
   ],
 };

@@ -1,0 +1,88 @@
+import { Tabs, Tab } from '@theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Rolldown
+
+Deploy your Rolldown applications to Zephyr Cloud with blazing-fast Rust-powered bundling. The Zephyr Rolldown plugin integrates seamlessly with Rolldown's next-generation bundler.
+
+:::warning Work in Progress
+Rolldown is under heavy development right now. Features and APIs may change.
+:::
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/introduction/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Rolldown plugin in your project:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm add --dev zephyr-rolldown-plugin
+```
+</Tab>
+<Tab>
+```bash
+bun add --dev zephyr-rolldown-plugin
+```
+</Tab>
+<Tab>
+```bash
+yarn add --dev zephyr-rolldown-plugin
+```
+</Tab>
+<Tab>
+```bash
+npm install --save-dev zephyr-rolldown-plugin
+```
+</Tab>
+</Tabs>
+
+## Quick Start
+
+To add Zephyr to a Rolldown application, add the plugin to your Rolldown configuration.
+
+```typescript
+// rolldown.config.ts
+import { defineConfig } from 'rolldown';
+import { withZephyr } from 'zephyr-rolldown-plugin';
+
+export default defineConfig({
+  input: 'src/main.tsx',
+  output: {
+    dir: 'dist',
+    format: 'esm',
+  },
+  plugins: [
+    {
+      name: 'emit-html',
+      generateBundle() {
+        this.emitFile({
+          type: 'asset',
+          fileName: 'index.html',
+          source: `
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <title>My App</title>
+              </head>
+              <body>
+                <div id="root"></div>
+                <script type="module" src="./main.js"></script>
+              </body>
+            </html>
+          `,
+        });
+      },
+    },
+    withZephyr(),
+  ],
+});
+```

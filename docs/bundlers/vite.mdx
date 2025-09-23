@@ -1,0 +1,136 @@
+import { Tabs, Tab } from '@theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Vite
+
+Deploy your Vite applications to Zephyr Cloud with lightning-fast builds and Module Federation support. The Zephyr Vite plugin integrates seamlessly with Vite's build process and development server.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/introduction/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Vite plugin in your project:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm add --dev vite-plugin-zephyr
+```
+</Tab>
+<Tab>
+```bash
+bun add --dev vite-plugin-zephyr
+```
+</Tab>
+<Tab>
+```bash
+yarn add --dev vite-plugin-zephyr
+```
+</Tab>
+<Tab>
+```bash
+npm install --save-dev vite-plugin-zephyr
+```
+</Tab>
+</Tabs>
+
+## Basic Setup
+
+Add the Zephyr plugin to your Vite configuration:
+
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr } from 'vite-plugin-zephyr';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    withZephyr(),
+  ],
+});
+```
+
+### TypeScript Configuration
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr } from 'vite-plugin-zephyr';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    withZephyr(),
+  ],
+});
+```
+
+## Module Federation
+
+### Host Application (Consuming Remote Modules)
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr, type ModuleFederationOptions } from 'vite-plugin-zephyr';
+
+const mfConfig: ModuleFederationOptions = {
+  name: 'host-app',
+  remotes: {
+    'remote-app': 'remoteApp@http://localhost:3001/remoteEntry.js',
+    'shared-components': 'components@http://localhost:3002/remoteEntry.js',
+  },
+  shared: {
+    react: { singleton: true },
+    'react-dom': { singleton: true },
+  },
+};
+
+export default defineConfig({
+  plugins: [
+    react(),
+    withZephyr({ mfConfig })
+  ],
+});
+```
+
+### Remote Application (Exposing Modules)
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr, type ModuleFederationOptions } from 'vite-plugin-zephyr';
+
+const mfConfig: ModuleFederationOptions = {
+  name: 'remote-app',
+  filename: 'remoteEntry.js',
+  exposes: {
+    './Button': './src/components/Button',
+    './Header': './src/components/Header',
+    './utils': './src/utils',
+  },
+  shared: {
+    react: { singleton: true },
+    'react-dom': { singleton: true },
+  },
+};
+
+export default defineConfig({
+  plugins: [
+    react(),
+    withZephyr({ mfConfig })
+  ],
+});
+```

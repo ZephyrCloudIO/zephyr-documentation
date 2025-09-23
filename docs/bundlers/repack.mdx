@@ -1,0 +1,141 @@
+import { Tabs, Tab } from '@theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Re.Pack (React Native)
+
+Deploy your React Native applications with Module Federation to Zephyr Cloud using Re.Pack and Rspack. The Zephyr Re.Pack plugin integrates seamlessly with Re.Pack's build process and supports cross-platform mobile applications.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/introduction/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Re.Pack plugin in your project:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm add --dev zephyr-repack-plugin
+```
+</Tab>
+<Tab>
+```bash
+bun add --dev zephyr-repack-plugin
+```
+</Tab>
+<Tab>
+```bash
+yarn add --dev zephyr-repack-plugin
+```
+</Tab>
+<Tab>
+```bash
+npm install --save-dev zephyr-repack-plugin
+```
+</Tab>
+</Tabs>
+
+## Basic Setup
+
+Add the Zephyr plugin to your Rspack configuration by wrapping it with `withZephyr`:
+
+```javascript
+// rspack.config.js
+const { withZephyr } = require('zephyr-repack-plugin');
+
+const config = {
+  // ...your existing rspack configuration
+  plugins: [
+    // your existing plugins
+  ],
+};
+
+module.exports = withZephyr()(config);
+```
+
+## Module Federation with Re.Pack
+
+You can continue using your existing Module Federation configuration from Re.Pack. We recommend using the new Re.Pack Module Federation as it provides better runtime support for cross-platform applications.
+
+For detailed Re.Pack setup, refer to [Re.Pack's documentation](https://re-pack.dev) and check out [Callstack's Super App Showcase](https://github.com/callstack/super-app-showcase) for reference implementations.
+
+### Host Application (Consumer)
+
+```javascript
+// rspack.config.js
+const { withZephyr } = require('zephyr-repack-plugin');
+const Repack = require('@callstack/repack');
+
+const config = {
+  plugins: [
+    new Repack.plugins.ModuleFederationPluginV2({
+      name: 'MobileHost',
+      dts: false,
+      remotes: {
+        MobileCart: `MobileCart@http://localhost:9000/${platform}/MobileCart.container.js.bundle`,
+        MobileInventory: `MobileInventory@http://localhost:9001/${platform}/MobileInventory.container.js.bundle`,
+        MobileCheckout: `MobileCheckout@http://localhost:9002/${platform}/MobileCheckout.container.js.bundle`,
+        MobileOrders: `MobileOrders@http://localhost:9003/${platform}/MobileOrders.container.js.bundle`,
+      },
+      shared: getSharedDependencies({ eager: true }),
+    }),
+  ],
+};
+
+module.exports = withZephyr()(config);
+```
+
+### Remote Application (Provider)
+
+```javascript
+// rspack.config.js
+const { withZephyr } = require('zephyr-repack-plugin');
+const Repack = require('@callstack/repack');
+
+const config = {
+  plugins: [
+    new Repack.plugins.ModuleFederationPluginV2({
+      name: 'MobileCheckout',
+      filename: 'MobileCheckout.container.js.bundle',
+      dts: false,
+      exposes: {
+        './CheckoutSection': './src/components/CheckoutSection',
+        './CheckoutSuccessScreen': './src/screens/CheckoutSuccessScreen',
+      },
+      shared: getSharedDependencies({ eager: STANDALONE }),
+    }),
+  ],
+};
+
+module.exports = withZephyr()(config);
+```
+
+## Shared Dependencies
+
+Configure shared dependencies to ensure single instances of critical modules like React and React Native:
+
+```javascript
+// rspack.config.js
+const getSharedDependencies = ({ eager }) => ({
+  'react': { singleton: true, eager },
+  'react-native': { singleton: true, eager },
+  '@react-navigation/native': { singleton: true, eager },
+  '@react-navigation/stack': { singleton: true, eager },
+});
+```
+
+## Platform-Specific Builds
+
+Re.Pack supports platform-specific builds for iOS and Android. The `${platform}` variable in remote URLs automatically resolves to the target platform:
+
+```javascript
+remotes: {
+  MobileCart: `MobileCart@http://localhost:9000/${platform}/MobileCart.container.js.bundle`,
+}
+```
