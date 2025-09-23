@@ -43,10 +43,6 @@ const zephyrRsbuildPlugin = () => ({
   },
 });
 
-const newRelicScript = fs.readFileSync("lib/scripts/new-relic.js", "utf-8");
-
-const twitterScript = fs.readFileSync("lib/scripts/twitter.js", "utf-8");
-
 const socialLinks: SocialLink[] = [
   {
     icon: "github",
@@ -407,7 +403,7 @@ export default defineConfig({
     source: {
       define: {
         "process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID": JSON.stringify(
-          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID
+          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID,
         ),
       },
     },
@@ -424,20 +420,6 @@ export default defineConfig({
           },
         ],
       },
-    },
-    html: {
-      tags: [
-        {
-          tag: "script",
-          attrs: { type: "text/javascript" },
-          children: newRelicScript,
-        },
-        {
-          tag: "script",
-          attrs: { type: "text/javascript" },
-          children: twitterScript,
-        },
-      ],
     },
   },
 

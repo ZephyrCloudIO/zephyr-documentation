@@ -2,25 +2,25 @@ import { AkamaiIcon } from "@/components/icons/akamai";
 import { CloudflareIcon } from "@/components/icons/cloudflare";
 import { FastlyIcon } from "@/components/icons/fastly";
 import type React from "react";
+import { EmberIcon } from "../components/icons/ember";
+import { ModernjsIcon } from "../components/icons/modernjs";
 import ModuleFederationIcon from "../components/icons/module-federation";
 // import { QwikIcon } from '../components/icons/qwik';
 // import { AngularIcon } from '../components/icons/angular';
 // import { LernaIcon } from '../components/icons/lerna';
 import { NetlifyIcon } from "../components/icons/netlify";
 import { NxIcon } from "../components/icons/nx";
+import { ParcelIcon } from "../components/icons/parcel";
 import { ReactIcon } from "../components/icons/react";
-import { RspackIcon } from "../components/icons/rspack";
-import { ViteIcon } from "../components/icons/vite";
-import { WebpackIcon } from "../components/icons/webpack";
-import { RsbuildIcon } from "../components/icons/rsbuild";
+import { RepackIcon } from "../components/icons/repack";
 import { RolldownIcon } from "../components/icons/rolldown";
 import { RollupIcon } from "../components/icons/rollup";
-import { ParcelIcon } from "../components/icons/parcel";
-import { RepackIcon } from "../components/icons/repack";
-import { EmberIcon } from "../components/icons/ember";
-import { ModernjsIcon } from "../components/icons/modernjs";
-import { RspressIcon } from "../components/icons/rspress";
+import { RsbuildIcon } from "../components/icons/rsbuild";
 import { RslibIcon } from "../components/icons/rslib";
+import { RspackIcon } from "../components/icons/rspack";
+import { RspressIcon } from "../components/icons/rspress";
+import { ViteIcon } from "../components/icons/vite";
+import { WebpackIcon } from "../components/icons/webpack";
 
 export const version = "0.0.38";
 
@@ -75,28 +75,32 @@ export const SiteConfig: CardProps = {
   getStarted: [
     {
       title: "🚀 Rsbuild (Recommended)",
-      description: "Extremely fast builds with Rspack. Zero-config setup with sensible defaults.",
+      description:
+        "Extremely fast builds with Rspack. Zero-config setup with sensible defaults.",
       href: "/integrations/react-rsbuild",
       variant: "small",
       icons: [<ReactIcon />, <RspackIcon />],
     },
     {
       title: "⚡ Vite",
-      description: "Lightning-fast development with instant hot reload and modern ESM.",
+      description:
+        "Lightning-fast development with instant hot reload and modern ESM.",
       href: "/integrations/react-vite",
       variant: "small",
       icons: [<ReactIcon />, <ViteIcon />],
     },
     {
       title: "📱 Metro (React Native)",
-      description: "Fast, scalable bundler for React Native applications with native performance.",
+      description:
+        "Fast, scalable bundler for React Native applications with native performance.",
       href: "/bundlers/metro",
       variant: "small",
       icons: [<ReactIcon />],
     },
     {
       title: "🔧 Re.Pack (React Native)",
-      description: "Advanced React Native bundling with Rspack-based tooling and hot reload.",
+      description:
+        "Advanced React Native bundling with Rspack-based tooling and hot reload.",
       href: "/integrations/react-native-repack",
       variant: "small",
       icons: [<ReactIcon />],

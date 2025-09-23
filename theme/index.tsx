@@ -10,6 +10,7 @@ import { cn } from "@/lib/cn";
 import { useEffect, useState } from "react";
 import { useDark } from "rspress/runtime";
 import Theme from "rspress/theme";
+
 import { Footer } from "../components/footer";
 import { type CardItemProps, version } from "../lib/site.config";
 
