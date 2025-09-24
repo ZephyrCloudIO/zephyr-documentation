@@ -1,0 +1,54 @@
+import { Tabs, Tab } from '@theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Parcel
+
+Deploy your Parcel applications to Zephyr Cloud with zero-configuration bundling. The Zephyr Parcel reporter integrates seamlessly with Parcel's build process.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/introduction/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Parcel reporter in your project:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm add --dev parcel-reporter-zephyr
+```
+</Tab>
+<Tab>
+```bash
+bun add --dev parcel-reporter-zephyr
+```
+</Tab>
+<Tab>
+```bash
+yarn add --dev parcel-reporter-zephyr
+```
+</Tab>
+<Tab>
+```bash
+npm install --save-dev parcel-reporter-zephyr
+```
+</Tab>
+</Tabs>
+
+## Quick Start
+
+To add Zephyr to a Parcel application, add the reporter to your `.parcelrc` configuration.
+
+```json
+// .parcelrc
+{
+  "extends": "@parcel/config-default",
+  "reporters": ["...", "parcel-reporter-zephyr"]
+}
+```

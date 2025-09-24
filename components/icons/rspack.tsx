@@ -3,8 +3,8 @@ import type { SVGProps } from "react";
 
 export function RspackIcon(props: SVGProps<SVGSVGElement>) {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 655 555">
-			<g strokeWidth="2" fill="none" {...props}>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 655 555" {...props}>
+			<g strokeWidth="2" fill="none">
 				<path
 					stroke="#ab7f45"
 					d="M379 102q-8 7-11 16-2 4-1 6c1 5 15 7 20 7q18 2 43 2l33 4q2 0 2 2c0 3-3 4-5 4h-9c-2 0-5 2-5 5q0 14-3 31 0 2 2 0l12-7q3-3 11-6c13-6 25-16 36-26 8-7 15-14 18-24s-4-18-14-20"

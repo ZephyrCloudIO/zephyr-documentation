@@ -1,0 +1,180 @@
+# Prerequisites
+
+Set up your development environment for Zephyr Cloud development.
+
+## Get Started with Zephyr Mission Control
+
+**🚀 Install our browser extension first for the best development experience:**
+
+- **Chrome**: [Install Zephyr Mission Control](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+The Zephyr Mission Control extension provides:
+- **Real-time deployment monitoring** - See your builds deploy instantly
+- **Environment management** - Switch between dev, staging, and production
+- **Debug tools** - Inspect module federation and remote modules
+- **One-click rollbacks** - Instantly revert problematic deployments
+- **Team collaboration** - Share deployment status with your team
+
+## Required Software
+
+Before you can start using Zephyr, make sure you have the following tools installed on your system:
+
+### Node.js
+
+Zephyr requires **Node.js version 18 or higher**. We recommend using Node.js 24+ for the best experience.
+
+**Quick Check:**
+```bash
+node --version
+# Should output v18.0.0 or higher
+```
+
+If you don't have Node.js installed refer below to [Node Version Manager](#node-version-management)
+
+### Package Manager
+
+You'll need a package manager to install Zephyr plugins and dependencies. We recommend them in this order:
+
+1. **pnpm** (most recommended)
+2. **bun** (fast alternative) 
+3. **yarn** (stable option)
+4. **npm** (comes with Node.js)
+
+### Git
+
+Git is required for version control and some Zephyr workflows:
+```bash
+git --version
+# Should output git version 2.x.x or higher
+```
+
+Install Git from [git-scm.com](https://git-scm.com/) if needed.
+
+## Node Version Management
+
+### Why Use a Version Manager?
+
+Different projects may require different Node.js versions. Version managers allow you to:
+- Switch between Node.js versions instantly
+- Maintain project-specific Node versions
+- Avoid version conflicts between projects
+
+### Node Version Manager (nvm)
+
+**For macOS/Linux:**
+
+1. **Install nvm from [nvm-sh/nvm](https://github.com/nvm-sh/nvm):**
+
+2. **Restart your terminal** or reload your profile
+
+3. **Install and use Node.js 24:**
+   ```bash
+   nvm install 24
+   nvm use 24
+   nvm alias default 24  # Set as default
+   ```
+
+4. **Verify installation:**
+   ```bash
+   node --version  # Should show v24.x.x
+   nvm current     # Should show v24.x.x
+   ```
+
+**For Windows:**
+
+Use [nvm-windows](https://github.com/coreybutler/nvm-windows):
+
+1. Download the installer from GitHub releases
+2. Install and restart your terminal
+3. Use similar commands:
+   ```bash
+   nvm install 24
+   nvm use 24
+   ```
+
+### fnm (Fast Node Manager)
+
+A faster alternative to nvm:
+
+**Install fnm:**
+```bash
+# macOS/Linux
+curl -fsSL https://fnm.vercel.app/install | bash
+
+# Windows (with Chocolatey)
+choco install fnm
+```
+
+**Use fnm:**
+```bash
+fnm install 24
+fnm use 24
+fnm default 24
+```
+
+### Project-Specific Node Versions
+
+Create a `.nvmrc` file in your project root:
+```bash
+echo "24" > .nvmrc
+```
+
+Then use:
+```bash
+nvm use    # Uses version specified in .nvmrc
+# or
+fnm use    # With fnm
+```
+
+## Package Manager Setup
+
+### Installing pnpm (Most Recommended)
+
+pnpm is faster, more efficient, and uses less disk space than npm:
+
+```bash
+# Install pnpm globally
+npm install -g pnpm@latest
+
+# Verify installation
+pnpm --version
+```
+
+**Why pnpm?**
+- Faster installations and less disk usage
+- Strict dependency resolution prevents phantom dependencies
+- Built-in monorepo support
+- Compatible with npm ecosystem
+
+### Installing bun (Fast Alternative)
+
+bun is an extremely fast JavaScript runtime and package manager:
+
+```bash
+# Install bun (macOS/Linux)
+curl -fsSL https://bun.sh/install | bash
+
+# Install bun (Windows)
+powershell -c "irm bun.sh/install.ps1 | iex"
+
+# Verify installation
+bun --version
+```
+
+**Why bun?**
+- Extremely fast package installation
+- Built-in bundler and test runner
+- Drop-in replacement for npm/yarn
+- Native TypeScript support
+
+## Next Steps
+
+Once your environment is set up:
+
+1. **Create a Zephyr Account** → [Sign up at app.zephyr-cloud.io](https://app.zephyr-cloud.io)
+2. **Build Your First App** → [Your First App](/tutorials/first-app)
+3. **Explore Integration Guides** → [Integration Guides](/integrations/existing-app)
+
+---
+
+Need help? Join our [Discord community](https://zephyr-cloud.io/discord) or check our [troubleshooting guide](/reference/troubleshooting).

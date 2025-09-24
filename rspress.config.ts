@@ -43,10 +43,6 @@ const zephyrRsbuildPlugin = () => ({
   },
 });
 
-const newRelicScript = fs.readFileSync("lib/scripts/new-relic.js", "utf-8");
-
-const twitterScript = fs.readFileSync("lib/scripts/twitter.js", "utf-8");
-
 const socialLinks: SocialLink[] = [
   {
     icon: "github",
@@ -67,11 +63,6 @@ const socialLinks: SocialLink[] = [
 
 const nav: Nav = [
   {
-    text: "Get Started",
-    link: "/general/get-started",
-    activeMatch: "/general/get-started/",
-  },
-  {
     text: "Zephyr Cloud →",
     link: "https://app.zephyr-cloud.io",
   },
@@ -80,86 +71,150 @@ const nav: Nav = [
 const sidebar: Sidebar = {
   "/": [
     {
-      text: "General",
+      text: "Getting Started",
       items: [
         {
-          text: "Why Zephyr Cloud",
-          link: "/general/why-zephyr-cloud",
+          text: "Overview",
+          link: "/",
         },
         {
-          text: "Get Started",
-          link: "/general/get-started",
+          text: "Prerequisites",
+          link: "/getting-started/installation",
         },
         {
-          text: "Create MF App",
-          link: "/general/create-mf-app",
-        },
-        {
-          text: "Architecture",
-          link: "/general/architecture",
-        },
-        {
-          text: "Additional Resources",
-          link: "/general/resources",
-        },
-        {
-          text: "FAQ",
-          link: "/general/question",
+          text: "Quick Start",
+          link: "/getting-started/quick-start",
         },
       ],
     },
     {
-      text: "How to",
+      text: "Features & Workflows",
+      collapsed: false,
+      collapsible: true,
+      items: [
+        {
+          text: "Organization Structure",
+          link: "/features/organization-structure",
+        },
+        {
+          text: "Versions",
+          link: "/features/versions",
+        },
+        {
+          text: "Tags & Environments",
+          link: "/features/tags-environments",
+        },
+        {
+          text: "Instant Rollbacks",
+          link: "/features/instant-rollbacks",
+        },
+        {
+          text: "Remote Dependencies",
+          link: "/features/remote-dependencies",
+        },
+        {
+          text: "CI/CD",
+          link: "/features/ci-cd",
+        },
+        {
+          text: "Teams & Members",
+          link: "/features/teams-members",
+        },
+        {
+          text: "Subscriptions",
+          link: "/features/subscriptions",
+        },
+      ],
+    },
+    {
+      text: "Development Tools",
       collapsed: true,
       collapsible: true,
       items: [
         {
-          text: "Micro-Frontends with Zephyr",
-          link: "/how-to/mf-guide",
+          text: "create-zephyr-apps",
+          link: "/tools/create-zephyr-apps",
         },
         {
-          text: "Dependency Management",
-          link: "/how-to/dependency-management",
+          text: "Zephyr Codemod",
+          link: "/tools/zephyr-codemod",
         },
         {
-          text: "Fork Our Examples",
-          link: "/how-to/fork-our-examples",
+          text: "Zephyr Sidepanel",
+          link: "/tools/browser-extension",
         },
         {
-          text: "Environments",
-          link: "/how-to/environments",
+          text: "Zephyr Devtools",
+          link: "/tools/browser-devtools",
         },
         {
-          text: "GitHub automations",
-          link: "/how-to/github-automations",
+          text: "Module Federation Devtools",
+          link: "/tools/module-federation-devtools",
+        },
+      ],
+    },
+    {
+      text: "Bundler Guides",
+      collapsible: true,
+      items: [
+        {
+          text: "Webpack",
+          link: "/bundlers/webpack",
         },
         {
-          text: "Gitlab automations",
-          link: "/how-to/gitlab-automations",
+          text: "Rspack",
+          link: "/bundlers/rspack",
         },
         {
-          text: "End-to-end Testing",
-          link: "/how-to/end-to-end-testing",
+          text: "Rsbuild",
+          link: "/bundlers/rsbuild",
         },
         {
-          text: "Chrome Extension",
-          link: "/how-to/browser-extension",
+          text: "Vite",
+          link: "/bundlers/vite",
         },
         {
-          text: "Version rollback and roll-forward",
-          link: "/how-to/versioning-tags",
+          text: "Rolldown",
+          link: "/bundlers/rolldown",
         },
         {
-          text: "Generate an API Token",
-          link: "/how-to/api-token",
+          text: "Rollup",
+          link: "/bundlers/rollup",
         },
         {
-          text: "Version Statuses",
-          link: "/how-to/version-statuses",
+          text: "Parcel",
+          link: "/bundlers/parcel",
         },
         {
-          text: "Allow IP addresses",
-          link: "/how-to/allow-ip-addresses",
+          text: "Re.Pack (React Native)",
+          link: "/bundlers/repack",
+        },
+        // TODO: Uncomment and add when Metro is working
+        // {
+        //   text: "Metro (React Native)",
+        //   link: "/bundlers/metro",
+        // },
+      ],
+    },
+    {
+      text: "Meta Frameworks",
+      collapsible: true,
+      items: [
+        {
+          text: "Ember.js",
+          link: "/meta-frameworks/emberjs",
+        },
+        {
+          text: "ModernJS",
+          link: "/meta-frameworks/modernjs",
+        },
+        {
+          text: "Rspress",
+          link: "/meta-frameworks/rspress",
+        },
+        {
+          text: "Rslib",
+          link: "/meta-frameworks/rslib",
         },
       ],
     },
@@ -196,73 +251,93 @@ const sidebar: Sidebar = {
       ],
     },
     {
-      text: "Recipes",
-      link: "/recipes",
-      collapsed: false,
+      text: "Integration Guides",
+      collapsed: true,
       collapsible: true,
       items: [
         {
-          text: "Existing App",
-          link: "/recipes/existing-app",
-        },
-        {
-          text: "React Native + Re.Pack + MF",
-          link: "/recipes/repack-mf",
-        },
-        {
           text: "React + Vite",
-          link: "/recipes/react-vite",
+          link: "/integrations/react-vite",
         },
         {
           text: "React + Rsbuild",
-          link: "/recipes/react-rsbuild",
-        },
-        {
-          text: "Vite + Rspack + webpack + MF",
-          link: "/recipes/vite-rspack-webpack-mf",
+          link: "/integrations/react-rsbuild",
         },
         {
           text: "React + Rspack + Nx",
-          link: "/recipes/react-rspack-nx",
+          link: "/integrations/react-rspack-nx",
         },
         {
-          text: "Rspress",
-          link: "/recipes/rspress",
+          text: "React Native + Re.Pack",
+          link: "/integrations/react-native-repack",
         },
         {
-          text: "React + Rspack + Turborepo",
-          link: "/recipes/turborepo-react",
+          text: "Multi-bundler Setup",
+          link: "/integrations/vite-rspack-webpack-mf",
         },
         {
-          text: "React Native",
-          link: "/recipes/react-native",
-        },
-        {
-          text: "Migrate from Webpack to Rspack in Nx",
-          link: "/recipes/migrate-nx-webpack-to-rspack",
-        },
-        {
-          text: "Nx MF App",
-          link: "/recipes/nx-mf-app",
-        },
-        {
-          text: "ModernJS",
-          link: "/recipes/modernjs",
-        },
-        {
-          text: "Rolldown React",
-          link: "/recipes/rolldown-react",
-        },
-        {
-          text: "Parcel React",
-          link: "/recipes/parcel-react",
+          text: "Existing App Migration",
+          link: "/integrations/existing-app",
         },
       ],
     },
-
     {
-      text: "Supported Bundlers & Platforms",
-      link: "/supported",
+      text: "Tutorials",
+      collapsed: true,
+      collapsible: true,
+      items: [
+        {
+          text: "Your First App",
+          link: "/tutorials/first-app",
+        },
+        {
+          text: "Adding Micro-Frontends",
+          link: "/tutorials/create-mf-app",
+        },
+        {
+          text: "Complete MF Guide",
+          link: "/tutorials/mf-guide",
+        },
+        {
+          text: "End-to-End Testing",
+          link: "/tutorials/e2e-testing",
+        },
+      ],
+    },
+    {
+      text: "Reference",
+      collapsed: true,
+      collapsible: true,
+      items: [
+        {
+          text: "Core Concepts",
+          link: "/reference/concepts",
+        },
+        {
+          text: "Version Statuses",
+          link: "/reference/version-statuses",
+        },
+        {
+          text: "FAQ",
+          link: "/reference/faq",
+        },
+        {
+          text: "Additional Resources",
+          link: "/reference/resources",
+        },
+        {
+          text: "Why Zephyr Cloud",
+          link: "/reference/why-zephyr-cloud",
+        },
+        {
+          text: "Architecture",
+          link: "/reference/architecture",
+        },
+        {
+          text: "IP Allowlists",
+          link: "/reference/allow-ip-addresses",
+        },
+      ],
     },
     {
       text: "Troubleshooting",
@@ -345,20 +420,6 @@ export default defineConfig({
           },
         ],
       },
-    },
-    html: {
-      tags: [
-        {
-          tag: "script",
-          attrs: { type: "text/javascript" },
-          children: newRelicScript,
-        },
-        {
-          tag: "script",
-          attrs: { type: "text/javascript" },
-          children: twitterScript,
-        },
-      ],
     },
   },
 

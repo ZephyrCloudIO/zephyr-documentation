@@ -14,28 +14,22 @@ This error happens when the Zephyr's plugin tries to get a list of assets ids fr
 
 If you encounter this error, you can try to deploy your application again. This error can be transient and may not occur on subsequent deployments.
 
-```bash
 npm run build
-```
 
 ### Ensure you are running latest Zephyr plugin
 
 Please update your Zephyr plugin to the latest version to ensure you have the latest features and bug fixes.
 
-```bash
 # Choose the plugin you are using
 npm install zephyr-webpack-plugin --latest
 npm install rollup-plugin-zephyr --latest
 npm install vite-plugin-zephyr --latest
-```
 
 ### Clear assets cache
 
 If the error persists, you can try to clear the assets cache and re-run the deployment.
 
-```bash
 rm -rf ~/.zephyr
-```
 
 </Steps>
 

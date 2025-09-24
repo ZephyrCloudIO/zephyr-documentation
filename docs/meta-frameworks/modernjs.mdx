@@ -1,0 +1,183 @@
+import { Tabs, Tab } from '@theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Modern.js
+
+Deploy your Modern.js applications to Zephyr Cloud with built-in Rspack integration. Modern.js is a meta-framework that provides full-stack capabilities with performance-first architecture and convention-based development.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/introduction/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Modern.js plugin in your project:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm add --dev zephyr-modernjs-plugin
+```
+</Tab>
+<Tab>
+```bash
+bun add --dev zephyr-modernjs-plugin
+```
+</Tab>
+<Tab>
+```bash
+yarn add --dev zephyr-modernjs-plugin
+```
+</Tab>
+<Tab>
+```bash
+npm install --save-dev zephyr-modernjs-plugin
+```
+</Tab>
+</Tabs>
+
+## Configuration
+
+Add the Zephyr plugin to your Modern.js configuration:
+
+```typescript
+// modern.config.ts
+import { appTools, defineConfig } from '@modern-js/app-tools';
+import { withZephyr } from 'zephyr-modernjs-plugin';
+
+export default defineConfig({
+  output: {
+    distPath: {
+      html: './',
+    },
+  },
+  html: {
+    outputStructure: 'flat',
+  },
+  source: {
+    mainEntryName: 'index',
+  },
+  runtime: {
+    router: true,
+  },
+  plugins: [
+    appTools({
+      bundler: 'rspack', // Set to 'webpack' to enable webpack
+    }),
+    withZephyr(),
+  ],
+});
+```
+
+## Project Structure
+
+Modern.js uses file-based routing and conventions:
+
+```
+my-modernjs-app/
+├── src/
+│   └── routes/          # File-based routing
+│       ├── layout.tsx   # Root layout
+│       └── page.tsx     # Home page
+├── modern.config.ts     # Modern.js configuration
+├── package.json
+└── biome.json          # Biome configuration (optional)
+```
+
+## Development Workflow
+
+Start your development server:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm dev
+```
+</Tab>
+<Tab>
+```bash
+bun run dev
+```
+</Tab>
+<Tab>
+```bash
+yarn dev
+```
+</Tab>
+<Tab>
+```bash
+npm run dev
+```
+</Tab>
+</Tabs>
+
+Build for production:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm build
+```
+</Tab>
+<Tab>
+```bash
+bun run build
+```
+</Tab>
+<Tab>
+```bash
+yarn build
+```
+</Tab>
+<Tab>
+```bash
+npm run build
+```
+</Tab>
+</Tabs>
+
+Preview production build:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm serve
+```
+</Tab>
+<Tab>
+```bash
+bun run serve
+```
+</Tab>
+<Tab>
+```bash
+yarn serve
+```
+</Tab>
+<Tab>
+```bash
+npm run serve
+```
+</Tab>
+</Tabs>
+
+## Bundler Options
+
+Modern.js supports both Rspack (default) and webpack:
+
+```typescript
+// Use Rspack (recommended)
+appTools({
+  bundler: 'rspack',
+})
+
+// Use webpack
+appTools({
+  bundler: 'webpack',
+})
+```

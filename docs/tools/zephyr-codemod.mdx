@@ -1,0 +1,161 @@
+---
+title: Zephyr Codemod
+description: Automatically integrate Zephyr plugins into your existing bundler configurations
+---
+
+import { Tabs, Tab } from '@theme';
+
+# Zephyr Codemod
+
+The Zephyr Codemod automatically adds Zephyr integration to your existing projects. It detects your bundler and modifies your configuration to include the appropriate Zephyr plugin.
+
+## Quick Start
+
+<Tabs>
+<Tab label="Curl (Recommended)">
+
+```bash
+curl -fsSL https://with.zephyr-cloud.io | node
+```
+
+</Tab>
+<Tab label="npx">
+
+```bash
+npx with-zephyr
+```
+
+</Tab>
+<Tab label="pnpm">
+
+```bash
+pnpm dlx with-zephyr
+```
+
+</Tab>
+<Tab label="Yarn">
+
+```bash
+yarn dlx with-zephyr
+```
+
+</Tab>
+</Tabs>
+
+## Options
+
+```bash
+# Preview changes without applying them
+npx with-zephyr --dry-run
+
+# Automatically install missing packages
+npx with-zephyr --install
+
+# Target specific directory
+npx with-zephyr ./my-project
+
+# Filter specific bundlers
+npx with-zephyr --bundlers webpack vite
+
+# Combined usage
+npx with-zephyr --dry-run --install
+```
+
+## What It Does
+
+The codemod scans your project for bundler configuration files and automatically:
+
+1. **Detects your bundler** (Webpack, Vite, Rollup, etc.)
+2. **Adds the correct Zephyr plugin** import
+3. **Updates your configuration** to include Zephyr
+4. **Shows you what changed**
+
+## Supported Bundlers
+
+- **Webpack** → `zephyr-webpack-plugin`
+- **Rspack** → `zephyr-rspack-plugin`
+- **Vite** → `vite-plugin-zephyr`
+- **Rollup** → `rollup-plugin-zephyr`
+- **Rolldown** → `zephyr-rolldown-plugin`
+- **RSBuild** → `zephyr-rsbuild-plugin`
+- **Modern.js** → `zephyr-modernjs-plugin`
+- **RSPress** → `zephyr-rspress-plugin`
+- **Parcel** → `parcel-reporter-zephyr`
+- **Re.Pack** → `zephyr-repack-plugin`
+
+## Examples
+
+<Tabs>
+<Tab label="Webpack">
+
+**Before:**
+```javascript
+const { composePlugins, withNx } = require('@nx/webpack');
+
+module.exports = composePlugins(withNx(), (config) => config);
+```
+
+**After:**
+```javascript
+const { withZephyr } = require('zephyr-webpack-plugin');
+const { composePlugins, withNx } = require('@nx/webpack');
+
+module.exports = composePlugins(withNx(), withZephyr(), (config) => config);
+```
+
+</Tab>
+<Tab label="Vite">
+
+**Before:**
+```typescript
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()]
+});
+```
+
+**After:**
+```typescript
+import { withZephyr } from 'vite-plugin-zephyr';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react(), withZephyr()]
+});
+```
+
+</Tab>
+<Tab label="Rollup">
+
+**Before:**
+```javascript
+import resolve from '@rollup/plugin-node-resolve';
+
+export default {
+  plugins: [resolve()]
+};
+```
+
+**After:**
+```javascript
+import { withZephyr } from 'rollup-plugin-zephyr';
+import resolve from '@rollup/plugin-node-resolve';
+
+export default withZephyr()({
+  plugins: [resolve()]
+});
+```
+
+</Tab>
+</Tabs>
+
+## Best Practices
+
+1. **Commit your changes** before running the codemod
+2. **Use `--dry-run`** to preview changes first
+3. **Review the diff** after running to ensure correctness
+4. **Test your build** to verify everything works
+5. **Use `--install`** to automatically add missing packages

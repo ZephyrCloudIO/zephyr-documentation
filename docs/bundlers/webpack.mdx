@@ -1,0 +1,142 @@
+import { Tabs, Tab } from '@theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Webpack
+
+Deploy your Webpack applications to Zephyr Cloud with full Module Federation support. The Zephyr Webpack plugin integrates seamlessly with Webpack's ecosystem, creating optimized deployments with zero configuration.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/introduction/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the plugin in your project:
+
+<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
+<Tab>
+```bash
+pnpm add --dev zephyr-webpack-plugin
+```
+</Tab>
+<Tab>
+```bash
+bun add --dev zephyr-webpack-plugin
+```
+</Tab>
+<Tab>
+```bash
+yarn add --dev zephyr-webpack-plugin
+```
+</Tab>
+<Tab>
+```bash
+npm install --save-dev zephyr-webpack-plugin
+```
+</Tab>
+</Tabs>
+
+## Quick Start
+
+To add Zephyr to a webpack application make sure to wrap the entire webpack configuration with the `withZephyr` function.
+
+```typescript
+// webpack.config.ts
+import { Configuration } from 'webpack';
+import { withZephyr } from 'zephyr-webpack-plugin';
+import path from 'path';
+
+const config: Configuration = {
+  entry: './src/index.tsx',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[contenthash].js',
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+};
+
+export default withZephyr()(config);
+```
+
+## Module Federation
+
+Zephyr has first party support for Module Federation. You don't need to do any additional configuration to enable Module Federation in Zephyr.
+
+Zephyr will hook into the bundling process and modify the remote resolution to point to the Zephyr Cloud deployments.
+
+### Host Application
+
+```typescript
+// webpack.config.ts
+import { Configuration } from 'webpack';
+import { withZephyr } from 'zephyr-webpack-plugin';
+import ModuleFederationPlugin from '@module-federation/enhanced/webpack';
+
+const config: Configuration = {
+  entry: './src/index.tsx',
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'host',
+      remotes: {
+        mfe1: 'mfe1@http://localhost:3001/remoteEntry.js',
+        mfe2: 'mfe2@http://localhost:3002/remoteEntry.js',
+      },
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+    }),
+  ],
+};
+
+export default withZephyr()(config);
+```
+
+### Remote Application
+
+```typescript
+// webpack.config.ts
+import { Configuration } from 'webpack';
+import { withZephyr } from 'zephyr-webpack-plugin';
+import ModuleFederationPlugin from '@module-federation/enhanced/webpack';
+
+const config: Configuration = {
+  entry: './src/index.tsx',
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'mfe1',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Button': './src/components/Button',
+        './Header': './src/components/Header',
+      },
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+    }),
+  ],
+};
+
+export default withZephyr()(config);
+```
+
+## Next Steps
+
+- [Join our Discord](https://zephyr-cloud.io/discord) for support
