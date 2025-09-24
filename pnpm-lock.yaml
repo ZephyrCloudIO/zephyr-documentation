@@ -143,6 +143,9 @@ importers:
       postcss-loader:
         specifier: ^8.1.1
         version: 8.1.1(@rspack/core@1.4.10(@swc/helpers@0.5.15))(postcss@8.5.3)(typescript@5.8.2)(webpack@5.96.0(@swc/core@1.11.13(@swc/helpers@0.5.15)))
+      rsbuild-plugin-open-graph:
+        specifier: ^1.1.0
+        version: 1.1.0(@rsbuild/core@1.2.3)
       tailwindcss:
         specifier: ^3.4.17
         version: 3.4.17
@@ -3997,6 +4000,14 @@ packages:
 
   rrweb@2.0.0-alpha.18:
     resolution: {integrity: sha512-1mjZcB+LVoGSx1+i9E2ZdAP90fS3MghYVix2wvGlZvrgRuLCbTCCOZMztFCkKpgp7/EeCdYM4nIHJkKX5J1Nmg==}
+
+  rsbuild-plugin-open-graph@1.1.0:
+    resolution: {integrity: sha512-ETrmQxhs/hW7xFzDGb6CIiZ1tVOrsrGPDgPTC/49bQ+sK75y6LZ3/CvcqPNxMwdnI3Ba79l62FIFvR0uC+UISw==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+    peerDependenciesMeta:
+      '@rsbuild/core':
+        optional: true
 
   rspack-plugin-virtual-module@0.1.13:
     resolution: {integrity: sha512-VC0HiVHH6dtGfTgfpbDgVTt6LlYv+uAg9CWGWAR5lBx9FbKPEZeGz7iRUUP8vMymx+PGI8ps0u4a25dne0rtuQ==}
@@ -9369,6 +9380,10 @@ snapshots:
       mitt: 3.0.1
       rrdom: 2.0.0-alpha.18
       rrweb-snapshot: 2.0.0-alpha.18
+
+  rsbuild-plugin-open-graph@1.1.0(@rsbuild/core@1.2.3):
+    optionalDependencies:
+      '@rsbuild/core': 1.2.3
 
   rspack-plugin-virtual-module@0.1.13:
     dependencies:
