@@ -3,6 +3,7 @@ import * as path from "node:path";
 import { pluginClientRedirects } from "@rspress/plugin-client-redirects";
 import type { Nav, Sidebar, SocialLink } from "@rspress/shared";
 import dotenv from "dotenv";
+import { pluginOpenGraph } from "rsbuild-plugin-open-graph";
 import fileTree from "rspress-plugin-file-tree";
 import ga from "rspress-plugin-google-analytics";
 import readingTime from "rspress-plugin-reading-time";
@@ -374,7 +375,6 @@ export default defineConfig({
   ssg: true,
   globalStyles: path.join(__dirname, "styles/index.css"),
   mediumZoom: { selector: ".rspress-doc img" },
-
   logo: {
     light: "/light-bg-icon.png",
     dark: "/dark-bg-icon.png",
@@ -407,7 +407,6 @@ export default defineConfig({
         ),
       },
     },
-    plugins: [zephyrRsbuildPlugin()],
     output: {
       copy: {
         patterns: [
@@ -422,6 +421,22 @@ export default defineConfig({
       },
     },
   },
+  // ? Rsbuild Plugins
+  builderPlugins: [
+    pluginOpenGraph({
+      title: "Zephyr Cloud Docs",
+      type: "website",
+      url: "https://docs.zephyr-cloud.io/",
+      image: "https://docs.zephyr-cloud.io/dark-bg-logo.png",
+      description:
+        "Documentation for Zephyr Cloud - The developer-first SaaS platform for Module Federation, micro-frontends, and modern web applications.",
+      twitter: {
+        site: "@ZephyrCloudIO",
+        card: "summary_large_image",
+      },
+    }),
+    zephyrRsbuildPlugin(),
+  ],
 
   plugins: [
     sitemap({ domain: "https://docs.zephyr-cloud.io" }),
