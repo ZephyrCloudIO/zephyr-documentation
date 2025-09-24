@@ -1,4 +1,5 @@
 import { AkamaiIcon } from "@/components/icons/akamai";
+import { AWSIcon } from "@/components/icons/aws";
 import { CloudflareIcon } from "@/components/icons/cloudflare";
 import { FastlyIcon } from "@/components/icons/fastly";
 import type React from "react";
@@ -411,6 +412,14 @@ export const SiteConfig: CardProps = {
       variant: "small",
       href: "/cloud/akamai",
       icons: [<AkamaiIcon className="w-6 h-6" />],
+    },
+    {
+      title: "AWS",
+      description:
+        "Deploy and manage your applications on Amazon Web Services infrastructure",
+      variant: "small",
+      href: "/cloud/aws",
+      icons: [<AWSIcon className="w-6 h-6" />],
     },
   ],
   metaFrameworks: [
