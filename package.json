@@ -51,8 +51,8 @@
     "husky": "^9.1.7",
     "lucide-react": "^0.544.0",
     "react-wrap-balancer": "^1.1.1",
+    "rsbuild-plugin-google-analytics": "^1.0.4",
     "rspress-plugin-file-tree": "^0.4.0",
-    "rspress-plugin-google-analytics": "^0.3.0",
     "rspress-plugin-reading-time": "^0.3.0",
     "tailwind-merge": "^3.3.1",
     "zephyr-rspack-plugin": "^0.0.59"
@@ -82,7 +82,7 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "rspress-plugin-google-analytics@0.3.0": "patches/rspress-plugin-google-analytics@0.3.0.patch"
+      "rsbuild-plugin-google-analytics@1.0.4": "patches/rsbuild-plugin-google-analytics@1.0.4.patch"
     }
   },
   "packageManager": "pnpm@10.17.1"

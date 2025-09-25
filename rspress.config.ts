@@ -1,46 +1,17 @@
-// import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { pluginClientRedirects } from '@rspress/plugin-client-redirects';
 import type { Nav, Sidebar, SocialLink } from '@rspress/shared';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
+import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 // import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
-// import ga from 'rspress-plugin-google-analytics';
-// import readingTime from 'rspress-plugin-reading-time';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { defineConfig } from '@rspress/core';
-// import { withZephyr } from 'zephyr-rspack-plugin';
 import { withZephyr } from 'zephyr-rsbuild-plugin';
+// import { withZephyr } from 'zephyr-rspress-plugin';
 
 import { Categories, Errors } from './lib/error-codes-messages';
-// import { PAGE_CODE_REGEX, getError as getZeError } from './lib/error-helpers';
 import { capitalizeFirstLetter } from './lib/utils/casing';
-
-// const TEMP_SEARCH_INDEX_PATH = path.join(__dirname, 'temp-search-index.json');
-// const getSearchIndexHash = () => {
-//   let searchIndexHash = '';
-//   return {
-//     setHash: (hash: string) => {
-//       searchIndexHash = hash;
-//     },
-//     getHashedFilename: () =>
-//       `search_index.en-US${searchIndexHash ? `.${searchIndexHash}` : ''}.json`,
-//   };
-// };
-
-// const searchIndexHelper = getSearchIndexHash();
-
-// const zephyrRsbuildPlugin = () => ({
-//   name: 'zephyr-rsbuild-plugin',
-//   setup(api: {
-//     // biome-ignore lint/suspicious/noExplicitAny: `modifyRspackConfig` is a valid method
-//     modifyRspackConfig: (arg0: (config: any) => Promise<void>) => void;
-//   }) {
-//     api.modifyRspackConfig(async (config) => {
-//       config.name === 'web' && (await withZephyr()(config));
-//     });
-//   },
-// });
 
 const socialLinks: SocialLink[] = [
   {
@@ -415,65 +386,21 @@ export default defineConfig({
           card: 'summary_large_image',
         },
       }),
+      pluginGoogleAnalytics({
+        id: 'G-B7G266JZDH',
+      }),
       withZephyr(),
     ],
     output: {
       copy: {
-        patterns: [
-          { from: 'docs/public' },
-          // {
-          //   from: 'temp-search-index.json',
-          //   to: () => `static/${searchIndexHelper.getHashedFilename()}`,
-          // },
-        ],
+        patterns: [{ from: 'docs/public' }],
       },
     },
   },
   plugins: [
     pluginSitemap({ siteUrl: 'https://docs.zephyr-cloud.io' }),
-    // pluginLlms(), // Temporarily disabled due to bug with nav.default
-    // readingTime(),
+    // pluginLlms(),
     pluginAlgolia(),
-    // {
-    //   name: 'zephyr-search-enhancer',
-    //   modifySearchIndexData(rows) {
-    //     for (const row of rows) {
-    //       const match = PAGE_CODE_REGEX.exec(row.routePath);
-    //       if (!match) continue;
-
-    //       const error = getZeError(match[1]);
-    //       if (!error) {
-    //         throw new Error(`Invalid error page found: ${match[1]}`);
-    //       }
-
-    //       // Adds to content because the indexer is not configured to
-    //       // lookup the frontmatter data.
-    //       // https://github.com/web-infra-dev/rspress/blob/d16b4b625c586e8d10385c792ade2a5d356834f3/packages/theme-default/src/components/Search/logic/providers/LocalProvider.ts#L78
-    //       row.content = `ZE${Categories[error.kind]}${error.id}\n${
-    //         error.message
-    //       }\n\n\n${row.content}`;
-    //     }
-
-    //     const searchIndexData = JSON.stringify(rows);
-    //     const staticDir = path.join(__dirname, 'doc_build/static');
-
-    //     if (fs.existsSync(staticDir)) {
-    //       const files = fs.readdirSync(staticDir);
-    //       for (const file of files) {
-    //         const match = file.match(/search_index\.en-US\.([a-z0-9]+)\.json/);
-    //         if (match) {
-    //           searchIndexHelper.setHash(match[1]);
-    //           break;
-    //         }
-    //       }
-    //     }
-
-    //     fs.writeFileSync(TEMP_SEARCH_INDEX_PATH, searchIndexData);
-    //   },
-    // },
-    // ga({
-    //   id: 'G-B7G266JZDH',
-    // }),
     pluginClientRedirects({
       redirects: [
         { from: '/how-to/cloud-providers', to: '/cloud' },

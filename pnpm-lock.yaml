@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  rspress-plugin-google-analytics@0.3.0:
-    hash: 1cb480ddd858fd8892f5ebc2ee6014c1afa07cc675c67c60a54e9ac803dd71cd
-    path: patches/rspress-plugin-google-analytics@0.3.0.patch
+  rsbuild-plugin-google-analytics@1.0.4:
+    hash: 6002602d312e1a83bfd588644f8cd9f9b0d2085841d2809a45e424b4d8e2fdd4
+    path: patches/rsbuild-plugin-google-analytics@1.0.4.patch
 
 importers:
 
@@ -67,12 +67,12 @@ importers:
       react-wrap-balancer:
         specifier: ^1.1.1
         version: 1.1.1(react@19.1.1)
+      rsbuild-plugin-google-analytics:
+        specifier: ^1.0.4
+        version: 1.0.4(patch_hash=6002602d312e1a83bfd588644f8cd9f9b0d2085841d2809a45e424b4d8e2fdd4)(@rsbuild/core@1.5.12)
       rspress-plugin-file-tree:
         specifier: ^0.4.0
         version: 0.4.0(rspress@1.45.6(webpack@5.96.0))
-      rspress-plugin-google-analytics:
-        specifier: ^0.3.0
-        version: 0.3.0(patch_hash=1cb480ddd858fd8892f5ebc2ee6014c1afa07cc675c67c60a54e9ac803dd71cd)(rspress@1.45.6(webpack@5.96.0))
       rspress-plugin-reading-time:
         specifier: ^0.3.0
         version: 0.3.0(rspress@1.45.6(webpack@5.96.0))
@@ -4468,6 +4468,14 @@ packages:
   rfdc@1.4.1:
     resolution: {integrity: sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA==}
 
+  rsbuild-plugin-google-analytics@1.0.4:
+    resolution: {integrity: sha512-K7KkgIUJWtoBpcCLBDLnBXezvQWdue5LCDO4NDvSDe/TEFxOlKb8wG6dDtp/A+CwbnZRVeNOZ9cB6vNg/y/Suw==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+    peerDependenciesMeta:
+      '@rsbuild/core':
+        optional: true
+
   rsbuild-plugin-open-graph@1.1.0:
     resolution: {integrity: sha512-ETrmQxhs/hW7xFzDGb6CIiZ1tVOrsrGPDgPTC/49bQ+sK75y6LZ3/CvcqPNxMwdnI3Ba79l62FIFvR0uC+UISw==}
     peerDependencies:
@@ -4486,11 +4494,6 @@ packages:
 
   rspress-plugin-file-tree@0.4.0:
     resolution: {integrity: sha512-VIOufC+0ljC2DJBpa7jV3TmqE+kkpQUXt1URNzWF5CJQINEwW3QMTCPby4uNtVGq5e+N2UpuCfHmG+TlqydI+w==}
-    peerDependencies:
-      rspress: '*'
-
-  rspress-plugin-google-analytics@0.3.0:
-    resolution: {integrity: sha512-WefsXU8eTHGFC54Zr6/rmZVuK89w3kgY+sP7uUPdFZZghbkFJUM1Xjd2UqzyFL1coq67RDxeZ68L29nPKF3ReA==}
     peerDependencies:
       rspress: '*'
 
@@ -10748,6 +10751,10 @@ snapshots:
 
   rfdc@1.4.1: {}
 
+  rsbuild-plugin-google-analytics@1.0.4(patch_hash=6002602d312e1a83bfd588644f8cd9f9b0d2085841d2809a45e424b4d8e2fdd4)(@rsbuild/core@1.5.12):
+    optionalDependencies:
+      '@rsbuild/core': 1.5.12
+
   rsbuild-plugin-open-graph@1.1.0(@rsbuild/core@1.5.12):
     optionalDependencies:
       '@rsbuild/core': 1.5.12
@@ -10783,14 +10790,6 @@ snapshots:
       - supports-color
 
   rspress-plugin-file-tree@0.4.0(rspress@1.45.6(webpack@5.96.0)):
-    dependencies:
-      '@rspress/shared': 1.45.6
-      rspress: 1.45.6(webpack@5.96.0)
-      rspress-plugin-devkit: 0.3.0(rspress@1.45.6(webpack@5.96.0))
-    transitivePeerDependencies:
-      - supports-color
-
-  rspress-plugin-google-analytics@0.3.0(patch_hash=1cb480ddd858fd8892f5ebc2ee6014c1afa07cc675c67c60a54e9ac803dd71cd)(rspress@1.45.6(webpack@5.96.0)):
     dependencies:
       '@rspress/shared': 1.45.6
       rspress: 1.45.6(webpack@5.96.0)
