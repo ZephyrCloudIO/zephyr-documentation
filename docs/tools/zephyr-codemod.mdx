@@ -11,7 +11,14 @@ The Zephyr Codemod automatically adds Zephyr integration to your existing projec
 
 ## Quick Start
 
-<PackageManagerTabs command="with-zephyr" exec={true} />
+<PackageManagerTabs
+  command={{
+    npm: 'npx with-zephyr',
+    yarn: 'yarn dlx with-zephyr',
+    pnpm: 'pnpx with-zephyr',
+    bun: 'bunx with-zephyr',
+  }}
+/>
 
 ## Options
 

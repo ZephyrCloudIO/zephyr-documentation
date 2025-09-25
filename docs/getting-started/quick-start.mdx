@@ -15,7 +15,14 @@ curl -fsSL https://with.zephyr-cloud.io | node
 
 import { PackageManagerTabs } from '@rspress/core/theme';
 
-<PackageManagerTabs command="with-zephyr" exec={true} />
+<PackageManagerTabs
+  command={{
+    npm: 'npx with-zephyr',
+    yarn: 'yarn dlx with-zephyr',
+    pnpm: 'pnpx with-zephyr',
+    bun: 'bunx with-zephyr',
+  }}
+/>
 
 Our intelligent codemod automatically detects your bundler (Webpack, Vite, Rspack, etc.) and configures Zephyr with zero manual setup. Perfect for adding Zephyr to existing projects without disrupting your workflow.
 

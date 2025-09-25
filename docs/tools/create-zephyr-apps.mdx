@@ -11,7 +11,14 @@ Command-line tool to quickly scaffold new applications with Zephyr integration p
 
 ## Create a new project
 
-<PackageManagerTabs command="create-zephyr-apps@latest my-app" exec={true} />
+<PackageManagerTabs
+  command={{
+    npm: 'npx create-zephyr-apps@latest my-app',
+    yarn: 'yarn create zephyr-apps@latest my-app',
+    pnpm: 'pnpm create zephyr-apps@latest my-app',
+    bun: 'bun create zephyr-apps@latest my-app',
+  }}
+/>
 
 ## Getting Started
 
