@@ -17,18 +17,18 @@ import { Categories, Errors } from './lib/error-codes-messages';
 import { capitalizeFirstLetter } from './lib/utils/casing';
 
 // const TEMP_SEARCH_INDEX_PATH = path.join(__dirname, 'temp-search-index.json');
-const getSearchIndexHash = () => {
-  let searchIndexHash = '';
-  return {
-    setHash: (hash: string) => {
-      searchIndexHash = hash;
-    },
-    getHashedFilename: () =>
-      `search_index.en-US${searchIndexHash ? `.${searchIndexHash}` : ''}.json`,
-  };
-};
+// const getSearchIndexHash = () => {
+//   let searchIndexHash = '';
+//   return {
+//     setHash: (hash: string) => {
+//       searchIndexHash = hash;
+//     },
+//     getHashedFilename: () =>
+//       `search_index.en-US${searchIndexHash ? `.${searchIndexHash}` : ''}.json`,
+//   };
+// };
 
-const searchIndexHelper = getSearchIndexHash();
+// const searchIndexHelper = getSearchIndexHash();
 
 // const zephyrRsbuildPlugin = () => ({
 //   name: 'zephyr-rsbuild-plugin',
@@ -422,10 +422,10 @@ export default defineConfig({
       copy: {
         patterns: [
           { from: 'docs/public' },
-          {
-            from: 'temp-search-index.json',
-            to: () => `static/${searchIndexHelper.getHashedFilename()}`,
-          },
+          // {
+          //   from: 'temp-search-index.json',
+          //   to: () => `static/${searchIndexHelper.getHashedFilename()}`,
+          // },
         ],
       },
     },
