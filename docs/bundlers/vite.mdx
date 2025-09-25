@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@theme';
+import { Tabs, Tab } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Vite
@@ -7,7 +7,7 @@ Deploy your Vite applications to Zephyr Cloud with lightning-fast builds and Mod
 
 :::info Prerequisites
 
-- Finished our [Prerequisites](/introduction/installation) setup guide
+- Finished our [Prerequisites](/getting-started/installation) setup guide
 - Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
 
 :::
@@ -18,27 +18,18 @@ Deploy your Vite applications to Zephyr Cloud with lightning-fast builds and Mod
 
 Install the Vite plugin in your project:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm add --dev vite-plugin-zephyr
-```
-</Tab>
-<Tab>
-```bash
-bun add --dev vite-plugin-zephyr
-```
-</Tab>
-<Tab>
-```bash
-yarn add --dev vite-plugin-zephyr
-```
-</Tab>
-<Tab>
-```bash
-npm install --save-dev vite-plugin-zephyr
-```
-</Tab>
+<Tabs
+  values={[
+    { label: 'pnpm' },
+    { label: 'bun' },
+    { label: 'yarn' },
+    { label: 'npm' },
+  ]}
+>
+  <Tab>```bash pnpm add --dev vite-plugin-zephyr ```</Tab>
+  <Tab>```bash bun add --dev vite-plugin-zephyr ```</Tab>
+  <Tab>```bash yarn add --dev vite-plugin-zephyr ```</Tab>
+  <Tab>```bash npm install --save-dev vite-plugin-zephyr ```</Tab>
 </Tabs>
 
 ## Basic Setup
@@ -52,10 +43,7 @@ import react from '@vitejs/plugin-react';
 import { withZephyr } from 'vite-plugin-zephyr';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    withZephyr(),
-  ],
+  plugins: [react(), withZephyr()],
 });
 ```
 
@@ -68,10 +56,7 @@ import react from '@vitejs/plugin-react';
 import { withZephyr } from 'vite-plugin-zephyr';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    withZephyr(),
-  ],
+  plugins: [react(), withZephyr()],
 });
 ```
 
@@ -98,10 +83,7 @@ const mfConfig: ModuleFederationOptions = {
 };
 
 export default defineConfig({
-  plugins: [
-    react(),
-    withZephyr({ mfConfig })
-  ],
+  plugins: [react(), withZephyr({ mfConfig })],
 });
 ```
 
@@ -128,9 +110,6 @@ const mfConfig: ModuleFederationOptions = {
 };
 
 export default defineConfig({
-  plugins: [
-    react(),
-    withZephyr({ mfConfig })
-  ],
+  plugins: [react(), withZephyr({ mfConfig })],
 });
 ```

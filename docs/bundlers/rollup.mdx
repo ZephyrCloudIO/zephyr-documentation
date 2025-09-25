@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@theme';
+import { Tabs, Tab } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Rollup
@@ -7,7 +7,7 @@ Deploy your Rollup applications to Zephyr Cloud with optimized bundling and Modu
 
 :::info Prerequisites
 
-- Finished our [Prerequisites](/introduction/installation) setup guide
+- Finished our [Prerequisites](/getting-started/installation) setup guide
 - Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
 
 :::
@@ -18,27 +18,18 @@ Deploy your Rollup applications to Zephyr Cloud with optimized bundling and Modu
 
 Install the Rollup plugin in your project:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm add --dev rollup-plugin-zephyr
-```
-</Tab>
-<Tab>
-```bash
-bun add --dev rollup-plugin-zephyr
-```
-</Tab>
-<Tab>
-```bash
-yarn add --dev rollup-plugin-zephyr
-```
-</Tab>
-<Tab>
-```bash
-npm install --save-dev rollup-plugin-zephyr
-```
-</Tab>
+<Tabs
+  values={[
+    { label: 'pnpm' },
+    { label: 'bun' },
+    { label: 'yarn' },
+    { label: 'npm' },
+  ]}
+>
+  <Tab>```bash pnpm add --dev rollup-plugin-zephyr ```</Tab>
+  <Tab>```bash bun add --dev rollup-plugin-zephyr ```</Tab>
+  <Tab>```bash yarn add --dev rollup-plugin-zephyr ```</Tab>
+  <Tab>```bash npm install --save-dev rollup-plugin-zephyr ```</Tab>
 </Tabs>
 
 ## Quick Start
@@ -61,12 +52,7 @@ export default defineConfig({
     entryFileNames: '[name].[hash].js',
     chunkFileNames: '[name].[hash].js',
   },
-  plugins: [
-    resolve(),
-    commonjs(),
-    typescript(),
-    zephyrPlugin(),
-  ],
+  plugins: [resolve(), commonjs(), typescript(), zephyrPlugin()],
 });
 ```
 

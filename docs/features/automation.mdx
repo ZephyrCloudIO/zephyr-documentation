@@ -78,7 +78,7 @@ stages:
   - deploy
 
 variables:
-  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  npm_config_cache: '$CI_PROJECT_DIR/.npm'
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -133,15 +133,18 @@ When the Zephyr plugin detects the `ZE_SECRET_TOKEN` environment variable, it wi
 ## Troubleshooting
 
 ### Token not found
+
 - Ensure the variable name is exactly `ZE_SECRET_TOKEN`
 - Verify the variable is available in the job environment
 - Check that the token hasn't expired
 
 ### GitHub Actions Issues
+
 - Make sure the secret is added to the correct repository
 - Verify the secret name matches what's referenced in the workflow
 
 ### GitLab CI/CD Issues
+
 - If using protected variables, ensure your pipeline runs on protected branches
 - Masked variables won't appear in logs (recommended for security)
 - Check variable scope matches your branch/environment

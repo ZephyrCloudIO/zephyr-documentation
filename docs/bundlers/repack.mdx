@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@theme';
+import { Tabs, Tab } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Re.Pack (React Native)
@@ -7,7 +7,7 @@ Deploy your React Native applications with Module Federation to Zephyr Cloud usi
 
 :::info Prerequisites
 
-- Finished our [Prerequisites](/introduction/installation) setup guide
+- Finished our [Prerequisites](/getting-started/installation) setup guide
 - Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
 
 :::
@@ -18,27 +18,18 @@ Deploy your React Native applications with Module Federation to Zephyr Cloud usi
 
 Install the Re.Pack plugin in your project:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm add --dev zephyr-repack-plugin
-```
-</Tab>
-<Tab>
-```bash
-bun add --dev zephyr-repack-plugin
-```
-</Tab>
-<Tab>
-```bash
-yarn add --dev zephyr-repack-plugin
-```
-</Tab>
-<Tab>
-```bash
-npm install --save-dev zephyr-repack-plugin
-```
-</Tab>
+<Tabs
+  values={[
+    { label: 'pnpm' },
+    { label: 'bun' },
+    { label: 'yarn' },
+    { label: 'npm' },
+  ]}
+>
+  <Tab>```bash pnpm add --dev zephyr-repack-plugin ```</Tab>
+  <Tab>```bash bun add --dev zephyr-repack-plugin ```</Tab>
+  <Tab>```bash yarn add --dev zephyr-repack-plugin ```</Tab>
+  <Tab>```bash npm install --save-dev zephyr-repack-plugin ```</Tab>
 </Tabs>
 
 ## Basic Setup
@@ -123,7 +114,7 @@ Configure shared dependencies to ensure single instances of critical modules lik
 ```javascript
 // rspack.config.js
 const getSharedDependencies = ({ eager }) => ({
-  'react': { singleton: true, eager },
+  react: { singleton: true, eager },
   'react-native': { singleton: true, eager },
   '@react-navigation/native': { singleton: true, eager },
   '@react-navigation/stack': { singleton: true, eager },

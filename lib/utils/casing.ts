@@ -4,7 +4,7 @@ export function capitalizeFirstLetter(str: string) {
 
 export function toTitleCase(str: string) {
   return str
-    .split("_")
+    .split('_')
     .map((word) => capitalizeFirstLetter(word))
-    .join(" ");
+    .join(' ');
 }

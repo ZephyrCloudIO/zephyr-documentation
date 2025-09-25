@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@theme';
+import { Tabs, Tab } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Rslib
@@ -7,7 +7,7 @@ Deploy your JavaScript/TypeScript libraries to Zephyr Cloud using Rslib. Built o
 
 :::info Prerequisites
 
-- Finished our [Prerequisites](/introduction/installation) setup guide
+- Finished our [Prerequisites](/getting-started/installation) setup guide
 - Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
 
 :::
@@ -18,27 +18,18 @@ Deploy your JavaScript/TypeScript libraries to Zephyr Cloud using Rslib. Built o
 
 Install the Rsbuild plugin in your Rslib project:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm add --dev zephyr-rsbuild-plugin
-```
-</Tab>
-<Tab>
-```bash
-bun add --dev zephyr-rsbuild-plugin
-```
-</Tab>
-<Tab>
-```bash
-yarn add --dev zephyr-rsbuild-plugin
-```
-</Tab>
-<Tab>
-```bash
-npm install --save-dev zephyr-rsbuild-plugin
-```
-</Tab>
+<Tabs
+  values={[
+    { label: 'pnpm' },
+    { label: 'bun' },
+    { label: 'yarn' },
+    { label: 'npm' },
+  ]}
+>
+  <Tab>```bash pnpm add --dev zephyr-rsbuild-plugin ```</Tab>
+  <Tab>```bash bun add --dev zephyr-rsbuild-plugin ```</Tab>
+  <Tab>```bash yarn add --dev zephyr-rsbuild-plugin ```</Tab>
+  <Tab>```bash npm install --save-dev zephyr-rsbuild-plugin ```</Tab>
 </Tabs>
 
 ## Configuration
@@ -139,52 +130,34 @@ my-library/
 
 Start development mode with watch:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm dev
-```
-</Tab>
-<Tab>
-```bash
-bun run dev
-```
-</Tab>
-<Tab>
-```bash
-yarn dev
-```
-</Tab>
-<Tab>
-```bash
-npm run dev
-```
-</Tab>
+<Tabs
+  values={[
+    { label: 'pnpm' },
+    { label: 'bun' },
+    { label: 'yarn' },
+    { label: 'npm' },
+  ]}
+>
+  <Tab>```bash pnpm dev ```</Tab>
+  <Tab>```bash bun run dev ```</Tab>
+  <Tab>```bash yarn dev ```</Tab>
+  <Tab>```bash npm run dev ```</Tab>
 </Tabs>
 
 Build for production:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm build
-```
-</Tab>
-<Tab>
-```bash
-bun run build
-```
-</Tab>
-<Tab>
-```bash
-yarn build
-```
-</Tab>
-<Tab>
-```bash
-npm run build
-```
-</Tab>
+<Tabs
+  values={[
+    { label: 'pnpm' },
+    { label: 'bun' },
+    { label: 'yarn' },
+    { label: 'npm' },
+  ]}
+>
+  <Tab>```bash pnpm build ```</Tab>
+  <Tab>```bash bun run build ```</Tab>
+  <Tab>```bash yarn build ```</Tab>
+  <Tab>```bash npm run build ```</Tab>
 </Tabs>
 
 ## TypeScript Support
@@ -232,8 +205,8 @@ export default defineConfig({
       format: 'esm',
       dts: true,
       autoExternal: false, // Bundle dependencies
-      bundle: true,        // Enable bundling
-      minify: true,        // Minify output
+      bundle: true, // Enable bundling
+      minify: true, // Minify output
       output: {
         distPath: {
           root: 'dist',

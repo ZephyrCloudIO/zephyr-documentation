@@ -1,5 +1,5 @@
-import React from "react";
-import type { SVGProps } from "react";
+import React from 'react';
+import type { SVGProps } from 'react';
 
 export function AWSIcon(props: SVGProps<SVGSVGElement>) {
   return (

@@ -2,7 +2,7 @@
  * Some common css theme variables and they will be used in the tailwind theme as well.
  */
 
-@import url("./fonts.css");
+@import url('./fonts.css');
 :root {
   /*--rp-nav-height: 72px;*/
   /*--rp-sidebar-width: 320px;*/
@@ -107,7 +107,7 @@ dd {
 }
 
 .keyboard-shortcut {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.4;
@@ -145,23 +145,23 @@ dd {
   gap: 1rem !important;
 }
 
-.rspress-doc-footer [class*="prev_"],
-.rspress-doc-footer [class*="next_"] {
+.rspress-doc-footer [class*='prev_'],
+.rspress-doc-footer [class*='next_'] {
   flex: 1 1 50% !important;
   width: 50% !important;
   min-width: 0 !important;
 }
 
-.rspress-doc-footer [class*="prev_"] {
+.rspress-doc-footer [class*='prev_'] {
   text-align: left !important;
 }
 
-.rspress-doc-footer [class*="next_"] {
+.rspress-doc-footer [class*='next_'] {
   text-align: right !important;
 }
 
-.rspress-doc-footer [class*="prev_"] a,
-.rspress-doc-footer [class*="next_"] a {
+.rspress-doc-footer [class*='prev_'] a,
+.rspress-doc-footer [class*='next_'] a {
   width: 100% !important;
   display: block !important;
 }

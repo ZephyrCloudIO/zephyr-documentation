@@ -3,16 +3,15 @@ title: React + Rsbuild
 description: Zephyr Cloud Documentation - React with Rsbuild guide
 ---
 
-import SupportedBrowser from "../../components/browser-table";
+import SupportedBrowser from '../../components/browser-table';
 import { DrawingPinIcon } from '@radix-ui/react-icons';
-import { Image } from "../../components/ui/image";
-import { Keyboard } from "../../components/ui/keyboard";
-import { SourceCode, Tabs, Tab } from '@theme';
-import { Card } from "../../components/ui/card";
-import BuildAuthInfo from "../../components/build-auth-info.mdx";
+import { Image } from '../../components/ui/image';
+import { Keyboard } from '../../components/ui/keyboard';
+import { SourceCode, Tabs, Tab } from '@rspress/core/theme';
+import { Card } from '../../components/ui/card';
+import BuildAuthInfo from '../../components/build-auth-info.mdx';
 
 # React + Rsbuild
-
 
 :::info Prerequisites
 
@@ -34,12 +33,14 @@ npm create rsbuild@latest my-rsbuild-app
 ```
 
 Select these options:
+
 ```bash title="Terminal"
 ? Select framework: React
 ? Select language: TypeScript
 ```
 
 Navigate to your project:
+
 ```bash title="Terminal"
 cd my-rsbuild-app
 ```
@@ -137,7 +138,7 @@ export default defineConfig({
 ### Next Steps
 
 - Explore [Module Federation Guide](/tutorials/mf-guide) for advanced microfrontend patterns
-- Learn about [Environment Management](/features/environments) for different deployment stages
+- Learn about [Environment Management](/features/tags-environments) for different deployment stages
 - Set up [GitHub Automations](/features/automation) for CI/CD integration
 
 ### Troubleshooting
@@ -146,6 +147,6 @@ If you encounter issues:
 
 1. **Build fails**: Ensure you have the latest version of `zephyr-rsbuild-plugin`
 2. **Module Federation errors**: Make sure the Zephyr plugin is added after the Module Federation plugin
-3. **Authentication issues**: Check your Zephyr Cloud authentication with our [browser extension](/features/browser-extension)
+3. **Authentication issues**: Check your Zephyr Cloud authentication with our [browser extension](/tools/browser-extension)
 
 For more help, visit our [Discord community](https://zephyr-cloud.io/discord) or check our [error codes documentation](/errors).

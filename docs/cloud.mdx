@@ -4,10 +4,10 @@ description: With Zephyr's bring your own cloud feature, you can use Zephyr with
 ---
 
 import { Button } from '../components/ui/button.tsx';
-import { Steps, Badge } from '@theme';
+import { Steps, Badge } from '@rspress/core/theme';
 import { Separator } from '../components/ui/separator.tsx';
 import { CardLayout } from '../components/ui/card-layout';
-import { CloudProviderCards } from "../components/cloud-provider"
+import { CloudProviderCards } from '../components/cloud-provider';
 
 # Manage Cloud Providers on Zephyr
 
@@ -17,10 +17,10 @@ With BYOC, users are able to _manage configuration_, _understand the underlying 
 
 Users belong to an organization can manage and configure cloud providers on Zephyr's [dashboard](https://app.zephyr-cloud.io), and user's organization gets connected with cloud provider account by creating an integration under **Deployment Integration** tab.
 
-## Choose your Cloud provider 
+## Choose your Cloud provider
 
 <CardLayout>
-<CloudProviderCards/>
+  <CloudProviderCards />
 </CardLayout>
 
 ## About Deployment Integrations
@@ -47,7 +47,7 @@ For detailed instructions on updating your deployment integrations, see our [Upd
 Zephyr regularly releases updates to deployment integrations that provide:
 
 - **New Features**: Access to the latest Zephyr capabilities and cloud provider features
-- **Performance Improvements**: Faster deployments and better resource utilization  
+- **Performance Improvements**: Faster deployments and better resource utilization
 - **Security Updates**: Latest security patches and compliance improvements
 - **Bug Fixes**: Resolution of known issues and edge cases
 - **Compatibility**: Support for new versions of bundlers and frameworks

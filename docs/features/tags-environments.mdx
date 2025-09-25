@@ -22,22 +22,27 @@ For example, you might create a "production" tag that always points to the lates
 Tags use flexible condition rules to decide which version to serve. You can combine multiple conditions using "AND" and "OR" logic:
 
 **Branch-based tags**: Point to versions from specific git branches
+
 - Perfect for environment-specific deployments
 - Example: All versions from "main" branch
 
 **User-based tags**: Point to versions built by specific team members
+
 - Great for personal development environments
 - Example: All versions built by "john@company.com"
 
 **CI/CD tags**: Distinguish between automated and manual builds
+
 - Useful for separating production from development builds
 - Example: Only CI-built versions vs only manually built versions
 
 **Git tag matching**: Point to versions that match semantic versioning patterns
+
 - Essential for release management
 - Example: All versions tagged like "v1.2.3"
 
 **Platform targeting**: Point to versions built for specific platforms
+
 - Important for multi-platform applications
 - Example: Web versions vs mobile versions
 

@@ -1,10 +1,9 @@
 ---
-title: Add Zephyr to an existing application 
+title: Add Zephyr to an existing application
 description: Zephyr Cloud Documentation - How to add Zephyr to existing application, using React, webpack and Nx as an example
 ---
 
-
-import { Tabs, Tab } from '@theme';
+import { Tabs, Tab } from '@rspress/core/theme';
 import BuildAuthInfo from '../../components/build-auth-info.mdx';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
@@ -19,7 +18,6 @@ import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 :::
 
-
 ## Integrating Zephyr into an Existing Application
 
 If you already have an application and wish to enhance it with Zephyr Cloud, we have designed the integration process to be as straightforward as possible. Here's how you can seamlessly incorporate Zephyr into your existing setup:
@@ -27,16 +25,13 @@ If you already have an application and wish to enhance it with Zephyr Cloud, we 
 ### 1. Add Zephyr as a dependency
 
 Install the package via NPM:
-<Tabs values={[{label:"Rspack"}, {label: 'webpack'}]}>
+
+<Tabs values={[{ label: 'Rspack' }, { label: 'webpack' }]}>
   <Tab>
-  ```bash filename="Terminal"
-  npm i zephyr-rspack-plugin@latest --save
-  ```
+    ```bash filename="Terminal" npm i zephyr-rspack-plugin@latest --save ```
   </Tab>
   <Tab>
-  ```bash filename="Terminal"
-  npm i zephyr-webpack-plugin@latest --save
-  ```
+    ```bash filename="Terminal" npm i zephyr-webpack-plugin@latest --save ```
   </Tab>
 </Tabs>
 
@@ -48,7 +43,7 @@ Wrap your existing configuration settings with the necessary modifications.
   <Tab>
   For Nx projects that utilize compose plugins, integrating Zephyr is straightforward and requires adding just one more plugin. To ensure proper functionality, Zephyr should be positioned as the last plugin in the composition.
 
-  Here is how you can configure it in your `webpack.config.js`:
+Here is how you can configure it in your `webpack.config.js`:
 
     ```diff filename="webpack.config.js"
     + const {withZephyr} = require('zephyr-webpack-plugin');
@@ -79,10 +74,10 @@ Wrap your existing configuration settings with the necessary modifications.
 
 ### Building the Application
 
-Initiate the build process for your application to activate Zephyr.  
+Initiate the build process for your application to activate Zephyr.
 
 <BuildAuthInfo />
 
 Once logged in, you can begin developing with Zephyr.
 
-Read more about Vite in [React + Vite](/recipes/react-vite) and [Vite + Rspack + Webpack with Module Federation](/recipes/vite-rspack-webpack-mf). 
+Read more about Vite in [React + Vite](/integrations/react-vite) and [Vite + Rspack + Webpack with Module Federation](/integrations/vite-rspack-webpack-mf).

@@ -2,8 +2,8 @@ export const Video = ({ src, title }: { src: string; title: string }) => {
   return (
     <div
       style={{
-        position: "relative",
-        paddingBottom: "64.67065868263472%",
+        position: 'relative',
+        paddingBottom: '64.67065868263472%',
         height: 0,
       }}
     >
@@ -13,11 +13,11 @@ export const Video = ({ src, title }: { src: string; title: string }) => {
         frameBorder="0"
         allowFullScreen
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
-          width: "100%",
-          height: "100%",
+          width: '100%',
+          height: '100%',
         }}
       />
     </div>

@@ -7,9 +7,9 @@ export const Keyboard = ({ shortcuts }: { shortcuts: string | string[] }) => {
         shortcuts.map((shortcut, index) => {
           return (
             <div key={index}>
-              {" "}
+              {' '}
               <span className="keyboard-shortcut">{shortcut}</span>
-              <span>{index === shortcuts.length - 1 ? " " : " + "}</span>
+              <span>{index === shortcuts.length - 1 ? ' ' : ' + '}</span>
             </div>
           );
         })

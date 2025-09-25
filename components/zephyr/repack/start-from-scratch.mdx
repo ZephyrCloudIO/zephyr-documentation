@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@theme';
+import { Tabs, Tab } from '@rspress/core/theme';
 import { Badge } from '../../ui/badge';
 import { Image } from '../../ui/image';
 import BuildAuthInfo from '../../build-auth-info.mdx';
@@ -6,22 +6,24 @@ import CodemodDisclaimer from '../../codemod-disclaimer.mdx';
 
 <CodemodDisclaimer />
 
-In this section, we will guide you through the process of starting a new React Native application powered by Module Federation. The app will include a simple host application and a remote application. 
+In this section, we will guide you through the process of starting a new React Native application powered by Module Federation. The app will include a simple host application and a remote application.
 
-We will use the [repack-init cli](https://github.com/callstack/repack) provided by [Callstack](https://callstack.com/): 
+We will use the [repack-init cli](https://github.com/callstack/repack) provided by [Callstack](https://callstack.com/):
 
-To start with, create a new directory and run the following command:  
+To start with, create a new directory and run the following command:
 
 ```bash
-mkdir ZephyrRepackPlayground 
-cd ZephyrRepackPlayground 
+mkdir ZephyrRepackPlayground
+cd ZephyrRepackPlayground
 git init
-pnpm init 
+pnpm init
 ```
+
 **If this is a new repo, remember to set a remote origin for your git repository and create your first commit before running a build.**
 
-And then run the repack init command twice: 
-```bash 
+And then run the repack init command twice:
+
+```bash
 npx @callstack/repack-init
 ```
 
@@ -37,7 +39,7 @@ For the first app we will call it **`HostApp`**
 │  Rspack
 ```
 
-When you run the command for the second time, we will call it **`MiniApp`**. 
+When you run the command for the second time, we will call it **`MiniApp`**.
 
 ```bash
 ┌  RE.PACK INIT
@@ -49,24 +51,24 @@ When you run the command for the second time, we will call it **`MiniApp`**.
 │  Rspack
 ```
 
-Now if you enter both application's directory and run below commands: 
+Now if you enter both application's directory and run below commands:
 
-```bash 
-cd HostApp 
-npm install 
+```bash
+cd HostApp
+npm install
 npx pod-install
 npm run ios
 ```
 
-At this stage, both of your HostApp and MiniApp's `rspack.config.mjs` files should looks like this: 
+At this stage, both of your HostApp and MiniApp's `rspack.config.mjs` files should looks like this:
 
 <details>
 <summary> Default build config <Badge variant="default">Info</Badge></summary>
 
 ```js title="rspack.config.mjs"
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import * as Repack from "@callstack/repack";
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import * as Repack from '@callstack/repack';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -80,7 +82,7 @@ const __dirname = path.dirname(__filename);
 
 export default {
   context: __dirname,
-  entry: "./index.js",
+  entry: './index.js',
   resolve: {
     ...Repack.getResolveOptions(),
   },
@@ -96,20 +98,17 @@ export default {
 
 </details>
 
+## Modify the `HostApp`
 
-## Modify the `HostApp` 
+#### Build configuration
 
-
-#### Build configuration 
-
-Open the `rspack.config.mjs` file in `HostApp` and modify the `build` configuration to include the following: 
-
+Open the `rspack.config.mjs` file in `HostApp` and modify the `build` configuration to include the following:
 
 ```js title="HostApp/rspack.config.mjs"{4,15,68}
 import path from 'node:path';
-import {fileURLToPath} from 'node:url';
+import { fileURLToPath } from 'node:url';
 import * as Repack from '@callstack/repack';
-import {withZephyr} from 'zephyr-repack-plugin';
+import { withZephyr } from 'zephyr-repack-plugin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -120,66 +119,64 @@ const __dirname = path.dirname(__filename);
  * Learn about Re.Pack configuration: https://re-pack.dev/docs/guides/configuration
  */
 
-export default withZephyr()(env => {
-  const { platform, mode } = env
+export default withZephyr()((env) => {
+  const { platform, mode } = env;
   return {
     context: __dirname,
     entry: './index.js',
-  resolve: {
-    // 1. Understand the file path of ios and android file extensions
-    // 2. Configure the output to be as close to Metro as possible
-    ...Repack.getResolveOptions(),
-  },
-  output: {
-    // Unsure - for module federation HMR and runtime? 
-    uniqueName: 'react-native-host-app',
-  },
-  module: {
-    rules: [
-      ...Repack.getJsTransformRules(),
-      ...Repack.getAssetTransformRules(),
-    ],
-  },
-  plugins: [
-    new Repack.RepackPlugin({
-      platform,
-    }),
-    new Repack.plugins.ModuleFederationPluginV2({
-      name: 'HostApp',
-      filename: 'HostApp.container.js.bundle',
-      dts: false,
-      remotes: {
-        MiniApp: `MiniApp@http://localhost:9001/${platform}/MiniApp.container.js.bundle`,
-      },
-      shared: {
-        react: {
-          singleton: true,
-          version: '19.0.0',
-          eager: true,
+    resolve: {
+      // 1. Understand the file path of ios and android file extensions
+      // 2. Configure the output to be as close to Metro as possible
+      ...Repack.getResolveOptions(),
+    },
+    output: {
+      // Unsure - for module federation HMR and runtime?
+      uniqueName: 'react-native-host-app',
+    },
+    module: {
+      rules: [
+        ...Repack.getJsTransformRules(),
+        ...Repack.getAssetTransformRules(),
+      ],
+    },
+    plugins: [
+      new Repack.RepackPlugin({
+        platform,
+      }),
+      new Repack.plugins.ModuleFederationPluginV2({
+        name: 'HostApp',
+        filename: 'HostApp.container.js.bundle',
+        dts: false,
+        remotes: {
+          MiniApp: `MiniApp@http://localhost:9001/${platform}/MiniApp.container.js.bundle`,
         },
-        'react-native': {
-          singleton: true,
-          version: '0.78.0',
-          eager: true,
-        }
-      },
-    }),
-    // Supports for new architecture - Hermes can also use JS, it's not a requirement, it will still work the same but it's for performance optimization
-    new Repack.plugins.HermesBytecodePlugin({
-      enabled: mode === 'production',
-      test: /\.(js)?bundle$/,
-      exclude: /index.bundle$/,
-    }),
-  ],
-
-  }
+        shared: {
+          react: {
+            singleton: true,
+            version: '19.0.0',
+            eager: true,
+          },
+          'react-native': {
+            singleton: true,
+            version: '0.78.0',
+            eager: true,
+          },
+        },
+      }),
+      // Supports for new architecture - Hermes can also use JS, it's not a requirement, it will still work the same but it's for performance optimization
+      new Repack.plugins.HermesBytecodePlugin({
+        enabled: mode === 'production',
+        test: /\.(js)?bundle$/,
+        exclude: /index.bundle$/,
+      }),
+    ],
+  };
 });
-
 ```
 
-#### Modify consuming app 
+#### Modify consuming app
 
-Within the `HostApp` folder, adjust `App.tsx` to include the following to consume the button from`MiniApp`: 
+Within the `HostApp` folder, adjust `App.tsx` to include the following to consume the button from`MiniApp`:
 
 ```tsx title="src/App.tsx"
 /**
@@ -225,7 +222,8 @@ function Section({ children, title }: SectionProps): React.JSX.Element {
           {
             color: isDarkMode ? Colors.white : Colors.black,
           },
-        ]}>
+        ]}
+      >
         {title}
       </Text>
       <Text
@@ -234,7 +232,8 @@ function Section({ children, title }: SectionProps): React.JSX.Element {
           {
             color: isDarkMode ? Colors.light : Colors.dark,
           },
-        ]}>
+        ]}
+      >
         {children}
       </Text>
     </View>
@@ -265,8 +264,7 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        style={backgroundStyle}>
+      <ScrollView style={backgroundStyle}>
         <View style={{ paddingRight: safePadding }}>
           <Header />
         </View>
@@ -275,7 +273,8 @@ function App(): React.JSX.Element {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
             paddingHorizontal: safePadding,
             paddingBottom: safePadding,
-          }}>
+          }}
+        >
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.
@@ -317,14 +316,11 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
 ```
 
+## Modify the `MiniApp`
 
-## Modify the `MiniApp` 
-
-Open the `App.tsx` file in `MiniApp` and modify it as below to expose a button to the `HostApp`: 
-
+Open the `App.tsx` file in `MiniApp` and modify it as below to expose a button to the `HostApp`:
 
 ```tsx title="src/App.tsx"
 /**
@@ -342,9 +338,7 @@ import {
   useColorScheme,
 } from 'react-native';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -355,17 +349,15 @@ function App(): React.JSX.Element {
   };
 
   return (
-    <TouchableOpacity
-      style={styles.button}
-      onPress={handlePress}
-    >
+    <TouchableOpacity style={styles.button} onPress={handlePress}>
       <Text
         style={[
           styles.buttonText,
           {
             color: isDarkMode ? Colors.white : Colors.black,
           },
-        ]}>
+        ]}
+      >
         MiniApp Button +{count}
       </Text>
     </TouchableOpacity>
@@ -388,22 +380,20 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
 ```
 
-#### Build configuration 
+#### Build configuration
 
-Open the `rspack.config.mjs` in `MiniApp` and modify it as below: 
+Open the `rspack.config.mjs` in `MiniApp` and modify it as below:
 
 ```js title="MiniApp/rspack.config.mjs"{4,19,68}
 import path from 'node:path';
-import {fileURLToPath} from 'node:url';
+import { fileURLToPath } from 'node:url';
 import * as Repack from '@callstack/repack';
-import {withZephyr} from 'zephyr-repack-plugin';
+import { withZephyr } from 'zephyr-repack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 const STANDALONE = Boolean(process.env.STANDALONE);
 
@@ -414,8 +404,8 @@ const STANDALONE = Boolean(process.env.STANDALONE);
  * Learn about Re.Pack configuration: https://re-pack.dev/docs/guides/configuration
  */
 
-export default withZephyr()(env => {
-  const {platform, mode} = env;
+export default withZephyr()((env) => {
+  const { platform, mode } = env;
   return {
     mode,
     context: __dirname,
@@ -429,7 +419,7 @@ export default withZephyr()(env => {
     module: {
       rules: [
         ...Repack.getJsTransformRules(),
-        ...Repack.getAssetTransformRules({inline: true}),
+        ...Repack.getAssetTransformRules({ inline: true }),
       ],
     },
     plugins: [
@@ -461,15 +451,12 @@ export default withZephyr()(env => {
       }),
     ],
   };
-
- 
 });
-
 ```
-## Set up scripts 
 
-In HostApp's `package.json`, add the following scripts: 
+## Set up scripts
 
+In HostApp's `package.json`, add the following scripts:
 
 ```json title="HostApp/package.json"
 
@@ -486,7 +473,7 @@ In HostApp's `package.json`, add the following scripts:
   },
 ```
 
-In MiniApp's `package.json`, add the following scripts: 
+In MiniApp's `package.json`, add the following scripts:
 
 ```json title="MiniApp/package.json"
 "scripts": {
@@ -503,9 +490,7 @@ In MiniApp's `package.json`, add the following scripts:
   },
 ```
 
-
-## Running the application 
-
+## Running the application
 
 Take running the ios app as an example. Firstly we need to bundle the ios application and start the emulator:
 
@@ -514,9 +499,9 @@ pnpm --filter HostApp run ios
 ```
 
 :::note{title="Platform inference"}
-Passing in `--platform ios` or `--platform android` is recommended as it will start the dev server for the specific platform. Zephyr resolves MiniApps by `platform` inferred from the `react-native start` command. 
+Passing in `--platform ios` or `--platform android` is recommended as it will start the dev server for the specific platform. Zephyr resolves MiniApps by `platform` inferred from the `react-native start` command.
 
-If you opted to only run `react-native start`, you will be spawning two dev servers, one for iOS and one for Android, regardless whether the emulator is running iOS or Android. 
+If you opted to only run `react-native start`, you will be spawning two dev servers, one for iOS and one for Android, regardless whether the emulator is running iOS or Android.
 
 :::
 
@@ -526,18 +511,19 @@ Then we can run the dev server for both host and mini app. The same command will
 pnpm --filter MiniApp start --platform ios
 ```
 
-Without Zephyr, running MiniApps within a React Native application require you to run the dev server for both host and mini app. But with Zephyr, you can run any application standalone. 
+Without Zephyr, running MiniApps within a React Native application require you to run the dev server for both host and mini app. But with Zephyr, you can run any application standalone.
 
-```bash 
+```bash
 pnpm --filter MiniApp start:standalone --platform ios
 ```
 
-
-
 <BuildAuthInfo />
 
-You should see the applicaiton running in the iOS emulator: 
+You should see the applicaiton running in the iOS emulator:
 
-<Image src="/host-app-ios.webp" alt="Zephyr Cloud Minimal example running in iOS emulator" />
+<Image
+  src="/host-app-ios.webp"
+  alt="Zephyr Cloud Minimal example running in iOS emulator"
+/>
 
-The process should be the same for Android. 
+The process should be the same for Android.

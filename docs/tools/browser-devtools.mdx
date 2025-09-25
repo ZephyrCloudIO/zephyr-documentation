@@ -3,8 +3,8 @@ title: Zephyr Devtools
 description: Advanced debugging and performance analysis for your micro-frontend applications
 ---
 
-import { Tabs, Tab } from '@theme';
-import { Button } from "../../components/ui/button"
+import { Tabs, Tab } from '@rspress/core/theme';
+import { Button } from '../../components/ui/button';
 
 # Zephyr Devtools
 
@@ -14,8 +14,12 @@ The Zephyr Devtools provide advanced debugging and performance analysis capabili
 
 The devtools are part of the **Zephyr Chrome Extension**:
 
-<a href="https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn" target="_blank" rel="noreferrer">
-<Button variant="outline">Download Browser Extension Now</Button>
+<a
+  href="https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn"
+  target="_blank"
+  rel="noreferrer"
+>
+  <Button variant="outline">Download Browser Extension Now</Button>
 </a>
 
 1. **Install** the [Zephyr Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
@@ -30,6 +34,7 @@ The extension provides both a **side panel** for deployment management and dedic
 <Tab label="Applications">
 
 **Module Detection & Management**
+
 - Automatically detects federated modules via `__FEDERATION__` globals
 - Live module override and version switching
 - Real-time module status monitoring
@@ -39,6 +44,7 @@ The extension provides both a **side panel** for deployment management and dedic
 <Tab label="Performance">
 
 **Comprehensive Metrics Collection**
+
 - Bundle size analysis with compression ratios
 - Network timing breakdown (TTFB, download times)
 - Web Vitals tracking (First Paint, Layout Shift)
@@ -48,6 +54,7 @@ The extension provides both a **side panel** for deployment management and dedic
 <Tab label="Dependencies">
 
 **Module Relationship Visualization**
+
 - Dependency tree visualization
 - Module federation relationship mapping
 - Shared dependency analysis
@@ -57,6 +64,7 @@ The extension provides both a **side panel** for deployment management and dedic
 <Tab label="Settings">
 
 **DevTools Configuration**
+
 - Debug mode toggles
 - Performance monitoring controls
 - Extension behavior settings
@@ -95,12 +103,14 @@ The extension provides both a **side panel** for deployment management and dedic
 The Zephyr extension provides two complementary interfaces:
 
 **Side Panel** (Browser Action):
+
 - Environment and deployment management
 - Version switching and live reload
 - Authentication and settings
 - Always accessible deployment controls
 
 **DevTools Panels** (Chrome DevTools):
+
 - Deep debugging and performance analysis
 - Module federation internals inspection
 - Advanced dependency visualization
@@ -109,15 +119,19 @@ The Zephyr extension provides two complementary interfaces:
 ## Practical Use Cases
 
 ### Performance Debugging
+
 When your application loads slowly, use the Performance tab to identify bottleneck modules, analyze bundle sizes, and optimize loading strategies.
 
 ### Module Integration Testing
+
 Use the Applications tab to switch between different versions of federated modules, testing integration scenarios without deploying changes.
 
 ### Dependency Analysis
+
 Visualize complex module relationships in the Dependencies tab to understand how your micro-frontends interact and identify potential optimization opportunities.
 
 ### Development Workflow
+
 Combine the side panel's deployment controls with the devtools' debugging capabilities for a complete development and debugging workflow.
 
 The Zephyr Devtools transform micro-frontend debugging from guesswork into precise, data-driven analysis, making it easier to build and maintain complex federated applications.

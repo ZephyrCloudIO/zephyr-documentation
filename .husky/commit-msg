@@ -1,1 +1,1 @@
-npx commitlint -g .sdlc-config/commitlint.config.js --edit $1
+pnpm run commitlint ${1}

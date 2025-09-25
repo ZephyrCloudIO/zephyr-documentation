@@ -9,6 +9,7 @@ Set up your development environment for Zephyr Cloud development.
 - **Chrome**: [Install Zephyr Mission Control](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
 
 The Zephyr Mission Control extension provides:
+
 - **Real-time deployment monitoring** - See your builds deploy instantly
 - **Environment management** - Switch between dev, staging, and production
 - **Debug tools** - Inspect module federation and remote modules
@@ -24,6 +25,7 @@ Before you can start using Zephyr, make sure you have the following tools instal
 Zephyr requires **Node.js version 18 or higher**. We recommend using Node.js 24+ for the best experience.
 
 **Quick Check:**
+
 ```bash
 node --version
 # Should output v18.0.0 or higher
@@ -36,13 +38,14 @@ If you don't have Node.js installed refer below to [Node Version Manager](#node-
 You'll need a package manager to install Zephyr plugins and dependencies. We recommend them in this order:
 
 1. **pnpm** (most recommended)
-2. **bun** (fast alternative) 
+2. **bun** (fast alternative)
 3. **yarn** (stable option)
 4. **npm** (comes with Node.js)
 
 ### Git
 
 Git is required for version control and some Zephyr workflows:
+
 ```bash
 git --version
 # Should output git version 2.x.x or higher
@@ -55,6 +58,7 @@ Install Git from [git-scm.com](https://git-scm.com/) if needed.
 ### Why Use a Version Manager?
 
 Different projects may require different Node.js versions. Version managers allow you to:
+
 - Switch between Node.js versions instantly
 - Maintain project-specific Node versions
 - Avoid version conflicts between projects
@@ -68,6 +72,7 @@ Different projects may require different Node.js versions. Version managers allo
 2. **Restart your terminal** or reload your profile
 
 3. **Install and use Node.js 24:**
+
    ```bash
    nvm install 24
    nvm use 24
@@ -97,6 +102,7 @@ Use [nvm-windows](https://github.com/coreybutler/nvm-windows):
 A faster alternative to nvm:
 
 **Install fnm:**
+
 ```bash
 # macOS/Linux
 curl -fsSL https://fnm.vercel.app/install | bash
@@ -106,6 +112,7 @@ choco install fnm
 ```
 
 **Use fnm:**
+
 ```bash
 fnm install 24
 fnm use 24
@@ -115,11 +122,13 @@ fnm default 24
 ### Project-Specific Node Versions
 
 Create a `.nvmrc` file in your project root:
+
 ```bash
 echo "24" > .nvmrc
 ```
 
 Then use:
+
 ```bash
 nvm use    # Uses version specified in .nvmrc
 # or
@@ -141,6 +150,7 @@ pnpm --version
 ```
 
 **Why pnpm?**
+
 - Faster installations and less disk usage
 - Strict dependency resolution prevents phantom dependencies
 - Built-in monorepo support
@@ -162,6 +172,7 @@ bun --version
 ```
 
 **Why bun?**
+
 - Extremely fast package installation
 - Built-in bundler and test runner
 - Drop-in replacement for npm/yarn
@@ -177,4 +188,4 @@ Once your environment is set up:
 
 ---
 
-Need help? Join our [Discord community](https://zephyr-cloud.io/discord) or check our [troubleshooting guide](/reference/troubleshooting).
+Need help? Join our [Discord community](https://zephyr-cloud.io/discord) or check our [troubleshooting guide](/errors).

@@ -1,13 +1,13 @@
-import { SourceCode } from '@theme';
+import { SourceCode } from '@rspress/core/theme';
 import { getErrorMessage } from '../../lib/error-helpers.ts';
 import { ErrorInfo } from '../../components/errors/info.tsx';
-import { Steps } from '@theme';
+import { Steps } from '@rspress/core/theme';
 
 # {getErrorMessage('ZE10010')}
 
 <ErrorInfo code="ZE10010" terminal />
 
-This method is implemented across all bundlers' plugins (see our [supported bundlers and their relevant packages](/supported)).
+This method is implemented across all bundlers' plugins (see our [supported bundlers and their relevant packages](/getting-started/quick-start)).
 
 When we start the deployment process after your build, we first look for a `package.json` file in current directory (the same level) where bundler's configuration file lives based on your bundler's configuration and if not - we will find your current working directory ourselves. How we find your `package.json` file could be determined by two factors:
 
@@ -30,27 +30,3 @@ Ensure that there is one `package.json` file within either the directory where b
 ## Example folder structure
 
 <SourceCode href="https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/examples/react-vite-ts" />
-
-<br />
-<br />
-
-```tree
-.
-├── README.md
-├── index.html
-├── package-lock.json
-├── package.json
-├── public
-│   └── vite.svg
-├── src
-│   ├── App.css
-│   ├── App.tsx
-│   ├── assets
-│   │   └── react.svg
-│   ├── index.css
-│   ├── main.tsx
-│   └── vite-env.d.ts
-├── tsconfig.json
-├── tsconfig.node.json
-└── vite.config.ts
-```

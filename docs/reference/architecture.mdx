@@ -41,7 +41,7 @@ The Zephyr platform consists of four primary subsystems that work together to pr
 
 - **Build Integration Plane**: The entry point for developers, implemented as plugins for popular bundlers (Webpack, Rspack, Vite, etc...).
 
-  These plugins intercept build lifecycle events to analyze outputs, extract metadata, and initiate the deployment process. The integration is designed to be transparent, adding no overhead to the build process and requiring no changes to existing configurations. You can see a list of existing plugins and their usages [here](https://docs.zephyr-cloud.io/recipes). 
+  These plugins intercept build lifecycle events to analyze outputs, extract metadata, and initiate the deployment process. The integration is designed to be transparent, adding no overhead to the build process and requiring no changes to existing configurations. You can see a list of existing plugins and their usages [here](https://docs.zephyr-cloud.io/recipes).
 
 - **Control Plane**: The centralized management system comprising the Zephyr Cloud's API platform and dashboard UI.
 
@@ -114,7 +114,7 @@ The deployment system is designed for reliability, speed, and flexibility, suppo
 - **Managed Infrastructure Model**: In the default configuration, Zephyr provides a fully managed deployment pipeline.
 
   The API Gateway Worker handles incoming deployments, performing authentication and routing to appropriate processing workers.
-  
+
   The Build-ID Generator creates globally unique identifiers that enable consistent versioning across distributed systems.
 
   The Deployment Worker orchestrates the distribution of assets to edge locations, managing replication and confirming successful deployment.
@@ -124,7 +124,7 @@ The deployment system is designed for reliability, speed, and flexibility, suppo
 - **BYOC (Bring Your Own Cloud) Model**: For organizations with specific compliance or control requirements, Zephyr supports deployment to customer-owned infrastructure.
 
   In this model, the control plane remains managed by Zephyr, providing orchestration and configuration management, while the data plane (workers and storage) runs in the customer's cloud accounts.
-  
+
   This hybrid approach maintains the ease of use of the managed service while providing complete data sovereignty.
 
 ### Deployment Process
@@ -144,6 +144,7 @@ Every application in Zephyr is identified by a unique Application UID that follo
 ```
 
 This UID is automatically derived from:
+
 - **application**: The `name` field in your `package.json`.
 - **project**: The repository name from your git context.
 - **organization**: The GitHub/GitLab organization name.
@@ -153,6 +154,7 @@ If the VCS is within a custom organization or enterprise account, the organizati
 :::
 
 For example, an application with:
+
 - `package.json` name: `"shell-vibe"`
 - Repository: `swalker326`
 - Organization: `zephyr-cloud`
@@ -160,6 +162,7 @@ For example, an application with:
 Would have the Application UID: `shell-vibe.swalker326.zephyr-cloud`
 
 This UID serves as the primary key throughout Zephyr's infrastructure and enables:
+
 - Consistent identification across all deployment environments
 - Direct mapping to storage keys in the KV stores
 - Permission boundaries for access control
@@ -168,6 +171,7 @@ This UID serves as the primary key throughout Zephyr's infrastructure and enable
 ### Default Privacy Settings
 
 Organizations, projects, and applications in Zephyr are **private by default** in the dashboard. This means:
+
 - Private organizations can only be navigated to in the dashboard by their members
 - Private projects are only visible to members of the organization
 - Private applications only appear in the dashboards of authorized organization members
@@ -183,13 +187,13 @@ The serving plane is optimized for minimal latency and maximum availability, lev
 
 ### Request Processing Pipeline
 
-When a user request arrives at an edge location, it undergoes a multi-stage processing pipeline designed for efficiency and correctness. The initial DNS resolution uses GeoDNS to route requests to the nearest healthy edge location, with automatic failover to secondary locations if the primary is unavailable. 
+When a user request arrives at an edge location, it undergoes a multi-stage processing pipeline designed for efficiency and correctness. The initial DNS resolution uses GeoDNS to route requests to the nearest healthy edge location, with automatic failover to secondary locations if the primary is unavailable.
 
 :::info Note on DNS Configuration
 DNS setup varies based on deployment model and provider.
 :::
 
-Upon reaching the edge worker, the request is parsed to extract the hostname and path. The worker then performs a series of lookups against the storage plane, with each storage type optimized for specific access patterns. The Environment Store, implemented as a distributed KV store, provides millisecond lookup of the current deployment configuration for a given hostname. This configuration includes the active snapshot ID, versioning information etc... 
+Upon reaching the edge worker, the request is parsed to extract the hostname and path. The worker then performs a series of lookups against the storage plane, with each storage type optimized for specific access patterns. The Environment Store, implemented as a distributed KV store, provides millisecond lookup of the current deployment configuration for a given hostname. This configuration includes the active snapshot ID, versioning information etc...
 
 ### Storage Architecture
 

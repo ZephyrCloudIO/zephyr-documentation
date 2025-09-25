@@ -1,36 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export const TailwindIndicator = () => {
   const environment = process.env.NODE_ENV;
 
-  const win = typeof window !== "undefined" && window;
+  const win = typeof window !== 'undefined' && window;
   if (!win) {
     return null;
   }
 
   const [screenSize, setScreenSize] = useState<
-    "xs" | "sm" | "md" | "lg" | "2xl"
-  >("xs");
+    'xs' | 'sm' | 'md' | 'lg' | '2xl'
+  >('xs');
   useEffect(() => {
     const width = win.innerWidth;
     if (width < 640) {
-      setScreenSize("xs");
+      setScreenSize('xs');
     }
     if (width >= 640 && width < 768) {
-      setScreenSize("sm");
+      setScreenSize('sm');
     }
     if (width >= 768 && width < 1024) {
-      setScreenSize("md");
+      setScreenSize('md');
     }
     if (width >= 1024 && width < 1280) {
-      setScreenSize("lg");
+      setScreenSize('lg');
     }
     if (width >= 1280) {
-      setScreenSize("2xl");
+      setScreenSize('2xl');
     }
   }, [win]);
 
-  if (environment === "production") {
+  if (environment === 'production') {
     return null;
   }
 

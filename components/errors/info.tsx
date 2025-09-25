@@ -1,12 +1,12 @@
-import { Helmet } from "rspress/runtime";
-import { getErrorMessage } from "../../lib/error-helpers";
-import { ErrorLink } from "./link";
+// import { Head } from '@rspress/core/runtime';
+import { getErrorMessage } from '../../lib/error-helpers';
+import { ErrorLink } from './link';
 
 export function ErrorInfo({
   code,
   browser,
   terminal,
-  plugins = "all",
+  plugins = 'all',
   related,
 }: {
   code: string;
@@ -23,13 +23,13 @@ export function ErrorInfo({
 
   if ((browser && terminal) || (!browser && !terminal)) {
     throw new Error(
-      "Please provide only one of the following: browser or terminal",
+      'Please provide only one of the following: browser or terminal',
     );
   }
 
   return (
     <div>
-      <Helmet>
+      {/* <Head>
         <meta property="og:description" content={message} />
         <meta property="og:title" content={code} />
         <meta property="og:type" content="article" />
@@ -40,22 +40,22 @@ export function ErrorInfo({
         <title>
           {code} - {message}
         </title>
-      </Helmet>
+      </Head> */}
 
       <ul className="list-disc leading-10">
         <li>
           Error Code: <code>{code}</code>
         </li>
         <li>
-          Location:{" "}
+          Location:{' '}
           <b
             title={
               browser
-                ? "In our Browser Extension"
-                : "When using one of our plugins for your bundler"
+                ? 'In our Browser Extension'
+                : 'When using one of our plugins for your bundler'
             }
           >
-            {browser ? "Browser" : "Terminal"}
+            {browser ? 'Browser' : 'Terminal'}
           </b>
         </li>
 
@@ -68,7 +68,7 @@ export function ErrorInfo({
         {related && (
           <li>
             Similar errors:
-            {related.split(",").map((code) => (
+            {related.split(',').map((code) => (
               <span className="ml-2" key={code}>
                 <ErrorLink code={code} />
               </span>
