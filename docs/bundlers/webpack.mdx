@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@rspress/core/theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Webpack
@@ -18,19 +18,7 @@ Deploy your Webpack applications to Zephyr Cloud with full Module Federation sup
 
 Install the plugin in your project:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm add --dev zephyr-webpack-plugin ```</Tab>
-  <Tab>```bash bun add --dev zephyr-webpack-plugin ```</Tab>
-  <Tab>```bash yarn add --dev zephyr-webpack-plugin ```</Tab>
-  <Tab>```bash npm install --save-dev zephyr-webpack-plugin ```</Tab>
-</Tabs>
+<PackageManagerTabs command="add --dev zephyr-webpack-plugin" />
 
 ## Quick Start
 

@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@rspress/core/theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Rolldown
@@ -22,19 +22,7 @@ Rolldown is under heavy development right now. Features and APIs may change.
 
 Install the Rolldown plugin in your project:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm add --dev zephyr-rolldown-plugin ```</Tab>
-  <Tab>```bash bun add --dev zephyr-rolldown-plugin ```</Tab>
-  <Tab>```bash yarn add --dev zephyr-rolldown-plugin ```</Tab>
-  <Tab>```bash npm install --save-dev zephyr-rolldown-plugin ```</Tab>
-</Tabs>
+<PackageManagerTabs command="add --dev zephyr-rolldown-plugin" />
 
 ## Quick Start
 

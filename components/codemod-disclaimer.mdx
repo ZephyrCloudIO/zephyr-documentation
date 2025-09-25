@@ -1,23 +1,9 @@
-import { Tabs, Tab } from '@rspress/core/theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 
 :::tip{title="Quick Setup with Codemod"}
 Automatically configure Zephyr for your project:
 
-<Tabs
-  values={[
-    { label: 'curl' },
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash curl -fsSL https://with.zephyr-cloud.io | node ```</Tab>
-  <Tab>```bash pnpx with-zephyr ```</Tab>
-  <Tab>```bash bunx with-zephyr ```</Tab>
-  <Tab>```bash yarn dlx with-zephyr ```</Tab>
-  <Tab>```bash npx with-zephyr ```</Tab>
-</Tabs>
+<PackageManagerTabs command="with-zephyr" exec={true} />
 
 This detects your bundler and configures Zephyr automatically. [Learn more →](https://www.npmjs.com/package/with-zephyr)
 

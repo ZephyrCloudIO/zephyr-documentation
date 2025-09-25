@@ -375,7 +375,6 @@ export default defineConfig({
     light: '/light-bg-icon.png',
     dark: '/dark-bg-icon.png',
   },
-
   themeConfig: {
     darkMode: true,
     enableContentAnimation: true,
@@ -430,8 +429,6 @@ export default defineConfig({
       },
     },
   },
-  // ? Rsbuild Plugins
-
   plugins: [
     pluginSitemap({ siteUrl: 'https://docs.zephyr-cloud.io' }),
     // pluginLlms(), // Temporarily disabled due to bug with nav.default

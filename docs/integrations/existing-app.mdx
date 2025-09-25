@@ -3,7 +3,7 @@ title: Add Zephyr to an existing application
 description: Zephyr Cloud Documentation - How to add Zephyr to existing application, using React, webpack and Nx as an example
 ---
 
-import { Tabs, Tab } from '@rspress/core/theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import BuildAuthInfo from '../../components/build-auth-info.mdx';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
@@ -26,14 +26,17 @@ If you already have an application and wish to enhance it with Zephyr Cloud, we 
 
 Install the package via NPM:
 
-<Tabs values={[{ label: 'Rspack' }, { label: 'webpack' }]}>
-  <Tab>
-    ```bash filename="Terminal" npm i zephyr-rspack-plugin@latest --save ```
-  </Tab>
-  <Tab>
-    ```bash filename="Terminal" npm i zephyr-webpack-plugin@latest --save ```
-  </Tab>
-</Tabs>
+**For Rspack:**
+
+```bash filename="Terminal"
+npm i zephyr-rspack-plugin@latest --save
+```
+
+**For webpack:**
+
+```bash filename="Terminal"
+npm i zephyr-webpack-plugin@latest --save
+```
 
 ### 2. Setting Up
 

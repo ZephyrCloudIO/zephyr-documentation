@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@rspress/core/theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Modern.js
@@ -18,19 +18,7 @@ Deploy your Modern.js applications to Zephyr Cloud with built-in Rspack integrat
 
 Install the Modern.js plugin in your project:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm add --dev zephyr-modernjs-plugin ```</Tab>
-  <Tab>```bash bun add --dev zephyr-modernjs-plugin ```</Tab>
-  <Tab>```bash yarn add --dev zephyr-modernjs-plugin ```</Tab>
-  <Tab>```bash npm install --save-dev zephyr-modernjs-plugin ```</Tab>
-</Tabs>
+<PackageManagerTabs command="add --dev zephyr-modernjs-plugin" />
 
 ## Configuration
 
@@ -84,51 +72,15 @@ my-modernjs-app/
 
 Start your development server:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm dev ```</Tab>
-  <Tab>```bash bun run dev ```</Tab>
-  <Tab>```bash yarn dev ```</Tab>
-  <Tab>```bash npm run dev ```</Tab>
-</Tabs>
+<PackageManagerTabs command="dev" />
 
 Build for production:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm build ```</Tab>
-  <Tab>```bash bun run build ```</Tab>
-  <Tab>```bash yarn build ```</Tab>
-  <Tab>```bash npm run build ```</Tab>
-</Tabs>
+<PackageManagerTabs command="build" />
 
 Preview production build:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm serve ```</Tab>
-  <Tab>```bash bun run serve ```</Tab>
-  <Tab>```bash yarn serve ```</Tab>
-  <Tab>```bash npm run serve ```</Tab>
-</Tabs>
+<PackageManagerTabs command="serve" />
 
 ## Bundler Options
 

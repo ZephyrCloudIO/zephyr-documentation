@@ -42,6 +42,7 @@
     "@rspress/core": "^2.0.0-beta.32",
     "@rspress/plugin-client-redirects": "^2.0.0-beta.32",
     "@rspress/plugin-preview": "^2.0.0-beta.32",
+    "@rspress/plugin-sitemap": "2.0.0-beta.33",
     "@rspress/runtime": "^2.0.0-beta.32",
     "@rspress/shared": "^2.0.0-beta.32",
     "class-variance-authority": "^0.7.1",
@@ -53,7 +54,6 @@
     "rspress-plugin-file-tree": "^0.4.0",
     "rspress-plugin-google-analytics": "^0.3.0",
     "rspress-plugin-reading-time": "^0.3.0",
-    "@rspress/plugin-sitemap": "2.0.0-beta.33",
     "tailwind-merge": "^3.3.1",
     "zephyr-rspack-plugin": "^0.0.59"
   },

@@ -3,7 +3,7 @@ title: Zephyr Codemod
 description: Automatically integrate Zephyr plugins into your existing bundler configurations
 ---
 
-import { Tabs, Tab } from '@rspress/core/theme';
+import { Tabs, Tab, PackageManagerTabs } from '@rspress/core/theme';
 
 # Zephyr Codemod
 
@@ -11,36 +11,7 @@ The Zephyr Codemod automatically adds Zephyr integration to your existing projec
 
 ## Quick Start
 
-<Tabs>
-<Tab label="Curl (Recommended)">
-
-```bash
-curl -fsSL https://with.zephyr-cloud.io | node
-```
-
-</Tab>
-<Tab label="npx">
-
-```bash
-npx with-zephyr
-```
-
-</Tab>
-<Tab label="pnpm">
-
-```bash
-pnpm dlx with-zephyr
-```
-
-</Tab>
-<Tab label="Yarn">
-
-```bash
-yarn dlx with-zephyr
-```
-
-</Tab>
-</Tabs>
+<PackageManagerTabs command="with-zephyr" exec={true} />
 
 ## Options
 

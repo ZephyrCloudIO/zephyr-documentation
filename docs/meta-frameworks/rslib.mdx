@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@rspress/core/theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Rslib
@@ -18,19 +18,7 @@ Deploy your JavaScript/TypeScript libraries to Zephyr Cloud using Rslib. Built o
 
 Install the Rsbuild plugin in your Rslib project:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm add --dev zephyr-rsbuild-plugin ```</Tab>
-  <Tab>```bash bun add --dev zephyr-rsbuild-plugin ```</Tab>
-  <Tab>```bash yarn add --dev zephyr-rsbuild-plugin ```</Tab>
-  <Tab>```bash npm install --save-dev zephyr-rsbuild-plugin ```</Tab>
-</Tabs>
+<PackageManagerTabs command="add --dev zephyr-rsbuild-plugin" />
 
 ## Configuration
 
@@ -130,35 +118,11 @@ my-library/
 
 Start development mode with watch:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm dev ```</Tab>
-  <Tab>```bash bun run dev ```</Tab>
-  <Tab>```bash yarn dev ```</Tab>
-  <Tab>```bash npm run dev ```</Tab>
-</Tabs>
+<PackageManagerTabs command="dev" />
 
 Build for production:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm build ```</Tab>
-  <Tab>```bash bun run build ```</Tab>
-  <Tab>```bash yarn build ```</Tab>
-  <Tab>```bash npm run build ```</Tab>
-</Tabs>
+<PackageManagerTabs command="build" />
 
 ## TypeScript Support
 

@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@rspress/core/theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Ember.js
@@ -18,19 +18,7 @@ Deploy your Ember.js applications to Zephyr Cloud using Vite and Embroider. This
 
 Install the Vite plugin in your Ember project:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm add --dev vite-plugin-zephyr ```</Tab>
-  <Tab>```bash bun add --dev vite-plugin-zephyr ```</Tab>
-  <Tab>```bash yarn add --dev vite-plugin-zephyr ```</Tab>
-  <Tab>```bash npm install --save-dev vite-plugin-zephyr ```</Tab>
-</Tabs>
+<PackageManagerTabs command="add --dev vite-plugin-zephyr" />
 
 ## Configuration
 
@@ -87,35 +75,11 @@ my-ember-app/
 
 Start your development server:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm start ```</Tab>
-  <Tab>```bash bun start ```</Tab>
-  <Tab>```bash yarn start ```</Tab>
-  <Tab>```bash npm start ```</Tab>
-</Tabs>
+<PackageManagerTabs command="start" />
 
 Build for production:
 
-<Tabs
-  values={[
-    { label: 'pnpm' },
-    { label: 'bun' },
-    { label: 'yarn' },
-    { label: 'npm' },
-  ]}
->
-  <Tab>```bash pnpm build ```</Tab>
-  <Tab>```bash bun run build ```</Tab>
-  <Tab>```bash yarn build ```</Tab>
-  <Tab>```bash npm run build ```</Tab>
-</Tabs>
+<PackageManagerTabs command="build" />
 
 ## Embroider Requirements
 
