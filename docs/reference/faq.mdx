@@ -10,27 +10,24 @@ We integrate with bundlers or build tools like Webpack, Rspack and Vite to becom
 :::
 
 :::details{title="Do I need to have Micro-Frontend applications to use Zephyr?"}
-No! You can deploy a standalone application without any micro-frontends implementation. You can see an example documented here on how to use Zephyr with [React, Rspack and Nx](/recipes/react-rspack-nx).
+No! You can deploy a standalone application without any micro-frontends implementation. You can see an example documented here on how to use Zephyr with [React, Rspack and Nx](/integrations/react-rspack-nx).
 
 :::
 
 :::details{title="Would your npm plugins affect build?"}
 
-We only have actions during two phases of a build process: one is before the build starts, the other one is after the build finish. So we won't affect the build process. You can see more about how we manage the deployment and build process in our [architecture guide](/introduction/architecture).
+We only have actions during two phases of a build process: one is before the build starts, the other one is after the build finish. So we won't affect the build process. You can see more about how we manage the deployment and build process in our [architecture guide](/reference/architecture).
 
 :::
 
 :::details{title="Can I use my own cloud provider with Zephyr Cloud?"}
 
 Yes. You can integrate Zephyr with your existing Cloud provider. Currently we support Cloudflare and Netlify. We are in the process of adding AWS, Azure and more.
-You can see a [list of supported cloud provider](/reference/supported#supported-cloud-providers) here. If you don't see your cloud provider, or you have specific CI requirement, remember to jump in our [Discord](https://zephyr-cloud.io/discord) server to let us know!
+You can see a [Managing Cloud Providers](/cloud) here. If you don't see your cloud provider, or you have specific CI requirement, remember to jump in our [Discord](https://zephyr-cloud.io/discord) server to let us know!
 
 :::
 
-
-
 :::details{title="How do I connect custom cloud providers with Zephyr?"}
-
 
 You can start with this guide [Managing Cloud Providers](/cloud) to find out more and choose a Cloud provider to start with. If you run into any problems, welcome to jump into our [Discord Server](https://zephyr-cloud.io/discord) and we will help you out. 😊
 
@@ -42,7 +39,6 @@ Micro-Frontends are known to be complicated to deploy and configure. While we in
 
 :::
 
-
 :::details{title="What happens when I log in after running build commands?"}
 
 While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run:
@@ -53,6 +49,6 @@ rm rf ~/.zephyr
 
 :::details{title="What's the difference between Module Federation 1.0 and Module Federation 2.0?"}
 
-Module Federation 1.0 is highly focused on Micro-Frontend implementation in Webpack and it sits within Webpack's core repository. Module Federation 2.0 is separated from Webpack repository, offers more extensive capability with dynamic import types, Federation Runtime, Runtime Plugin Systems and more. All of these new capabilities aids support for large scale applications in enterprise. You can read more in the [Official Guide of Module Federation](https://module-federation.io/guide/start/index.html). You may also refer to a [section](/learning/concepts/module-federation#mf-10-vs-mf-20) in our documentation.
+Module Federation 1.0 is highly focused on Micro-Frontend implementation in Webpack and it sits within Webpack's core repository. Module Federation 2.0 is separated from Webpack repository, offers more extensive capability with dynamic import types, Federation Runtime, Runtime Plugin Systems and more. All of these new capabilities aids support for large scale applications in enterprise. You can read more in the [Official Guide of Module Federation](https://module-federation.io/guide/start/index.html). You may also refer to a [Module Federation guide](/tutorials/mf-guide) in our documentation.
 
 :::

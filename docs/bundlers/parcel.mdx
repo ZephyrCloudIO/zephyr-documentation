@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Parcel
@@ -7,7 +7,7 @@ Deploy your Parcel applications to Zephyr Cloud with zero-configuration bundling
 
 :::info Prerequisites
 
-- Finished our [Prerequisites](/introduction/installation) setup guide
+- Finished our [Prerequisites](/getting-started/installation) setup guide
 - Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
 
 :::
@@ -18,28 +18,7 @@ Deploy your Parcel applications to Zephyr Cloud with zero-configuration bundling
 
 Install the Parcel reporter in your project:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm add --dev parcel-reporter-zephyr
-```
-</Tab>
-<Tab>
-```bash
-bun add --dev parcel-reporter-zephyr
-```
-</Tab>
-<Tab>
-```bash
-yarn add --dev parcel-reporter-zephyr
-```
-</Tab>
-<Tab>
-```bash
-npm install --save-dev parcel-reporter-zephyr
-```
-</Tab>
-</Tabs>
+<PackageManagerTabs command="add --dev parcel-reporter-zephyr" />
 
 ## Quick Start
 

@@ -1,15 +1,10 @@
-import React from "react";
-import { Badge } from "../ui/badge";
-import { Progress } from "../ui/progress";
-const name = " ZEPHYR ";
-const userName = "zackary_chapple_zephyrcloud_io";
-const appId = "create-mf-app.createmf-app.zephyrcloudio";
-const version = "338";
-
-function getRandomSixDigit() {
-  return Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-}
-const randomSixDigit = getRandomSixDigit();
+import React from 'react';
+import { Badge } from '../ui/badge';
+import { Progress } from '../ui/progress';
+const name = ' ZEPHYR ';
+const userName = 'zackary_chapple_zephyrcloud_io';
+const appId = 'create-mf-app.createmf-app.zephyrcloudio';
+const version = '338';
 
 export const ZephyrInfo = () => {
   return (
@@ -56,8 +51,8 @@ export const ZephyrInfo = () => {
         <Badge>{name}</Badge>
         <p>
           Uploaded missing assets to zephyr (
-          <span className="text-amber-100">2</span> assets in{" "}
-          <span className="text-amber-100">300</span>ms,{" "}
+          <span className="text-amber-100">2</span> assets in{' '}
+          <span className="text-amber-100">300</span>ms,{' '}
           <span className="text-amber-100">5.74</span>kb)
         </p>
       </div>
@@ -70,7 +65,7 @@ export const ZephyrInfo = () => {
       <div className="inline-flex gap-2 items-center">
         <Badge>{name}</Badge>
         <p>
-          Uploaded <span className="text-emerald-300">local</span> snapshot in{" "}
+          Uploaded <span className="text-emerald-300">local</span> snapshot in{' '}
           <span className="text-amber-100">193</span>ms.
         </p>
       </div>
@@ -86,7 +81,7 @@ export const ZephyrInfo = () => {
         <p>
           Deployed to edge: <Badge>{name}</Badge> -&gt;
           <span className="text-cyan-300">
-            {" "}
+            {' '}
             https://{userName}
             {appId}.zephyrcloud.xyz
           </span>
@@ -99,7 +94,7 @@ export const ZephyrInfo = () => {
         <p className="text-zinc-400">done</p>
       </div>
       <p className="text-xs">
-        Rspack compiled <span className="text-emerald-300">successfully</span>{" "}
+        Rspack compiled <span className="text-emerald-300">successfully</span>{' '}
         in 892ms
       </p>
     </div>

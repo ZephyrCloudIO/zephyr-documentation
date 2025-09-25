@@ -26,28 +26,37 @@ Zephyr handles the complexity of Module Federation configuration and dependency 
 ## Key Terminology
 
 ### Host Application
+
 The main application that consumes remote modules from other applications. Also known as a "shell" application.
 
 ### Remote Application
+
 An application that exposes modules for consumption by host applications. These are the micro-frontends.
 
 ### Federated Modules
+
 Specific components, functions, or pages that are exposed by remote applications and consumed by hosts.
 
 ### Application Versions
+
 Every deployment to Zephyr creates a new version of your application. You can:
+
 - **Preview any version** using our Chrome extension or dashboard
 - **Rollback instantly** to previous versions
 - **Promote versions** to production with one click
 
 ### Dependencies
+
 Zephyr automatically resolves and manages:
+
 - **Shared dependencies** between federated applications
 - **Version compatibility** across your micro-frontends
 - **Dynamic loading** of remote modules
 
 ### Environments
+
 Organize your deployments using environments like:
+
 - **Development** - for active development and testing
 - **Staging** - for pre-production validation
 - **Production** - for live applications
@@ -75,6 +84,6 @@ This separation allows you to test in production safely and rollback instantly w
 
 Now that you understand the core concepts, you're ready to:
 
-1. Follow our [Quick Start](/introduction/quick-start) guide
-2. Learn about [Architecture](/introduction/architecture)
+1. Follow our [Quick Start](/getting-started/quick-start) guide
+2. Learn about [Architecture](/reference/architecture)
 3. Build your [first Micro-Frontend application](/tutorials/create-mf-app)

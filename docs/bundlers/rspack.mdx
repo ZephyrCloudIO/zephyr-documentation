@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Rspack
@@ -7,7 +7,7 @@ Deploy your Rspack applications to Zephyr Cloud with blazing-fast Rust-based bun
 
 :::info Prerequisites
 
-- Finished our [Prerequisites](/introduction/installation) setup guide
+- Finished our [Prerequisites](/getting-started/installation) setup guide
 - Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
 
 :::
@@ -18,28 +18,7 @@ Deploy your Rspack applications to Zephyr Cloud with blazing-fast Rust-based bun
 
 Install the Rspack plugin in your project:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm add --dev zephyr-rspack-plugin
-```
-</Tab>
-<Tab>
-```bash
-bun add --dev zephyr-rspack-plugin
-```
-</Tab>
-<Tab>
-```bash
-yarn add --dev zephyr-rspack-plugin
-```
-</Tab>
-<Tab>
-```bash
-npm install --save-dev zephyr-rspack-plugin
-```
-</Tab>
-</Tabs>
+<PackageManagerTabs command="add --dev zephyr-rspack-plugin" />
 
 ## Quick Start
 
@@ -262,7 +241,6 @@ module.exports = withZephyr()(config);
 - Node.js 18 or higher
 - Zephyr Cloud account ([sign up here](https://app.zephyr-cloud.io))
 
-
 ## Common Issues
 
 ### Module Federation Setup
@@ -270,7 +248,9 @@ module.exports = withZephyr()(config);
 For enhanced Module Federation features:
 
 ```javascript
-const { ModuleFederationPlugin } = require('@module-federation/enhanced/rspack');
+const {
+  ModuleFederationPlugin,
+} = require('@module-federation/enhanced/rspack');
 
 // Use enhanced plugin for better runtime and development experience
 const config = {

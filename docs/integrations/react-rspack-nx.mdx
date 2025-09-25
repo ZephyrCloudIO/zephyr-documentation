@@ -3,13 +3,13 @@ title: React + Rspack + Nx
 description: Zephyr Cloud Documentation - Get started guide
 ---
 
-import SupportedBrowser from "../../components/browser-table";
+import SupportedBrowser from '../../components/browser-table';
 import { DrawingPinIcon } from '@radix-ui/react-icons';
-import { Image } from "../../components/ui/image";
-import { Keyboard } from "../../components/ui/keyboard";
-import { SourceCode, Tabs, Tab } from '@theme';
-import { Card } from "../../components/ui/card";
-import BuildAuthInfo from "../../components/build-auth-info.mdx";
+import { Image } from '../../components/ui/image';
+import { Keyboard } from '../../components/ui/keyboard';
+import { SourceCode } from '@rspress/core/theme';
+import { Card } from '../../components/ui/card';
+import BuildAuthInfo from '../../components/build-auth-info.mdx';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # React + Rspack + Nx
@@ -23,9 +23,7 @@ import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 :::
 
-
 ### Setup
-
 
 #### 1. Create an Nx workspace
 
@@ -34,56 +32,58 @@ Run below commands:
 ```bash title="Terminal"
 npx create-nx-workspace@latest my-workspace --preset=apps
 ```
-And select from these options: 
+
+And select from these options:
 
 ```bash title="Terminal"
-? Which stack do you want to use? None. 
-? Package-based monorepo, integrated monorepo, or standalone project? Integrated Monorepo. 
-? Which CI provider would you like to use? skip 
+? Which stack do you want to use? None.
+? Package-based monorepo, integrated monorepo, or standalone project? Integrated Monorepo.
+? Which CI provider would you like to use? skip
 ? Would you like remote caching to make your build faster? No
 ```
 
 #### 2. Add hosts and remote
 
-In your terminal, run: 
+In your terminal, run:
 
 ```bash title="Terminal"
 npx nx add @nx/react
-npx nx g @nx/react:host --remotes=remote1,remote2 --bundler=rspack --directory=apps/host 
+npx nx g @nx/react:host --remotes=remote1,remote2 --bundler=rspack --directory=apps/host
 ```
 
-In the terminal select from below answers: 
+In the terminal select from below answers:
 
 ```bash title="Terminal"
-? Which stylesheet format would you like to use? - css 
-? Which E2E test runner would you like to use? - cypress 
-? What should be the project name and where should it be generated? 
+? Which stylesheet format would you like to use? - css
+? Which E2E test runner would you like to use? - cypress
+? What should be the project name and where should it be generated?
 ❯ As provided:
     Name: host
     Root: apps/host
 ```
 
-Your Nx application's initial setup is complete! If you run: 
+Your Nx application's initial setup is complete! If you run:
 
 ```bash title="Terminal"
 npx nx run host:serve
 ```
-You can see your application in the browser. 
+
+You can see your application in the browser.
 
 #### 3. Naming each application
 
-To understand why these configuration are necessary - [Read the complete checklist to deploy Micro-Frontend with Zephyr](/tutorials/mf-guide). 
+To understand why these configuration are necessary - [Read the complete checklist to deploy Micro-Frontend with Zephyr](/tutorials/mf-guide).
 
-Open the new directory in your selected editor and add `package.json` as a structure below: 
+Open the new directory in your selected editor and add `package.json` as a structure below:
 
 ```yaml title="Folder structure" {3,5,7}
-- apps 
--- host 
---- package.json 
--- remote1 
---- package.json 
--- remote2 
---- package.json 
+- apps
+-- host
+--- package.json
+-- remote1
+--- package.json
+-- remote2
+--- package.json
 ```
 
 This command will create all 3 files for you
@@ -92,46 +92,46 @@ This command will create all 3 files for you
 touch apps/host/package.json apps/remote1/package.json apps/remote2/package.json
 ```
 
-In host's `package.json`, add below field (minimal example): 
+In host's `package.json`, add below field (minimal example):
 
-```json 
+```json
 {
   "name": "host",
   "version": "0.0.0"
 }
 ```
 
-In remote1's `package.json`, add below field: 
+In remote1's `package.json`, add below field:
 
-```json 
+```json
 {
   "name": "remote1",
   "version": "0.0.0"
 }
 ```
 
-In remote2's `package.json`, add below field: 
+In remote2's `package.json`, add below field:
 
-```json 
+```json
 {
   "name": "remote2",
   "version": "0.0.0"
 }
 ```
 
-#### 4. Create your first commit 
+#### 4. Create your first commit
 
-After making sure each application in this project has a `package.json` and the naming aligns with the unique name in module federation config, you will need to make sure this project is a github repository and has at least one commit hash by running `git commit -m "commit something"` command. 
+After making sure each application in this project has a `package.json` and the naming aligns with the unique name in module federation config, you will need to make sure this project is a github repository and has at least one commit hash by running `git commit -m "commit something"` command.
 
 #### 5. Adding configuration for Zephyr
 
-Install Zephyr's plugin for Rspack (works in Webpack too): 
+Install Zephyr's plugin for Rspack (works in Webpack too):
 
 ```sh title="Terminal"
-npm i zephyr-rspack-plugin@latest 
+npm i zephyr-rspack-plugin@latest
 ```
 
-Add Zephyr plugin to each application's build config by adding below lines from Nx's auto-generated build config: 
+Add Zephyr plugin to each application's build config by adding below lines from Nx's auto-generated build config:
 
 ```ts title="rspack.config.ts" {6,24}
 import { composePlugins, withNx, withReact } from '@nx/rspack';
@@ -139,7 +139,7 @@ import {
   withModuleFederation,
   ModuleFederationConfig,
 } from '@nx/rspack/module-federation';
-import { withZephyr } from "zephyr-rspack-plugin"
+import { withZephyr } from 'zephyr-rspack-plugin';
 
 import baseConfig from './module-federation.config';
 
@@ -157,9 +157,10 @@ export default composePlugins(
   withNx(),
   withReact(),
   withModuleFederation(config, { dts: false }),
-  withZephyr() // the plugin sequence in Nx matters. Do remember to put zephyr at the end of your config file. 
-)
+  withZephyr(), // the plugin sequence in Nx matters. Do remember to put zephyr at the end of your config file.
+);
 ```
+
 You will need to do the same for `rspack.config.prod.ts` for host app.
 
 #### 6. Build the remotes and serve the host
@@ -176,7 +177,7 @@ nx run remote2:build
 
 <BuildAuthInfo />
 
-Now you can serve the host application to check if everything is working properly, which through nx magic will start the two remotes. 
+Now you can serve the host application to check if everything is working properly, which through nx magic will start the two remotes.
 
 ```bash Title=Terminal
 nx run host:serve
@@ -184,38 +185,33 @@ nx run host:serve
 
 Your host app should start on port 4200 by default and each remote will spin up on its own port. All three applications should be deployed now.
 
-#### 7. Chrome Extension 
+#### 7. Chrome Extension
 
-You can check the application you just deployed in our chrome extension. 
+You can check the application you just deployed in our chrome extension.
 
 Head to Chrome Web Store to install our chrome extension - [Zephyr Mission Control](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn). Click on **Add to Chrome** and confirm with **Add extension**. After you finish remember to **pin** the extension by clicking on <DrawingPinIcon className="inline -rotate-45"/> on extension management tab to provide you a quicker access to Zephyr's side panel.
 
 Once you click on the Chrome Extension, a login page will pop up and prompt you to log in (if you are using Microsoft Edge you will need to click on **Open Side Panel**).
 
-
-
 :::details{title="What happens when you log in?"}
-While we are logging you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run: 
-```bash 
-rm rf ~/.zephyr 
+While we are logging you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run:
+
+```bash
+rm rf ~/.zephyr
 ```
+
 :::
 
 Now that you have logged in and deployed your apps; you should see the versions of the host application, and the versions of our two remotes (remote1 & remote2). Make some changes locally, watch them redeploy and select the new version from the drop down (you may need to refresh the browser to see the latest, if live reload is not checked)
 
 :::info
-Our chrome extension is only supported on Chromium based browsers. See a list of [supported browser](/supported#browser-support).
+Our chrome extension is only supported on Chromium based browsers. See a list of supported browsers (Chrome, Edge, Brave, etc.).
 :::
 
-
-#### 8. Dashboard 
+#### 8. Dashboard
 
 If you want to see all your projects and their versions, sign in on [dashboard](https://app.zephyr-cloud.io) and you will see all your projects and their dependencies.
 
-<Image src="/dashboard-main.png" size="large"/>
+<Image src="/dashboard-main.png" size="large" />
 
 A more detailed explanation on how to use our dashboard is coming soon.
-
-
-
-

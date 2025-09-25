@@ -3,7 +3,7 @@ title: Zephyr Codemod
 description: Automatically integrate Zephyr plugins into your existing bundler configurations
 ---
 
-import { Tabs, Tab } from '@theme';
+import { Tabs, Tab, PackageManagerTabs } from '@rspress/core/theme';
 
 # Zephyr Codemod
 
@@ -11,36 +11,14 @@ The Zephyr Codemod automatically adds Zephyr integration to your existing projec
 
 ## Quick Start
 
-<Tabs>
-<Tab label="Curl (Recommended)">
-
-```bash
-curl -fsSL https://with.zephyr-cloud.io | node
-```
-
-</Tab>
-<Tab label="npx">
-
-```bash
-npx with-zephyr
-```
-
-</Tab>
-<Tab label="pnpm">
-
-```bash
-pnpm dlx with-zephyr
-```
-
-</Tab>
-<Tab label="Yarn">
-
-```bash
-yarn dlx with-zephyr
-```
-
-</Tab>
-</Tabs>
+<PackageManagerTabs
+  command={{
+    npm: 'npx with-zephyr',
+    yarn: 'yarn dlx with-zephyr',
+    pnpm: 'pnpx with-zephyr',
+    bun: 'bunx with-zephyr',
+  }}
+/>
 
 ## Options
 
@@ -89,6 +67,7 @@ The codemod scans your project for bundler configuration files and automatically
 <Tab label="Webpack">
 
 **Before:**
+
 ```javascript
 const { composePlugins, withNx } = require('@nx/webpack');
 
@@ -96,6 +75,7 @@ module.exports = composePlugins(withNx(), (config) => config);
 ```
 
 **After:**
+
 ```javascript
 const { withZephyr } = require('zephyr-webpack-plugin');
 const { composePlugins, withNx } = require('@nx/webpack');
@@ -107,23 +87,25 @@ module.exports = composePlugins(withNx(), withZephyr(), (config) => config);
 <Tab label="Vite">
 
 **Before:**
+
 ```typescript
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [react()]
+  plugins: [react()],
 });
 ```
 
 **After:**
+
 ```typescript
 import { withZephyr } from 'vite-plugin-zephyr';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [react(), withZephyr()]
+  plugins: [react(), withZephyr()],
 });
 ```
 
@@ -131,21 +113,23 @@ export default defineConfig({
 <Tab label="Rollup">
 
 **Before:**
+
 ```javascript
 import resolve from '@rollup/plugin-node-resolve';
 
 export default {
-  plugins: [resolve()]
+  plugins: [resolve()],
 };
 ```
 
 **After:**
+
 ```javascript
 import { withZephyr } from 'rollup-plugin-zephyr';
 import resolve from '@rollup/plugin-node-resolve';
 
 export default withZephyr()({
-  plugins: [resolve()]
+  plugins: [resolve()],
 });
 ```
 

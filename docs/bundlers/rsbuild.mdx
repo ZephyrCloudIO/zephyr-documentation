@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Rsbuild
@@ -7,7 +7,7 @@ Deploy your Rsbuild applications to Zephyr Cloud with lightning-fast Rust-based 
 
 :::info Prerequisites
 
-- Finished our [Prerequisites](/introduction/installation) setup guide
+- Finished our [Prerequisites](/getting-started/installation) setup guide
 - Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
 
 :::
@@ -18,28 +18,7 @@ Deploy your Rsbuild applications to Zephyr Cloud with lightning-fast Rust-based 
 
 Install the Rsbuild plugin in your project:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm add --dev zephyr-rsbuild-plugin
-```
-</Tab>
-<Tab>
-```bash
-bun add --dev zephyr-rsbuild-plugin
-```
-</Tab>
-<Tab>
-```bash
-yarn add --dev zephyr-rsbuild-plugin
-```
-</Tab>
-<Tab>
-```bash
-npm install --save-dev zephyr-rsbuild-plugin
-```
-</Tab>
-</Tabs>
+<PackageManagerTabs command="add --dev zephyr-rsbuild-plugin" />
 
 ## Quick Start
 
@@ -52,10 +31,7 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { withZephyr } from 'zephyr-rsbuild-plugin';
 
 export default defineConfig({
-  plugins: [
-    pluginReact(),
-    withZephyr(),
-  ],
+  plugins: [pluginReact(), withZephyr()],
 });
 ```
 

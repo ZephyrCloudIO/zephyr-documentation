@@ -13,30 +13,16 @@ curl -fsSL https://with.zephyr-cloud.io | node
 
 **Or using your preferred package manager:**
 
-import { Tabs, Tab } from '@theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpx with-zephyr
-```
-</Tab>
-<Tab>
-```bash
-bunx with-zephyr
-```
-</Tab>
-<Tab>
-```bash
-yarn dlx with-zephyr
-```
-</Tab>
-<Tab>
-```bash
-npx with-zephyr
-```
-</Tab>
-</Tabs>
+<PackageManagerTabs
+  command={{
+    npm: 'npx with-zephyr',
+    yarn: 'yarn dlx with-zephyr',
+    pnpm: 'pnpx with-zephyr',
+    bun: 'bunx with-zephyr',
+  }}
+/>
 
 Our intelligent codemod automatically detects your bundler (Webpack, Vite, Rspack, etc.) and configures Zephyr with zero manual setup. Perfect for adding Zephyr to existing projects without disrupting your workflow.
 
@@ -44,11 +30,11 @@ Our intelligent codemod automatically detects your bundler (Webpack, Vite, Rspac
 
 ## What do you want to start with?
 
-import { CardLayout } from "../../components/ui/card-layout"
-import { GetStartedCards } from "../../components/get-started"
+import { CardLayout } from '../../components/ui/card-layout';
+import { GetStartedCards } from '../../components/get-started';
 
 <CardLayout>
-<GetStartedCards/>
+  <GetStartedCards />
 </CardLayout>
 
 ## Integration Guides
@@ -56,17 +42,20 @@ import { GetStartedCards } from "../../components/get-started"
 Need to integrate Zephyr with your existing setup? We've got you covered:
 
 ### Framework Integrations
+
 - **[React + Webpack](/integrations/existing-app)** - Classic React setup
 - **[React + Rspack + Nx](/integrations/react-rspack-nx)** - Monorepo with Nx
-- **[ModernJS Framework](/integrations/modernjs)** - Full-stack React framework
+- **[ModernJS Framework](/meta-frameworks/modernjs)** - Full-stack React framework
 - **[Multi-Framework Setup](/integrations/vite-rspack-webpack-mf)** - Vite, Rspack, and Webpack together
 
 ### Monorepo Solutions
+
 - **[Nx Integration](/integrations/react-rspack-nx)** - Scalable monorepo development
 - **[Lerna Support](/integrations/existing-app)** - Multi-package repositories
 - **[Rush Integration](/integrations/existing-app)** - Enterprise monorepo management
 
 ### Advanced Setups
+
 - **[Existing Applications](/integrations/existing-app)** - Add Zephyr to any project
 - **[Multi-Bundler Projects](/integrations/vite-rspack-webpack-mf)** - Mix different bundlers
 - **[Enterprise Deployments](/cloud)** - Custom cloud provider setup
@@ -76,13 +65,15 @@ Need to integrate Zephyr with your existing setup? We've got you covered:
 Zephyr makes it easy to build and deploy micro-frontend architectures using **Module Federation**. Share components, libraries, and entire applications across teams while maintaining independent deployments.
 
 **Key Benefits:**
+
 - **Independent Development** - Teams can work autonomously on different parts of your application
 - **Runtime Sharing** - Share dependencies and components dynamically without bundling duplicates
 - **Incremental Migration** - Gradually modernize legacy applications piece by piece
 - **Scalable Architecture** - Build applications that grow with your organization
 
 **Ready to explore?**
-- 📚 **[Learn Module Federation Concepts](/introduction/concepts)** - Understand the fundamentals
+
+- 📚 **[Learn Module Federation Concepts](/reference/concepts)** - Understand the fundamentals
 - 🏗️ **[Build Your First Micro-Frontend](/tutorials/create-mf-app)** - Hands-on tutorial
 - ⚡ **[See Real Examples](/tutorials/mf-guide)** - Production-ready patterns
 
@@ -94,8 +85,8 @@ Get real-time help from the Zephyr team and community! Ask questions, share your
 
 ### 📚 Learning Resources
 
-- **[Core Concepts](/introduction/concepts)** - Understand Module Federation and Zephyr
-- **[Architecture Guide](/about/architecture)** - Deep dive into how Zephyr works
+- **[Core Concepts](/reference/concepts)** - Understand Module Federation and Zephyr
+- **[Architecture Guide](/reference/architecture)** - Deep dive into how Zephyr works
 - **[Best Practices](/tutorials/mf-guide)** - Learn from real-world implementations
 
 ---

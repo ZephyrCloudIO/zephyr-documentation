@@ -1,39 +1,38 @@
-# Allow IP Addresses 
+# Allow IP Addresses
 
-:::info 
-This guide is recommended for users who want to "bring your own cloud" (BYOC) or using our managed cloud. Zephyr Cloud leverages many other IP ranges for various product and services but some of these address will not make connections to your origin. 
-::: 
+:::info
+This guide is recommended for users who want to "bring your own cloud" (BYOC) or using our managed cloud. Zephyr Cloud leverages many other IP ranges for various product and services but some of these address will not make connections to your origin.
+:::
 
-Zephyr has several IP addresses which are used by all proxied hostnames. These IP addresses construct the skeleton of our global edge network to help distribute traffic among various servers. 
+Zephyr has several IP addresses which are used by all proxied hostnames. These IP addresses construct the skeleton of our global edge network to help distribute traffic among various servers.
 
+If you have private network setup, implemented IP filtering, or are allowing certain IP addresses in your organization, all traffic between your origin and Zephyr Cloud's server will pass through your proxy network. Without whitelisting below IP addresses to your allow list, devices at your origin will stop receiving traffic from our servers. Blocking these IPs will result in visitor traffic termination or deployment failure. Whitelisting below IP addresses enable connections to our backend server and providers to enable flawless deployment flow.
 
-If you have private network setup, implemented IP filtering, or are allowing certain IP addresses in your organization, all traffic between your origin and Zephyr Cloud's server will pass through your proxy network. Without whitelisting below IP addresses to your allow list, devices at your origin will stop receiving traffic from our servers. Blocking these IPs will result in visitor traffic termination or deployment failure. Whitelisting below IP addresses enable connections to our backend server and providers to enable flawless deployment flow. 
+The following table lists the IP addresses for connections with Zephyr including application UI interface and backend providers.
 
-The following table lists the IP addresses for connections with Zephyr including application UI interface and backend providers. 
+| List of IP address |
+| ------------------ |
+| 172.67.75.242      |
+| 172.67.71.27       |
+| 104.26.8.74        |
+| 104.26.9.74        |
+| 104.26.10.118      |
+| 104.26.11.118      |
+| 100.64.0.1         |
+| 75.2.70.75         |
+| 99.83.190.102      |
 
-| List of IP address | 
-| ---- | 
-| 172.67.75.242 | 
-| 172.67.71.27 | 
-| 104.26.8.74 | 
-| 104.26.9.74 |
-| 104.26.10.118 |
-| 104.26.11.118 |
-| 100.64.0.1 | 
-| 75.2.70.75 | 
-| 99.83.190.102 | 
+## Configure origin server
 
-## Configure origin server 
+To avoid blocking Zephyr Cloud's IP addresses unintentionally, you should allow Zephyr Cloud's IP addresses at your origin web server.
 
-To avoid blocking Zephyr Cloud's IP addresses unintentionally, you should allow Zephyr Cloud's IP addresses at your origin web server. 
+You can explicitly allow these IP addresses with a [`.htaccess` file](https://httpd.apache.org/docs/trunk/mod/mod_authz_core.html#require) or using [iptable].
 
-You can explicitly allow these IP addresses with a [`.htaccess` file](https://httpd.apache.org/docs/trunk/mod/mod_authz_core.html#require) or using [iptable]. 
+You can use an iptables rule to allow a Zephyr IP address range by replacing `$ip` below with our IP address list above.
 
-You can use an iptables rule to allow a Zephyr IP address range by replacing `$ip` below with our IP address list above. 
-
-```sh 
+```sh
 $ iptables -I INPUT -p tcp -m multiport --dports http,https -s $ip -j ACCEPT
-$ ip6tables -I INPUT -p tcp -m multiport --dports http,https -s $ip -j ACCEPT 
+$ ip6tables -I INPUT -p tcp -m multiport --dports http,https -s $ip -j ACCEPT
 ```
 
 For more specific guidance, contact your hosting provider or website administrator.

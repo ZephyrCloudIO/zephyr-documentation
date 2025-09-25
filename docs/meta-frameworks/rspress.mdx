@@ -1,4 +1,4 @@
-import { Tabs, Tab } from '@theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
 # Rspress
@@ -7,7 +7,7 @@ Deploy your Rspress documentation sites to Zephyr Cloud with lightning-fast buil
 
 :::info Prerequisites
 
-- Finished our [Prerequisites](/introduction/installation) setup guide
+- Finished our [Prerequisites](/getting-started/installation) setup guide
 - Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
 
 :::
@@ -18,28 +18,7 @@ Deploy your Rspress documentation sites to Zephyr Cloud with lightning-fast buil
 
 Install the Rspress plugin in your project:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm add --dev zephyr-rspress-plugin
-```
-</Tab>
-<Tab>
-```bash
-bun add --dev zephyr-rspress-plugin
-```
-</Tab>
-<Tab>
-```bash
-yarn add --dev zephyr-rspress-plugin
-```
-</Tab>
-<Tab>
-```bash
-npm install --save-dev zephyr-rspress-plugin
-```
-</Tab>
-</Tabs>
+<PackageManagerTabs command="add --dev zephyr-rspress-plugin" />
 
 ## Configuration
 
@@ -81,78 +60,15 @@ my-rspress-site/
 
 Start your development server:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm dev
-```
-</Tab>
-<Tab>
-```bash
-bun run dev
-```
-</Tab>
-<Tab>
-```bash
-yarn dev
-```
-</Tab>
-<Tab>
-```bash
-npm run dev
-```
-</Tab>
-</Tabs>
+<PackageManagerTabs command="dev" />
 
 Build for production:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm build
-```
-</Tab>
-<Tab>
-```bash
-bun run build
-```
-</Tab>
-<Tab>
-```bash
-yarn build
-```
-</Tab>
-<Tab>
-```bash
-npm run build
-```
-</Tab>
-</Tabs>
+<PackageManagerTabs command="build" />
 
 Preview production build:
 
-<Tabs values={[{label:"pnpm"}, {label: 'bun'}, {label: 'yarn'}, {label: 'npm'}]}>
-<Tab>
-```bash
-pnpm preview
-```
-</Tab>
-<Tab>
-```bash
-bun run preview
-```
-</Tab>
-<Tab>
-```bash
-yarn preview
-```
-</Tab>
-<Tab>
-```bash
-npm run preview
-```
-</Tab>
-</Tabs>
+<PackageManagerTabs command="preview" />
 
 ## Content Management
 

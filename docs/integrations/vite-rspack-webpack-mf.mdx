@@ -1,7 +1,6 @@
-import { Tabs, Tab } from '@theme';
+import { Tabs, Tab } from '@rspress/core/theme';
 
 # Vite + Webpack + Rspack with Module Federation
-
 
 Vite is the first build tool Zephyr is able to handle Module Federation configuration directly, although you can still use the official [Vite Plugin](https://github.com/module-federation/vite) from Module Federation. Both cases are supported in this guide.
 
@@ -12,8 +11,6 @@ This guide aims to walk you through how you can deploy a Micro-Frontend applicat
 - We expect you to have finished our [Get Started](/tutorials/first-app) guide.
 - Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
 
-
-
 :::
 
 ### Install Zephyr Plugins
@@ -21,7 +18,7 @@ This guide aims to walk you through how you can deploy a Micro-Frontend applicat
 For applications built with Vite:
 
 ```sh title="Terminal"
-npm i vite-plugin-zephyr@latest 
+npm i vite-plugin-zephyr@latest
 ```
 
 For applications built with Webpack and Rspack:
@@ -38,7 +35,8 @@ Four example build configuration for Vite, Rspack and Webpack.
 
 For your host application, you can use `withZephyr()` from `vite-plugin-zephyr` plugin to configure Module Federation. The first example configuration is using `vite-plugin-zephyr` directly. The second example is using the official [Vite Plugin](https://github.com/module-federation/vite) from Module Federation.
 
-#### Example 1 
+#### Example 1
+
 ```js title="vite.config.ts"{3,35}
 
 import { defineConfig } from 'vite';
@@ -74,7 +72,7 @@ const mfConfig = {
 
 export default defineConfig({
   plugins: [
-    react(), 
+    react(),
     withZephyr({ mfConfig }), // sequence matters
     svgr({
         svgrOptions: {
@@ -85,7 +83,7 @@ export default defineConfig({
   build: {
     target: 'chrome89',
     modulePreload: {
-    // This is important if you have other plugins like `svgr` that are handling transformation of code. 
+    // This is important if you have other plugins like `svgr` that are handling transformation of code.
         resolveDependencies: (_, deps: string[]) => {
           // Only preload React packages and non-federated modules
           return deps.filter((dep) => {
@@ -101,9 +99,10 @@ export default defineConfig({
 
 ```
 
-#### Example 2 
+#### Example 2
 
 Using the official [Vite Plugin](https://github.com/module-federation/vite) from Module Federation.
+
 ```ts title="vite.config.ts"{3-4,38-39}
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -140,18 +139,13 @@ const mfConfig: ModuleFederationOptions = {
 };
 
 export default defineConfig({
-  plugins: [
-    react(),
-    federation({ ...mfConfig }),
-    withZephyr(),
-  ],
+  plugins: [react(), federation({ ...mfConfig }), withZephyr()],
   build: {
     minify: false,
     target: 'chrome89',
   },
 });
-
-``` 
+```
 
 :::warning{title="Known issue"}
 
@@ -213,7 +207,6 @@ If the application doesn't show up in the browser, you might be experiencing pro
 ### Vite Remote
 
 ```ts title="vite.config.ts"{3,18}
-
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { withZephyr } from 'vite-plugin-zephyr';
@@ -229,10 +222,7 @@ const mfConfig = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(), 
-    withZephyr({ mfConfig })
-  ],
+  plugins: [react(), withZephyr({ mfConfig })],
   experimental: {
     renderBuiltUrl() {
       return { relative: true };
@@ -373,7 +363,9 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
 const { withZephyr } = require('zephyr-webpack-plugin');
-const { ModuleFederationPlugin } = require('@module-federation/enhanced/webpack');
+const {
+  ModuleFederationPlugin,
+} = require('@module-federation/enhanced/webpack');
 
 const deps = require('./package.json').dependencies;
 
@@ -459,5 +451,4 @@ module.exports = (_, argv) =>
       new Dotenv(),
     ],
   });
-
 ```

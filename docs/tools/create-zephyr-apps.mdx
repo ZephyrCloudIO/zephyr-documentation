@@ -3,7 +3,7 @@ title: create-zephyr-apps
 description: Scaffold new applications with Zephyr integration
 ---
 
-import { Tabs, Tab } from '@theme';
+import { PackageManagerTabs } from '@rspress/core/theme';
 
 # create-zephyr-apps
 
@@ -11,28 +11,14 @@ Command-line tool to quickly scaffold new applications with Zephyr integration p
 
 ## Create a new project
 
-<Tabs>
-<Tab label="npm">
-```bash
-npx create-zephyr-apps@latest my-app
-```
-</Tab>
-<Tab label="pnpm">
-```bash
-pnpm create zephyr-apps@latest my-app
-```
-</Tab>
-<Tab label="yarn">
-```bash
-yarn create zephyr-apps my-app
-```
-</Tab>
-<Tab label="bun">
-```bash
-bunx create-zephyr-apps@latest my-app
-```
-</Tab>
-</Tabs>
+<PackageManagerTabs
+  command={{
+    npm: 'npx create-zephyr-apps@latest my-app',
+    yarn: 'yarn create zephyr-apps@latest my-app',
+    pnpm: 'pnpm create zephyr-apps@latest my-app',
+    bun: 'bun create zephyr-apps@latest my-app',
+  }}
+/>
 
 ## Getting Started
 
