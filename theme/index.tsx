@@ -54,7 +54,7 @@ export const CurrentVersion = () => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>
-          <div className="py-1 px-3 bg-blue-400 border-[0.4px] border-zinc-400/80 rounded-md mb-4">
+          <div className="py-1 px-3 bg-transparent border-[0.4px] border-zinc-400/80 rounded-md mb-4">
             <a
               href="https://www.npmjs.com/package/zephyr-webpack-plugin"
               target="_blank"
@@ -82,7 +82,7 @@ const AfterNavTitle = () => {
     <div className="flex gap-4 items-center justify-center">
       <a
         href="/"
-        className="text-sm font-nebu-semibold text-[var(--rp-c-text-1)] font-bold  transition-all hover:text-[var(--rp-c-text-2)]"
+        className="text-sm font-semibold text-[var(--rp-c-text-1)] font-bold  transition-all hover:text-[var(--rp-c-text-2)]"
       >
         Zephyr Cloud Docs
       </a>
