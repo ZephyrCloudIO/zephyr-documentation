@@ -97,7 +97,7 @@ const Search = () => {
       docSearchProps={{
         appId: '072HAFA8RX', // cspell:disable-line
         apiKey: 'ed3f7caac2f30ca8f3cc9ff8f5fb3bd8', // cspell:disable-line
-        indexName: 'zephyr_cloud_io_docs',
+        indexName: 'Zephyr Docs',
         searchParameters: {
           facetFilters: [`lang:${lang}`],
         },
