@@ -3,7 +3,7 @@ import { pluginClientRedirects } from '@rspress/plugin-client-redirects';
 import type { Nav, Sidebar, SocialLink } from '@rspress/shared';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
-// import { pluginLlms } from '@rspress/plugin-llms';
+import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { defineConfig } from '@rspress/core';
@@ -399,7 +399,7 @@ export default defineConfig({
   },
   plugins: [
     pluginSitemap({ siteUrl: 'https://docs.zephyr-cloud.io' }),
-    // pluginLlms(),
+    pluginLlms(),
     pluginAlgolia(),
     pluginClientRedirects({
       redirects: [
