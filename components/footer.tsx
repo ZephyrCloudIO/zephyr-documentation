@@ -4,7 +4,7 @@ import Intercom from '@intercom/messenger-js-sdk';
 const footerConfig = {
   discord: {
     label: 'Discord',
-    href: 'https://zephyr-cloud.io/discord',
+    href: 'https://discord.gg/zephyrcloud',
   },
   linkedin: {
     label: 'LinkedIn',
