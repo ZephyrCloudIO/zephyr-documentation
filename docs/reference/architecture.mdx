@@ -35,7 +35,7 @@ export default withZephyr()({
 
 ## System Architecture Overview
 
-![Zephyr Infrastructure Architecture](/infra-overview.png)
+![Zephyr Infrastructure Architecture](/infra-overview.webp)
 
 The Zephyr platform consists of four primary subsystems that work together to provide seamless deployment and serving capabilities:
 
@@ -71,11 +71,11 @@ Each plugin implements the same core functionality while adapting to bundler-spe
 
 The plugins operate on a principle of "silent observation" - they attach to existing bundler hooks without modifying the build pipeline or affecting output. This approach ensures that builds with Zephyr produce identical artifacts to builds without it, maintaining compatibility with existing CI/CD systems and development workflows.
 
-![Zephyr Build Flow](/architecture-v2.png)
+![Zephyr Build Flow](/architecture-v2.webp)
 
 ### Lifecycle Integration Points
 
-![Zephyr Agent Lifecycle](/lifecycle-events.png)
+![Zephyr Agent Lifecycle](/lifecycle-events.webp)
 
 The Zephyr agent activates during the bundler initialization phase and attaches to specific lifecycle hooks that vary by bundler:
 
@@ -109,7 +109,7 @@ The deployment system is designed for reliability, speed, and flexibility, suppo
 
 ### Infrastructure Models
 
-![Zephyr Default Integration](/default-integration.png)
+![Zephyr Default Integration](/default-integration.webp)
 
 - **Managed Infrastructure Model**: In the default configuration, Zephyr provides a fully managed deployment pipeline.
 
@@ -119,7 +119,7 @@ The deployment system is designed for reliability, speed, and flexibility, suppo
 
   The Deployment Worker orchestrates the distribution of assets to edge locations, managing replication and confirming successful deployment.
 
-![Zephyr BYOC Integration](/byoc-integration.png)
+![Zephyr BYOC Integration](/byoc-integration.webp)
 
 - **BYOC (Bring Your Own Cloud) Model**: For organizations with specific compliance or control requirements, Zephyr supports deployment to customer-owned infrastructure.
 
@@ -135,7 +135,7 @@ Once the snapshot is confirmed available in all required regions, the system upd
 
 ### Application UID
 
-![Application UID Structure](/url-structure.png)
+![Application UID Structure](/url-structure.webp)
 
 Every application in Zephyr is identified by a unique Application UID that follows a deterministic structure:
 
@@ -181,7 +181,7 @@ Note: This privacy setting only affects dashboard visibility. Deployed applicati
 
 ## Serving Architecture
 
-![Edge Worker Request Flow](/edge-worker-request-flow.png)
+![Edge Worker Request Flow](/edge-worker-request-flow.webp)
 
 The serving plane is optimized for minimal latency and maximum availability, leveraging a globally distributed edge network to serve applications as close to users as possible.
 

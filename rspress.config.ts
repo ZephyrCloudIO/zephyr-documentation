@@ -343,8 +343,8 @@ export default defineConfig({
   globalStyles: path.join(__dirname, 'styles/index.css'),
   mediumZoom: { selector: '.rspress-doc img' },
   logo: {
-    light: '/light-bg-icon.png',
-    dark: '/dark-bg-icon.png',
+    light: '/light-bg-icon.webp',
+    dark: '/dark-bg-icon.webp',
   },
   themeConfig: {
     darkMode: true,
@@ -378,7 +378,7 @@ export default defineConfig({
         title: 'Zephyr Cloud Docs',
         type: 'website',
         url: 'https://docs.zephyr-cloud.io/',
-        image: 'https://docs.zephyr-cloud.io/dark-bg-logo.png',
+        image: 'https://docs.zephyr-cloud.io/dark-bg-logo.webp',
         description:
           'Documentation for Zephyr Cloud - The developer-first SaaS platform for Module Federation, micro-frontends, and modern web applications.',
         twitter: {
