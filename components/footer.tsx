@@ -1,7 +1,7 @@
 const footerConfig = {
   discord: {
     label: 'Discord',
-    href: 'https://zephyr-cloud.io/discord',
+    href: 'https://discord.gg/zephyrcloud',
   },
   linkedin: {
     label: 'LinkedIn',
