@@ -1,6 +1,3 @@
-import { INTERCOM_SETTINGS } from '@/theme/intercom';
-import Intercom from '@intercom/messenger-js-sdk';
-
 const footerConfig = {
   discord: {
     label: 'Discord',
@@ -31,14 +28,6 @@ const footerConfig = {
     href: 'https://status.zephyr-cloud.io/',
   },
 };
-
-const appId = process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID;
-if (appId) {
-  Intercom({
-    ...INTERCOM_SETTINGS,
-    ...(appId ? { app_id: appId } : {}),
-  });
-}
 
 export const Footer = () => {
   const array = Object.values(footerConfig);

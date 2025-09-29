@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDark, useLang } from '@rspress/core/runtime';
+import Intercom from '@intercom/messenger-js-sdk';
+import { INTERCOM_SETTINGS } from './intercom';
 import {
   Layout as DefaultLayout,
   getCustomMDXComponent as basicGetCustomMDXComponent,
@@ -82,7 +84,7 @@ const AfterNavTitle = () => {
     <div className="flex gap-4 items-center justify-center">
       <a
         href="/"
-        className="text-sm font-semibold text-[var(--rp-c-text-1)] font-bold  transition-all hover:text-[var(--rp-c-text-2)]"
+        className="text-sm text-[var(--rp-c-text-1)] font-bold  transition-all hover:text-[var(--rp-c-text-2)]"
       >
         Zephyr Cloud Docs
       </a>
@@ -93,17 +95,20 @@ const AfterNavTitle = () => {
 const Search = () => {
   const lang = useLang();
   return (
-    <PluginAlgoliaSearch
-      docSearchProps={{
-        appId: '072HAFA8RX', // cspell:disable-line
-        apiKey: 'ed3f7caac2f30ca8f3cc9ff8f5fb3bd8', // cspell:disable-line
-        indexName: 'Zephyr Docs',
-        searchParameters: {
-          facetFilters: [`lang:${lang}`],
-        },
-      }}
-      locales={ZH_LOCALES}
-    />
+    <>
+      <HelpButton />
+      <PluginAlgoliaSearch
+        docSearchProps={{
+          appId: '072HAFA8RX', // cspell:disable-line
+          apiKey: 'ed3f7caac2f30ca8f3cc9ff8f5fb3bd8', // cspell:disable-line
+          indexName: 'Zephyr Docs',
+          searchParameters: {
+            facetFilters: [`lang:${lang}`],
+          },
+        }}
+        locales={ZH_LOCALES}
+      />
+    </>
   );
 };
 
@@ -150,13 +155,61 @@ const NotFoundLayout = () => (
   </div>
 );
 
-const Layout = () => (
-  <DefaultLayout
-    beforeDocContent={<CurrentVersion />}
-    afterNavTitle={<AfterNavTitle />}
-    bottom={<Footer />}
-  />
-);
+const HelpButton = () => {
+  const dark = useDark();
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            id="intercom-launcher"
+            className={cn(
+              'flex items-center mr-2 justify-center w-8 h-8 rounded-md transition-all duration-200 hover:bg-[var(--rp-c-bg-mute)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--rp-c-brand)]',
+              'text-[var(--rp-c-text-2)] hover:text-[var(--rp-c-text-1)]',
+            )}
+            aria-label="Get Help"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <circle cx="12" cy="17" r="0.5" fill="currentColor" />
+            </svg>
+          </button>
+        </TooltipTrigger>
+        <TooltipContent
+          className={cn('z-[100]', dark ? 'bg-zinc-950' : 'bg-zinc-50')}
+        >
+          <p>Need help? Chat with us!</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
+const Layout = () => {
+  useEffect(() => {
+    // Initialize Intercom when the theme loads
+    Intercom(INTERCOM_SETTINGS);
+  }, []);
+
+  return (
+    <DefaultLayout
+      beforeDocContent={<CurrentVersion />}
+      afterNavTitle={<AfterNavTitle />}
+      bottom={<Footer />}
+    />
+  );
+};
 
 function getCustomMDXComponent() {
   const { h1: H1, ...components } = basicGetCustomMDXComponent();
