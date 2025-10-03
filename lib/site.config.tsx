@@ -63,7 +63,7 @@ export const SiteConfig: CardProps = {
       title: 'Adding Zephyr to existing application',
       description:
         'One line of code to add Zephyr to your existing application. Use Nx + React + Webpack as an example.',
-      href: '/recipes/existing-app',
+      href: '/integrations/existing-app',
       variant: 'small',
     },
     // {
@@ -91,20 +91,20 @@ export const SiteConfig: CardProps = {
       icons: [<ReactIcon />, <ViteIcon />],
     },
     {
-      title: '📱 Metro (React Native)',
-      description:
-        'Fast, scalable bundler for React Native applications with native performance.',
-      href: '/bundlers/metro',
-      variant: 'small',
-      icons: [<ReactIcon />],
-    },
-    {
-      title: '🔧 Re.Pack (React Native)',
+      title: '📱 Re.Pack (React Native)',
       description:
         'Advanced React Native bundling with Rspack-based tooling and hot reload.',
       href: '/integrations/react-native-repack',
       variant: 'small',
       icons: [<ReactIcon />],
+    },
+    {
+      title: '🔧 Rspack + Nx',
+      description:
+        'Powerful monorepo setup with Nx workspace and high-performance Rspack bundler.',
+      href: '/integrations/react-rspack-nx',
+      variant: 'small',
+      icons: [<ReactIcon />, <RspackIcon />, <NxIcon />],
     },
   ],
   features: [
@@ -150,7 +150,7 @@ export const SiteConfig: CardProps = {
       title: 'React + Vite',
       framework: 'react',
       description: 'Use Zephyr with React and Vite.',
-      href: '/recipes/react-vite',
+      href: '/integrations/react-vite',
       variant: 'small',
       icons: [<ReactIcon />, <ViteIcon />],
     },
@@ -159,7 +159,7 @@ export const SiteConfig: CardProps = {
       title: 'Add Zephyr to existing App',
       framework: 'react',
       description: 'Add Zephyr to an existing application',
-      href: '/recipes/existing-app',
+      href: '/integrations/existing-app',
       variant: 'small',
       icons: [<ReactIcon />, <ViteIcon />, <WebpackIcon />, <RspackIcon />],
     },
@@ -168,7 +168,7 @@ export const SiteConfig: CardProps = {
       framework: 'vite',
       description:
         'Deploying a Micro-Frontend application using the Official Vite Plugin from Module Federation with Vite, Rspack and Webpack on Zephyr. ',
-      href: '/recipes/vite-rspack-webpack-mf',
+      href: '/integrations/vite-rspack-webpack-mf',
       variant: 'small',
       icons: [
         <ViteIcon />,
@@ -197,71 +197,33 @@ export const SiteConfig: CardProps = {
     {
       title: 'React + Rsbuild',
       description: 'Use Zephyr with React and Rsbuild.',
-      href: '/recipes/react-rsbuild',
+      href: '/integrations/react-rsbuild',
       variant: 'small',
       icons: [<ReactIcon />, <RspackIcon />],
     },
     {
       title: 'React + Rspack + Nx',
       description: 'Use Zephyr with React, Nx and Rspack.',
-      href: '/recipes/react-rspack-nx',
+      href: '/integrations/react-rspack-nx',
       variant: 'small',
       icons: [<ReactIcon />, <RspackIcon />, <NxIcon />],
     },
     {
-      title: 'React Native',
+      title: 'React Native + Re.Pack',
       description:
         'Read more about how Zephyr works with Re.Pack - built for React Native.',
-    },
-    {
-      title: 'Migrate from Webpack in Nx to Rspack',
-      description: 'Migrate from Webpack in Nx to Rspack and use Zephyr.',
-      href: '/recipes/migrate-nx-webpack-to-rspack',
+      href: '/integrations/react-native-repack',
       variant: 'small',
-      icons: [<ModuleFederationIcon />],
-    },
-    {
-      // create-mf-app-rspack
-      title: 'React + Rspack',
-      description: 'Use Zephyr with React and Rspack',
-      href: '/general/get-started#start-from-scratch',
-      variant: 'small',
-      icons: [<ReactIcon />, <RspackIcon />, <ModuleFederationIcon />],
-    },
-    // {
-    //   // create-nx-rspack-workpace-mf
-    //   title: "React + Nx + Rspack + Module Federation",
-    //   description: "Use Zephyr with React, Nx, Rspack and Module Federation.",
-    //   href: "/recipes/react-nx-mf-rspack",
-    //   variant: "small",
-    //   icons: [
-    //     <ReactIcon />,
-    //     <NxIcon />,
-    //     <RspackIcon />,
-    //     <ModuleFederationIcon />,
-    //   ],
-    // },
-    {
-      // create-nx-workspace-mf + react-tractor-sample
-      title: 'React + Webpack + Nx + Module Federation',
-      description: 'Use Zephyr with React, Nx and Module Federation.',
-      href: '/recipes/nx-mf-app',
-      variant: 'small',
-      icons: [
-        <ReactIcon />,
-        <WebpackIcon />,
-        <NxIcon />,
-        <ModuleFederationIcon />,
-      ],
+      icons: [<ReactIcon />, <RepackIcon />],
     },
     {
       // react-vite-ts
       title: 'Enable SSG on Rspress',
       framework: 'react',
       description: 'Deploy a SSG application with Zephyr + Rspress.',
-      href: '/recipes/rspress',
+      href: '/meta-frameworks/rspress',
       variant: 'small',
-      icons: [<RspackIcon />],
+      icons: [<RspressIcon />],
     },
     // {
     //   // create-default-webpack-mf
