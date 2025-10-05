@@ -8,7 +8,6 @@ import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { defineConfig } from '@rspress/core';
 import { withZephyr } from 'zephyr-rsbuild-plugin';
-// import { withZephyr } from 'zephyr-rspress-plugin';
 
 import { Categories, Errors } from './lib/error-codes-messages';
 import { capitalizeFirstLetter } from './lib/utils/casing';
@@ -424,6 +423,10 @@ export default defineConfig({
         {
           from: '/guide/integrations/netlify',
           to: '/cloud/netlify',
+        },
+        {
+          from: '/recipes/react-vite',
+          to: '/bundlers/vite',
         },
       ],
     }),
