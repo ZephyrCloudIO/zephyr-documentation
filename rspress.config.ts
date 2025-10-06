@@ -7,7 +7,7 @@ import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { defineConfig } from '@rspress/core';
-import { withZephyr } from 'zephyr-rsbuild-plugin';
+import { withZephyr } from 'zephyr-rspress-plugin';
 
 import { Categories, Errors } from './lib/error-codes-messages';
 import { capitalizeFirstLetter } from './lib/utils/casing';
@@ -338,7 +338,7 @@ export default defineConfig({
   description: 'Documentation for Zephyr Cloud',
   icon: '/favicon.ico',
   lang: 'en',
-  ssg: false,
+  ssg: true,
   globalStyles: path.join(__dirname, 'styles/index.css'),
   mediumZoom: { selector: '.rspress-doc img' },
   logo: {
@@ -388,7 +388,6 @@ export default defineConfig({
       pluginGoogleAnalytics({
         id: 'G-B7G266JZDH',
       }),
-      withZephyr(),
     ],
     output: {
       copy: {
@@ -430,5 +429,7 @@ export default defineConfig({
         },
       ],
     }),
+    // @ts-expect-error Rspress plugin only accounts for stable not beta so there is type issues
+    withZephyr(),
   ],
 });
