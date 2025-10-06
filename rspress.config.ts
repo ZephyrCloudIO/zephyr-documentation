@@ -158,11 +158,10 @@ const sidebar: Sidebar = {
           text: 'Re.Pack (React Native)',
           link: '/bundlers/repack',
         },
-        // TODO: Uncomment and add when Metro is working
-        // {
-        //   text: "Metro (React Native)",
-        //   link: "/bundlers/metro",
-        // },
+        {
+          text: 'Metro (React Native)',
+          link: '/bundlers/metro',
+        },
       ],
     },
     {
@@ -266,6 +265,10 @@ const sidebar: Sidebar = {
         {
           text: 'Complete MF Guide',
           link: '/tutorials/mf-guide',
+        },
+        {
+          text: 'React Native with Metro',
+          link: '/tutorials/metro',
         },
         {
           text: 'End-to-End Testing',
