@@ -28,12 +28,12 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      # Run the CI build script to ensure search works
-      - name: Run CI build
+      # Run the build
+      - name: Run build
         id: build
         env:
           ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
-        run: pnpm run build:ci
+        run: pnpm build
 
       - name: Zephyr deploy summary
         uses: ZephyrCloudIO/deploy-summary-action@v1.3.0
