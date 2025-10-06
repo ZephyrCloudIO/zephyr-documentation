@@ -36,15 +36,19 @@ jobs:
       - name: Run linting
         run: pnpm lint
 
-      # Run the CI build script
-      - name: Run CI build
+      # Run the build
+      - name: Run build
         env:
           ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
-        run: pnpm run build:ci
+        run: pnpm build
+
       - name: Zephyr deploy summary
         uses: ZephyrCloudIO/deploy-summary-action@v1.3.0
         id: zephyr-summary
         with:
           application_uid: zephyr-cloud-docs.zephyr-documentation.zephyrcloudio # Required
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_environment: zephyr-docs (Preview)
+
       - name: Zephyr deploy summary
-        run: echo "Deployed to ${{ steps.zephyr.outputs.version_url }}"
+        run: echo "Deployed to ${{ steps.zephyr-summary.outputs.version_url }}"

@@ -8,7 +8,6 @@
   },
   "scripts": {
     "build": "rspress build",
-    "build:ci": "node scripts/build-ci.js",
     "dev": "rspress dev --port 3030",
     "lint": "eslint .",
     "format": "prettier --write .",
