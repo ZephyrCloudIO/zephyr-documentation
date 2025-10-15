@@ -48,6 +48,30 @@ Tags use flexible condition rules to decide which version to serve. You can comb
 
 You can create sophisticated rules by combining conditions. A "stable" tag might point to versions that are from the main branch, built by CI, and match a version pattern - ensuring only production-ready builds are served.
 
+---
+
+### Nested Conditions
+
+Tag conditions can be **nested**, allowing deeply flexible and expressive logic trees using combinations of `AND` and `OR` groups.
+
+Each condition group can contain:
+- **Individual conditions**, and/or  
+- **Other nested groups** of conditions.
+
+This lets you describe logic such as:
+
+> **Example:**  
+> - `isCI is true`  
+> - **AND**  
+>   - (`branch is main` **OR** `branch is release`)  
+>   - **AND**  
+>   - (`user is Zephyr User` **OR** `user is Tech Team`)  
+
+This rule means:  
+**“Select CI builds from the main or release branches made by Zephyr User or the Tech team.”**
+
+---
+
 ### Tag URLs and Access
 
 Every tag gets its own permanent URL that you can share, bookmark, or use in other applications. These URLs never change, even when the tag switches to point to different versions. This means your links always work, but they automatically serve the most up-to-date content based on your rules.
