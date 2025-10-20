@@ -86,6 +86,10 @@ const sidebar: Sidebar = {
           link: '/features/ci-cd',
         },
         {
+          text: 'CI/CD - Server token',
+          link: '/features/ci-cd-server-token',
+        },
+        {
           text: 'Teams & Members',
           link: '/features/teams-members',
         },
