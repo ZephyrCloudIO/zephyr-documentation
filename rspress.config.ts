@@ -82,8 +82,8 @@ const sidebar: Sidebar = {
           link: '/features/remote-dependencies',
         },
         {
-          text: 'CI/CD',
-          link: '/features/ci-cd',
+          text: 'CI/CD - Personal token',
+          link: '/features/ci-cd-personal-token',
         },
         {
           text: 'CI/CD - Server token',

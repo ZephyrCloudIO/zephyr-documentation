@@ -5,7 +5,7 @@ description: The Server Auth Token allows you to authenticate Zephyr plugins at 
 
 import { Steps } from '@rspress/core/theme';
 
-# CI/CD Integration
+# CI/CD Integration using Server token
 
 The Server Auth Token allows you to authenticate Zephyr plugins at the organization level without needing individual user credentials for every operation. It identifies the user performing actions via their email and enables secure access to Zephyr on behalf of your organization.
 
@@ -25,19 +25,25 @@ To use Zephyr Cloud in CI/CD pipelines, you'll need an API token for authenticat
 
 Go to your Organization Settings in Zephyr.
 
+![org settings screen](../public/org-settings-screen.webp)
+
 ### Server Tokens section
 
 Navigate to the Server Tokens section.
+
+![server token section screen](../public/server-token-section-screen.webp)
 
 ### Click Generate Token Button
 
 Fill out the required information about the token you're about to generate
 
-![token screen](../public/token-screen.webp)
+![server token screen](../public/server-token-screen.webp)
 
 ### Click Generate
 
 Copy the token for usage where you need to use it
+
+![server token created screen](../public/server-token-created-screen.webp)
 
 </Steps>
 
@@ -78,7 +84,7 @@ Configure your GitLab Runner pipeline to build and deploy with Zephyr by adding 
 
 ### Adding the GitLab CI/CD Variable
 
-1. Create a full access token on your [API token](https://app.zephyr-cloud.io/profile/settings/user-tokens) page
+1. Create a full access token on your [Organization Server tokens page](#server-tokens-section) page
 2. Add it as a CI/CD variable in your GitLab project:
 
 **Steps to add the token:**
@@ -188,6 +194,12 @@ deploy:
     ZE_SERVER_TOKEN: $ZE_SERVER_TOKEN
     ZE_USER_EMAIL: $ZE_USER_EMAIL
 ```
+
+## Security Notes
+
+- Do not share server tokens publicly.
+- Rotate tokens regularly and revoke any that may be compromised.
+- Remember: server tokens provide organization-level access, so they are sensitive credentials.
 
 ## Troubleshooting
 
