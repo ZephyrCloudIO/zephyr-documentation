@@ -55,17 +55,19 @@ You can create sophisticated rules by combining conditions. A "stable" tag might
 Tag conditions can be **nested**, allowing deeply flexible and expressive logic trees using combinations of `AND` and `OR` groups.
 
 Each condition group can contain:
-- **Individual conditions**, and/or  
+
+- **Individual conditions**, and/or
 - **Other nested groups** of conditions.
 
 This lets you describe logic such as:
 
-> **Example:**  
-> - `isCI is true`  
-> - **AND**  
->   - (`branch is main` **OR** `branch is release`)  
->   - **AND**  
->   - (`user is Zephyr User` **OR** `user is Tech Team`)  
+> **Example:**
+>
+> - `isCI is true`
+> - **AND**
+>   - (`branch is main` **OR** `branch is release`)
+>   - **AND**
+>   - (`user is Zephyr User` **OR** `user is Tech Team`)
 
 This rule means:  
 **“Select CI builds from the main or release branches made by Zephyr User or the Tech team.”**
