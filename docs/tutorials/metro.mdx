@@ -1,0 +1,636 @@
+---
+- title: React Native Module Federation with Metro
+- description: Complete guide to building a React Native app with Module Federation using Metro bundler
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+import { Separator } from '../../components/ui/separator';
+import { Keyboard } from '../../components/ui/keyboard';
+
+# React Native, Metro and Module Federation
+
+This guide will explain how to build a React Native app with Metro bundler that uses [Module Federation](https://module-federation.io) to share code between apps. This approach enables you to create micro-frontend architectures in React Native applications, allowing teams to develop, deploy, and scale mini-applications independently.
+
+:::info Prerequisites
+
+- Finished our [Get Started](/tutorials/first-app) guide
+- A registered account on [Zephyr Cloud](https://app.zephyr-cloud.io)
+- npm >=10
+- node >=18
+- ruby >= 3.3.2
+
+:::
+
+## Overview
+
+Module Federation with Metro bundler in React Native provides several key advantages:
+
+1. **Independent Development**: Teams can develop mini-applications in isolation with their own release cycles
+2. **Code Sharing**: Efficient sharing of common dependencies and utilities across applications
+3. **Runtime Loading**: Dynamic loading of mini-applications without requiring app store updates
+4. **Scalability**: Easy addition of new features and micro-frontends as your application grows
+5. **Team Autonomy**: Different teams can work on different parts of the application independently
+
+## Architecture Considerations
+
+When implementing Module Federation with Metro in React Native, consider these architectural patterns:
+
+- **Host Application**: The main React Native app that loads and orchestrates mini-applications
+- **Mini Applications**: Self-contained React Native applications that expose specific functionality
+- **Shared Dependencies**: Common libraries and utilities shared between host and mini-applications
+
+<Separator />
+
+## Creating Your Applications
+
+### Project Structure
+
+Your project structure should look like this:
+
+```
+apps/
+├── HostApp/                # Main React Native application
+│   ├── metro.config.js     # Metro configuration with Module Federation
+│   ├── react-native.config.js
+│   ├── package.json
+│   └── src/
+│       └── App.tsx
+├── MiniApp/                # Mini application
+│   ├── metro.config.js     # Metro configuration with Module Federation
+│   ├── react-native.config.js
+│   ├── package.json
+│   └── src/
+│       └── example.tsx     # Exposed component
+└── libs/                   # Shared libraries (optional)
+    └── core/               # Shared utilities and components
+```
+
+### Creating a New React Native Application
+
+If you're starting from scratch, create both the host and mini applications:
+
+**Create a new React Native host application:**
+
+```bash
+npx react-native init HostApp
+cd HostApp
+```
+
+**Create a new React Native mini application:**
+
+```bash
+npx react-native init MiniApp
+cd MiniApp
+```
+
+### Modifying an Existing React Native Application
+
+If you have existing React Native applications, you can convert them to use Module Federation. Install the required dependencies in both host and mini applications:
+
+<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro @module-federation/metro-plugin-rnc-cli @module-federation/runtime" />
+
+<Separator />
+
+## Configuring the Mini Application
+
+The mini application is a self-contained React Native app that exposes specific functionality to be consumed by the host application. This section covers the essential configuration steps.
+
+### Understanding Mini Application Configuration
+
+Mini applications in Module Federation work as "remotes" that expose modules to be consumed by host applications. Key aspects include:
+
+- **Exposed Modules**: Components, utilities, or entire screens that can be loaded by the host
+- **Shared Dependencies**: Libraries that are shared between host and mini applications
+- **Bundle Configuration**: How the application is bundled and served
+
+### Step 1: Configure Metro for Module Federation
+
+Create or modify your `metro.config.js` file in the mini application:
+
+```javascript
+// MiniApp/metro.config.js
+const path = require('node:path');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withModuleFederation } = require('@module-federation/metro');
+const { withZephyr } = require('zephyr-metro-plugin');
+
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ *
+ * @type {import('@react-native/metro-config').MetroConfig}
+ */
+const config = {
+  resolver: { useWatchman: false },
+  watchFolders: [
+    path.resolve(__dirname, '../../node_modules'),
+    path.resolve(__dirname, '../../packages/core'),
+  ],
+};
+
+async function getConfig() {
+  const zephyrConfig = await withZephyr()({
+    name: 'miniApp',
+    filename: 'miniApp.bundle',
+    exposes: {
+      './example': './src/example.tsx',
+    },
+    shared: {
+      react: {
+        singleton: true,
+        eager: false,
+        requiredVersion: '19.1.0',
+        version: '19.1.0',
+        import: false,
+      },
+      'react-native': {
+        singleton: true,
+        eager: false,
+        requiredVersion: '0.80.0',
+        version: '0.80.0',
+        import: false,
+      },
+    },
+    shareStrategy: 'version-first',
+  });
+
+  return withModuleFederation(
+    mergeConfig(getDefaultConfig(__dirname), config),
+    zephyrConfig,
+    {
+      flags: {
+        unstable_patchHMRClient: true,
+        unstable_patchInitializeCore: true,
+        unstable_patchRuntimeRequire: true,
+      },
+    },
+  );
+}
+
+module.exports = getConfig();
+```
+
+:::details{title="Configuration Breakdown"}
+
+- **name**: Unique identifier for your mini application
+- **filename**: The bundle filename that will be generated
+- **exposes**: Modules to expose to host applications (key is the public path, value is the source path)
+- **shared**: Dependencies shared with the host application
+  - **singleton**: Ensures only one instance is loaded
+  - **eager**: Controls whether the dependency is loaded immediately
+  - **requiredVersion**: Version constraint for the shared dependency
+  - **import**: Whether to import the dependency (set to false for React Native)
+- **shareStrategy**: `'version-first'` prioritizes version compatibility
+
+:::
+
+### Step 2: Configure React Native CLI
+
+Create or modify your `react-native.config.js` file to enable uploading mini application bundles to Zephyr Cloud:
+
+```javascript
+// MiniApp/react-native.config.js
+const commands = require('@module-federation/metro-plugin-rnc-cli');
+const { updateManifest } = require('@module-federation/metro');
+const { zephyrCommandWrapper } = require('zephyr-metro-plugin');
+
+const wrappedFuncPromise = zephyrCommandWrapper(
+  commands.bundleMFRemoteCommand.func,
+  commands.loadMetroConfig,
+  () => {
+    updateManifest(
+      global.__METRO_FEDERATION_MANIFEST_PATH,
+      global.__METRO_FEDERATION_CONFIG,
+    );
+  },
+);
+
+const zephyrCommand = {
+  name: 'bundle-mf-remote',
+  description:
+    'Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications',
+  func: async (...args) => {
+    const wrappedFunc = await wrappedFuncPromise;
+    return wrappedFunc(...args);
+  },
+  options: commands.bundleMFRemoteCommand.options,
+};
+
+module.exports = {
+  commands: [zephyrCommand],
+};
+```
+
+:::details{title="Why This Configuration?"}
+
+This configuration adds a custom React Native CLI command that:
+
+- Handles Module Federation bundling
+- Integrates with Zephyr Cloud for asset upload
+- Updates the Module Federation manifest
+- Enables deployment to Zephyr's edge network
+
+:::
+
+### Step 3: Create an Exposed Component
+
+Create a component in your mini application that will be exposed to the host:
+
+```tsx
+// MiniApp/src/example.tsx
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+export default function Example() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Hello from Mini App!</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+});
+```
+
+### Step 4: Bundle Your Mini Application
+
+Once configured, bundle your mini application for different platforms:
+
+```bash
+# Bundle for iOS
+npx react-native bundle-mf-remote --platform ios --dev false
+
+# Bundle for Android
+npx react-native bundle-mf-remote --platform android --dev false
+```
+
+:::tip
+
+After bundling, configure your mini app environments and tags in the [Tags & Environments](/features/tags-environments) section of your Zephyr Cloud dashboard.
+
+:::
+
+<Separator />
+
+## Configuring the Host Application
+
+The host application is the main React Native app that loads and orchestrates mini-applications. It acts as a "consumer" in the Module Federation architecture.
+
+### Understanding Host Application Configuration
+
+The host application configuration differs from mini-applications in several key ways:
+
+- **Remotes Configuration**: Defines which mini-applications to load and from where
+- **Eager Loading**: Host applications typically eager-load shared dependencies
+- **Runtime Plugins**: Can include custom runtime logic for module loading
+- **Share Strategy**: Uses `'loaded-first'` strategy to prioritize already loaded dependencies
+
+### Step 1: Configure Metro for the Host
+
+Create or modify your `metro.config.js` file in the host application:
+
+```javascript
+// HostApp/metro.config.js
+const path = require('node:path');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withZephyr } = require('zephyr-metro-plugin');
+const { withModuleFederation } = require('@module-federation/metro');
+
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ *
+ * @type {import('@react-native/metro-config').MetroConfig}
+ */
+
+const config = {
+  resolver: { useWatchman: false },
+  watchFolders: [
+    path.resolve(__dirname, '../../node_modules'),
+    path.resolve(__dirname, '../../packages/core'),
+  ],
+};
+
+const getConfig = async () => {
+  const zephyrConfig = await withZephyr()({
+    name: 'hostApp',
+    remotes: {
+      miniApp: 'miniApp@http://localhost:8082/mf-manifest.json',
+    },
+    shared: {
+      react: {
+        singleton: true,
+        eager: true,
+        requiredVersion: '19.1.0',
+        version: '19.1.0',
+      },
+      'react-native': {
+        singleton: true,
+        eager: true,
+        requiredVersion: '0.80.0',
+        version: '0.80.0',
+      },
+    },
+    shareStrategy: 'loaded-first',
+    plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
+  });
+
+  return withModuleFederation(
+    mergeConfig(getDefaultConfig(__dirname), config),
+    zephyrConfig,
+    {
+      flags: {
+        unstable_patchHMRClient: true,
+        unstable_patchInitializeCore: true,
+        unstable_patchRuntimeRequire: true,
+      },
+    },
+  );
+};
+
+module.exports = getConfig;
+```
+
+:::details{title="Configuration Breakdown"}
+
+- **name**: Unique identifier for your host application
+- **remotes**: Mini-applications to load
+  - Key is the local name you'll use to import
+  - Value is the remote entry URL (Zephyr will resolve this to the cloud URL)
+- **shared**: Dependencies shared with mini-applications
+  - **eager: true**: Host loads these dependencies immediately
+- **shareStrategy**: `'loaded-first'` prioritizes already loaded dependencies
+- **plugins**: Optional runtime plugins for custom logic
+
+:::
+
+### Step 2: Configure Zephyr Dependencies
+
+To enable Zephyr Cloud integration, add the `zephyr:dependencies` field to your `package.json`:
+
+```json
+// HostApp/package.json
+{
+  "name": "hostApp",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "19.1.0",
+    "react-native": "0.80.0"
+  },
+  "zephyr:dependencies": {
+    "miniApp": "zephyr:miniApp@yourEnvironment"
+  }
+}
+```
+
+:::details{title="Environment Configuration"}
+
+- **miniApp**: The name of the mini-application (must match the name in metro.config.js)
+- **zephyr:miniApp@yourEnvironment**: References the mini-app from a specific Zephyr environment
+- Replace `yourEnvironment` with your actual environment name (e.g., `staging`, `production`)
+
+For more information about managing dependencies, see [Remote Dependencies](/features/remote-dependencies).
+
+:::
+
+### Step 3: Load Mini Application in Your Code
+
+Now you can use the mini application in your host app:
+
+```tsx
+// HostApp/src/App.tsx
+import React, { Suspense } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+
+// Import the mini application component
+const MiniAppComponent = React.lazy(() => import('miniApp/example'));
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Host Application</Text>
+
+      <Suspense fallback={<ActivityIndicator size="large" color="#0000ff" />}>
+        <MiniAppComponent />
+      </Suspense>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+});
+```
+
+:::tip
+
+Always wrap lazy-loaded components with `Suspense` to handle loading states gracefully.
+
+:::
+
+<Separator />
+
+## Running Your Application
+
+Once both host and mini applications are configured:
+
+### Step 1: Start the Metro Bundler
+
+In your host application directory:
+
+```bash
+cd HostApp
+npx react-native start
+```
+
+### Step 2: Run on iOS
+
+Open a new terminal and run:
+
+```bash
+npx react-native run-ios
+```
+
+### Step 3: Run on Android
+
+Open a new terminal and run:
+
+```bash
+npx react-native run-android
+```
+
+:::info
+
+During development, the host will load mini-applications from the URLs specified in your Metro configuration. In production, Zephyr will automatically resolve these to your deployed versions based on your environment configuration.
+
+:::
+
+<Separator />
+
+## Best Practices
+
+### Shared Dependencies
+
+Carefully manage shared dependencies to avoid version conflicts:
+
+```javascript
+shared: {
+  react: {
+    singleton: true,  // Critical - only one React instance
+    eager: true,      // Load immediately in host
+    requiredVersion: '19.1.0',
+    version: '19.1.0',
+  },
+  'react-native': {
+    singleton: true,  // Critical - only one RN instance
+    eager: true,
+    requiredVersion: '0.80.0',
+    version: '0.80.0',
+  },
+  // Be selective with other shared dependencies
+  '@react-navigation/native': {
+    singleton: true,
+    eager: false,
+    requiredVersion: '^6.0.0',
+  },
+}
+```
+
+### Error Handling
+
+Implement proper error boundaries for mini-applications:
+
+```tsx
+import React, { Component, ReactNode } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+interface Props {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+}
+
+class MiniAppErrorBoundary extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): State {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        this.props.fallback || (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>
+              Failed to load mini application
+            </Text>
+          </View>
+        )
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+const styles = StyleSheet.create({
+  errorContainer: {
+    padding: 20,
+    backgroundColor: '#ffebee',
+    borderRadius: 8,
+  },
+  errorText: {
+    color: '#c62828',
+    fontSize: 16,
+  },
+});
+
+export default MiniAppErrorBoundary;
+```
+
+### Platform-Specific Code
+
+Handle platform differences in your mini-applications:
+
+```tsx
+import { Platform } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    padding: Platform.select({
+      ios: 20,
+      android: 16,
+    }),
+  },
+});
+```
+
+<Separator />
+
+## Troubleshooting
+
+### Mini Application Not Loading
+
+If your mini application fails to load:
+
+1. Verify the remote URL in metro.config.js
+2. Check that the mini application was bundled successfully
+3. Ensure the mini application is deployed to Zephyr Cloud
+4. Verify network connectivity and CORS settings
+
+### Version Conflicts
+
+If you encounter dependency version conflicts:
+
+1. Ensure shared dependencies have matching version ranges
+2. Use `singleton: true` for critical dependencies like React
+3. Check the Metro bundler logs for specific version mismatches
+
+### Build Failures
+
+Common build issues and solutions:
+
+- **Module not found**: Verify the exposed path in the mini app's metro.config.js
+- **Bundle size too large**: Review shared dependencies and optimize imports
+- **Cache issues**: Clear Metro cache with `npx react-native start --reset-cache`
+
+<Separator />
+
+## Next Steps
+
+Now that you have Module Federation working with Metro, explore these advanced topics:
+
+- Explore our [example repository](https://github.com/ZephyrCloudIO/zephyr-metro-example/) for complete working examples
+- Learn about [Tags & Environments](/features/tags-environments) for managing different deployment stages
+- Check out [Remote Dependencies](/features/remote-dependencies) for advanced dependency configuration
+- Review [End-to-End Testing](/tutorials/e2e-testing) for testing federated applications
+- Understand [Versioning and Tags](/features/versioning-tags) for managing deployments
+- Set up [CI/CD pipelines](/features/ci-cd) for automated deployments
