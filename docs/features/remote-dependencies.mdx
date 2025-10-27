@@ -121,18 +121,20 @@ Zephyr's dependency resolution engine supports multiple version selector formats
     "header": "header-component@latest",
     "uiKit": "design-system@stable",
     "utils": "shared-utilities@v2.1",
-    "experimental": "beta-features@next"
+    "experimental": "beta-features@next",
+    "legacy": "old-component@1.2.3"
   }
 }
 ```
 
-Label-based selectors resolve to environments or tags with matching names. They allow you to:
+Label-based selectors resolve to environments, tags, or version numbers with matching names. They allow you to:
 
 - Target lifecycle stages: `@latest`, `@stable`, `@next`
 - Reference specific releases: `@v2.1`, `@release-3.0`
 - Use environment names: `@production`, `@staging`, `@development`
+- Resolve to specific versions: `@1.2.3`, `@2.0.0`
 
-**Resolution Priority**: Zephyr searches for an **environment** with the label name first, then falls back to searching for a **tag** with that name. Environments always take precedence over tags when both exist with the same name.
+**Resolution Priority**: Zephyr searches for an **environment** with the label name first, then falls back to searching for a **tag** with that name, and finally attempts to match it as a version number. Environments always take precedence over tags when both exist with the same name.
 
 #### Semantic Version Ranges
 
@@ -305,14 +307,15 @@ The resolution engine implements automatic fallback to the 'web' platform when p
 
 ### Label-Based Resolution (Environments and Tags)
 
-Dependencies can be resolved using labels that correspond to either environments or tags. When using label-based selectors, Zephyr follows a specific priority order:
+Dependencies can be resolved using labels that correspond to environments, tags, or version numbers. When using label-based selectors, Zephyr follows a specific priority order:
 
 ```json title="package.json"
 {
   "zephyr:dependencies": {
     "analytics": "zephyr:analytics-service@production",
     "feature-flags": "zephyr:feature-service@staging",
-    "ui-library": "design-system@latest"
+    "ui-library": "design-system@latest",
+    "legacy-api": "api-service@1.2.3"
   }
 }
 ```
@@ -321,10 +324,11 @@ Dependencies can be resolved using labels that correspond to either environments
 
 1. **Environment name first**: Zephyr searches for an environment with the matching name
 2. **Tag name second**: If no environment is found, searches for a tag with the matching name
-3. **Platform fallback**: If not found for the target platform, tries the web platform
-4. **Default environment**: Falls back to the default environment if no match is found
+3. **Version number third**: If no tag is found, attempts to match it as a version number
+4. **Platform fallback**: If not found for the target platform, tries the web platform
+5. **Default environment**: Falls back to the default environment if no match is found
 
-This priority system means environment names always take precedence over tag names. For example, if both an environment and a tag are named `production`, the environment will be selected.
+This priority system means environment names always take precedence over tag names, and tag names take precedence over version numbers. For example, if both an environment and a tag are named `production`, the environment will be selected.
 
 ## Resolution Order and Strategies
 
@@ -352,10 +356,11 @@ The resolution strategy is determined by the version selector format:
    - Falls back to web platform if no matching version exists for the requested platform
    - Falls back to default environment if no matching versions are found
 
-4. **Label-Based Resolution** (e.g., `@production`, `@staging`, `@latest`, custom tags):
+4. **Label-Based Resolution** (e.g., `@production`, `@staging`, `@latest`, `@1.2.3`):
    - First searches for an environment with the matching name
    - If no environment found, searches for a tag with the matching name
-   - Environment names take priority over tag names
+   - If no tag found, attempts to match it as a version number
+   - Environment names take priority over tag names, and tag names take priority over version numbers
    - Falls back to web platform if no match exists for the requested platform
    - Falls back to default environment if no matching label is found
 
