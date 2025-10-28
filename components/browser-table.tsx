@@ -1,5 +1,5 @@
-import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
-import { supportedBrowser } from "../lib/site.config";
+import { CheckCircledIcon, CrossCircledIcon } from '@radix-ui/react-icons';
+import { supportedBrowser } from '../lib/site.config';
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
+} from './ui/table';
 
 export default function SupportedBrowser() {
   return (
@@ -17,13 +17,13 @@ export default function SupportedBrowser() {
         <TableCaption className="text-start">
           While the extension may also function on other Chromium-based browsers
           such as Microsoft Edge, Brave, Vivaldi, and Opera, please be aware
-          that these are not officially supported.{" "}
+          that these are not officially supported.{' '}
           <i>
             <strong>
               For best user experience, we highly recommend you to use Google
               Chrome.
             </strong>
-          </i>{" "}
+          </i>{' '}
           We are not responsible for any issues that may arise, and currently,
           we do not provide support for these platforms.
         </TableCaption>

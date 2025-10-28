@@ -1,20 +1,20 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { useDark } from "rspress/runtime";
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { useDark } from '@rspress/core/runtime';
 
 interface ImageTypeProps {
   darkSrc?: string;
   lightSrc?: string;
 }
 export const InvertImage = ({ darkSrc, lightSrc }: ImageTypeProps) => {
-  const [imageSrc, setImageSrc] = useState("/dark-bg-logo.png");
+  const [imageSrc, setImageSrc] = useState('/dark-bg-logo.webp');
 
   const isDark = useDark();
 
   useEffect(() => {
-    if (!isDark) setImageSrc(lightSrc ? lightSrc : "/light-bg-logo.png");
+    if (!isDark) setImageSrc(lightSrc ? lightSrc : '/light-bg-logo.webp');
 
-    if (isDark) setImageSrc(darkSrc ? darkSrc : "/dark-bg-logo.png");
+    if (isDark) setImageSrc(darkSrc ? darkSrc : '/dark-bg-logo.webp');
   }, [isDark, darkSrc, lightSrc]);
 
   return (

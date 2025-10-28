@@ -1,6 +1,6 @@
 import { getErrorMessage } from '../../lib/error-helpers.ts';
 import { ErrorInfo } from '../../components/errors/info.tsx';
-import { Steps } from '@theme';
+import { Steps } from '@rspress/core/theme';
 
 # {getErrorMessage('ZE20011')}
 
@@ -20,19 +20,16 @@ It was either by a mistyped `project_uid` _(subdomain)_ or the URL path doesn't 
 
 Re-run your build and ensure you clicked on the latest deployment URL for your tag and not an older one that was in your copy-paste history.
 
-```bash
 npm run build
-
-ZEPHYR   Hi arthurfiorette!
-ZEPHYR   Building to project.repository.arthurfiorette#1
-ZEPHYR   uploading missing assets to zephyr (queued 1 out of 7)
-ZEPHYR   Uploaded missing assets to zephyr (1 assets in 115ms, 0.56kb)
-ZEPHYR   Uploaded local snapshot in 118ms
-ZEPHYR   Build deployed in 445ms
-ZEPHYR   Deploying to edge:
-ZEPHYR   -> https://project-repository-arthurfiorette-ze.valorkin.dev
-ZEPHYR   -> https://arthurfiorette-project-commitid-ze.valorkin.dev
-```
+ZEPHYR Hi arthurfiorette!
+ZEPHYR Building to project.repository.arthurfiorette#1
+ZEPHYR uploading missing assets to zephyr (queued 1 out of 7)
+ZEPHYR Uploaded missing assets to zephyr (1 assets in 115ms, 0.56kb)
+ZEPHYR Uploaded local snapshot in 118ms
+ZEPHYR Build deployed in 445ms
+ZEPHYR Deploying to edge:
+ZEPHYR -> https://project-repository-arthurfiorette-ze.valorkin.dev
+ZEPHYR -> https://arthurfiorette-project-commitid-ze.valorkin.dev
 
 You can now use all the URLs shown in the output to access your recently deployed project.
 

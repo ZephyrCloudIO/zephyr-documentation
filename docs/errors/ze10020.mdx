@@ -1,6 +1,6 @@
 import { getErrorMessage } from '../../lib/error-helpers.ts';
 import { ErrorInfo } from '../../components/errors/info.tsx';
-import { Steps } from '@theme';
+import { Steps } from '@rspress/core/theme';
 import { ErrorLink } from '../../components/errors/link.tsx';
 
 # {getErrorMessage('ZE10020')}
@@ -85,8 +85,6 @@ plugins = [
 
 Remove `~/.zephyr` by running below commands and login from either [dashboard](https://app.zephyr-cloud.io) or [sidepanel on Chrome](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) again.
 
-```bash
 rm -rf ~/.zephyr
-```
 
 </Steps>

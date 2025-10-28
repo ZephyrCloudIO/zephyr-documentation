@@ -1,0 +1,192 @@
+---
+title: Tags & Environments
+description: Manage application deployments with smart tags and flexible environments in Zephyr Cloud
+---
+
+# Tags & Environments
+
+Tags and environments work together to give you flexible control over where your applications get deployed and how users access them. Think of tags as smart bookmarks that automatically point to the right version, and environments as deployment destinations with their own custom settings.
+
+## Understanding Tags
+
+Tags are smart pointers that automatically find and serve the right version of your application based on rules you set. Unlike static bookmarks, tags actively evaluate your deployment conditions and always point to the most relevant version.
+
+### How Tags Work
+
+When you create a tag, you define conditions that describe which version it should point to. Every time someone visits your tag's URL, Zephyr looks through all your versions, finds the ones that match your conditions, and serves the most recent match.
+
+For example, you might create a "production" tag that always points to the latest version built from your main branch by your CI system. When you push new code to main and your CI deploys it, the production tag automatically switches to that new version without you doing anything.
+
+### Tag Conditions
+
+Tags use flexible condition rules to decide which version to serve. You can combine multiple conditions using "AND" and "OR" logic:
+
+**Branch-based tags**: Point to versions from specific git branches
+
+- Perfect for environment-specific deployments
+- Example: All versions from "main" branch
+
+**User-based tags**: Point to versions built by specific team members
+
+- Great for personal development environments
+- Example: All versions built by "john@company.com"
+
+**CI/CD tags**: Distinguish between automated and manual builds
+
+- Useful for separating production from development builds
+- Example: Only CI-built versions vs only manually built versions
+
+**Git tag matching**: Point to versions that match semantic versioning patterns
+
+- Essential for release management
+- Example: All versions tagged like "v1.2.3"
+
+**Platform targeting**: Point to versions built for specific platforms
+
+- Important for multi-platform applications
+- Example: Web versions vs mobile versions
+
+You can create sophisticated rules by combining conditions. A "stable" tag might point to versions that are from the main branch, built by CI, and match a version pattern - ensuring only production-ready builds are served.
+
+---
+
+### Nested Conditions
+
+Tag conditions can be **nested**, allowing deeply flexible and expressive logic trees using combinations of `AND` and `OR` groups.
+
+Each condition group can contain:
+- **Individual conditions**, and/or  
+- **Other nested groups** of conditions.
+
+This lets you describe logic such as:
+
+> **Example:**  
+> - `isCI is true`  
+> - **AND**  
+>   - (`branch is main` **OR** `branch is release`)  
+>   - **AND**  
+>   - (`user is Zephyr User` **OR** `user is Tech Team`)  
+
+This rule means:  
+**“Select CI builds from the main or release branches made by Zephyr User or the Tech team.”**
+
+---
+
+### Tag URLs and Access
+
+Every tag gets its own permanent URL that you can share, bookmark, or use in other applications. These URLs never change, even when the tag switches to point to different versions. This means your links always work, but they automatically serve the most up-to-date content based on your rules.
+
+When someone visits a tag URL, they see whatever version the tag currently points to. Behind the scenes, Zephyr evaluates your tag conditions in real-time and serves the appropriate content from its global edge network.
+
+### Automatic Tag Creation
+
+Zephyr creates useful tags automatically when you deploy. These default tags follow patterns like "web_main_yourname" and include sensible conditions based on your build context. You can customize these or create entirely new ones with your own rules.
+
+## Understanding Environments
+
+Environments are deployment destinations that represent different stages of your application lifecycle. They're like dedicated hosting slots where specific versions of your application live, each with their own configuration and custom domains.
+
+### What Environments Enable
+
+Think of environments as separate deployment targets for your application. You might have a "development" environment that automatically deploys the latest code for testing, a "staging" environment for final review, and a "production" environment that serves your live application to users.
+
+Each environment can have its own custom domain, environment variables, and deployment settings. This lets you run the same application code in different contexts - maybe your staging environment uses test data while production uses real customer information.
+
+### Environment Configuration
+
+Environments can be configured to deploy in two ways:
+
+**Tag-based environments** automatically deploy when a specific tag updates. For example, your staging environment might watch the "beta" tag - whenever the beta tag points to a new version, staging automatically deploys that version.
+
+**Version-based environments** deploy a specific locked version that doesn't change until you manually update it. This gives you complete control over what's running in that environment.
+
+### Custom Domains and DNS
+
+Each environment can have multiple custom domains pointing to it. This is perfect for:
+
+- **White-label deployments** where different clients see the same application on their own domain
+- **Geographic routing** where different regions use different domains
+- **A/B testing** where you can split traffic between different versions
+- **Brand management** where staging uses "staging.company.com" and production uses "app.company.com"
+
+Setting up custom domains is straightforward. When you add a domain to an environment, Zephyr automatically handles SSL certificates and creates the necessary routing. You just need to point your DNS records to Zephyr's edge network.
+
+### Environment Variables and Secrets
+
+Each environment maintains its own set of environment variables and secrets. This lets the same application code behave differently in different environments. Your development environment might connect to a test database while production connects to your live data.
+
+Zephyr securely stores sensitive values and provides a full audit trail of when variables are changed and by whom. You can also organize variables into groups and inherit settings from parent levels.
+
+## Working Together: Tags, Environments, and Promotion Workflows
+
+Tags and environments work together to create powerful deployment workflows. A common pattern is:
+
+1. **Development environment** watches the "latest" tag, which points to any new version from your feature branches
+2. **Staging environment** watches the "beta" tag, which you manually update when you're ready to test
+3. **Production environment** is locked to a specific version that you promote after thorough testing
+
+This setup gives you automatic deployment for development, controlled promotion to staging, and careful management of production releases.
+
+### Promoting Between Environments
+
+When you're ready to move a version from one environment to another, Zephyr provides promotion tools. You can select any version from your history and deploy it to any environment. This creates a clear audit trail showing what version was deployed where and when.
+
+For example, after testing a version in staging, you can promote that exact same version to production with one click. Since versions are immutable, you know production will run exactly what you tested.
+
+### Environment Ordering and Workflows
+
+You can organize your environments in order to create clear promotion pipelines. New versions flow through your environments in a predictable way, with each stage serving as a checkpoint before the next level.
+
+Teams often set up workflows where successful builds automatically deploy to development, get manually promoted to staging after code review, and then get promoted to production after QA approval.
+
+## Practical Examples
+
+### Development Team Workflow
+
+A typical team might set up:
+
+- **"dev" tag**: Points to latest builds from any branch by any team member
+- **"staging" tag**: Points to builds from main branch, manually updated
+- **"production" tag**: Points to specific approved versions
+
+- **Development environment**: Uses the dev tag, updates constantly
+- **Staging environment**: Uses the staging tag, updated for testing
+- **Production environment**: Uses specific versions, updated carefully
+
+### Multi-tenant Application
+
+For applications serving multiple customers:
+
+- **"customer-a" environment**: Custom domain "app.customer-a.com", production version
+- **"customer-b" environment**: Custom domain "app.customer-b.com", same production version
+- **"demo" environment**: Custom domain "demo.company.com", latest beta version
+
+Each customer sees the application on their own domain, but you manage everything from one codebase.
+
+### Feature Flag Testing
+
+For testing new features:
+
+- **"stable" tag**: Points to main branch builds without feature flags
+- **"experimental" tag**: Points to feature branch builds with new features enabled
+
+- **Production environment**: Uses stable tag for most users
+- **Beta environment**: Uses experimental tag for selected testers
+
+This lets you safely test new features with a subset of users while keeping the main application stable.
+
+## Managing Tags and Environments
+
+The Zephyr dashboard provides full control over your tags and environments. You can create, update, and delete them, view their history, and see exactly which versions they're currently serving.
+
+For tags, you can see which conditions are active, preview which versions would match, and update the rules as your workflow evolves. For environments, you can manage custom domains, environment variables, and deployment settings all in one place.
+
+Both tags and environments maintain full audit logs, so you can always see who changed what and when. This is essential for debugging issues and maintaining security compliance in production environments.
+
+## Integration with CI/CD
+
+Tags and environments integrate seamlessly with your existing CI/CD pipelines. Your build systems can automatically create tags, deploy to environments, or trigger promotions based on your workflow needs.
+
+Many teams configure their CI to automatically update a "latest" tag when tests pass, trigger staging deployments when code merges to main, and provide promotion tools for moving releases to production.
+
+Since everything works through Zephyr's API, you can integrate with any CI/CD system and create custom workflows that match your team's processes exactly.

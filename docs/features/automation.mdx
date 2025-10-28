@@ -1,0 +1,150 @@
+# CI/CD Automation
+
+Zephyr requires an authenticated user to publish updates. To configure your CI/CD pipeline to build and deploy with Zephyr, you'll need to add a token to your pipeline configuration.
+
+## Creating an API Token
+
+First, create a token on your [API token](https://app.zephyr-cloud.io/profile/settings/user-tokens) page. This token will be used to authenticate your CI/CD pipeline with Zephyr.
+
+## GitHub Actions
+
+### Adding the GitHub Secret
+
+Add your Zephyr token as a repository secret:
+
+1. Navigate to your GitHub repository
+2. Go to **Settings** → **Secrets and variables** → **Actions**
+3. Click **New repository secret**
+4. Set:
+   - **Name**: `ZEPHYR_AUTH_TOKEN`
+   - **Secret**: Your Zephyr API token
+
+### Using in Workflow
+
+The secret must be assigned to the `ZE_SECRET_TOKEN` environment variable:
+
+```yml title=".github/workflows/deploy.yml"
+name: Deploy with Zephyr
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and deploy
+        run: npm run build
+```
+
+## GitLab CI/CD
+
+### Adding the GitLab Variable
+
+Add your Zephyr token as a CI/CD variable:
+
+1. Navigate to your GitLab project
+2. Go to **Settings** → **CI/CD**
+3. Expand the **Variables** section
+4. Click **Add variable**
+5. Set:
+   - **Key**: `ZE_SECRET_TOKEN`
+   - **Value**: Your Zephyr API token
+   - **Type**: Variable
+   - **Environment scope**: All (or specify environments)
+   - **Protect variable**: ✓ (recommended)
+   - **Mask variable**: ✓ (recommended)
+
+### Using in Pipeline
+
+```yml title=".gitlab-ci.yml"
+stages:
+  - install
+  - build
+  - deploy
+
+variables:
+  npm_config_cache: '$CI_PROJECT_DIR/.npm'
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .npm/
+    - node_modules/
+
+install:
+  stage: install
+  script:
+    - npm ci --cache .npm --prefer-offline
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+build:
+  stage: build
+  script:
+    - npm run build
+  variables:
+    ZE_SECRET_TOKEN: $ZE_SECRET_TOKEN
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 day
+
+deploy:
+  stage: deploy
+  script:
+    - npm run deploy
+  only:
+    - main
+  environment:
+    name: production
+  variables:
+    ZE_SECRET_TOKEN: $ZE_SECRET_TOKEN
+```
+
+## Plugin Behavior
+
+When the Zephyr plugin detects the `ZE_SECRET_TOKEN` environment variable, it will:
+
+1. Use the token for automatic authentication
+2. Skip the interactive login step
+3. Display this message in the console:
+
+```shell
+ ZEPHYR   Token found in environment. Using secret token for authentication
+```
+
+## Troubleshooting
+
+### Token not found
+
+- Ensure the variable name is exactly `ZE_SECRET_TOKEN`
+- Verify the variable is available in the job environment
+- Check that the token hasn't expired
+
+### GitHub Actions Issues
+
+- Make sure the secret is added to the correct repository
+- Verify the secret name matches what's referenced in the workflow
+
+### GitLab CI/CD Issues
+
+- If using protected variables, ensure your pipeline runs on protected branches
+- Masked variables won't appear in logs (recommended for security)
+- Check variable scope matches your branch/environment

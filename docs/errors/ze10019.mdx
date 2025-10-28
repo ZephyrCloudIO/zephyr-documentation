@@ -1,7 +1,7 @@
 import { getErrorMessage } from '../../lib/error-helpers.ts';
 import { ErrorInfo } from '../../components/errors/info.tsx';
 import { ErrorLink } from '../../components/errors/link.tsx';
-import { Steps } from '@theme';
+import { Steps } from '@rspress/core/theme';
 
 # {getErrorMessage('ZE10019')}
 
@@ -31,9 +31,7 @@ Git configuration details for the project is different from previous build
 
 One of the plausible way to debug this error is to remove your local zephyr configuration by running:
 
-```bash
 rm -rf ~/.zephyr
-```
 
 And then try to run a build again.
 

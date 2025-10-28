@@ -1,6 +1,6 @@
 import { getErrorMessage } from '../../lib/error-helpers.ts';
 import { ErrorInfo } from '../../components/errors/info.tsx';
-import { Steps } from '@theme';
+import { Steps } from '@rspress/core/theme';
 
 # {getErrorMessage('ZE20010')}
 
@@ -16,9 +16,7 @@ This error occurs when a problem between Zephyr's plugin and our servers happens
 
 If you encounter this error, you can try to deploy your application again. This error can be transient and may not occur on subsequent deployments.
 
-```bash
 npm run build
-```
 
 ### Check your network connection
 

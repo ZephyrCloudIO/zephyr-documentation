@@ -1,0 +1,37 @@
+diff --git a/dist/index.js b/dist/index.js
+index 58b2f395165a64bddb7b6228df37a927089a808f..14ed1c42af55a5c8c992cae0024385fe5c2cc6c2 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -20,7 +20,31 @@ const pluginGoogleAnalytics = ({ id, enable = true })=>({
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+-    gtag('config', '${id}');`
++
++const id_name = '*_ze_id';
++
++function get_or_create_ze_id() {
++  const ze_id = localStorage.getItem(id_name);
++  if (ze_id) {
++    return ze_id;
++  }
++  return Math.random().toString(36).substring(2, 15);
++}
++
++const ze_id = get_or_create_ze_id();
++    gtag('config', '${id}', {
++      anonymize_ip: true,
++      page_path: window.location.pathname,
++      first_field_name: 'documentation',
++      linker: {
++        domains: ['docs.zephyr-cloud.io', 'zephyr-cloud.io', 'app.zephyr-cloud.io'],
++      },
++      link_id: ze_id,
++    });
++
++    gtag('set', 'linker', {
++      accept_incoming: true,
++    });`
+                             }
+                         ]
+                     }

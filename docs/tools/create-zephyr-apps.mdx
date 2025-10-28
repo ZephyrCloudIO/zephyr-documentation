@@ -1,0 +1,41 @@
+---
+title: create-zephyr-apps
+description: Scaffold new applications with Zephyr integration
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+# create-zephyr-apps
+
+Command-line tool to quickly scaffold new applications with Zephyr integration pre-configured.
+
+## Create a new project
+
+<PackageManagerTabs
+  command={{
+    npm: 'npx create-zephyr-apps@latest my-app',
+    yarn: 'yarn create zephyr-apps@latest my-app',
+    pnpm: 'pnpm create zephyr-apps@latest my-app',
+    bun: 'bun create zephyr-apps@latest my-app',
+  }}
+/>
+
+## Getting Started
+
+After creating your project:
+
+```bash
+cd my-app
+npm install
+npm run dev    # Start development server
+npm run build  # Build and deploy to Zephyr Cloud
+```
+
+## Module Federation
+
+Enable Module Federation during setup to create micro-frontend applications with:
+
+- Host and remote application templates
+- Shared dependencies configuration
+- Type-safe module imports
+- Development and production configurations

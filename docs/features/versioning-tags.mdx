@@ -1,0 +1,117 @@
+# Versioning, Tags and Environments
+
+Zephyr utilizes familiar versioning concepts by adopting [SemVer](https://semver.org/) (Semantic Versioning) as its foundational versioning methodology, ensuring a systematic and meaningful progression of project versions.
+
+Applications deployed through Zephyr can have an unlimited number of versions. After you configure Zephyr's npm plugin in your build tool, or bundlers, _**each successful deployment will generate a new version**_. Check [here to see how tags are created](#how-tags-are-created) and [how versions, tags and environments work together](#).
+
+## Semantic Versioning Overview
+
+Semantic versioning is structured as `MAJOR.MINOR.PATCH`:
+
+- **MAJOR:** Introduces breaking changes.
+- **MINOR:** Adds new, backward-compatible features.
+- **PATCH:** Makes backward-compatible bug fixes.
+
+## Advantages of Semantic Versioning with Tags
+
+1. **Clarity and Communication:** Provides explicit guidelines on version progression, facilitating clear communication across the development team and stakeholders.
+2. **Backward Compatibility:** Aids in maintaining compatibility and understanding the implications of new updates.
+3. **Issue Tracking:** Simplifies the process of tracking bugs and changes back to specific releases.
+4. **Dependency Management:** Crucial for effectively managing dependencies, particularly in complex projects.
+
+## Version Rollback And Roll-forward
+
+You can rollback or roll-forward an application's version on Zephyr's [dashboard](https://app.zephyr-cloud.io) and [Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) towards a tag or a specific environment.
+
+You can read more about [how tag rules are created](#how-tags-are-created) and [how to create an environment to have a custom domain](/features/tags-environments) in other sections of our documnetation.
+
+### Dashboard
+
+1. Navigate to Zephyr's dashboard, sign in to an organization and find the application you'd like to make changes to under **Applications** page.
+2. Next click on **Versions** and scroll down to the **Versions history**.
+3. Select a version and click on **Deploy**. You can verify whether it is a version you'd like to promote by clicking on its link.
+4. Select either a specific **Tag** or an **Environment** on the pop up.
+5. Type in **Deploy** in the last input field and click on **Yes, I am sure** to confirm the changes.
+
+:::note Custom Domain
+
+If you want to rollback or roll-forward a version towards a custom domain, you can know more by walking through [how to configure custom domain on Zephyr](/features/tags-environments).
+
+:::
+
+## Tag Management
+
+To streamline the tagging process and ensure seamless integration with continuous integration and delivery (CI/CD) pipelines, Zephyr adopts specific rules for generating tags based on branch names during CI processes. This approach not only automates tag creation but also aligns with the development workflow to accurately reflect the state of the software at any given point.
+
+### How Tags are created
+
+#### Auto-generated
+
+On your first successful build, we find your branch name to auto-create a tag.
+
+After the first successful build, each build's version fits in thiscriteria will be attached as latest version under this tag.
+
+#### Manually created on Dashboard
+
+On [Zephyr's Dashboard](https://app.zephyr-cloud.io), you can find **Tags** under each application's **Settings** page.
+
+After clicking on **Create Tag**, you will need to input a **Tag name** and choose rules under **Tag conditions**. Currently four related rule sets are available:
+
+<div className="pl-4">
+<dl>
+<dt>`User`</dt>
+<dd>After selection any future deployment from this selected user will be locked into to this tag as the latest.</dd>
+
+<dt>`Version`</dt>
+<dd>
+  Select a specific version to pin to this tag. Version number is an integer at
+  the end of a deployment URL.
+</dd>
+
+<dt>`Branch`</dt>
+<dd>
+  Your git's branch. Any future deployment from this branch will be locked into
+  this tag as the latest.{' '}
+</dd>
+
+<dt>`CI`</dt>
+<dd>Checking if environment is a CI environment. Only deployment through CI will be locked into this tag.</dd>
+</dl>
+</div>
+
+You can select a combination of rule set by clicking on **+ Add** under **Tag conditions**.
+
+:::details{title="How will a combination of tag rules work with deployment"}
+
+Take an example, you just created a new tag rule with 3 rules:
+
+- Username: Zack
+- Branch: fix-ui
+- Version: 200
+- is-CI: true
+
+Zack's deployment, version 200 under the branch "fix-ui" will be locked into this tag. Since the version rule is set to a fixed version.
+:::
+
+#### Edit existing tags
+
+Under application's **Settings** page select **Tags** and then the desired **Tag name** you want to edit.
+
+Click on **+ Add** button to add new rules, edit or delete pre-existing rules.
+
+### Tagging Strategy in CI
+
+When code is pushed through a CI pipeline, tags are dynamically assigned based on the branch from which the push originates:
+
+- **`master` or `main` branches:** Automatically tagged as `latest`. This tag is used for the most stable, production-ready version of the application.
+- **`development` branch:** Assigned the `next` tag. This is used for pre-release versions that may still be under active development but are stable enough for testing purposes.
+- **Other branches:** Receive a tag that matches the branch name. This allows for unique identification of builds coming from feature branches or other non-standard development paths.
+
+### Non-CI Tagging Considerations
+
+For manual pushes (i.e., those not done through a CI pipeline), the tagging format incorporates the branch name followed by the username of the developer who made the push. This format is particularly useful for:
+
+- **Traceability:** Allows teams to easily trace back versions to specific developers, enhancing accountability and understanding of changes made.
+- **Collaborative Development:** Supports collaborative environments where multiple developers may be working on different aspects of the project simultaneously.
+
+These tagging strategies ensure that every build on Zephyr can be uniquely identified and correlated with its source, enhancing both the development process and version control.

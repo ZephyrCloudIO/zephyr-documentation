@@ -4,7 +4,7 @@ description: 'Configuring Cloudflare as your deployment integration provider on 
 ---
 
 import { Button } from '../../components/ui/button.tsx';
-import { Steps, Badge } from '@theme';
+import { Steps, Badge } from '@rspress/core/theme';
 import { Separator } from '../../components/ui/separator.tsx';
 import { CustomDomain } from '../../components/cloud-provider.tsx';
 
@@ -73,7 +73,7 @@ Before proceeding, you will need two details and one DNS configuration from Clou
 - Return to your domain’s home page (the **Overview** page should still be open) and click on **DNS** on the left sidebar.
 - Click **Add record** on the _Records_ page and enter the following details:
 
-![dns](../public/cf-dns-entry-cname.png)
+![dns](../public/cf-dns-entry-cname.webp)
 
 <details>
 <summary>Click to view DNS record details</summary>
@@ -101,13 +101,15 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 <dd>The name of the integration shown on the dashboard.</dd>
 
 <dt>Delimiter</dt>
-<dd>Choose the delimiter for application subdomains: `-` (your deploy URL will be `*-ze.your.domain`) or `.` (your deploy URL will be `*.ze.your.domain`) </dd>
+<dd>
+  Choose the delimiter for application subdomains: `-` (your deploy URL will be
+  `*-ze.your.domain`) or `.` (your deploy URL will be `*.ze.your.domain`){' '}
+</dd>
 
 <dt>API Token</dt>
 <dd>
-  Obtainable from Cloudflare. [See
-  instructions](#2-api-token) for creating
-  your API token.
+  Obtainable from Cloudflare. [See instructions](#2-api-token) for creating your
+  API token.
 </dd>
 
 <dt>Zone ID</dt>
@@ -166,7 +168,7 @@ A CNAME record will be added to your domain with the following details:
 
 | Type  | Name |       Content        | Proxy Status | TTL  |
 | :---: | :--: | :------------------: | :----------: | :--: |
-| CNAME | `*`  | `ze.zephyrcloud.app` |  ✔ Proxied   | Auto |
+| CNAME | `*`  | `ze.zephyrcloud.app` |  ✔ Proxied  | Auto |
 
 ### Deployment and Inspecting Assets
 
@@ -180,7 +182,7 @@ In your Cloudflare dashboard, navigate to **Workers & Pages** and then **KV** to
 - `ze_envs`: stores application environment and access rights.
 - `ze_snapshot`: stores application snapshots compared against the previous build.
 - If deploying an application previously on our managed cloud, run `rm -rf ~/.zephyr` before deployment.
-- If you encounter issues deploying Micro-frontend applications, see our [Micro-frontend deployment guide](/how-to/mf-guide).
+- If you encounter issues deploying Micro-frontend applications, see our [Micro-frontend deployment guide](/tutorials/mf-guide).
 
 :::
 

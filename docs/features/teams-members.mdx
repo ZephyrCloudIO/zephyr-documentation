@@ -1,0 +1,185 @@
+---
+title: Teams & Members
+description: Collaborate with team members and manage organization access
+---
+
+# Teams & Members
+
+Teams in Zephyr help you organize people and control who can access your projects and applications. Think of teams as groups of people who work together on related projects, with shared permissions and responsibilities.
+
+## Understanding Teams
+
+Teams are collections of people within your organization who need similar access to projects and applications. Instead of managing permissions for each person individually, you can create teams, assign permissions to the team, and then add or remove people as needed.
+
+For example, you might have a "Frontend Team" that needs access to all UI-related projects, or a "Mobile Team" that only works on mobile applications. Teams make it easy to grant appropriate access to the right people without micromanaging individual permissions.
+
+### How Teams Work
+
+When you create a team, you give it a name and add people to it. Then you can assign the entire team access to specific projects with specific roles. Everyone on the team automatically gets those permissions, and when someone joins or leaves the team, their access updates automatically.
+
+Teams sit between your organization and your projects. Your organization contains all your teams, and teams can be granted access to specific projects. This creates a flexible system where people can be on multiple teams, and teams can have access to multiple projects with different permission levels.
+
+### Team Structure
+
+Every team belongs to an organization and has:
+
+- **Team name**: A unique identifier within your organization
+- **Members**: People who belong to the team
+- **Team roles**: Each member has a role within the team (member or maintainer)
+- **Project access**: The projects this team can access and what they can do there
+
+## Team Roles and Permissions
+
+Teams have two internal roles that determine what people can do within the team itself:
+
+### Team Member
+
+Team members are regular participants who can:
+
+- View team information and member list
+- Access all projects the team has been granted access to
+- Work on applications and deployments based on team permissions
+
+Team members cannot manage the team itself - they can't add or remove other members or change team settings.
+
+### Team Maintainer
+
+Team maintainers have full control over their team and can:
+
+- Add and remove team members
+- Change member roles within the team
+- Update team settings like name and description
+- Delete the team if needed
+
+The person who creates a team automatically becomes a maintainer. Teams can have multiple maintainers for shared responsibility.
+
+### Project Access Levels
+
+When you assign a team to a project, you choose what level of access they get:
+
+**Viewer**: Can see the project and its applications but cannot make changes
+
+- Perfect for stakeholders who need visibility without editing rights
+- Can view deployments, versions, and project settings
+
+**Editor**: Can work with applications and make deployments
+
+- Most common role for developers actively working on projects
+- Can create versions, manage tags, and deploy to environments
+
+**Admin**: Can manage project settings and control who has access
+
+- Can invite other teams or individuals to the project
+- Can modify project-level configurations and integrations
+
+**Owner**: Has complete control over the project
+
+- Can delete the project or transfer ownership
+- Typically reserved for project leads or technical managers
+
+## Managing Teams
+
+### Creating Teams
+
+Anyone with appropriate permissions in your organization can create teams. When you create a team, you become its first maintainer and can start adding members right away.
+
+Teams need descriptive names that make their purpose clear. Good team names reflect either the functional area ("Frontend Team", "DevOps Team") or the product focus ("Mobile App Team", "Admin Dashboard Team").
+
+### Adding Members
+
+Team maintainers can add anyone from their organization to the team. When you add someone to a team, they become a regular team member by default, though maintainers can promote them to maintainer status if needed.
+
+Adding someone to a team immediately grants them access to all projects that team can access. This makes onboarding new team members simple - add them to the right teams and they automatically get appropriate permissions.
+
+### Managing Team Access
+
+The real power of teams comes from assigning them to projects. Instead of managing individual permissions, you grant teams access to projects with specific roles. This creates a clean permission structure that's easy to understand and maintain.
+
+For example, your "Frontend Team" might have editor access to UI projects, viewer access to backend projects for context, and admin access to the design system project they maintain. As people join or leave the frontend team, their access automatically updates.
+
+## Working with Multiple Teams
+
+People can belong to multiple teams, which is common in modern development organizations. Someone might be on both the "Frontend Team" and the "Mobile Team" if they work across platforms.
+
+When someone belongs to multiple teams that have access to the same project, they get the highest level of permissions from any of their teams. If one team has viewer access and another has editor access to the same project, they get editor permissions.
+
+This system encourages collaboration while maintaining security. People can participate in multiple areas without needing separate accounts or complex permission management.
+
+## Team-Based Workflows
+
+Teams enable powerful collaboration workflows that scale with your organization:
+
+### Project-Centered Teams
+
+Some teams organize around specific products or projects. A "E-commerce Platform Team" might have complete ownership of all applications related to that product, while other teams have limited access for integration purposes.
+
+### Skill-Based Teams
+
+Other teams organize around technical skills. Your "DevOps Team" might have admin access to deployment configurations across multiple projects, while "QA Team" has editor access for testing in various environments.
+
+### Cross-Functional Teams
+
+Many organizations use hybrid approaches where cross-functional teams have broad access to their area of responsibility, with specialized teams providing expert support across multiple areas.
+
+## Practical Examples
+
+### Startup Development Team
+
+A small startup might have:
+
+- **Core Team**: Owners of all projects, handles everything from development to deployment
+- **Design Team**: Editor access to frontend projects, viewer access to others for context
+- **Stakeholder Team**: Viewer access to key projects for progress tracking
+
+### Enterprise Organization
+
+A larger company might organize teams like:
+
+- **Platform Team**: Admin access to shared infrastructure projects, editor access to application projects
+- **Product Team A**: Owner access to their product projects, viewer access to platform projects
+- **Product Team B**: Owner access to their product projects, viewer access to platform projects
+- **Security Team**: Admin access to all projects for compliance and security auditing
+- **Executive Team**: Viewer access to all projects for oversight
+
+### Agency Model
+
+Development agencies might structure teams around clients:
+
+- **Client A Team**: Owner access to Client A projects, no access to other client work
+- **Client B Team**: Owner access to Client B projects, no access to other client work
+- **Internal Tools Team**: Owner access to agency's internal tools and processes
+- **Leadership Team**: Viewer access across all projects for resource planning
+
+## Integration with Development Workflows
+
+Teams work seamlessly with your existing development processes. When someone pushes code or creates a deployment, Zephyr uses their team memberships to determine what they can access.
+
+If your CI/CD system deploys applications, you can create service account users and add them to appropriate teams. This gives your automated systems the same role-based access as human team members.
+
+Teams also integrate with version control workflows. When someone creates a feature branch and deploys it, their team permissions determine which environments they can deploy to and which applications they can modify.
+
+## Security and Compliance
+
+Team-based access control provides several security benefits:
+
+**Principle of Least Privilege**: People only get access to what they need through team membership, reducing security risk.
+
+**Audit Trail**: All team membership changes are logged, making it easy to track who had access when.
+
+**Consistent Access**: Teams ensure people get appropriate permissions without manual configuration that might miss important access rules.
+
+**Easy Offboarding**: Removing someone from teams immediately revokes their access across all related projects.
+
+## Managing Team Growth
+
+As your organization grows, teams help maintain order without slowing down development:
+
+**Scalable Permissions**: Add new people to existing teams rather than configuring individual permissions.
+
+**Clear Ownership**: Teams make it obvious who's responsible for what, reducing confusion and conflicts.
+
+**Flexible Structure**: Reorganize teams as your company evolves without disrupting individual user accounts.
+
+**Self-Service Access**: Team maintainers can manage their own membership without requiring admin intervention for every change.
+
+Teams provide the foundation for collaborative development at any scale, from small startups to large enterprises. They make security manageable while keeping development workflows smooth and efficient.

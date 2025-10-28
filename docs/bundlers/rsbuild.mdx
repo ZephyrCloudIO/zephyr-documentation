@@ -1,0 +1,157 @@
+import { PackageManagerTabs } from '@rspress/core/theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Rsbuild
+
+Deploy your Rsbuild applications to Zephyr Cloud with lightning-fast Rust-based builds and Module Federation support. The Zephyr Rsbuild plugin integrates seamlessly with Rsbuild's modern development experience.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/getting-started/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Rsbuild plugin in your project:
+
+<PackageManagerTabs command="add --dev zephyr-rsbuild-plugin" />
+
+## Quick Start
+
+To add Zephyr to an Rsbuild application, add the plugin to your Rsbuild configuration.
+
+```typescript
+// rsbuild.config.ts
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+export default defineConfig({
+  plugins: [pluginReact(), withZephyr()],
+});
+```
+
+## Module Federation
+
+Zephyr has first party support for Module Federation. You don't need to do any additional configuration to enable Module Federation in Zephyr.
+
+Zephyr will hook into the bundling process and modify the remote resolution to point to the Zephyr Cloud deployments.
+
+### Host Application
+
+```typescript
+// rsbuild.config.ts
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+export default defineConfig({
+  plugins: [
+    pluginReact(),
+    pluginModuleFederation({
+      name: 'host',
+      remotes: {
+        mfe1: 'mfe1@http://localhost:3001/remoteEntry.js',
+        mfe2: 'mfe2@http://localhost:3002/remoteEntry.js',
+      },
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+    }),
+    withZephyr(),
+  ],
+});
+```
+
+### Remote Application
+
+```typescript
+// rsbuild.config.ts
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+export default defineConfig({
+  plugins: [
+    pluginReact(),
+    pluginModuleFederation({
+      name: 'mfe1',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Button': './src/components/Button',
+        './Header': './src/components/Header',
+        './utils': './src/utils',
+      },
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+    }),
+    withZephyr(),
+  ],
+});
+```
+
+## Package.json Scripts
+
+Add these scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview"
+  }
+}
+```
+
+## Advanced Configuration
+
+### Custom Plugin Options
+
+```typescript
+// rsbuild.config.ts
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+export default defineConfig({
+  plugins: [
+    pluginReact(),
+    withZephyr({
+      wait_for_index_html: true,
+    }),
+  ],
+});
+```
+
+## Features
+
+- 🚀 **Lightning-fast builds** with Rsbuild's optimized bundling
+- 🏗️ **Full Module Federation support** with official plugin
+- 📦 **Asset optimization** and intelligent caching
+- 🔧 **Zero-config setup** for simple applications
+- 📊 **Build analytics** and deployment monitoring
+- 🌐 **Global CDN distribution** for optimal performance
+- ⚡ **Hot module replacement** in development
+- 🔗 **Easy integration** with existing Rsbuild projects
+
+## Requirements
+
+- Rsbuild 1.0 or higher
+- Node.js 18 or higher
+- Zephyr Cloud account ([sign up here](https://app.zephyr-cloud.io))
+
+## Next Steps
+
+- [React + Rsbuild Integration](/integrations/react-rsbuild)
+- [Module Federation Tutorial](/tutorials/create-mf-app)
+- [Join our Discord](https://zephyr-cloud.io/discord) for support

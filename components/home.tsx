@@ -1,5 +1,5 @@
-import { SiteConfig } from "../lib/site.config";
-import { Card } from "./ui/card";
+import { SiteConfig } from '../lib/site.config';
+import { Card } from './ui/card';
 
 export const HomeStart = () => {
   return (
@@ -35,6 +35,36 @@ export const HomeRecipes = () => {
   return (
     <>
       {SiteConfig.recipes.slice(0, 4).map((item, i) => {
+        return <Card key={i} item={item} />;
+      })}
+    </>
+  );
+};
+
+export const HomeBundlers = () => {
+  return (
+    <>
+      {SiteConfig.bundlers.map((item, i) => {
+        return <Card key={i} item={item} />;
+      })}
+    </>
+  );
+};
+
+export const HomeCloud = () => {
+  return (
+    <>
+      {SiteConfig.cloud.map((item, i) => {
+        return <Card key={i} item={item} />;
+      })}
+    </>
+  );
+};
+
+export const HomeMetaFrameworks = () => {
+  return (
+    <>
+      {SiteConfig.metaFrameworks.map((item, i) => {
         return <Card key={i} item={item} />;
       })}
     </>

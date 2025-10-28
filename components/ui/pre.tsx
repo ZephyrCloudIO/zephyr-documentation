@@ -1,20 +1,20 @@
-import type React from "react";
-import { cn } from "../../lib/cn";
-import type { CodeProps } from "./code";
-const DEFAULT_LANGUAGE_CLASS = "language-bash";
+import type React from 'react';
+import { cn } from '../../lib/cn';
+import type { CodeProps } from './code';
+const DEFAULT_LANGUAGE_CLASS = 'language-bash';
 
 export function parseTitleFromMeta(meta?: string): string {
   if (!meta) {
-    return "";
+    return '';
   }
   let result = meta;
   const highlightReg = /{[\d,-]*}/i;
   const highlightMeta = highlightReg.exec(meta)?.[0];
   if (highlightMeta) {
-    result = meta.replace(highlightReg, "").trim();
+    result = meta.replace(highlightReg, '').trim();
   }
-  result = result.split("=")[1] ?? "";
-  return result?.replace(/["'`]/g, "");
+  result = result.split('=')[1] ?? '';
+  return result?.replace(/["'`]/g, '');
 }
 
 export function PreCode({
@@ -32,7 +32,7 @@ export function PreCode({
         className={cn(
           title || DEFAULT_LANGUAGE_CLASS,
           className,
-          "bg-[var(--rp-c-dark-light-2)] py-2 pb-6 px-4 overflow-x-scroll",
+          'bg-[var(--rp-c-dark-light-2)] py-2 pb-6 px-4 overflow-x-scroll',
         )}
       >
         {codeTitle && <div>{codeTitle}</div>}

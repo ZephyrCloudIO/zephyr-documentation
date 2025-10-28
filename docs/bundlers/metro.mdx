@@ -1,0 +1,220 @@
+import { PackageManagerTabs } from '@rspress/core/theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Metro (React Native)
+
+Deploy your React Native applications with Module Federation to Zephyr Cloud using Metro bundler. The Zephyr Metro plugin integrates seamlessly with Metro's build process and enables micro-frontend architectures for React Native applications.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/getting-started/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+- npm >=10
+- node >=18
+- ruby >= 3.3.2
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Metro plugin and required dependencies in your project:
+
+<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro @module-federation/metro-plugin-rnc-cli @module-federation/runtime" />
+
+## Module Federation with Metro
+
+Metro bundler supports Module Federation through the `@module-federation/metro` package, allowing you to create host and mini applications (remotes) in React Native.
+
+### Mini Application (Remote)
+
+Mini applications expose modules to be consumed by host applications:
+
+```javascript
+// metro.config.js
+const path = require('node:path');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withModuleFederation } = require('@module-federation/metro');
+const { withZephyr } = require('zephyr-metro-plugin');
+
+const config = {
+  resolver: { useWatchman: false },
+  watchFolders: [
+    path.resolve(__dirname, '../../node_modules'),
+    path.resolve(__dirname, '../../packages/core'),
+  ],
+};
+
+async function getConfig() {
+  const zephyrConfig = await withZephyr()({
+    name: 'miniApp',
+    filename: 'miniApp.bundle',
+    exposes: {
+      './example': './src/example.tsx',
+    },
+    shared: {
+      react: {
+        singleton: true,
+        eager: false,
+        requiredVersion: '19.1.0',
+        version: '19.1.0',
+        import: false,
+      },
+      'react-native': {
+        singleton: true,
+        eager: false,
+        requiredVersion: '0.80.0',
+        version: '0.80.0',
+        import: false,
+      },
+    },
+    shareStrategy: 'version-first',
+  });
+
+  return withModuleFederation(
+    mergeConfig(getDefaultConfig(__dirname), config),
+    zephyrConfig,
+    {
+      flags: {
+        unstable_patchHMRClient: true,
+        unstable_patchInitializeCore: true,
+        unstable_patchRuntimeRequire: true,
+      },
+    },
+  );
+}
+
+module.exports = getConfig();
+```
+
+### React Native CLI Configuration
+
+Create or modify `react-native.config.js` to enable bundling with Zephyr:
+
+```javascript
+// react-native.config.js
+const commands = require('@module-federation/metro-plugin-rnc-cli');
+const { updateManifest } = require('@module-federation/metro');
+const { zephyrCommandWrapper } = require('zephyr-metro-plugin');
+
+const wrappedFuncPromise = zephyrCommandWrapper(
+  commands.bundleMFRemoteCommand.func,
+  commands.loadMetroConfig,
+  () => {
+    updateManifest(
+      global.__METRO_FEDERATION_MANIFEST_PATH,
+      global.__METRO_FEDERATION_CONFIG,
+    );
+  },
+);
+
+const zephyrCommand = {
+  name: 'bundle-mf-remote',
+  description:
+    'Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications',
+  func: async (...args) => {
+    const wrappedFunc = await wrappedFuncPromise;
+    return wrappedFunc(...args);
+  },
+  options: commands.bundleMFRemoteCommand.options,
+};
+
+module.exports = {
+  commands: [zephyrCommand],
+};
+```
+
+### Bundle Mini Application
+
+Bundle your mini application for different platforms:
+
+```bash
+# Bundle for iOS
+npx react-native bundle-mf-remote --platform ios --dev false
+
+# Bundle for Android
+npx react-native bundle-mf-remote --platform android --dev false
+```
+
+### Host Application (Consumer)
+
+Host applications load and orchestrate mini-applications:
+
+```javascript
+// metro.config.js
+const path = require('node:path');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withZephyr } = require('zephyr-metro-plugin');
+const { withModuleFederation } = require('@module-federation/metro');
+
+const config = {
+  resolver: { useWatchman: false },
+  watchFolders: [
+    path.resolve(__dirname, '../../node_modules'),
+    path.resolve(__dirname, '../../packages/core'),
+  ],
+};
+
+const getConfig = async () => {
+  const zephyrConfig = await withZephyr()({
+    name: 'hostApp',
+    remotes: {
+      miniApp: 'miniApp@http://localhost:8082/mf-manifest.json',
+    },
+    shared: {
+      react: {
+        singleton: true,
+        eager: true,
+        requiredVersion: '19.1.0',
+        version: '19.1.0',
+      },
+      'react-native': {
+        singleton: true,
+        eager: true,
+        requiredVersion: '0.80.0',
+        version: '0.80.0',
+      },
+    },
+    shareStrategy: 'loaded-first',
+    plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
+  });
+
+  return withModuleFederation(
+    mergeConfig(getDefaultConfig(__dirname), config),
+    zephyrConfig,
+    {
+      flags: {
+        unstable_patchHMRClient: true,
+        unstable_patchInitializeCore: true,
+        unstable_patchRuntimeRequire: true,
+      },
+    },
+  );
+};
+
+module.exports = getConfig;
+```
+
+### Zephyr Dependencies
+
+Configure Zephyr dependencies in your host application's `package.json`:
+
+```json
+{
+  "name": "hostApp",
+  "version": "1.0.0",
+  "zephyr:dependencies": {
+    "miniApp": "zephyr:miniApp@yourEnvironment"
+  }
+}
+```
+
+For more details, see [Remote Dependencies](/features/remote-dependencies).
+
+## Next Steps
+
+- Check out our [Metro Tutorial](/tutorials/metro) for a complete walkthrough
+- Explore the [example repository](https://github.com/ZephyrCloudIO/zephyr-metro-example/) for working examples
+- Learn about [Tags & Environments](/features/tags-environments) for managing deployment stages
+- Review [End-to-End Testing](/tutorials/e2e-testing) for testing federated applications

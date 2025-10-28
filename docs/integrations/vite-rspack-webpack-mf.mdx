@@ -1,0 +1,454 @@
+import { Tabs, Tab } from '@rspress/core/theme';
+
+# Vite + Webpack + Rspack with Module Federation
+
+Vite is the first build tool Zephyr is able to handle Module Federation configuration directly, although you can still use the official [Vite Plugin](https://github.com/module-federation/vite) from Module Federation. Both cases are supported in this guide.
+
+This guide aims to walk you through how you can deploy a Micro-Frontend application using the Official Vite Plugin from Module Federation. After this guide, you will have a React application consuming remote applications bundled by Vite, Rspack and Webpack deployed through Zephyr Cloud.
+
+:::info Prerequisites
+
+- We expect you to have finished our [Get Started](/tutorials/first-app) guide.
+- Have our [browser extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) installed in your browser.
+
+:::
+
+### Install Zephyr Plugins
+
+For applications built with Vite:
+
+```sh title="Terminal"
+npm i vite-plugin-zephyr@latest
+```
+
+For applications built with Webpack and Rspack:
+
+```sh title="Terminal"
+npm i zephyr-webpack-plugin@latest
+```
+
+## Example configuration
+
+Four example build configuration for Vite, Rspack and Webpack.
+
+### Vite Host
+
+For your host application, you can use `withZephyr()` from `vite-plugin-zephyr` plugin to configure Module Federation. The first example configuration is using `vite-plugin-zephyr` directly. The second example is using the official [Vite Plugin](https://github.com/module-federation/vite) from Module Federation.
+
+#### Example 1
+
+```js title="vite.config.ts"{3,35}
+
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr } from 'vite-plugin-zephyr';
+
+const mfConfig = {
+  name: 'vite-host',
+  filename: 'remoteEntry.js',
+  remotes: {
+    'vite-remote': {
+      entry: 'http://localhost:5174/remoteEntry.js',
+      type: 'module',
+    },
+    vite_webpack: {
+      entry: 'http://localhost:8080/remoteEntry.js',
+      type: 'var',
+    },
+    vite_rspack: {
+      entry: 'http://localhost:8081/remoteEntry.js',
+      type: 'var',
+    },
+  },
+  shared: {
+    react: {
+      singleton: true,
+    },
+    'react-dom': {
+      singleton: true,
+    },
+  },
+};
+
+export default defineConfig({
+  plugins: [
+    react(),
+    withZephyr({ mfConfig }), // sequence matters
+    svgr({
+        svgrOptions: {
+          // svgr options
+        },
+      }),
+  ],
+  build: {
+    target: 'chrome89',
+    modulePreload: {
+    // This is important if you have other plugins like `svgr` that are handling transformation of code.
+        resolveDependencies: (_, deps: string[]) => {
+          // Only preload React packages and non-federated modules
+          return deps.filter((dep) => {
+            const isReactPackage = dep.includes('react') || dep.includes('react-dom');
+            const isNotRemoteEntry = !dep.includes('remoteEntry.js');
+
+            return isReactPackage && isNotRemoteEntry;
+          });
+        },
+      },
+  },
+});
+
+```
+
+#### Example 2
+
+Using the official [Vite Plugin](https://github.com/module-federation/vite) from Module Federation.
+
+```ts title="vite.config.ts"{3-4,38-39}
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr, type ModuleFederationOptions } from 'vite-plugin-zephyr';
+import { federation } from '@module-federation/vite';
+const mfConfig: ModuleFederationOptions = {
+  name: 'vite-host',
+  filename: 'remoteEntry.js',
+  remotes: {
+    'vite-remote': {
+      name: 'vite-remote',
+      entry: 'http://localhost:5174/remoteEntry.js',
+      type: 'module',
+    },
+    vite_webpack: {
+      name: 'vite_webpack',
+      entry: 'http://localhost:8080/remoteEntry.js',
+      type: 'var',
+    },
+    vite_rspack: {
+      name: 'vite_rspack',
+      entry: 'http://localhost:8081/remoteEntry.js',
+      type: 'var',
+    },
+  },
+  shared: {
+    react: {
+      singleton: true,
+    },
+    'react-dom': {
+      singleton: true,
+    },
+  },
+};
+
+export default defineConfig({
+  plugins: [react(), federation({ ...mfConfig }), withZephyr()],
+  build: {
+    minify: false,
+    target: 'chrome89',
+  },
+});
+```
+
+:::warning{title="Known issue"}
+
+**1. Enable top level await**
+For `vite-plugin-zephyr` to work properly with your remotes, you need to set your build target to `chrome89` to enable top level await, alternatively you can install [`vite-plugin-top-level-await` plugin to enable it](https://www.npmjs.com/package/vite-plugin-top-level-await) and use it in configuration:
+
+```ts title="vite.config.ts"
+  plugins: [
+    react(),
+    withZephyr({
+      name: 'viteViteHost',
+      remotes: {
+       ...
+      },
+      filename: 'remoteEntry-[hash].js',
+      manifest: true,
+      shared: {
+        vue: {},
+        'react/': {
+          requiredVersion: '18',
+        },
+        'react-dom': {},
+      ...
+      },
+      runtimePlugins: ['./src/mfPlugins'],
+    }),
+    // If you set build.target: "chrome89", you can remove this plugin
+    false && topLevelAwait(),
+  ],
+    build: {
+    target: 'chrome89',
+  },
+```
+
+**2. Sequence of plugins**
+
+Because of how Vite and Rollup are exposing hooks and processing modules in plugins, the sequence of plugins matters where `withZephyr()` should be after `react()` but before any other plugins. For example, if `svgr()` is before `withZephyr()` it would unexpectedly interrupt the transformed output bundle.
+
+**3. Shared dependencies**
+
+If the application doesn't show up in the browser, you might be experiencing problems related to dependencies (one of the potential issues), please rememeber to configure `modulePreload` in your `vite.config.ts`:
+
+```ts title="vite.config.ts"
+ modulePreload: {
+        resolveDependencies: (_, deps: string[]) => {
+          // Only preload React packages and non-federated modules
+          return deps.filter((dep) => {
+            const isReactPackage = dep.includes('react') || dep.includes('react-dom');
+            const isNotRemoteEntry = !dep.includes('remoteEntry.js');
+
+            return isReactPackage && isNotRemoteEntry;
+          });
+        },
+      },
+```
+
+:::
+
+### Vite Remote
+
+```ts title="vite.config.ts"{3,18}
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr } from 'vite-plugin-zephyr';
+
+const mfConfig = {
+  name: 'vite-remote',
+  filename: 'remoteEntry.js',
+  exposes: {
+    './Button': './src/Button',
+  },
+  shared: ['react', 'react-dom'],
+};
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react(), withZephyr({ mfConfig })],
+  experimental: {
+    renderBuiltUrl() {
+      return { relative: true };
+    },
+  },
+  build: {
+    target: 'chrome89',
+  },
+});
+```
+
+### Rspack Remote
+
+Example project created via `npx create-mf-app`
+
+```ts title="rspack.config.js" {5,12}
+const rspack = require('@rspack/core');
+const refreshPlugin = require('@rspack/plugin-react-refresh');
+const isDev = process.env.NODE_ENV === 'development';
+const path = require('path');
+const { withZephyr } = require('zephyr-webpack-plugin');
+
+const printCompilationMessage = require('./compilation.config.js');
+
+/**
+ * @type {import('@rspack/cli').Configuration}
+ */
+module.exports = withZephyr()({
+  context: __dirname,
+  entry: {
+    main: './src/index.tsx',
+  },
+
+  devServer: {
+    port: 8081,
+    historyApiFallback: true,
+    watchFiles: [path.resolve(__dirname, 'src')],
+    onListening: function (devServer) {
+      const port = devServer.server.address().port;
+
+      printCompilationMessage('compiling', port);
+
+      devServer.compiler.hooks.done.tap('OutputMessagePlugin', (stats) => {
+        setImmediate(() => {
+          if (stats.hasErrors()) {
+            printCompilationMessage('failure', port);
+          } else {
+            printCompilationMessage('success', port);
+          }
+        });
+      });
+    },
+  },
+  experiments: {
+    css: true,
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(svg|png)$/,
+        type: 'asset',
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: {
+                  tailwindcss: {},
+                  autoprefixer: {},
+                },
+              },
+            },
+          },
+        ],
+        type: 'css',
+      },
+      {
+        test: /\.(jsx?|tsx?)$/,
+        use: [
+          {
+            loader: 'builtin:swc-loader',
+            options: {
+              sourceMap: true,
+              jsc: {
+                parser: {
+                  syntax: 'typescript',
+                  tsx: true,
+                },
+                transform: {
+                  react: {
+                    runtime: 'automatic',
+                    development: isDev,
+                    refresh: isDev,
+                  },
+                },
+                target: 'es2020',
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
+  plugins: [
+    new rspack.container.ModuleFederationPlugin({
+      name: 'vite_rspack',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Image': './src/Image',
+      },
+      shared: ['react', 'react-dom'],
+    }),
+    new rspack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    }),
+    new rspack.ProgressPlugin({}),
+    new rspack.HtmlRspackPlugin({
+      template: './src/index.html',
+    }),
+    isDev ? new refreshPlugin() : null,
+  ].filter(Boolean),
+});
+```
+
+### Webpack Remote
+
+Example project created via `npx create-mf-app`
+
+```ts title="webpack.config.js"{5,13}
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+//const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const path = require('path');
+const Dotenv = require('dotenv-webpack');
+const { withZephyr } = require('zephyr-webpack-plugin');
+const {
+  ModuleFederationPlugin,
+} = require('@module-federation/enhanced/webpack');
+
+const deps = require('./package.json').dependencies;
+
+const printCompilationMessage = require('./compilation.config.js');
+
+module.exports = (_, argv) =>
+  withZephyr()({
+    output: {
+      publicPath: 'auto',
+    },
+
+    resolve: {
+      extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
+    },
+
+    devServer: {
+      port: 8080,
+      historyApiFallback: true,
+      watchFiles: [path.resolve(__dirname, 'src')],
+      onListening: function (devServer) {
+        const port = devServer.server.address().port;
+
+        printCompilationMessage('compiling', port);
+
+        devServer.compiler.hooks.done.tap('OutputMessagePlugin', (stats) => {
+          setImmediate(() => {
+            if (stats.hasErrors()) {
+              printCompilationMessage('failure', port);
+            } else {
+              printCompilationMessage('success', port);
+            }
+          });
+        });
+      },
+    },
+
+    module: {
+      rules: [
+        {
+          test: /\.(svg|png)$/,
+          type: 'asset',
+        },
+        {
+          test: /\.m?js/,
+          type: 'javascript/auto',
+          resolve: {
+            fullySpecified: false,
+          },
+        },
+        {
+          test: /\.(css|s[ac]ss)$/i,
+          use: ['style-loader', 'css-loader', 'postcss-loader'],
+        },
+        {
+          test: /\.(ts|tsx|js|jsx)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+          },
+        },
+      ],
+    },
+
+    plugins: [
+      new ModuleFederationPlugin({
+        name: 'vite_webpack',
+        filename: 'remoteEntry.js',
+        exposes: {
+          './Image': './src/Image',
+        },
+        shared: {
+          react: {
+            singleton: true,
+          },
+          'react-dom': {
+            singleton: true,
+          },
+        },
+      }),
+      new HtmlWebPackPlugin({
+        template: './src/index.html',
+      }),
+      new Dotenv(),
+    ],
+  });
+```

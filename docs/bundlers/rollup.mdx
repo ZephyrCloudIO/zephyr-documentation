@@ -1,0 +1,124 @@
+import { PackageManagerTabs } from '@rspress/core/theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Rollup
+
+Deploy your Rollup applications to Zephyr Cloud with optimized bundling and Module Federation support. The Zephyr Rollup plugin integrates seamlessly with Rollup's plugin ecosystem.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/getting-started/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Rollup plugin in your project:
+
+<PackageManagerTabs command="add --dev rollup-plugin-zephyr" />
+
+## Quick Start
+
+To add Zephyr to a Rollup application, add the plugin to your Rollup configuration.
+
+```typescript
+// rollup.config.ts
+import { defineConfig } from 'rollup';
+import { zephyrPlugin } from 'rollup-plugin-zephyr';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import typescript from '@rollup/plugin-typescript';
+
+export default defineConfig({
+  input: 'src/main.ts',
+  output: {
+    dir: 'dist',
+    format: 'es',
+    entryFileNames: '[name].[hash].js',
+    chunkFileNames: '[name].[hash].js',
+  },
+  plugins: [resolve(), commonjs(), typescript(), zephyrPlugin()],
+});
+```
+
+## Package.json Scripts
+
+Add these scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "rollup -c -w",
+    "build": "rollup -c",
+    "preview": "serve dist"
+  }
+}
+```
+
+## Advanced Configuration
+
+### Multiple Output Formats
+
+```typescript
+// rollup.config.ts
+import { defineConfig } from 'rollup';
+import { zephyrPlugin } from 'rollup-plugin-zephyr';
+
+export default defineConfig([
+  // ES Module build
+  {
+    input: 'src/main.ts',
+    output: {
+      dir: 'dist/es',
+      format: 'es',
+    },
+    plugins: [
+      // ... other plugins
+      zephyrPlugin(),
+    ],
+  },
+  // UMD build
+  {
+    input: 'src/main.ts',
+    output: {
+      dir: 'dist/umd',
+      format: 'umd',
+      name: 'MyLibrary',
+    },
+    plugins: [
+      // ... other plugins
+      zephyrPlugin(),
+    ],
+  },
+]);
+```
+
+### Library Mode
+
+```typescript
+// rollup.config.ts
+import { defineConfig } from 'rollup';
+import { zephyrPlugin } from 'rollup-plugin-zephyr';
+
+export default defineConfig({
+  input: 'src/index.ts',
+  output: [
+    {
+      file: 'dist/my-library.es.js',
+      format: 'es',
+    },
+    {
+      file: 'dist/my-library.cjs.js',
+      format: 'cjs',
+    },
+  ],
+  external: ['react', 'react-dom'],
+  plugins: [
+    // ... other plugins
+    zephyrPlugin(),
+  ],
+});
+```

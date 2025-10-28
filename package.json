@@ -8,85 +8,81 @@
   },
   "scripts": {
     "build": "rspress build",
-    "build:ci": "node scripts/build-ci.js",
     "dev": "rspress dev --port 3030",
-    "generate:plan": "nx release plan",
-    "lint": "biome check",
-    "format": "biome check --fix && biome format --write",
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "prepare": "husky",
     "preview": "rspress preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "commitlint": "commitlint --edit"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js}": [
+      "prettier --write",
+      "eslint --max-warnings 0 ."
+    ]
   },
   "engines": {
-    "node": "22.x",
+    "node": "24.x",
     "pnpm": "10.x"
   },
   "dependencies": {
-    "@commitlint/config-conventional": "^19.8.0",
-    "@intercom/messenger-js-sdk": "^0.0.14",
-    "@newrelic/browser-agent": "^1.285.0",
+    "@intercom/messenger-js-sdk": "^0.0.18",
     "@radix-ui/react-icons": "^1.3.2",
-    "@radix-ui/react-progress": "^1.1.2",
-    "@radix-ui/react-slot": "^1.1.2",
-    "@radix-ui/react-tabs": "^1.1.3",
-    "@radix-ui/react-tooltip": "^1.1.8",
-    "@rspress/core": "^1.43.9",
-    "@rspress/mdx-rs": "^0.6.6",
-    "@rspress/plugin-client-redirects": "^1.43.9",
-    "@rspress/plugin-preview": "^1.43.9",
-    "@rspress/plugin-shiki": "^1.43.9",
-    "@rspress/runtime": "^1.43.9",
-    "@rspress/shared": "^1.43.9",
+    "@radix-ui/react-progress": "^1.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "@rspress/core": "^2.0.0-beta.34",
+    "@rspress/plugin-client-redirects": "^2.0.0-beta.34",
+    "@rspress/plugin-preview": "^2.0.0-beta.34",
+    "@rspress/plugin-sitemap": "2.0.0-beta.34",
+    "@rspress/runtime": "^2.0.0-beta.34",
+    "@rspress/shared": "^2.0.0-beta.34",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "commitlint": "^19.8.0",
-    "dotenv": "^16.4.7",
+    "commitlint": "^20.0.0",
     "husky": "^9.1.7",
-    "lucide-react": "^0.484.0",
+    "lucide-react": "^0.544.0",
     "react-wrap-balancer": "^1.1.1",
-    "rspress": "^1.43.9",
+    "rsbuild-plugin-google-analytics": "^1.0.4",
     "rspress-plugin-file-tree": "^0.4.0",
-    "rspress-plugin-google-analytics": "^0.3.0",
     "rspress-plugin-reading-time": "^0.3.0",
-    "rspress-plugin-sitemap": "^1.1.1",
-    "tailwind-merge": "^3.0.2",
-    "zephyr-rspack-plugin": "^0.0.56",
-    "zod": "^3.24.2"
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@nx/js": "21.1.2",
-    "@swc-node/register": "~1.10.10",
-    "@swc/core": "~1.11.13",
-    "@swc/helpers": "~0.5.15",
-    "@tailwindcss/typography": "^0.5.16",
-    "@types/node": "^22.13.13",
-    "@types/react": "^19.0.12",
+    "@commitlint/cli": "^20.0.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@eslint/js": "^9.36.0",
+    "@rspress/plugin-algolia": "^2.0.0-beta.34",
+    "@rspress/plugin-llms": "2.0.0-beta.34",
+    "@tailwindcss/postcss": "^4.1.13",
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/node": "^24.5.2",
+    "@types/react": "^19.1.13",
     "autoprefixer": "^10.4.21",
-    "dotenv": "^16.5.0",
-    "globals": "^16.0.0",
-    "nx": "21.1.2",
-    "postcss": "^8.5.3",
-    "postcss-loader": "^8.1.1",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.2"
+    "eslint": "^9.36.0",
+    "globals": "^16.4.0",
+    "lint-staged": "^16.2.1",
+    "postcss": "^8.5.6",
+    "postcss-loader": "^8.2.0",
+    "prettier": "^3.6.2",
+    "rsbuild-plugin-open-graph": "^1.1.0",
+    "semantic-release": "^24.2.9",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1",
+    "zephyr-rspress-plugin": "^0.1.0-next.1"
   },
-  "optionalDependencies": {
-    "@rspress/mdx-rs-linux-x64-gnu": "^0.6.6"
-  },
-  "packageManager": "pnpm@10.15.0",
   "pnpm": {
     "patchedDependencies": {
-      "rspress-plugin-google-analytics@0.3.0": "patches/rspress-plugin-google-analytics@0.3.0.patch"
-    },
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@swc/core",
-      "core-js",
-      "esbuild",
-      "nx",
-      "sharp",
-      "workerd"
-    ]
-  }
+      "rsbuild-plugin-google-analytics@1.0.4": "patches/rsbuild-plugin-google-analytics@1.0.4.patch"
+    }
+  },
+  "packageManager": "pnpm@10.17.1"
 }

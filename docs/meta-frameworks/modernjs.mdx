@@ -1,0 +1,99 @@
+import { PackageManagerTabs } from '@rspress/core/theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Modern.js
+
+Deploy your Modern.js applications to Zephyr Cloud with built-in Rspack integration. Modern.js is a meta-framework that provides full-stack capabilities with performance-first architecture and convention-based development.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/getting-started/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Modern.js plugin in your project:
+
+<PackageManagerTabs command="add --dev zephyr-modernjs-plugin" />
+
+## Configuration
+
+Add the Zephyr plugin to your Modern.js configuration:
+
+```typescript
+// modern.config.ts
+import { appTools, defineConfig } from '@modern-js/app-tools';
+import { withZephyr } from 'zephyr-modernjs-plugin';
+
+export default defineConfig({
+  output: {
+    distPath: {
+      html: './',
+    },
+  },
+  html: {
+    outputStructure: 'flat',
+  },
+  source: {
+    mainEntryName: 'index',
+  },
+  runtime: {
+    router: true,
+  },
+  plugins: [
+    appTools({
+      bundler: 'rspack', // Set to 'webpack' to enable webpack
+    }),
+    withZephyr(),
+  ],
+});
+```
+
+## Project Structure
+
+Modern.js uses file-based routing and conventions:
+
+```
+my-modernjs-app/
+├── src/
+│   └── routes/          # File-based routing
+│       ├── layout.tsx   # Root layout
+│       └── page.tsx     # Home page
+├── modern.config.ts     # Modern.js configuration
+├── package.json
+└── biome.json          # Biome configuration (optional)
+```
+
+## Development Workflow
+
+Start your development server:
+
+<PackageManagerTabs command="dev" />
+
+Build for production:
+
+<PackageManagerTabs command="build" />
+
+Preview production build:
+
+<PackageManagerTabs command="serve" />
+
+## Bundler Options
+
+Modern.js supports both Rspack (default) and webpack:
+
+```typescript
+// Use Rspack (recommended)
+appTools({
+  bundler: 'rspack',
+});
+
+// Use webpack
+appTools({
+  bundler: 'webpack',
+});
+```

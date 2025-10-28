@@ -1,5 +1,5 @@
-import { useNavigate } from "rspress/runtime";
-import { Categories, Errors } from "../../lib/error-codes-messages";
+import { useNavigate } from '@rspress/core/runtime';
+import { Categories, Errors } from '../../lib/error-codes-messages';
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from '../ui/table';
 
 export function ErrorTables({
   category,
@@ -50,7 +50,7 @@ export function ErrorTables({
             <TableCell className="text-left items-start flex justify-start">
               <div>
                 <div className="mb-2 hover:text-[var(--rp-c-brand)] hover:decoration-[var(--rp-c-brand)] ">
-                  {name.replace(/_/g, " ")}
+                  {name.replace(/_/g, ' ')}
                 </div>
                 <div>{error.message}</div>
               </div>

@@ -3,7 +3,7 @@ title: 'Configure AWS on Zephyr'
 description: 'Configuring AWS as your deployment integration provider on Zephyr'
 ---
 
-import { Steps } from '@theme';
+import { Steps } from '@rspress/core/theme';
 import { Button } from '../../components/ui/button.tsx';
 
 # Configure AWS on Zephyr
@@ -98,34 +98,28 @@ aws_secret_access_key = YOUR_ACCESS_KEY_SECRET
 Details for each input after clicking **Add Integration** under **AWS**:
 
 <dt>Integration Name</dt>
-<dd>
-  A unique name within your organization, used as a slug.
-</dd>
+<dd>A unique name within your organization, used as a slug.</dd>
 
 <dt>Integration Display Name</dt>
-<dd>
-  The name of the integration shown on the dashboard.
-</dd>
+<dd>The name of the integration shown on the dashboard.</dd>
 
 <dt>API Token</dt>
 <dd>
-  Obtainable from AWS. [See instructions](#1-api-token) for creating your API token.
+  Obtainable from AWS. [See instructions](#1-api-token) for creating your API
+  token.
 </dd>
 
 <dt>Domain</dt>
-<dd>
-  Your domain.
-</dd>
+<dd>Your domain.</dd>
 
 <dt>Certificate arn</dt>
-<dd>
-  Certificate arn for domain (ze.your.domain)
-</dd>
+<dd>Certificate arn for domain (ze.your.domain)</dd>
 
 <dt>Set Integration as Default</dt>
 <dd>
   When set as default, all Zephyr deployments will use this integration until a
-  new one (default integration) is set. Deployment using integration won't work until AWS worker and property become activated.
+  new one (default integration) is set. Deployment using integration won't work
+  until AWS worker and property become activated.
 </dd>
 
 ### Validate domain and setup DNS
@@ -134,10 +128,10 @@ Details for each input after clicking **Add Integration** under **AWS**:
 - Find you domain
 - Copy value from `Domain name (standard)` column and add DNS records described in the table below
 
-| Subdomain                         | Type  | Value                                      |
-|-----------------------------------|-------|--------------------------------------------|
-| ze.yourdomain.com                 | CNAME | < Domain name value >                      |
-| *.ze.yourdomain.com               | CNAME | < Domain name value >                      |
+| Subdomain            | Type  | Value                       |
+| -------------------- | ----- | --------------------------- |
+| ze.yourdomain.com    | CNAME | &lt; Domain name value &gt; |
+| \*.ze.yourdomain.com | CNAME | &lt; Domain name value &gt; |
 
 </Steps>
 
@@ -586,7 +580,7 @@ if aws lambda get-function --function-name "$FN_NAME" >/dev/null 2>&1; then
 
   log "Function: $FN_NAME"
   log " ARN: $BASE_ARN"
-  log " Role (from config): ${ROLE_FROM_CFG:-<none>}"
+  log " Role (from config): ${ROLE_FROM_CFG:-&lt;none&gt;}"
 
   # Function URLs
   log "Cleaning function URL configs"
@@ -681,7 +675,7 @@ log "==> PHASE 2 completed."
 #### Collect necessary data
 
 | Variable          | Where to find in the AWS dashboard | Description                                          |
-|-------------------|------------------------------------|------------------------------------------------------|
+| ----------------- | ---------------------------------- | ---------------------------------------------------- |
 | DDB_TABLES        | DynamoDB -> Tables                 | envs and snaphots table names                        |
 | LOG_GROUPS        | Cloudwatch -> Log groups           | Cloudwatch log groups of Lambda@Edge function        |
 | CF_DIST_ID        | Cloudfront -> Distributions        | Cloudfron distribution id                            |
@@ -695,22 +689,18 @@ log "==> PHASE 2 completed."
 
 #### Run the script for the first stage
 
-```bash
-DDB_TABLES="<envs_ddb_table> <snapshots_ddb_table>" \
-LOG_GROUPS="<global_log_group> <log_group>" \
-CF_DIST_ID=<cloudfront_distribution_id> \
-CF_FUNC_NAME=<cloudfront_function_name> \
-SECRET_NAME=<secret_store_name> \
-S3_BUCKET=<s3_bucket_name> \
-IAM_POLICY_SM_ARN="<secret_manager_arn>" \
+DDB_TABLES="&lt;envs_ddb_table&gt; &lt;snapshots_ddb_table&gt;" \
+LOG_GROUPS="&lt;global_log_group&gt; &lt;log_group&gt;" \
+CF_DIST_ID=&lt;cloudfront_distribution_id&gt; \
+CF_FUNC_NAME=&lt;cloudfront_function_name&gt; \
+SECRET_NAME=&lt;secret_store_name&gt; \
+S3_BUCKET=&lt;s3_bucket_name&gt; \
+IAM_POLICY_SM_ARN="&lt;secret_manager_arn&gt;" \
 bash ./cleanup-stage1.sh
-```
 
 #### Run the script for the second stage
 
-```bash
-LAMBDA_NAME="<lambda_name>" \
-POLICY_ARN="<policy_arn>" \
-IAM_ROLE_ARN="<iam_role_arn>" \
+LAMBDA_NAME="&lt;lambda_name&gt;" \
+POLICY_ARN="&lt;policy_arn&gt;" \
+IAM_ROLE_ARN="&lt;iam_role_arn&gt;" \
 bash ./cleanup-stage2.sh
-```

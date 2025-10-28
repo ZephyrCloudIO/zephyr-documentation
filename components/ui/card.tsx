@@ -1,40 +1,53 @@
-import { cn } from "../../lib/cn";
-import type { CardItemProps } from "../../lib/site.config";
+import { cn } from '../../lib/cn';
+import type { CardItemProps } from '../../lib/site.config';
 
 export const Card = ({ item }: { item: CardItemProps }) => {
   return (
     <li
       className={cn(
-        "mb-2 list-none col-span-2",
+        'list-none col-span-2',
         item.className,
-        item.variant === "small" && "col-span-1",
-
-        item.variant === "large" && "col-span-2 lg:col-span-2",
+        item.variant === 'small' && 'col-span-1',
+        item.variant === 'large' && 'col-span-2 lg:col-span-2',
       )}
     >
-      <div
-        className={cn(
-          "group relative rounded-md bg-[var(--rp-c-bg-muted)] overflow-hidden px-[0.6px] pb-[1.02px] pt-[1px] lg:hover:!opacity-100 transition-all lg:group-hover/list:opacity-30",
-        )}
+      <a
+        href={item.href}
+        className="group block h-full no-underline hover:no-underline"
+        style={{ textDecoration: 'none' }}
       >
-        <div className="absolute glow rotate-45 inset-0 w-[100px] h-[100px] z-0 hidden transition lg:-inset-x-6 lg:hidden lg:group-hover:block lg:group-hover:bg-[var(--rp-c-bg-soft)] lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,143,124,0.1)] lg:group-hover:drop-shadow-lg" />
-        <a
-          href={item.href}
-          className={cn(
-            "z-5 lg:px-5 lg:py-4 relative border-[0.2px] border-slate-300/30 md:min-h-48 min-h-32 xl:min-h-48 max-h-52  rounded-md  bg-[var(--rp-c-bg-soft)] hover:bg-[calc(var(--rp-c-bg-soft)/20)] flex flex-col transition-all p-4   gap-2 lg:gap-5 md:gap-4 lg:hover:!opacity-100 lg:hover:bg-[var(--rp-c-bg)]/30 ",
-          )}
-        >
-          {item.icons && (
-            <div className="flex items-center gap-2">
-              {item.icons.map((Icon, index) => (
-                <span key={index}>{Icon} </span>
-              ))}
+        <div className="relative h-full min-h-[10rem] p-4 rounded-xl bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 border border-zinc-800/50 hover:border-zinc-700/70 transition-all duration-300 hover:shadow-lg hover:shadow-zinc-950/20 hover:-translate-y-1">
+          {/* Background glow effect */}
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+          {/* Content */}
+          <div className="relative z-10 flex flex-col h-full">
+            {/* Icons */}
+            {item.icons && (
+              <div className="flex items-center gap-2 mb-1">
+                {item.icons.map((Icon, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-center w-6 h-6"
+                  >
+                    {Icon}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Title and Description */}
+            <div className="flex-1 flex flex-col justify-center gap-2">
+              <h3 className="text-xl font-semibold text-white group-hover:text-blue-50 transition-colors leading-tight">
+                {item.title}
+              </h3>
+              <p className="text-sm text-zinc-400 leading-snug line-clamp-3">
+                {item.description}
+              </p>
             </div>
-          )}
-          <h2 className="font-semibold ">{item.title}</h2>
-          <p>{item.description && item.description}</p>
-        </a>
-      </div>
+          </div>
+        </div>
+      </a>
     </li>
   );
 };

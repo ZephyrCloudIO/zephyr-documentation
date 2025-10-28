@@ -1,0 +1,182 @@
+import { PackageManagerTabs } from '@rspress/core/theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Rslib
+
+Deploy your JavaScript/TypeScript libraries to Zephyr Cloud using Rslib. Built on Rsbuild, Rslib provides a fast and flexible library building solution with excellent TypeScript support and multiple output formats.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/getting-started/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Rsbuild plugin in your Rslib project:
+
+<PackageManagerTabs command="add --dev zephyr-rsbuild-plugin" />
+
+## Configuration
+
+Add the Zephyr plugin to your Rslib configuration:
+
+```typescript
+// rslib.config.ts
+import { defineConfig } from '@rslib/core';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+export default defineConfig({
+  plugins: [withZephyr()],
+  source: {
+    entry: {
+      index: 'src/index.ts',
+    },
+  },
+  lib: [
+    {
+      format: 'esm',
+      output: {
+        distPath: {
+          root: 'dist',
+        },
+      },
+    },
+  ],
+});
+```
+
+## Multiple Output Formats
+
+Rslib supports building your library in multiple formats:
+
+```typescript
+// rslib.config.ts
+import { defineConfig } from '@rslib/core';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+export default defineConfig({
+  plugins: [withZephyr()],
+  source: {
+    entry: {
+      index: 'src/index.ts',
+    },
+  },
+  lib: [
+    // ESM build
+    {
+      format: 'esm',
+      output: {
+        distPath: {
+          root: 'dist/esm',
+        },
+      },
+    },
+    // CommonJS build
+    {
+      format: 'cjs',
+      output: {
+        distPath: {
+          root: 'dist/cjs',
+        },
+      },
+    },
+    // UMD build
+    {
+      format: 'umd',
+      umdName: 'MyLibrary',
+      output: {
+        distPath: {
+          root: 'dist/umd',
+        },
+      },
+    },
+  ],
+});
+```
+
+## Project Structure
+
+A typical Rslib library structure:
+
+```
+my-library/
+├── src/
+│   ├── index.ts         # Main entry point
+│   ├── components/      # Library components
+│   └── utils/           # Utility functions
+├── dist/                # Built output
+├── rslib.config.ts      # Rslib configuration
+├── package.json
+└── tsconfig.json       # TypeScript configuration
+```
+
+## Development Workflow
+
+Start development mode with watch:
+
+<PackageManagerTabs command="dev" />
+
+Build for production:
+
+<PackageManagerTabs command="build" />
+
+## TypeScript Support
+
+Rslib provides excellent TypeScript support with automatic declaration generation:
+
+```typescript
+// rslib.config.ts
+export default defineConfig({
+  plugins: [withZephyr()],
+  source: {
+    entry: {
+      index: 'src/index.ts',
+    },
+  },
+  lib: [
+    {
+      format: 'esm',
+      dts: true, // Generate TypeScript declarations
+      output: {
+        distPath: {
+          root: 'dist',
+        },
+      },
+    },
+  ],
+});
+```
+
+## Advanced Configuration
+
+Customize bundling behavior with additional options:
+
+```typescript
+// rslib.config.ts
+export default defineConfig({
+  plugins: [withZephyr()],
+  source: {
+    entry: {
+      index: 'src/index.ts',
+    },
+  },
+  lib: [
+    {
+      format: 'esm',
+      dts: true,
+      autoExternal: false, // Bundle dependencies
+      bundle: true, // Enable bundling
+      minify: true, // Minify output
+      output: {
+        distPath: {
+          root: 'dist',
+        },
+      },
+    },
+  ],
+});
+```

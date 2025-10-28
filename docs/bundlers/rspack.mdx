@@ -1,0 +1,286 @@
+import { PackageManagerTabs } from '@rspress/core/theme';
+import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
+
+# Rspack
+
+Deploy your Rspack applications to Zephyr Cloud with blazing-fast Rust-based bundling and Module Federation support. The Zephyr Rspack plugin integrates seamlessly with Rspack's high-performance build process.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/getting-started/installation) setup guide
+- Installed our [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn)
+
+:::
+
+<CodemodDisclaimer />
+
+## Installation
+
+Install the Rspack plugin in your project:
+
+<PackageManagerTabs command="add --dev zephyr-rspack-plugin" />
+
+## Quick Start
+
+To add Zephyr to an Rspack application, wrap the entire Rspack configuration with the `withZephyr` function.
+
+```typescript
+// rspack.config.ts
+import { Configuration } from '@rspack/core';
+import { withZephyr } from 'zephyr-rspack-plugin';
+import path from 'path';
+
+const config: Configuration = {
+  entry: './src/index.tsx',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[contenthash].js',
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx|ts|tsx)$/,
+        exclude: /node_modules/,
+        use: 'builtin:swc-loader',
+      },
+    ],
+  },
+};
+
+export default withZephyr()(config);
+```
+
+## Module Federation
+
+Zephyr has first party support for Module Federation. You don't need to do any additional configuration to enable Module Federation in Zephyr.
+
+Zephyr will hook into the bundling process and modify the remote resolution to point to the Zephyr Cloud deployments.
+
+### Host Application
+
+```typescript
+// rspack.config.ts
+import { Configuration } from '@rspack/core';
+import { withZephyr } from 'zephyr-rspack-plugin';
+import { ModuleFederationPlugin } from '@module-federation/enhanced/rspack';
+
+const config: Configuration = {
+  entry: './src/index.tsx',
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'host',
+      remotes: {
+        mfe1: 'mfe1@http://localhost:3001/mf-manifest.json',
+        mfe2: 'mfe2@http://localhost:3002/mf-manifest.json',
+      },
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+    }),
+  ],
+};
+
+export default withZephyr()(config);
+```
+
+### Remote Application
+
+```typescript
+// rspack.config.ts
+import { Configuration } from '@rspack/core';
+import { withZephyr } from 'zephyr-rspack-plugin';
+import { ModuleFederationPlugin } from '@module-federation/enhanced/rspack';
+
+const config: Configuration = {
+  entry: './src/index.tsx',
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'mfe1',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Button': './src/components/Button',
+        './Header': './src/components/Header',
+        './utils': './src/utils',
+      },
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+    }),
+  ],
+};
+
+export default withZephyr()(config);
+```
+
+## Package.json Scripts
+
+Add these scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "rspack serve --mode development",
+    "build": "rspack build --mode production",
+    "build:dev": "rspack build --mode development",
+    "serve": "rspack serve"
+  }
+}
+```
+
+## Advanced Configuration
+
+### Environment-Specific Builds
+
+```javascript
+// rspack.config.js
+const { withZephyr } = require('zephyr-rspack-plugin');
+
+const config = {
+  entry: './src/index.js',
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
+};
+
+module.exports = withZephyr({
+  deploy: process.env.NODE_ENV === 'production',
+  environment: process.env.NODE_ENV || 'development',
+})(config);
+```
+
+### Custom Optimization
+
+```javascript
+// rspack.config.js
+const { withZephyr } = require('zephyr-rspack-plugin');
+
+const config = {
+  entry: './src/index.js',
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\\\/]node_modules[\\\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+        common: {
+          name: 'common',
+          minChunks: 2,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
+};
+
+module.exports = withZephyr()(config);
+```
+
+## Development Server
+
+Rspack provides a fast development server with hot reloading:
+
+```bash
+# Start development server
+pnpm dev
+
+# Start with custom port
+pnpm dev -- --port 3000
+
+# Start with host binding
+pnpm dev -- --host 0.0.0.0
+```
+
+### Dev Server Configuration
+
+```javascript
+// rspack.config.js
+const config = {
+  entry: './src/index.js',
+  devServer: {
+    port: 3000,
+    hot: true,
+    historyApiFallback: true,
+    open: true,
+  },
+};
+
+module.exports = withZephyr()(config);
+```
+
+## Features
+
+- 🚀 **Blazing-fast builds** with Rust-based bundling
+- 🏗️ **Full Module Federation support** with enhanced features
+- 📦 **Asset optimization** and intelligent caching
+- 🔧 **Zero-config setup** for simple applications
+- 📊 **Build analytics** and deployment monitoring
+- 🌐 **Global CDN distribution** for optimal performance
+- ⚡ **Hot module replacement** in development
+- 💾 **Built-in SWC** for ultra-fast transpilation
+- 🔗 **Webpack compatibility** for easy migration
+
+## Requirements
+
+- Rspack 0.3 or higher
+- Node.js 18 or higher
+- Zephyr Cloud account ([sign up here](https://app.zephyr-cloud.io))
+
+## Common Issues
+
+### Module Federation Setup
+
+For enhanced Module Federation features:
+
+```javascript
+const {
+  ModuleFederationPlugin,
+} = require('@module-federation/enhanced/rspack');
+
+// Use enhanced plugin for better runtime and development experience
+const config = {
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'my-app',
+      // Enhanced features available
+      runtimePlugins: ['./mf-runtime.js'],
+    }),
+  ],
+};
+```
+
+### Performance Optimization
+
+For optimal build performance:
+
+```javascript
+const config = {
+  experiments: {
+    css: true, // Enable CSS support
+  },
+  optimization: {
+    realContentHash: true,
+  },
+};
+```
+
+## Next Steps
+
+- [Module Federation Tutorial](/tutorials/create-mf-app)
+- [Multi-bundler Setup](/integrations/vite-rspack-webpack-mf)
+- [Join our Discord](https://zephyr-cloud.io/discord) for support
