@@ -112,25 +112,29 @@ The `zephyr:dependencies` field serves to:
 
 Zephyr's dependency resolution engine supports multiple version selector formats, each designed for specific use cases in your development and deployment workflows.
 
-#### Standard Version Selectors
+#### Label-Based Selectors (Tags and Environments)
 
 ```json title="package.json"
 {
   "zephyr:dependencies": {
-    // Local alias -> Remote application @ version tag
+    // Local alias -> Remote application @ label
     "header": "header-component@latest",
     "uiKit": "design-system@stable",
     "utils": "shared-utilities@v2.1",
-    "experimental": "beta-features@next"
+    "experimental": "beta-features@next",
+    "legacy": "old-component@1.2.3"
   }
 }
 ```
 
-Version tags allow you to:
+Label-based selectors resolve to environments, tags, or version numbers with matching names. They allow you to:
 
 - Target lifecycle stages: `@latest`, `@stable`, `@next`
 - Reference specific releases: `@v2.1`, `@release-3.0`
-- Use custom environment tags: `@production`, `@staging`
+- Use environment names: `@production`, `@staging`, `@development`
+- Resolve to specific versions: `@1.2.3`, `@2.0.0`
+
+**Resolution Priority**: Zephyr searches for an **environment** with the label name first, then falls back to searching for a **tag** with that name, and finally attempts to match it as a version number. Environments always take precedence over tags when both exist with the same name.
 
 #### Semantic Version Ranges
 
@@ -160,7 +164,7 @@ Zephyr uses the [official semver specification](https://semver.org/) for version
 
 #### Wildcard Version
 
-The wildcard `"*"` selector matches any available version of a dependency, similar to `workspace:*` but with different resolution behavior:
+The wildcard `"*"` selector resolves to the latest available version of a dependency:
 
 ```json title="package.json"
 {
@@ -173,10 +177,11 @@ The wildcard `"*"` selector matches any available version of a dependency, simil
 
 The `"*"` wildcard:
 
-- Matches any published version of the dependency
-- Uses the same workspace resolution logic as `workspace:*` when in development
-- Falls back to the latest available version if no workspace match is found
-- Provides a simpler syntax for cases where any version is acceptable
+- Returns the latest application version for the target platform
+- Falls back to web platform if no versions exist for the requested platform
+- Falls back to the default environment if no versions are found
+- Unlike `workspace:*`, does not match by build context (branch, CI, username)
+- Provides a simpler syntax for cases where the latest version is always acceptable
 
 #### Workspace Resolution
 
@@ -192,14 +197,22 @@ The most powerful feature of Zephyr's dependency system is workspace resolution 
 }
 ```
 
-When you use `workspace:*`, Zephyr intelligently resolves dependencies based on:
+When you use `workspace:*`, Zephyr intelligently resolves dependencies by matching all of the following build context criteria:
 
-- Your current git branch
-- The CI/CD environment
-- The build target platform
-- The developer's local environment
+- **Git branch**: The current branch name (e.g., `feature/new-ui`, `main`)
+- **Target platform**: The build target platform (e.g., `web`, `ios`, `android`)
+- **CI environment**: Whether the build is running in CI (`true`) or locally (`false`)
+- **Username**: The developer username or CI identity
 
-Feature branches automatically use matching versions of dependencies, eliminating the need for manual version updates during development.
+The resolution returns the **most recent version** (by creation date) that matches all four criteria. If no exact match is found, it falls back to the default environment.
+
+**Key Benefits:**
+
+- Feature branches automatically use matching versions of dependencies
+- Local development builds are isolated from CI builds
+- Each developer can work independently without version conflicts
+- Eliminates the need for manual version updates during development
+- Updates automatically when rebuilding with the same context
 
 ### Example: Multi-Remote Setup
 
@@ -292,41 +305,81 @@ The platform resolution follows a hierarchical approach:
 
 The resolution engine implements automatic fallback to the 'web' platform when platform-specific versions are unavailable, ensuring build reliability while maintaining platform optimization when available.
 
-### Environment-Based Resolution
+### Label-Based Resolution (Environments and Tags)
 
-Dependencies can also be resolved based on deployment environments and tags:
+Dependencies can be resolved using labels that correspond to environments, tags, or version numbers. When using label-based selectors, Zephyr follows a specific priority order:
 
 ```json title="package.json"
 {
   "zephyr:dependencies": {
-    "analytics": "zephyr:analytics-service@production", // first zephyr will try to find if there is an environment called `production`, and if not, zephyr will find if there is a tag called `production`
-    "feature-flags": "zephyr:feature-service@staging"
+    "analytics": "zephyr:analytics-service@production",
+    "feature-flags": "zephyr:feature-service@staging",
+    "ui-library": "design-system@latest",
+    "legacy-api": "api-service@1.2.3"
   }
 }
 ```
 
-Zephyr will resolve these to the appropriate environment-specific versions, with automatic fallback to the default environment if the specified one doesn't exist.
+**Resolution Priority:**
+
+1. **Environment name first**: Zephyr searches for an environment with the matching name
+2. **Tag name second**: If no environment is found, searches for a tag with the matching name
+3. **Version number third**: If no tag is found, attempts to match it as a version number
+4. **Platform fallback**: If not found for the target platform, tries the web platform
+5. **Default environment**: Falls back to the default environment if no match is found
+
+This priority system means environment names always take precedence over tag names, and tag names take precedence over version numbers. For example, if both an environment and a tag are named `production`, the environment will be selected.
 
 ## Resolution Order and Strategies
 
-The resolution engine processes dependency declarations through a deterministic pipeline of resolution strategies. Each strategy is attempted in order until a valid resolution is found or all strategies are exhausted.
+The resolution engine processes dependency declarations through a deterministic pipeline of resolution strategies. Each strategy uses specific matching criteria and fallback chains to maximize resolution success.
 
 ### Resolution Pipeline
 
-1. **Exact Version Match**: If the selector specifies an exact version (e.g., `1.2.3`), Zephyr looks for that specific version.
+The resolution strategy is determined by the version selector format:
 
-2. **Workspace Resolution**: For `workspace:*` selectors, Zephyr uses the build context to find matching versions based on branch, environment, and platform.
+1. **Workspace Resolution (`workspace:*`)**:
+   - Matches application versions by build context: branch name, target platform, CI environment, and username
+   - Returns the most recent version matching all context criteria
+   - Falls back to default environment if no matching build is found
+   - Updates automatically on rebuild with matching context
 
-3. **Semver Range Resolution**: For semver selectors (e.g., `^1.0.0`), Zephyr finds all matching versions and selects the highest one.
+2. **Wildcard (`*`)**:
+   - Returns the latest available application version for the target platform
+   - Falls back to web platform if no versions exist for the requested platform
+   - Falls back to default environment if no versions are found
+   - Similar to `workspace:*` but doesn't require matching build context
 
-4. **Label Resolution**: For labeled versions (e.g., `@latest`, `@stable`), Zephyr resolves to the version tagged with that label.
+3. **Semantic Version Range** (e.g., `^1.0.0`, `~2.1.0`, `>=1.0.0 <2.0.0`):
+   - Matches application versions by semver specification
+   - Selects the highest version matching the range
+   - Falls back to web platform if no matching version exists for the requested platform
+   - Falls back to default environment if no matching versions are found
 
-5. **Latest Version Fallback**: If no specific version is found, Zephyr falls back to the latest available version.
+4. **Label-Based Resolution** (e.g., `@production`, `@staging`, `@latest`, `@1.2.3`):
+   - First searches for an environment with the matching name
+   - If no environment found, searches for a tag with the matching name
+   - If no tag found, attempts to match it as a version number
+   - Environment names take priority over tag names, and tag names take priority over version numbers
+   - Falls back to web platform if no match exists for the requested platform
+   - Falls back to default environment if no matching label is found
 
-6. **Default Environment**: As a final fallback, Zephyr checks the default environment for the application.
+5. **Unrecognized Selectors** (invalid or arbitrary values):
+   - Any selector that doesn't match the above patterns
+   - Resolves directly to the default environment
+   - Useful as a fallback strategy for URL-like values
+
+### Default Environment Fallback
+
+The **default environment** is the application's environment with the smallest `order` value (lowest priority number). This serves as the final fallback for all resolution strategies when:
+
+- No matching versions exist
+- Platform-specific versions are unavailable
+- Labels or tags cannot be resolved
+- Invalid selectors are provided
 
 :::warning Environment Requirement
-Applications must have at least one environment created in Zephyr Cloud to be resolvable as dependencies. Without an environment, resolution will fail. Create environments through the Zephyr dashboard after building your application.
+Applications must have at least one environment created in Zephyr Cloud to be resolvable as dependencies. The environment with the smallest `order` value becomes the default fallback. Create environments through the Zephyr dashboard after building your application.
 :::
 
 ### Build-Time Behavior
