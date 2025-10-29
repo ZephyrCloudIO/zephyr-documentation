@@ -169,6 +169,10 @@ const sidebar: Sidebar = {
       collapsible: true,
       items: [
         {
+          text: 'Astro',
+          link: '/meta-frameworks/astro',
+        },
+        {
           text: 'Ember.js',
           link: '/meta-frameworks/emberjs',
         },
