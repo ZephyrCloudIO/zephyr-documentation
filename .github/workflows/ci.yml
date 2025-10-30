@@ -43,12 +43,7 @@ jobs:
         run: pnpm build
 
       - name: Zephyr deploy summary
-        uses: ZephyrCloudIO/deploy-summary-action@v1.3.0
+        uses: ZephyrCloudIO/zephyr-preview-environment-action@main
         id: zephyr-summary
         with:
-          application_uid: zephyr-cloud-docs.zephyr-documentation.zephyrcloudio # Required
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          github_environment: zephyr-docs (Preview)
-
-      - name: Zephyr deploy summary
-        run: echo "Deployed to ${{ steps.zephyr-summary.outputs.version_url }}"
