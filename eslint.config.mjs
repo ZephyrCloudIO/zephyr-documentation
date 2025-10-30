@@ -6,5 +6,5 @@ export default [
   { languageOptions: { globals: globals.browser } },
   js.configs.recommended,
   ...ts.configs.recommended,
-  { ignores: ['doc_build/'] },
+  { ignores: ['doc_build/', '.nx/'] },
 ];
