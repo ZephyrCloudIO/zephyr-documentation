@@ -1,14 +1,15 @@
-name: Run on PR Merge
+name: CI
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
+  push:
+    branches:
+      - main
 
 env:
   NODE_VERSION: 24
 
 jobs:
-  deploy-on-pr-changes:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -28,19 +29,18 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
+      # Run Linting
+      - name: Run linting
+        run: pnpm lint
+
       # Run the build
       - name: Run build
-        id: build
         env:
           ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
         run: pnpm build
 
       - name: Zephyr deploy summary
-        uses: ZephyrCloudIO/deploy-summary-action@v1.3.0
+        uses: ZephyrCloudIO/zephyr-preview-environment-action@main
         id: zephyr-summary
         with:
-          application_uid: zephyr-cloud-docs.zephyr-documentation.zephyrcloudio # Required
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          github_environment: zephyr-docs (Preview)
-      - name: Zephyr deploy summary
-        run: echo "Deployed to ${{ steps.zephyr.outputs.version_url }}"

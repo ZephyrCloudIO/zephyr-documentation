@@ -1,18 +1,14 @@
-name: CI
+name: Run on Pull Request
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
+    types: [opened, synchronize, reopened, closed]
 
 env:
   NODE_VERSION: 24
 
 jobs:
-  build:
+  deploy-on-pr-changes:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -32,12 +28,9 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      # Run Linting
-      - name: Run linting
-        run: pnpm lint
-
       # Run the build
       - name: Run build
+        id: build
         env:
           ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
         run: pnpm build
