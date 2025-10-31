@@ -21,7 +21,7 @@ const socialLinks: SocialLink[] = [
   {
     icon: 'discord',
     mode: 'link',
-    content: 'https://zephyr-cloud.io/discord',
+    content: 'https://discord.gg/zephyrcloud',
   },
   {
     icon: 'x',
