@@ -1,0 +1,688 @@
+# Deployment Hooks
+
+Zephyr provides hooks to tap into the deployment lifecycle, allowing you to integrate with external services, send notifications, update registries, or perform custom actions after successful deployments.
+
+## Available Hooks
+
+### onDeployComplete
+
+Fires after a successful deployment with comprehensive metadata about the deployed application. This hook is called after all assets have been uploaded and the deployment is complete.
+
+**Key Features:**
+
+- Supports both synchronous and asynchronous callbacks
+- Errors in hooks are logged but won't fail the build
+- Called only when deployment succeeds
+- Provides complete deployment metadata
+
+## Usage
+
+### Webpack
+
+```typescript
+// webpack.config.ts
+import { Configuration } from 'webpack';
+import { withZephyr } from 'zephyr-webpack-plugin';
+
+const config: Configuration = {
+  entry: './src/index.js',
+  // ... other webpack config
+};
+
+export default withZephyr({
+  hooks: {
+    onDeployComplete: async (deploymentInfo) => {
+      console.log('🚀 Deployment Complete!');
+      console.log(`   URL: ${deploymentInfo.url}`);
+      console.log(`   Module: ${deploymentInfo.snapshot.uid.app_name}`);
+      console.log(`   Build ID: ${deploymentInfo.snapshot.uid.build}`);
+      console.log(
+        `   Dependencies: ${deploymentInfo.federatedDependencies.length}`,
+      );
+      console.log(
+        `   Git: ${deploymentInfo.snapshot.git.branch}@${deploymentInfo.snapshot.git.commit}`,
+      );
+      console.log(
+        `   CI: ${deploymentInfo.buildStats.context.isCI ? 'Yes' : 'No'}`,
+      );
+    },
+  },
+})(config);
+```
+
+### Rspack
+
+```typescript
+// rspack.config.ts
+import { Configuration } from '@rspack/core';
+import { withZephyr } from 'zephyr-rspack-plugin';
+
+const config: Configuration = {
+  entry: './src/index.js',
+  // ... other rspack config
+};
+
+export default withZephyr({
+  hooks: {
+    onDeployComplete: async (deploymentInfo) => {
+      console.log('🚀 Deployment Complete!');
+      console.log(`   URL: ${deploymentInfo.url}`);
+      console.log(`   Module: ${deploymentInfo.snapshot.uid.app_name}`);
+      console.log(`   Build ID: ${deploymentInfo.snapshot.uid.build}`);
+    },
+  },
+})(config);
+```
+
+### Rsbuild
+
+```typescript
+// rsbuild.config.ts
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+export default defineConfig({
+  plugins: [
+    pluginReact(),
+    withZephyr({
+      hooks: {
+        onDeployComplete: async (deploymentInfo) => {
+          console.log('Deployed to:', deploymentInfo.url);
+        },
+      },
+    }),
+  ],
+});
+```
+
+### Vite
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr } from 'vite-plugin-zephyr';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    withZephyr({
+      hooks: {
+        onDeployComplete: async (deploymentInfo) => {
+          console.log('Deployed to:', deploymentInfo.url);
+          console.log('Build ID:', deploymentInfo.buildStats.app.buildId);
+        },
+      },
+    }),
+  ],
+});
+```
+
+### Rollup
+
+```javascript
+// rollup.config.js
+import { withZephyr } from 'rollup-plugin-zephyr';
+
+export default {
+  input: 'src/index.js',
+  output: {
+    dir: 'dist',
+    format: 'es',
+  },
+  plugins: [
+    withZephyr({
+      hooks: {
+        onDeployComplete: async (deploymentInfo) => {
+          console.log('Deployed to:', deploymentInfo.url);
+        },
+      },
+    }),
+  ],
+};
+```
+
+### Rolldown
+
+```javascript
+// rolldown.config.js
+import { withZephyr } from 'rolldown-plugin-zephyr';
+
+export default {
+  input: 'src/index.js',
+  output: {
+    dir: 'dist',
+  },
+  plugins: [
+    withZephyr({
+      hooks: {
+        onDeployComplete: async (deploymentInfo) => {
+          console.log('Deployed to:', deploymentInfo.url);
+        },
+      },
+    }),
+  ],
+};
+```
+
+## DeploymentInfo Interface
+
+The `onDeployComplete` hook receives a `DeploymentInfo` object with the following structure:
+
+### Type Definition
+
+```typescript
+interface DeploymentInfo {
+  url: string;
+  snapshot: Snapshot;
+  federatedDependencies: ZeResolvedDependency[];
+  buildStats: ZephyrBuildStats;
+}
+```
+
+### url
+
+**Type:** `string`
+
+The deployment URL where your application is accessible.
+
+**Example:**
+
+```typescript
+onDeployComplete: (info) => {
+  console.log(info.url); // https://my-app.zephyr-cloud.io/v1.0.0
+};
+```
+
+### snapshot
+
+**Type:** `Snapshot`
+
+Complete snapshot of the deployed application including git information, assets, and Module Federation configuration.
+
+**Key Properties:**
+
+```typescript
+interface Snapshot {
+  application_uid: string; // Format: "app.repo.org"
+  version: string; // Package version + build descriptor
+  snapshot_id: string; // Format: "version.app.repo.org"
+  domain: string; // Default domain URL
+
+  uid: {
+    build: string; // Unique build identifier
+    app_name: string; // Application name
+    repo: string; // Repository name
+    org: string; // Organization name
+  };
+
+  git: {
+    name?: string; // Git user name
+    email?: string; // Git user email
+    branch: string; // Current branch
+    commit: string; // Commit hash
+    tags?: string[]; // Git tags
+  };
+
+  creator: {
+    name: string; // Creator name
+    email: string; // Creator email
+  };
+
+  createdAt: number; // Timestamp
+
+  mfConfig?: {
+    // Module Federation configuration
+    name: string;
+    filename: string;
+    exposes?: Record<string, string>;
+    remotes?: Record<string, string>;
+    shared?: Record<string, unknown>;
+  };
+
+  assets: Record<string, SnapshotAsset>; // Deployed assets
+  ze_envs?: Record<string, string>; // Public environment variables
+  ze_envs_hash?: string; // Environment variables hash
+}
+```
+
+**Example:**
+
+```typescript
+onDeployComplete: (info) => {
+  const { snapshot } = info;
+  console.log(`App: ${snapshot.uid.app_name}`);
+  console.log(`Build: ${snapshot.uid.build}`);
+  console.log(`Branch: ${snapshot.git.branch}`);
+  console.log(`Commit: ${snapshot.git.commit}`);
+
+  if (snapshot.mfConfig) {
+    console.log(`Module Federation Name: ${snapshot.mfConfig.name}`);
+    console.log(`Exposes:`, snapshot.mfConfig.exposes);
+  }
+};
+```
+
+### federatedDependencies
+
+**Type:** `ZeResolvedDependency[]`
+
+Array of resolved remote modules that this application depends on.
+
+```typescript
+interface ZeResolvedDependency {
+  name: string; // Remote module name
+  version: string; // Remote module version
+  remote_entry_url: string; // URL to remote entry
+  default_url: string; // Default URL
+  // ... additional properties
+}
+```
+
+**Example:**
+
+```typescript
+onDeployComplete: (info) => {
+  const { federatedDependencies } = info;
+
+  console.log(`Total Dependencies: ${federatedDependencies.length}`);
+
+  federatedDependencies.forEach((dep) => {
+    console.log(`  - ${dep.name}@${dep.version}`);
+    console.log(`    Remote: ${dep.remote_entry_url}`);
+  });
+};
+```
+
+### buildStats
+
+**Type:** `ZephyrBuildStats`
+
+Comprehensive build statistics and metadata.
+
+**Key Properties:**
+
+```typescript
+interface ZephyrBuildStats {
+  project: string;
+  id: string; // application_uid
+  name: string;
+  version: string;
+  remote: string | undefined; // e.g., "remoteEntry.js"
+
+  overrides: ApplicationOverride[];
+  consumes: ApplicationConsumes[];
+  modules: ApplicationModule[];
+  dependencies?: RawDependency[];
+  devDependencies?: RawDependency[];
+  remotes?: string[];
+
+  app: {
+    name: string;
+    version: string;
+    org: string;
+    project: string;
+    buildId: string;
+  };
+
+  git: {
+    name: string;
+    email: string;
+    branch: string;
+    commit: string;
+    tags?: string[];
+  };
+
+  context: {
+    username?: string;
+    isCI: boolean; // Detected CI environment
+  };
+
+  edge: {
+    url: string; // Edge deployment URL
+    versionUrl?: string; // Version-specific URL
+    delimiter: string;
+  };
+
+  zephyrDependencies?: Record<string, ZephyrDependency>;
+  ze_envs?: Record<string, string>; // Public environment variables
+  ze_envs_hash?: string; // Environment variables hash
+}
+```
+
+**Example:**
+
+```typescript
+onDeployComplete: (info) => {
+  const { buildStats } = info;
+
+  console.log(`Build ID: ${buildStats.app.buildId}`);
+  console.log(`Organization: ${buildStats.app.org}`);
+  console.log(`Project: ${buildStats.app.project}`);
+  console.log(`CI Build: ${buildStats.context.isCI}`);
+  console.log(`Total Modules: ${buildStats.modules.length}`);
+  console.log(`Dependencies: ${buildStats.dependencies?.length || 0}`);
+};
+```
+
+## Use Cases
+
+### Send Webhook Notifications
+
+```typescript
+withZephyr({
+  hooks: {
+    onDeployComplete: async (deploymentInfo) => {
+      await fetch('https://api.slack.com/webhooks/YOUR_WEBHOOK_URL', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: `🚀 Deployment Complete!`,
+          blocks: [
+            {
+              type: 'section',
+              text: {
+                type: 'mrkdwn',
+                text: `*Deployment Complete*\n• URL: ${deploymentInfo.url}\n• Build: ${deploymentInfo.snapshot.uid.build}\n• Branch: ${deploymentInfo.snapshot.git.branch}`,
+              },
+            },
+          ],
+        }),
+      });
+    },
+  },
+});
+```
+
+### Update External Registry
+
+```typescript
+withZephyr({
+  hooks: {
+    onDeployComplete: async (deploymentInfo) => {
+      // Register the deployed module in your internal registry
+      await fetch('https://your-registry.com/api/modules', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.REGISTRY_TOKEN}`,
+        },
+        body: JSON.stringify({
+          name: deploymentInfo.snapshot.uid.app_name,
+          version: deploymentInfo.snapshot.version,
+          url: deploymentInfo.url,
+          buildId: deploymentInfo.buildStats.app.buildId,
+          git: deploymentInfo.snapshot.git,
+          dependencies: deploymentInfo.federatedDependencies,
+        }),
+      });
+    },
+  },
+});
+```
+
+### Track Deployment Analytics
+
+```typescript
+withZephyr({
+  hooks: {
+    onDeployComplete: async (deploymentInfo) => {
+      // Send deployment event to analytics platform
+      await analytics.track('deployment_complete', {
+        appName: deploymentInfo.snapshot.uid.app_name,
+        buildId: deploymentInfo.buildStats.app.buildId,
+        isCI: deploymentInfo.buildStats.context.isCI,
+        branch: deploymentInfo.snapshot.git.branch,
+        dependencyCount: deploymentInfo.federatedDependencies.length,
+        moduleCount: deploymentInfo.buildStats.modules.length,
+      });
+    },
+  },
+});
+```
+
+### Generate Deployment Report
+
+```typescript
+import fs from 'fs/promises';
+import path from 'path';
+
+withZephyr({
+  hooks: {
+    onDeployComplete: async (deploymentInfo) => {
+      const report = {
+        timestamp: new Date().toISOString(),
+        url: deploymentInfo.url,
+        build: {
+          id: deploymentInfo.buildStats.app.buildId,
+          version: deploymentInfo.snapshot.version,
+          ci: deploymentInfo.buildStats.context.isCI,
+        },
+        git: deploymentInfo.snapshot.git,
+        modules: deploymentInfo.buildStats.modules.length,
+        dependencies: deploymentInfo.federatedDependencies.map((dep) => ({
+          name: dep.name,
+          version: dep.version,
+          url: dep.remote_entry_url,
+        })),
+      };
+
+      await fs.writeFile(
+        path.join(process.cwd(), 'deployment-report.json'),
+        JSON.stringify(report, null, 2),
+      );
+    },
+  },
+});
+```
+
+### Update Database
+
+```typescript
+import { db } from './database';
+
+withZephyr({
+  hooks: {
+    onDeployComplete: async (deploymentInfo) => {
+      await db.deployments.create({
+        data: {
+          appName: deploymentInfo.snapshot.uid.app_name,
+          buildId: deploymentInfo.buildStats.app.buildId,
+          version: deploymentInfo.snapshot.version,
+          url: deploymentInfo.url,
+          branch: deploymentInfo.snapshot.git.branch,
+          commit: deploymentInfo.snapshot.git.commit,
+          isCI: deploymentInfo.buildStats.context.isCI,
+          deployedAt: new Date(),
+        },
+      });
+    },
+  },
+});
+```
+
+## TypeScript Support
+
+All plugins export the necessary types for TypeScript projects:
+
+```typescript
+import {
+  withZephyr,
+  type ZephyrBuildHooks,
+  type DeploymentInfo,
+} from 'zephyr-webpack-plugin';
+// or
+import {
+  withZephyr,
+  type ZephyrBuildHooks,
+  type DeploymentInfo,
+} from 'zephyr-rspack-plugin';
+// or
+import {
+  withZephyr,
+  type ZephyrBuildHooks,
+  type DeploymentInfo,
+} from 'vite-plugin-zephyr';
+// or
+import {
+  withZephyr,
+  type ZephyrBuildHooks,
+  type DeploymentInfo,
+} from 'rollup-plugin-zephyr';
+
+// Define your hook with full type safety
+const deploymentHook: ZephyrBuildHooks['onDeployComplete'] = async (
+  info: DeploymentInfo,
+) => {
+  console.log(info.url);
+};
+
+export default withZephyr({
+  hooks: {
+    onDeployComplete: deploymentHook,
+  },
+})(config);
+```
+
+## Error Handling
+
+Deployment hooks are designed to be resilient:
+
+- Errors thrown in hooks are **logged** but won't fail the build
+- The build process continues even if the hook fails
+- Errors are logged with the prefix: `Warning: deployment hook failed`
+
+**Example of safe error handling:**
+
+```typescript
+withZephyr({
+  hooks: {
+    onDeployComplete: async (deploymentInfo) => {
+      try {
+        await fetch('https://api.example.com/deploy', {
+          method: 'POST',
+          body: JSON.stringify(deploymentInfo),
+        });
+      } catch (error) {
+        // Hook errors are already logged by Zephyr
+        // You can add additional logging here if needed
+        console.error('Failed to send deployment notification:', error);
+        // Build will continue regardless
+      }
+    },
+  },
+});
+```
+
+## Supported Bundlers
+
+| Bundler      | Support   | Package                    |
+| ------------ | --------- | -------------------------- |
+| **Webpack**  | ✓ Yes     | `zephyr-webpack-plugin`    |
+| **Rspack**   | ✓ Yes     | `zephyr-rspack-plugin`     |
+| **Rsbuild**  | ✓ Yes     | `zephyr-rsbuild-plugin`    |
+| **Vite**     | ✓ Yes     | `vite-plugin-zephyr`       |
+| **Rollup**   | ✓ Yes     | `rollup-plugin-zephyr`     |
+| **Rolldown** | ✓ Yes     | `rolldown-plugin-zephyr`   |
+| **Parcel**   | ✗ Not yet | `parcel-reporter-zephyr`   |
+| **Astro**    | ✗ Not yet | `zephyr-astro-integration` |
+| **Metro**    | ✗ Not yet | `zephyr-metro-plugin`      |
+| **Re.Pack**  | ✗ Not yet | `zephyr-repack-plugin`     |
+
+:::info Note
+Support for additional bundlers is planned. Check back for updates or [open an issue](https://github.com/zephyrcloudio/zephyr-packages/issues) to request support for your bundler.
+:::
+
+## Best Practices
+
+### 1. Keep Hooks Fast
+
+Deployment hooks run during the build process. Keep them fast to avoid slowing down deployments:
+
+```typescript
+// Good: Fire and forget
+onDeployComplete: async (info) => {
+  fetch('https://api.example.com/deploy', {
+    method: 'POST',
+    body: JSON.stringify(info),
+  }).catch(console.error); // Don't await
+};
+
+// Better: Use a queue or background job
+onDeployComplete: async (info) => {
+  await queue.enqueue('deployment-notification', info);
+};
+```
+
+### 2. Use Environment Variables for Secrets
+
+Never hardcode secrets in your hooks:
+
+```typescript
+// Bad
+onDeployComplete: async (info) => {
+  await fetch('https://api.slack.com/webhooks/T00000000/B00000000/xxxx');
+};
+
+// Good
+onDeployComplete: async (info) => {
+  const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+  if (!webhookUrl) return;
+
+  await fetch(webhookUrl, {
+    method: 'POST',
+    body: JSON.stringify({ text: `Deployed: ${info.url}` }),
+  });
+};
+```
+
+### 3. Conditional Execution
+
+Only run hooks in specific environments:
+
+```typescript
+withZephyr({
+  hooks: {
+    onDeployComplete: async (info) => {
+      // Only notify on production deployments
+      if (info.snapshot.git.branch !== 'main') {
+        return;
+      }
+
+      // Only run in CI
+      if (!info.buildStats.context.isCI) {
+        return;
+      }
+
+      await sendNotification(info);
+    },
+  },
+});
+```
+
+### 4. Log Important Information
+
+Help with debugging by logging key information:
+
+```typescript
+onDeployComplete: async (info) => {
+  console.log(
+    `[Deployment Hook] Starting notification for build ${info.buildStats.app.buildId}`,
+  );
+
+  try {
+    await sendWebhook(info);
+    console.log(`[Deployment Hook] Successfully sent notification`);
+  } catch (error) {
+    console.error(`[Deployment Hook] Failed to send notification:`, error);
+  }
+};
+```
+
+## Next Steps
+
+- Learn about [CI/CD integration](/features/ci-cd) to automate deployments
+- Explore [Tags & Environments](/features/tags-environments) for deployment strategies
+- Check out [Remote Dependencies](/features/remote-dependencies) for Module Federation
+- Join our [Discord](https://zephyr-cloud.io/discord) for support and discussions

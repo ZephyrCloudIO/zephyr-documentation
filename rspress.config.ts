@@ -82,6 +82,10 @@ const sidebar: Sidebar = {
           link: '/features/remote-dependencies',
         },
         {
+          text: 'Deployment Hooks',
+          link: '/features/deployment-hooks',
+        },
+        {
           text: 'CI/CD',
           link: '/features/ci-cd',
         },
