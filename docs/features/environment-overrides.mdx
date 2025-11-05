@@ -38,8 +38,8 @@ When you build your application, Zephyr resolves your remote dependencies based 
 ```json title="package.json"
 {
   "zephyr:dependencies": {
-    "header": "ui-components@stable",
-    "cart": "cart-service@^2.0.0"
+    "header": "header@stable",
+    "cart": "cart@^2.0.0"
   }
 }
 ```
@@ -90,8 +90,8 @@ Let's say you have a host application that depends on three remotes: `header`, `
 {
   "name": "ecommerce-host",
   "zephyr:dependencies": {
-    "header": "ui-components@stable",
-    "cart": "cart-service@^2.0.0",
+    "header": "header@stable",
+    "cart": "cart@^2.0.0",
     "analytics": "analytics-module@production"
   }
 }
