@@ -103,6 +103,28 @@ The asset classification step is going to change in the near future to support a
 The asset map serves as the definitive record of a deployment, containing not just file listings but comprehensive metadata about each asset. This includes content hashes for cache validation, compression settings for optimal serving, MIME types for correct content negotiation, and dependency relationships for intelligent prefetching. The asset map is immutable once created, ensuring deployments can be perfectly reproduced.
 :::
 
+### Zephyr Manifest
+
+During the build process, Zephyr generates a `zephyr-manifest.json` file that captures configuration elements intended for environment-level runtime overrides. This manifest serves as the foundation for Zephyr's dynamic environment override system.
+
+**Manifest Contents:**
+
+- **Remote Dependencies**: All dependencies declared in the `zephyr:dependencies` field of `package.json`, including their resolution rules and build-time values
+- **Build-Time Environment Variables**: All environment variables prefixed with `ZE_PUBLIC_` captured during the build process
+
+The manifest is generated automatically and requires no direct interaction from developers. It's included in the build output and uploaded as part of the deployment process.
+
+**Runtime Override System:**
+
+The manifest enables Zephyr's environment-level override capabilities:
+
+- **Remote Dependency Overrides**: At runtime, each deployment environment can override which version, tag, or environment of a remote dependency to load, independent of the build-time declaration
+- **Environment Variable Overrides**: Each environment can inject different values for `ZE_PUBLIC_` variables without rebuilding the application
+
+This architecture enables "build once, deploy everywhere" workflows where a single build artifact can be deployed to multiple environments with environment-specific configuration. The manifest provides the baseline configuration while the environment settings provide the runtime overrides.
+
+For detailed information on using environment-level overrides, see [Environment-Level Overrides](/features/environment-overrides).
+
 ## Deployment Architecture
 
 The deployment system is designed for reliability, speed, and flexibility, supporting both Zephyr-managed infrastructure and customer-controlled environments.
