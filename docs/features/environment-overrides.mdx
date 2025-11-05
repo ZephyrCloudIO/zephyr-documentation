@@ -147,18 +147,6 @@ Test if issue resolves
 Rollback or proceed based on results
 ```
 
-**4. Team Independence**
-
-Frontend and backend teams work independently with different deployment cadences:
-
-```
-Frontend staging: points to backend@development
-Frontend production: points to backend@production
-
-Backend team deploys at their own pace
-Frontend automatically gets appropriate backend version per environment
-```
-
 ### Override Resolution Priority
 
 When an environment has a remote override configured, the resolution order is:
@@ -167,7 +155,7 @@ When an environment has a remote override configured, the resolution order is:
 2. **Build-time declaration** from `zephyr:dependencies`
 3. **Default fallback** (lowest priority)
 
-This means environment overrides always take precedence over the build-time configuration, giving you full control at deployment time.
+This means environment overrides always take precedence over the build-time configuration, giving you full control at serve time.
 
 ## Environment Variable Overrides
 
