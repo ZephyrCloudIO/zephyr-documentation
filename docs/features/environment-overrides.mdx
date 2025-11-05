@@ -1,0 +1,419 @@
+---
+title: Environment-Level Overrides
+description: Dynamically control remote dependencies and environment variables per deployment environment
+---
+
+# Environment-Level Overrides
+
+One of Zephyr's most powerful capabilities is the ability to override application configuration on a per-deployment-environment basis. This means the same built application can dynamically adapt its behavior - consuming different versions of remote dependencies and using different environment variable values - depending on which environment URL serves it.
+
+## Overview
+
+Environment-level overrides enable two key capabilities:
+
+- **[Remote Dependency Overrides](#remote-dependency-overrides)**: Control which version, tag, or environment of remote modules your application loads
+- **[Environment Variable Overrides](#environment-variable-overrides)**: Dynamically inject environment-specific configuration values
+
+Both features work through the same underlying system: Zephyr captures configuration at build time in a manifest, then dynamically applies environment-specific overrides at runtime based on which environment serves your application.
+
+## The Manifest System
+
+Behind the scenes, Zephyr generates a `zephyr-manifest.json` file at build time that records:
+
+- Remote dependencies declared in your `zephyr:dependencies` configuration
+- Environment variables prefixed with `ZE_PUBLIC_` from your build environment
+
+This manifest enables runtime override capabilities - you don't need to interact with this file directly, but it's what makes environment-level customization possible without rebuilding your application.
+
+**Key benefit**: Build once, deploy everywhere with environment-specific configuration.
+
+## Remote Dependency Overrides
+
+When you build your application, Zephyr resolves your remote dependencies based on the version selectors in your `zephyr:dependencies` configuration. However, at the environment level, you can override these declarations to point to different versions, tags, or environments of your remotes without rebuilding.
+
+### Understanding Remote Overrides
+
+**Build-time**: Your application is built with remote dependency declarations from `package.json`:
+
+```json title="package.json"
+{
+  "zephyr:dependencies": {
+    "header": "header@stable",
+    "cart": "cart@^2.0.0"
+  }
+}
+```
+
+**Environment-level**: Each deployment environment can override which version of each remote to load:
+
+| Environment | header Override | cart Override |
+| ----------- | --------------- | ------------- |
+| Development | `@latest`       | `@beta`       |
+| Staging     | `@beta`         | `2.1.0-rc.1`  |
+| Production  | `@stable`       | `2.0.5`       |
+
+**Runtime**: When your application is served from an environment URL, Zephyr dynamically resolves remotes based on that environment's override configuration.
+
+### How Remote Overrides Work
+
+The override system operates through three components:
+
+1. **Build-time capture**: Zephyr captures your remote dependencies and their resolution rules in the manifest
+2. **Environment configuration**: Configure per-environment overrides for specific remotes in the Zephyr dashboard
+3. **Runtime resolution**: When served from an environment URL, Zephyr dynamically resolves remotes based on the environment's overrides
+
+### Configuring Remote Overrides
+
+To configure remote dependency overrides for an environment:
+
+1. **Navigate to the DevOps section** in your Zephyr dashboard
+2. **Select the environment** you want to configure (e.g., staging, production)
+3. **Find the Remote Dependencies section** for that environment
+4. **For each remote**, you can override:
+   - **Version**: Point to a specific version number (e.g., `1.2.3`)
+   - **Tag**: Point to a tag that automatically updates (e.g., `latest`, `beta`)
+   - **Environment**: Point to a specific environment of the remote application (e.g., `staging`, `production`)
+
+{/* TODO: Add screenshot showing the DevOps environments section with remote dependency override configuration UI */}
+
+:::info Per-Remote Granularity
+Each remote can have a different override strategy. For example, you might override `ui-components` to use `@latest` while keeping `payment-processor` locked to a specific version for stability.
+:::
+
+### Practical Example: Remote Overrides
+
+Let's say you have a host application that depends on three remotes: `header`, `cart`, and `analytics`.
+
+**Build-time configuration** (package.json):
+
+```json title="package.json"
+{
+  "name": "ecommerce-host",
+  "zephyr:dependencies": {
+    "header": "header@stable",
+    "cart": "cart@^2.0.0",
+    "analytics": "analytics-module@production"
+  }
+}
+```
+
+**Environment-level overrides**:
+
+| Environment     | header Override | cart Override | analytics Override |
+| --------------- | --------------- | ------------- | ------------------ |
+| **Development** | `@latest`       | `@beta`       | `@development`     |
+| **Staging**     | `@beta`         | `2.1.0-rc.1`  | `@staging`         |
+| **Production**  | `@stable`       | `2.0.5`       | `@production`      |
+
+**What happens**:
+
+- When served from the **development** environment URL, the application loads the latest versions of all remotes
+- When served from **staging**, it uses beta versions for testing integration changes
+- When served from **production**, it uses stable, specific versions for reliability
+
+The same built application adapts its remote dependencies based on which environment serves it. No rebuild required to test different integration scenarios.
+
+### Remote Override Use Cases
+
+**1. Integration Testing with Beta Features**
+
+Your staging environment can consume beta versions of remotes to test new features before they reach production:
+
+```
+Staging Environment:
+├─ host@staging (your app)
+├─ ui-components@beta (testing new designs)
+├─ cart-service@latest (latest improvements)
+└─ analytics@staging (non-production tracking)
+```
+
+**2. Gradual Remote Rollouts**
+
+Roll out new versions of remotes progressively:
+
+- Week 1: Dev environment uses `header@3.0.0`
+- Week 2: Staging environment uses `header@3.0.0`
+- Week 3: Production environment uses `header@3.0.0`
+
+Each environment tests the new version before the next environment adopts it.
+
+**3. Debugging Production Issues**
+
+If you suspect a remote is causing issues, quickly override production to use a previous version without rebuilding:
+
+```
+Production environment: Override cart-service from 2.1.0 → 2.0.8
+Test if issue resolves
+Rollback or proceed based on results
+```
+
+### Override Resolution Priority
+
+When an environment has a remote override configured, the resolution order is:
+
+1. **Environment-specific override** (highest priority)
+2. **Build-time declaration** from `zephyr:dependencies`
+3. **Default fallback** (lowest priority)
+
+This means environment overrides always take precedence over the build-time configuration, giving you full control at serve time.
+
+## Environment Variable Overrides
+
+Zephyr provides a powerful system for managing environment variables that can be overridden on a per-environment basis at runtime. By prefixing environment variables with `ZE_PUBLIC_` in your build configuration, Zephyr captures them at build time and makes them available for environment-specific overrides.
+
+### Understanding Environment Variable Overrides
+
+**Build-time**: You prefix variables with `ZE_PUBLIC_` in your local `.env` file:
+
+```bash title=".env"
+ZE_PUBLIC_API_URL=https://api.development.example.com
+ZE_PUBLIC_FEATURE_FLAGS=beta-ui,new-checkout
+ZE_PUBLIC_ANALYTICS_KEY=dev_analytics_12345
+```
+
+**Environment-level**: Each deployment environment can override these values:
+
+| Environment | ZE_PUBLIC_API_URL                 | ZE_PUBLIC_FEATURE_FLAGS          |
+| ----------- | --------------------------------- | -------------------------------- |
+| Development | `https://api.dev.example.com`     | `beta-ui,new-checkout,analytics` |
+| Staging     | `https://api.staging.example.com` | `new-checkout,analytics`         |
+| Production  | `https://api.example.com`         | `analytics`                      |
+
+**Runtime**: When served from an environment URL, your application receives that environment's variable values.
+
+### How Environment Variable Overrides Work
+
+The system operates through three stages:
+
+1. **Build-time capture**: During the build process, Zephyr identifies all environment variables prefixed with `ZE_PUBLIC_` and captures their values
+2. **Manifest generation**: These variables are stored in the `zephyr-manifest.json` file (generated automatically)
+3. **Runtime override**: When your application is served from a specific environment, Zephyr dynamically injects the environment-specific values
+
+This means you can build your application once and deploy it to multiple environments, with each environment using its own configuration values without requiring a rebuild.
+
+### Setting Up Build-Time Variables
+
+To make an environment variable manageable by Zephyr, prefix it with `ZE_PUBLIC_` in your local `.env` file or build environment:
+
+```bash title=".env"
+# Regular environment variables (not managed by Zephyr)
+DATABASE_URL=postgres://localhost/myapp
+
+# Zephyr-managed environment variables (prefix with ZE_PUBLIC_)
+ZE_PUBLIC_API_URL=https://api.development.example.com
+ZE_PUBLIC_FEATURE_FLAGS=beta-ui,new-checkout
+ZE_PUBLIC_ANALYTICS_KEY=dev_analytics_12345
+ZE_PUBLIC_CDN_URL=https://cdn.development.example.com
+```
+
+When Zephyr builds your application, it captures the values of all `ZE_PUBLIC_` variables and makes them available for environment-level overrides.
+
+:::info Variable Naming
+The `ZE_PUBLIC_` prefix is required for Zephyr to identify and manage these variables. In your application code, you'll reference them with the full name including the prefix (e.g., `process.env.ZE_PUBLIC_API_URL`).
+:::
+
+### Configuring Environment Variable Overrides
+
+After building your application, you can override the values of `ZE_PUBLIC_` variables for each environment through the Zephyr dashboard:
+
+1. **Navigate to the DevOps section** in your Zephyr dashboard
+2. **Select the environment** you want to configure (e.g., staging, production)
+3. **Find the Environment Variables section** for that environment
+4. **For each `ZE_PUBLIC_` variable**, you can set an environment-specific override value
+
+{/* TODO: Add screenshot showing the DevOps environments section with environment variables configuration UI, highlighting ZE_PUBLIC_ variables and per-environment override values */}
+
+When your application is served from that environment's URL, it will use the overridden values instead of the build-time values.
+
+### Practical Example: Environment Variables
+
+Let's say you're building an e-commerce application that needs to connect to different API endpoints in different environments.
+
+**Local .env file** (build-time configuration):
+
+```bash title=".env"
+ZE_PUBLIC_API_URL=https://api.development.example.com
+ZE_PUBLIC_STRIPE_KEY=pk_test_51ABC123xyz
+ZE_PUBLIC_ANALYTICS_ID=UA-00000000-1
+```
+
+**Environment-level overrides**:
+
+| Environment     | ZE_PUBLIC_API_URL                 | ZE_PUBLIC_STRIPE_KEY  | ZE_PUBLIC_ANALYTICS_ID |
+| --------------- | --------------------------------- | --------------------- | ---------------------- |
+| **Development** | `https://api.dev.example.com`     | `pk_test_51ABC123xyz` | `UA-00000000-1`        |
+| **Staging**     | `https://api.staging.example.com` | `pk_test_51DEF456xyz` | `UA-11111111-1`        |
+| **Production**  | `https://api.example.com`         | `pk_live_51GHI789xyz` | `UA-22222222-1`        |
+
+**In your application code**:
+
+Use the environment variables exactly as you normally would - no special imports or configuration needed:
+
+```javascript title="src/config.js"
+// Use ZE_PUBLIC_ variables just like any other environment variable
+export const config = {
+  apiUrl: process.env.ZE_PUBLIC_API_URL,
+  stripeKey: process.env.ZE_PUBLIC_STRIPE_KEY,
+  analyticsId: process.env.ZE_PUBLIC_ANALYTICS_ID,
+};
+```
+
+Zephyr's bundler integration handles all the complexity behind the scenes through an importmap injected into your HTML. Simply prefix your variables with `ZE_PUBLIC_` and access them normally in your code.
+
+**What happens**:
+
+- You **build once** with the development values
+- When served from the **development** environment URL → uses development configuration
+- When served from the **staging** environment URL → uses staging configuration
+- When served from the **production** environment URL → uses production configuration
+
+The same built application adapts its configuration dynamically based on which environment URL serves it. No rebuild required.
+
+### Security Considerations
+
+**Public vs Secret Variables:**
+
+The `ZE_PUBLIC_` prefix indicates that these variables may be exposed to the client-side code. This is important to understand:
+
+- ✅ **Safe for ZE*PUBLIC***: API endpoints, feature flags, CDN URLs, public analytics IDs, client-side configuration
+- ❌ **Never use ZE*PUBLIC* for**: API secrets, database passwords, authentication tokens, private keys
+
+:::warning Client-Side Exposure
+Variables prefixed with `ZE_PUBLIC_` are intended for client-side use and may be visible in your bundled application code. Never store sensitive secrets in these variables. For sensitive data, use Zephyr's secure environment variables (without the prefix) which are only available server-side.
+:::
+
+For truly sensitive values that should never be exposed client-side, use regular environment variables without the `ZE_PUBLIC_` prefix. These can still be managed per-environment in the Zephyr dashboard but won't be included in the client bundle.
+
+### Environment Variable Use Cases
+
+**1. Environment-Specific API Endpoints**
+
+Point to different backend services per environment without rebuilding:
+
+```bash
+ZE_PUBLIC_API_URL=https://api.dev.example.com      # Development
+ZE_PUBLIC_API_URL=https://api.staging.example.com  # Staging
+ZE_PUBLIC_API_URL=https://api.example.com          # Production
+```
+
+**2. Feature Flags and Toggles**
+
+Enable different features in different environments:
+
+```bash
+ZE_PUBLIC_FEATURES=beta-ui,new-checkout,analytics     # Development (all features)
+ZE_PUBLIC_FEATURES=new-checkout,analytics             # Staging (selected features)
+ZE_PUBLIC_FEATURES=analytics                          # Production (stable features)
+```
+
+**3. Third-Party Service Configuration**
+
+Use different accounts or keys for external services:
+
+```bash
+ZE_PUBLIC_ANALYTICS_ID=UA-DEV-12345      # Development analytics
+ZE_PUBLIC_ANALYTICS_ID=UA-STAGING-67890  # Staging analytics
+ZE_PUBLIC_ANALYTICS_ID=UA-PROD-11111     # Production analytics
+```
+
+**4. CDN and Asset Management**
+
+Point to different CDN endpoints or asset locations:
+
+```bash
+ZE_PUBLIC_CDN_URL=https://cdn-dev.example.com      # Development CDN
+ZE_PUBLIC_CDN_URL=https://cdn-staging.example.com  # Staging CDN
+ZE_PUBLIC_CDN_URL=https://cdn.example.com          # Production CDN
+```
+
+## Working Together: Remote and Variable Overrides
+
+Remote dependency overrides and environment variable overrides work seamlessly together to provide complete environment-level customization:
+
+- **Remote dependency overrides** control which versions of external modules your application loads
+- **Environment variable overrides** control how your application code behaves
+
+Together, they enable powerful deployment strategies:
+
+**Example: Staging environment for integration testing**
+
+```
+Staging Environment Configuration:
+├─ Remote Overrides:
+│  ├─ ui-components → @beta (test new designs)
+│  ├─ cart-service → @latest (latest backend)
+│  └─ analytics → @staging (non-prod tracking)
+└─ Environment Variables:
+   ├─ ZE_PUBLIC_API_URL → https://api.staging.example.com
+   ├─ ZE_PUBLIC_FEATURE_FLAGS → new-checkout,analytics
+   └─ ZE_PUBLIC_STRIPE_KEY → pk_test_51DEF456xyz
+```
+
+The same built application adapts both its module dependencies and configuration based on which environment serves it.
+
+## Relationship to Other Features
+
+Environment-level overrides integrate seamlessly with Zephyr's other features:
+
+- **[Versions](/features/versions)**: Overrides can point to specific immutable version numbers
+- **[Tags](/features/tags-environments#tags)**: Overrides can reference tags that automatically resolve to the latest matching version
+- **[Environments](/features/tags-environments#environments)**: Each environment has its own override configuration
+- **[Remote Dependencies](/features/remote-dependencies)**: Build-time dependency declarations that can be overridden per environment
+
+This creates a powerful composition model where your application's behavior is defined at build time but can be customized at deployment time without rebuilding.
+
+## Best Practices
+
+### Remote Dependency Strategy
+
+- **Development**: Use tags like `@latest` or `@beta` to automatically pick up remote updates
+- **Staging**: Use release candidate versions or beta tags for integration testing
+- **Production**: Use specific versions or stable tags for predictability
+
+### Environment Variable Strategy
+
+**Variable Organization:**
+
+Group related variables with consistent prefixing:
+
+```bash
+# API Configuration
+ZE_PUBLIC_API_URL=...
+ZE_PUBLIC_API_TIMEOUT=...
+
+# Feature Flags
+ZE_PUBLIC_FEATURE_NEW_UI=...
+ZE_PUBLIC_FEATURE_CHECKOUT=...
+
+# External Services
+ZE_PUBLIC_ANALYTICS_ID=...
+ZE_PUBLIC_STRIPE_KEY=...
+```
+
+**Environment Settings:**
+
+- **Development**: Use permissive settings, debug logging, test services
+- **Staging**: Mirror production settings as closely as possible for realistic testing
+- **Production**: Use production services, minimal logging, strict error handling
+
+### Testing Override Changes
+
+Before applying overrides to production:
+
+1. Test the override configuration in a development or staging environment
+2. Verify that the application behaves correctly with the new remote versions or variable values
+3. Monitor for any integration issues or unexpected behavior
+4. Promote to production only after thorough validation
+
+### Documentation
+
+Maintain documentation for your team that includes:
+
+- All `ZE_PUBLIC_` variables your application uses and their purpose
+- Remote dependency override strategies for each environment
+- Which remotes are safe to update automatically vs which need careful version control
+- Rollback procedures if an override causes issues
+
+:::tip Progressive Adoption
+You don't need to use all features at once. Start by overriding one or two variables or remotes in non-production environments, then gradually expand as you become comfortable with the system.
+:::
