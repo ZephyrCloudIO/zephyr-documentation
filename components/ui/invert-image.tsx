@@ -22,7 +22,7 @@ export const InvertImage = ({ darkSrc, lightSrc }: ImageTypeProps) => {
       src={imageSrc}
       alt="Zephyr Cloud"
       height="100"
-      className="md:w-1/2 w-full md:min-h-[220px] mx-auto"
+      className="md:w-1/2 w-full mx-auto"
     />
   );
 };
