@@ -82,6 +82,10 @@ const sidebar: Sidebar = {
           link: '/features/remote-dependencies',
         },
         {
+          text: 'Environment Overrides',
+          link: '/features/environment-overrides',
+        },
+        {
           text: 'CI/CD',
           link: '/features/ci-cd',
         },
