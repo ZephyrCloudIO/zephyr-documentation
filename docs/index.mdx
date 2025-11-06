@@ -8,20 +8,27 @@ import {
 } from '../components/home';
 import { CardLayout } from '../components/ui/card-layout';
 import { Separator } from '../components/ui/separator';
-import { FeatureTable } from '../components/feature-table';
 import { InvertImage } from '../components/ui/invert-image';
 
 <InvertImage />
 <Separator />
 <br />
 
-**Zephyr Cloud** is a platform to accelerate your development workflow by providing a simple way to deploy and manage your applications - cloud agnostic, framework agnostic and bundler agnostic.
+**Zephyr Cloud** is a Module Federation platform that accelerates micro-frontend development by providing instant deployment, intelligent dependency resolution, and seamless version management—all while remaining cloud agnostic, framework agnostic, and bundler agnostic.
 
-Under the hood, Zephyr takes a snapshot of your application and deploy it to the edge in sub-seconds, allowing you to preview and test your application in a real-world environment before deploying it to production - make "testing in production" a reality. Whenever the version of your application is ready for production, you can promote it to production with a single click.
+## How It Works
 
-Whether you're are a small team or a large enterprise, Zephyr Cloud is designed to remove the ambiguity between different cloud providers, helping you build with speed and freedom.
+Zephyr captures every build as an immutable version and deploys it to the global edge network in seconds. Each version receives its own preview URL, allowing you to test in a real-world environment before promoting to production. When you're ready, deploy to production with a single click—and roll back just as quickly if needed.
 
-If you experience any issues, do jump in our [Discord](https://zephyr-cloud.io/discord) and let us know (we hang out here!).
+Behind the scenes, Zephyr automatically resolves dependencies between your micro-frontends, eliminates duplicate assets through content-addressed storage, and handles Module Federation configuration across multiple bundlers (Webpack, Vite, Rspack, Rollup, and more).
+
+## Built for Speed and Freedom
+
+Whether you're a small team shipping features fast or a large enterprise coordinating multiple micro-frontends across teams, Zephyr Cloud removes the complexity of cloud provider configuration and deployment orchestration—letting you focus on building great applications.
+
+Deploy to Cloudflare, AWS, Netlify, Fastly, or Vercel without changing a single line of code. Switch providers anytime without vendor lock-in.
+
+**Need help?** Join our [Discord community](https://discord.gg/zephyrcloud)—we're always here to help!
 
 ## Main Features
 

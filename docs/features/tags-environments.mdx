@@ -78,7 +78,32 @@ This rule means:
 
 Every tag gets its own permanent URL that you can share, bookmark, or use in other applications. These URLs never change, even when the tag switches to point to different versions. This means your links always work, but they automatically serve the most up-to-date content based on your rules.
 
-When someone visits a tag URL, they see whatever version the tag currently points to. Behind the scenes, Zephyr evaluates your tag conditions in real-time and serves the appropriate content from its global edge network.
+**Tag URL Format:**
+
+```
+https://t-{tagname}-{app-uid}-{hash}.{domain}
+```
+
+**Example:** `https://t-main-header-component-ecommerce-acme-abc123.zephyr-cloud.io`
+
+**URL Components:**
+
+- `t-` prefix indicates this is a tag URL
+- `tagname` - Your tag name (e.g., "main", "staging", "production")
+- `app-uid` - Application unique identifier
+- `hash` - Content hash for uniqueness
+- `domain` - Your edge domain
+
+When someone visits a tag URL, they see whatever version the tag currently points to. Behind the scenes, Zephyr evaluates your tag conditions in real-time against your application's version history, finds the most recent version matching the conditions, and serves that content from its global edge network.
+
+**How Tag Resolution Works:**
+
+1. Request arrives at tag URL
+2. Zephyr queries the database for versions matching the tag's conditions
+3. The most recent matching version is selected
+4. That version's assets are served from the edge network
+
+This dynamic evaluation means tags automatically update to serve the latest matching version without any manual intervention.
 
 ### Automatic Tag Creation
 
@@ -94,13 +119,28 @@ Think of environments as separate deployment targets for your application. You m
 
 Each environment can have its own custom domain, environment variables, and deployment settings. This lets you run the same application code in different contexts - maybe your staging environment uses test data while production uses real customer information.
 
+**Environment URL Format:**
+
+```
+https://{env-name}-{app-uid}-{hash}.{domain}
+```
+
+**Example:** `https://production-header-component-ecommerce-acme-abc123.zephyr-cloud.io`
+
+**URL Components:**
+
+- `env-name` - Your environment name (e.g., "production", "staging", "dev")
+- `app-uid` - Application unique identifier
+- `hash` - Content hash for uniqueness
+- `domain` - Your edge domain
+
 ### Environment Configuration
 
 Environments can be configured to deploy in two ways:
 
-**Tag-based environments** automatically deploy when a specific tag updates. For example, your staging environment might watch the "beta" tag - whenever the beta tag points to a new version, staging automatically deploys that version.
+**Tag-based environments** point to a specific tag and automatically serve whatever version that tag currently resolves to. For example, if your staging environment points to the "beta" tag, it will always serve whichever version the beta tag's conditions currently select. When the beta tag resolves to a new version (either because you built a new version matching its conditions, or because you updated the tag's conditions), the staging environment automatically reflects that change.
 
-**Version-based environments** deploy a specific locked version that doesn't change until you manually update it. This gives you complete control over what's running in that environment.
+**Version-based environments** point to a specific locked version that doesn't change until you manually deploy a different version. This gives you complete control over exactly what's running in that environment, with no automatic updates.
 
 ### Custom Domains and DNS
 
@@ -113,17 +153,11 @@ Each environment can have multiple custom domains pointing to it. This is perfec
 
 Setting up custom domains is straightforward. When you add a domain to an environment, Zephyr automatically handles SSL certificates and creates the necessary routing. You just need to point your DNS records to Zephyr's edge network.
 
-### Environment Variables and Secrets
-
-Each environment maintains its own set of environment variables and secrets. This lets the same application code behave differently in different environments. Your development environment might connect to a test database while production connects to your live data.
-
-Zephyr securely stores sensitive values and provides a full audit trail of when variables are changed and by whom. You can also organize variables into groups and inherit settings from parent levels.
-
-#### Build-Time Environment Variables (ZE*PUBLIC*)
+### Environment Variables (ZE*PUBLIC*\*)
 
 Zephyr provides a powerful system for managing environment variables that can be overridden on a per-environment basis at runtime. By prefixing environment variables with `ZE_PUBLIC_` in your local configuration, Zephyr captures them at build time and makes them available for environment-specific overrides.
 
-##### How It Works
+#### How It Works
 
 The system operates through three stages:
 
@@ -133,7 +167,7 @@ The system operates through three stages:
 
 This means you can build your application once and deploy it to multiple environments, with each environment using its own configuration values without requiring a rebuild.
 
-##### Setting Up Build-Time Variables
+#### Setting Up Build-Time Variables
 
 To make an environment variable manageable by Zephyr, prefix it with `ZE_PUBLIC_` in your local `.env` file or build environment:
 
@@ -154,7 +188,7 @@ When Zephyr builds your application, it captures the values of all `ZE_PUBLIC_` 
 The `ZE_PUBLIC_` prefix is required for Zephyr to identify and manage these variables. In your application code, you'll reference them with the full name including the prefix (e.g., `process.env.ZE_PUBLIC_API_URL`).
 :::
 
-##### Configuring Environment-Level Overrides
+#### Configuring Environment-Level Overrides
 
 After building your application, you can override the values of `ZE_PUBLIC_` variables for each environment through the Zephyr dashboard:
 
@@ -167,7 +201,7 @@ After building your application, you can override the values of `ZE_PUBLIC_` var
 
 When your application is served from that environment's URL, it will use the overridden values instead of the build-time values.
 
-##### Practical Example
+#### Practical Example
 
 Let's say you're building an e-commerce application that needs to connect to different API endpoints in different environments.
 
@@ -200,7 +234,7 @@ export const config = {
 };
 ```
 
-Zephyr's bundler integration handles all the complexity behind the scenes through an importmap injected into your HTML. Simply prefix your variables with `ZE_PUBLIC_` and access them normally in your code.
+Zephyr's bundler integration handles all the complexity behind the scenes. The implementation varies by bundler (Vite uses import maps, Webpack/Rspack use module resolution, Rollup uses code transformation), but the developer experience is consistent: simply prefix your variables with `ZE_PUBLIC_` and access them normally in your code.
 
 **What happens**:
 
@@ -211,120 +245,18 @@ Zephyr's bundler integration handles all the complexity behind the scenes throug
 
 The same built application adapts its configuration dynamically based on which environment URL serves it. No rebuild required.
 
-##### Security Considerations
+#### Security Considerations
 
 **Public vs Secret Variables:**
 
-The `ZE_PUBLIC_` prefix indicates that these variables may be exposed to the client-side code. This is important to understand:
+The `ZE_PUBLIC_` prefix indicates that these variables are **client-side** and will be included in your bundled application code. This is important to understand:
 
 - ✅ **Safe for ZE*PUBLIC***: API endpoints, feature flags, CDN URLs, public analytics IDs, client-side configuration
-- ❌ **Never use ZE*PUBLIC* for**: API secrets, database passwords, authentication tokens, private keys
+- ❌ **Never use ZE*PUBLIC* for**: API secrets, database passwords, authentication tokens, private keys, sensitive credentials
 
 :::warning Client-Side Exposure
-Variables prefixed with `ZE_PUBLIC_` are intended for client-side use and may be visible in your bundled application code. Never store sensitive secrets in these variables. For sensitive data, use Zephyr's secure environment variables (without the prefix) which are only available server-side.
+Variables prefixed with `ZE_PUBLIC_` are bundled into your client-side code and are visible to anyone who views your application. Never store sensitive secrets in these variables. Only use `ZE_PUBLIC_` for values that are safe to expose publicly.
 :::
-
-For truly sensitive values that should never be exposed client-side, use regular environment variables without the `ZE_PUBLIC_` prefix. These can still be managed per-environment in the Zephyr dashboard but won't be included in the client bundle.
-
-##### Common Use Cases
-
-**1. Environment-Specific API Endpoints**
-
-Point to different backend services per environment without rebuilding:
-
-```bash
-ZE_PUBLIC_API_URL=https://api.dev.example.com      # Development
-ZE_PUBLIC_API_URL=https://api.staging.example.com  # Staging
-ZE_PUBLIC_API_URL=https://api.example.com          # Production
-```
-
-**2. Feature Flags and Toggles**
-
-Enable different features in different environments:
-
-```bash
-ZE_PUBLIC_FEATURES=beta-ui,new-checkout,analytics     # Development (all features)
-ZE_PUBLIC_FEATURES=new-checkout,analytics             # Staging (selected features)
-ZE_PUBLIC_FEATURES=analytics                          # Production (stable features)
-```
-
-**3. Third-Party Service Configuration**
-
-Use different accounts or keys for external services:
-
-```bash
-ZE_PUBLIC_ANALYTICS_ID=UA-DEV-12345      # Development analytics
-ZE_PUBLIC_ANALYTICS_ID=UA-STAGING-67890  # Staging analytics
-ZE_PUBLIC_ANALYTICS_ID=UA-PROD-11111     # Production analytics
-```
-
-**4. CDN and Asset Management**
-
-Point to different CDN endpoints or asset locations:
-
-```bash
-ZE_PUBLIC_CDN_URL=https://cdn-dev.example.com      # Development CDN
-ZE_PUBLIC_CDN_URL=https://cdn-staging.example.com  # Staging CDN
-ZE_PUBLIC_CDN_URL=https://cdn.example.com          # Production CDN
-```
-
-##### Relationship to Remote Dependencies
-
-Environment variables work seamlessly with [remote dependency overrides](/features/remote-dependencies#environment-level-overrides). Both features use the same underlying manifest system to enable runtime configuration changes:
-
-- **Remote dependency overrides** control which versions of external modules your application loads
-- **Environment variable overrides** control how your application code behaves
-
-Together, they provide complete environment-level customization without rebuilding your application.
-
-##### Best Practices
-
-**Variable Organization:**
-
-Group related variables with consistent prefixing:
-
-```bash
-# API Configuration
-ZE_PUBLIC_API_URL=...
-ZE_PUBLIC_API_TIMEOUT=...
-
-# Feature Flags
-ZE_PUBLIC_FEATURE_NEW_UI=...
-ZE_PUBLIC_FEATURE_CHECKOUT=...
-
-# External Services
-ZE_PUBLIC_ANALYTICS_ID=...
-ZE_PUBLIC_STRIPE_KEY=...
-```
-
-**Environment Strategy:**
-
-- **Development**: Use permissive settings, debug logging, test services
-- **Staging**: Mirror production settings as closely as possible for realistic testing
-- **Production**: Use production services, minimal logging, strict error handling
-
-**Variable Validation:**
-
-Add runtime validation to ensure required variables are present:
-
-```javascript title="src/config.js"
-export const config = {
-  apiUrl: process.env.ZE_PUBLIC_API_URL,
-  stripeKey: process.env.ZE_PUBLIC_STRIPE_KEY,
-};
-
-// Validate required configuration
-if (!config.apiUrl) {
-  throw new Error('ZE_PUBLIC_API_URL is required');
-}
-if (!config.stripeKey) {
-  throw new Error('ZE_PUBLIC_STRIPE_KEY is required');
-}
-```
-
-**Documentation:**
-
-Maintain a list of all `ZE_PUBLIC_` variables your application uses, with descriptions of their purpose and expected values. This helps team members understand what needs to be configured in each environment.
 
 ## Working Together: Tags, Environments, and Promotion Workflows
 

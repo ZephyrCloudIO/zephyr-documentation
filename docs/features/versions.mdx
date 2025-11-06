@@ -25,15 +25,44 @@ After your build completes, Zephyr uploads only new or changed files to its glob
 
 ### Version Access and Persistence
 
-Every version gets a permanent URL that works forever. Zephyr creates a unique version identifier by combining your username, build ID, and application name. This means each build gets its own distinct version, even if you're building the same code in different situations.
+Every version gets a permanent URL that works forever. Each version is uniquely identified by a content-based `snapshot_id` (SHA-256 hash) that represents the exact state of your build. Zephyr also assigns a semantic version number that automatically increments with each build, and generates a unique URL hostname for accessing your version.
 
-When Zephyr creates a version, it takes a complete snapshot of your deployment. This snapshot includes everything: who built it, when it was built, which git branch and commit it came from, what dependencies it uses, and a detailed list of all files with their fingerprints. This gives you complete visibility into every version's history.
+**Version URL Format:**
+
+```
+https://{username}-{buildId}-{app-name}-{project}-{hash}.{domain}
+```
+
+**Example:** `https://john-doe-42-header-component-ecommerce-abc123.zephyr-cloud.io`
+
+**URL Components:**
+
+- `username` - Your Zephyr username (or branch name in CI)
+- `buildId` - Auto-incrementing build number (1, 2, 3...)
+- `app-name` - Application name from package.json
+- `project` - Project name from Git repository
+- `hash` - Content hash for uniqueness
+- `domain` - Your edge domain
+
+The URL hostname is automatically generated from your build context, ensuring each version is accessible via its own unique, permanent URL.
+
+When Zephyr creates a version, it takes a complete snapshot of your deployment. This snapshot includes everything: who built it, when it was built, which git branch and commit it came from, what dependencies it uses, a detailed list of all files with their content fingerprints, and a unique build ID for tracking. This gives you complete visibility into every version's history.
 
 ### Immutability and Management
 
 Once a version is created, it can never be changed. This is a key feature - when you share a version URL with someone, you know they'll see exactly the same thing you saw, no matter when they visit it.
 
-Versions stick around forever by default, but you can delete old ones you don't need anymore to save storage space. Most people keep their production versions forever and clean up development builds regularly. Since versions never change, you can confidently bookmark them or share them with your team.
+Versions stick around forever by default, but you have control over their lifecycle through version states:
+
+**Version States:**
+
+- **Active** - Normal, available for use and dependency resolution
+- **Deprecated** - Marked as old but still accessible; useful for phasing out versions
+- **Unavailable** - Hidden from dependency resolution but URL still accessible
+- **Problematic** - Flagged as having issues; warns users but remains accessible
+- **Deleted** - Permanently removed (cannot be undone)
+
+Most people keep their production versions active forever and mark old development builds as deprecated or delete them to save storage space. Since versions never change, you can confidently bookmark them or share them with your team.
 
 ## Working with Versions
 
@@ -57,11 +86,58 @@ Remember, once you delete a version, it's gone forever. Think carefully about wh
 
 ## Version URLs and Access
 
-Every version gets its own permanent URL that works immediately after your build finishes. These URLs are served lightning-fast from Zephyr's global edge network.
+Every version gets its own permanent URL that works immediately after your build finishes. The URL format follows a predictable pattern:
 
-These URLs never change or expire - you can bookmark them, share them, or use them in scripts. When someone visits a version URL, they get exactly what you built, served super fast from the nearest location. Zephyr's smart caching means the same files are never stored twice.
+```
+https://{username}-{buildId}-{app-name}-{project}-{hash}.{edge-domain}
+```
+
+**Real Examples:**
+
+- `https://john-doe-42-header-component-ecommerce-abc123.zephyr-cloud.io`
+- `https://jane-smith-156-shopping-cart-monorepo-def456.zephyr-cloud.io`
+
+These URLs are served lightning-fast from Zephyr's global edge network, with assets distributed to 200+ locations worldwide.
+
+These URLs never change or expire - you can bookmark them, share them, or use them in scripts. When someone visits a version URL, they get exactly what you built, served from the nearest edge location. Zephyr's content-addressed storage means the same files are never stored twice, saving bandwidth and deployment time.
+
+**Build ID in URLs:**
+
+The **build ID** (visible in the URL as `42`, `156`, etc.) is an auto-incrementing counter (1, 2, 3...) per user. This makes it easy to:
+
+- Identify which build a URL represents at a glance
+- Order builds chronologically
+- Track build history
+- Reference specific builds in logs and dashboards
+
+The build ID increments with each build, so you can quickly see that build 156 is newer than build 42.
 
 You can easily use these URLs in your development process, testing pipelines, or anywhere you need to reference a specific build.
+
+## Version Resolution
+
+When other applications depend on your application via Module Federation, Zephyr resolves which version to use based on the dependency specification:
+
+**Resolution Methods:**
+
+1. **Semantic Version** - Matches standard npm semver patterns
+   - `"^1.0.0"` - Latest 1.x.x version
+   - `"~2.3.1"` - Latest 2.3.x version
+   - `"1.2.3"` - Exact version match
+
+2. **Tag Resolution** - Points to versions deployed to specific tags
+   - `"main"` - Latest version on main tag
+   - `"staging"` - Version deployed to staging
+   - Custom tags like `"release-v2"`
+
+3. **Environment Resolution** - Uses versions deployed to environments
+   - `"production"` - Production environment version
+   - `"preview"` - Preview environment version
+
+4. **Direct URL** - Use a specific version URL directly
+   - `"https://my-app-v1-abc123.zephyr-cloud.io"`
+
+This resolution system ensures your dependencies are predictable and your application always loads the correct versions of remote modules.
 
 ## Integration with Tags and Environments
 
@@ -69,4 +145,4 @@ Versions are the building blocks for everything else in Zephyr. Tags are like bo
 
 When you create a tag, you're pointing it at a specific version. When you set up an environment, you're choosing which version users will see. This lets you promote the same version from staging to production, or update tags to point to newer builds.
 
-When apps depend on each other, they reference specific versions. This means your app will always use the exact same dependencies, no matter when or where it runs.
+When apps depend on each other through Module Federation, they reference specific versions using the resolution methods above. This means your app will always use the exact same dependencies, no matter when or where it runs.
