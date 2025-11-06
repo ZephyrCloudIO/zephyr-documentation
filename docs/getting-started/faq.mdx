@@ -1,0 +1,133 @@
+# Frequently Asked Questions
+
+Common questions about Zephyr Cloud and how to get the most out of the platform.
+
+:::details{title="How does Zephyr speed up development?"}
+
+Zephyr integrates with [bundlers](/bundlers/webpack) like Webpack, Rspack, and Vite as a side-effect of your build process to handle deployment automatically. Instead of configuring complex deployment pipelines, Zephyr deploys your application to the edge network as part of your standard build.
+
+**Key benefits:**
+
+- Instant deployments (sub-second)
+- No separate deployment configuration needed
+- Automatic version management
+- Built-in rollback capabilities
+
+Learn more in our [Quick Start guide](/getting-started/quick-start) or [Architecture documentation](/reference/architecture).
+
+:::
+
+:::details{title="Do I need Micro-Frontend applications to use Zephyr?"}
+
+No! Zephyr works with any application architecture:
+
+- **Standalone applications** - Deploy single applications without micro-frontends
+- **Micro-frontend applications** - Full Module Federation support
+- **Hybrid architectures** - Mix of standalone and federated modules
+
+You can see an example of deploying a standalone application with [React, Rspack and Nx](/integrations/react-rspack-nx).
+
+:::
+
+:::details{title="Do the Zephyr plugins affect my build performance?"}
+
+No. Zephyr plugins only act during two specific phases:
+
+1. **Before build starts** - Authentication and initialization
+2. **After build completes** - Asset analysis and deployment
+
+The actual build process runs normally without any interference. Zephyr doesn't modify your build configuration or slow down compilation.
+
+See more about how we manage the deployment process in our [Architecture guide](/reference/architecture).
+
+:::
+
+:::details{title="Can I use my own cloud provider?"}
+
+Yes! Zephyr supports **Bring Your Own Cloud (BYOC)** deployments. Currently supported providers:
+
+- [Cloudflare](/cloud/cloudflare)
+- [Netlify](/cloud/netlify)
+- [AWS](/cloud/aws)
+- [Fastly](/cloud/fastly)
+- [Akamai](/cloud/akamai)
+
+We're continuously adding more providers. See our [Cloud Providers guide](/cloud) for setup instructions.
+
+If you don't see your cloud provider or have specific requirements, join our [Discord community](https://discord.gg/zephyrcloud) to let us know!
+
+:::
+
+:::details{title="How do I connect custom cloud providers with Zephyr?"}
+
+Start with the [Managing Cloud Providers](/cloud) guide to choose and configure your provider. Each provider has specific setup instructions:
+
+1. Select your cloud provider from the dashboard
+2. Follow the provider-specific integration steps
+3. Configure your API keys and permissions
+4. Deploy your first application
+
+Need help? Jump into our [Discord Server](https://discord.gg/zephyrcloud) and we'll assist you!
+
+:::
+
+:::details{title="How does Zephyr help with Micro-Frontends?"}
+
+Micro-Frontends are notoriously complicated to deploy and configure. Zephyr simplifies this by:
+
+- **Automatic [remote module resolution](/features/remote-dependencies)** - No hardcoded URLs needed
+- **Dynamic dependency management** - Resolves correct versions at runtime
+- **Version coordination** - Ensures host and remote compatibility
+- **Simplified deployment** - Deploy remotes independently without breaking hosts
+
+Zephyr analyzes your Module Federation configuration, resolves your remote applications dynamically, and ensures everything works correctly in the browser.
+
+See our [complete Micro-Frontends guide](/tutorials/mf-guide) for best practices and deployment checklists.
+
+:::
+
+:::details{title="What happens when I log in after running build commands?"}
+
+When you authenticate with Zephyr, we store your authorization information locally in the `~/.zephyr` directory in your home folder. This contains JWT claims for each project you've deployed through Zephyr.
+
+**To clear your local profile:**
+
+```bash
+rm -rf ~/.zephyr
+```
+
+This removes all cached authentication tokens. You'll need to log in again the next time you build.
+
+:::
+
+:::details{title="What's the difference between Module Federation 1.0 and 2.0?"}
+
+**Module Federation 1.0:**
+
+- Built into Webpack core
+- Focused on Micro-Frontend implementation in Webpack
+- Basic runtime module sharing
+
+**Module Federation 2.0:**
+
+- Separated from Webpack repository
+- Framework-agnostic (works with Webpack, Rspack, Vite, etc.)
+- Enhanced capabilities:
+  - Dynamic import types
+  - Federation Runtime
+  - Runtime Plugin System
+  - Better TypeScript support
+  - Improved developer experience
+
+Module Federation 2.0 provides extensive capabilities that support large-scale enterprise applications. Learn more in the [Official Module Federation Guide](https://module-federation.io/guide/start/index.html) or our [Module Federation tutorial](/tutorials/mf-guide).
+
+:::
+
+---
+
+## Still Have Questions?
+
+- Join our [Discord community](https://discord.gg/zephyrcloud) for real-time help
+- Check our [Architecture documentation](/reference/architecture) for technical details
+- Browse our [tutorials](/tutorials/first-app) for step-by-step guides
+- Review [troubleshooting guides](/errors) for common issues

@@ -15,7 +15,7 @@ Tags are smart pointers that automatically find and serve the right version of y
 
 When you create a tag, you define conditions that describe which version it should point to. Every time someone visits your tag's URL, Zephyr looks through all your versions, finds the ones that match your conditions, and serves the most recent match.
 
-For example, you might create a "production" tag that always points to the latest version built from your main branch by your CI system. When you push new code to main and your CI deploys it, the production tag automatically switches to that new version without you doing anything.
+For example, you might create a "production" tag that always points to the latest [version](/features/versions) built from your main branch by your [CI system](/features/ci-cd-personal-token). When you push new code to main and your CI deploys it, the production tag automatically switches to that new version without you doing anything.
 
 ### Tag Conditions
 
@@ -117,7 +117,7 @@ Environments are deployment destinations that represent different stages of your
 
 Think of environments as separate deployment targets for your application. You might have a "development" environment that automatically deploys the latest code for testing, a "staging" environment for final review, and a "production" environment that serves your live application to users.
 
-Each environment can have its own custom domain, environment variables, and deployment settings. This lets you run the same application code in different contexts - maybe your staging environment uses test data while production uses real customer information.
+Each environment can have its own custom domain, [environment variables](/features/environment-overrides), and deployment settings. This lets you run the same application code in different contexts - maybe your staging environment uses test data while production uses real customer information.
 
 **Environment URL Format:**
 
@@ -270,9 +270,9 @@ This setup gives you automatic deployment for development, controlled promotion 
 
 ### Promoting Between Environments
 
-When you're ready to move a version from one environment to another, Zephyr provides promotion tools. You can select any version from your history and deploy it to any environment. This creates a clear audit trail showing what version was deployed where and when.
+When you're ready to move a version from one environment to another, Zephyr provides promotion tools. You can select any [version](/features/versions) from your history and deploy it to any environment. This creates a clear audit trail showing what version was deployed where and when.
 
-For example, after testing a version in staging, you can promote that exact same version to production with one click. Since versions are immutable, you know production will run exactly what you tested.
+For example, after testing a version in staging, you can promote that exact same version to production with one click. Since [versions are immutable](/features/versions#immutability-and-management), you know production will run exactly what you tested.
 
 ### Environment Ordering and Workflows
 
@@ -326,8 +326,8 @@ Both tags and environments maintain full audit logs, so you can always see who c
 
 ## Integration with CI/CD
 
-Tags and environments integrate seamlessly with your existing CI/CD pipelines. Your build systems can automatically create tags, deploy to environments, or trigger promotions based on your workflow needs.
+Tags and environments integrate seamlessly with your existing [CI/CD pipelines](/features/ci-cd-personal-token). Your build systems can automatically create tags, deploy to environments, or trigger promotions based on your workflow needs.
 
 Many teams configure their CI to automatically update a "latest" tag when tests pass, trigger staging deployments when code merges to main, and provide promotion tools for moving releases to production.
 
-Since everything works through Zephyr's API, you can integrate with any CI/CD system and create custom workflows that match your team's processes exactly.
+Since everything works through Zephyr's API, you can integrate with any CI/CD system and create custom workflows that match your team's processes exactly. Learn more about [automation workflows](/features/automation).

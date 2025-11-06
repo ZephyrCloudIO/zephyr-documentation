@@ -9,6 +9,10 @@ import { Steps } from '@rspress/core/theme';
 
 The Server Auth Token allows you to authenticate Zephyr plugins at the organization level without needing individual user credentials for every operation. It identifies the user performing actions via their email and enables secure access to Zephyr on behalf of your organization.
 
+:::info Alternative: Personal Tokens
+Server tokens provide organization-level authentication. For individual user authentication, see the Personal Token CI/CD Integration guide. Personal tokens are useful for personal projects or when you need user-specific permissions. Learn more in the [CI/CD Personal Token guide](/features/ci-cd-personal-token).
+:::
+
 ## Overview
 
 - [Generate API Token](#generate-an-server-api-token)
@@ -225,3 +229,10 @@ deploy:
 **Variable scope:**
 
 - Check that the variable scope matches your pipeline's environment requirements
+
+## Related Documentation
+
+- **[Personal Token CI/CD Integration](/features/ci-cd-personal-token)** - User-level authentication for CI/CD
+- **[Automation](/features/automation)** - Automated workflows and deployment strategies
+- **[Teams & Members](/features/teams-members)** - Managing organization access and permissions
+- **[Tags & Environments](/features/tags-environments)** - Managing deployment targets

@@ -2,6 +2,12 @@
 
 The Version Status feature allows you to track and manage different versions of your application. You can mark a version as Available, Deprecated, Unavailable, Failed, Rolled back, Live.
 
+**Related Documentation:**
+
+- **[Versions](/features/versions)** - Complete guide to version management and lifecycle
+- **[Tags & Environments](/features/tags-environments)** - Deploy versions to specific environments
+- **[Instant Rollbacks](/features/instant-rollbacks)** - Roll back to previous versions instantly
+
 ### All available version statuses
 
 Each application version is assigned a status to indicate its availability:
@@ -37,7 +43,7 @@ To update a version’s status, click the Actions button next to a version in th
 This will open a dropdown menu with the following options:
 
 - **Deploy Version** \
-  You can deploy version with any status except unavailable. If you attempt to deploy a Deprecated version, you will see a warning message. You must acknowledge the risks by checking a confirmation box before proceeding.
+  You can deploy version with any status except unavailable. If you attempt to deploy a Deprecated version, you will see a warning message. You must acknowledge the risks by checking a confirmation box before proceeding. Learn more about [deploying to environments](/features/tags-environments#environments).
   ![alt 'Deploy modal'](/deploy-modal-with-warning.webp)
 - **Set Version as Available** \
   If a version is currently Deprecated or Unavailable, you can restore it to Available by selecting this option. No additional input is required—simply confirm the action.

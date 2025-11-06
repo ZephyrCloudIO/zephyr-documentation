@@ -141,8 +141,8 @@ This resolution system ensures your dependencies are predictable and your applic
 
 ## Integration with Tags and Environments
 
-Versions are the building blocks for everything else in Zephyr. Tags are like bookmarks that can point to different versions, and environments are places where specific versions get served to users.
+Versions are the building blocks for everything else in Zephyr. [Tags](/features/tags-environments#tags) are like bookmarks that can point to different versions, and [environments](/features/tags-environments#environments) are places where specific versions get served to users.
 
-When you create a tag, you're pointing it at a specific version. When you set up an environment, you're choosing which version users will see. This lets you promote the same version from staging to production, or update tags to point to newer builds.
+When you create a tag, you're pointing it at a specific version. When you set up an environment, you're choosing which version users will see. This lets you [promote](/features/tags-environments#promotion-workflows) the same version from staging to production, or update tags to point to newer builds.
 
-When apps depend on each other through Module Federation, they reference specific versions using the resolution methods above. This means your app will always use the exact same dependencies, no matter when or where it runs.
+When apps depend on each other through Module Federation, they reference specific versions using the [remote dependency resolution](/features/remote-dependencies) methods. This means your app will always use the exact same dependencies, no matter when or where it runs.
