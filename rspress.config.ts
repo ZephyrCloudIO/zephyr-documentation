@@ -82,12 +82,16 @@ const sidebar: Sidebar = {
           link: '/features/remote-dependencies',
         },
         {
-          text: 'Environment Overrides',
-          link: '/features/environment-overrides',
+          text: 'CI/CD - Personal token',
+          link: '/features/ci-cd-personal-token',
         },
         {
-          text: 'CI/CD',
-          link: '/features/ci-cd',
+          text: 'CI/CD - Server token',
+          link: '/features/ci-cd-server-token',
+        },
+        {
+          text: 'Environment Overrides',
+          link: '/features/environment-overrides',
         },
         {
           text: 'Teams & Members',
