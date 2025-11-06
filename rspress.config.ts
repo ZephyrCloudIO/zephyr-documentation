@@ -21,7 +21,7 @@ const socialLinks: SocialLink[] = [
   {
     icon: 'discord',
     mode: 'link',
-    content: 'https://zephyr-cloud.io/discord',
+    content: 'https://discord.gg/zephyrcloud',
   },
   {
     icon: 'x',
@@ -88,6 +88,10 @@ const sidebar: Sidebar = {
         {
           text: 'CI/CD - Server token',
           link: '/features/ci-cd-server-token',
+        },
+        {
+          text: 'Environment Overrides',
+          link: '/features/environment-overrides',
         },
         {
           text: 'Teams & Members',
@@ -172,6 +176,10 @@ const sidebar: Sidebar = {
       text: 'Meta Frameworks',
       collapsible: true,
       items: [
+        {
+          text: 'Astro',
+          link: '/meta-frameworks/astro',
+        },
         {
           text: 'Ember.js',
           link: '/meta-frameworks/emberjs',
