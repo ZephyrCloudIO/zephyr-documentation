@@ -62,6 +62,8 @@ For example, if you have:
 
 The Application UID would be: `ui-components.design-system.my-company`
 
+**Learn more:** See the [Architecture guide](/reference/architecture#application-uid) for detailed information about Application UIDs and how they're used throughout Zephyr's infrastructure.
+
 ## Zephyr Dependencies Configuration
 
 Zephyr provides a dependency management system through the `zephyr:dependencies` field in your `package.json` to specify remote module federation dependencies that your application needs.
@@ -512,6 +514,20 @@ When migrating existing applications to use advanced selectors:
 :::tip Progressive Adoption
 You don't need to use all features at once. Start with basic version tags and gradually adopt more sophisticated selectors as your needs grow.
 :::
+
+## Related Documentation
+
+**Core Concepts:**
+
+- **[Versions](/features/versions)** - Understanding version management and resolution
+- **[Tags & Environments](/features/tags-environments)** - Label-based deployment strategies
+- **[Environment Overrides](/features/environment-overrides)** - Override dependencies per environment without rebuilding
+
+**Implementation Guides:**
+
+- **[Module Federation Guide](/tutorials/mf-guide)** - Complete guide to micro-frontends with Zephyr
+- **[Architecture](/reference/architecture)** - Deep dive into dependency resolution architecture
+- **[Integration Guides](/integrations/existing-app)** - Adding Zephyr to existing applications
 
 ### Common Patterns
 

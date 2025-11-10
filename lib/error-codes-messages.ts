@@ -23,7 +23,7 @@ export const Errors = {
   ERR_UNKNOWN: {
     id: '000',
     message:
-      'Unknown error. Tell us about it in Discord https://zephyr-cloud.io/discord if you see this error',
+      'Unknown error. Tell us about it in Discord https://discord.gg/zephyrcloud if you see this error',
     kind: 'unknown',
   },
   /** package.json not found error */

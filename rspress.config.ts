@@ -54,6 +54,10 @@ const sidebar: Sidebar = {
           text: 'Quick Start',
           link: '/getting-started/quick-start',
         },
+        {
+          text: 'FAQ',
+          link: '/getting-started/faq',
+        },
       ],
     },
     {
@@ -68,6 +72,10 @@ const sidebar: Sidebar = {
         {
           text: 'Versions',
           link: '/features/versions',
+        },
+        {
+          text: 'Version Statuses',
+          link: '/features/version-statuses',
         },
         {
           text: 'Tags & Environments',
@@ -293,18 +301,6 @@ const sidebar: Sidebar = {
       collapsed: true,
       collapsible: true,
       items: [
-        {
-          text: 'Core Concepts',
-          link: '/reference/concepts',
-        },
-        {
-          text: 'Version Statuses',
-          link: '/reference/version-statuses',
-        },
-        {
-          text: 'FAQ',
-          link: '/reference/faq',
-        },
         {
           text: 'Additional Resources',
           link: '/reference/resources',

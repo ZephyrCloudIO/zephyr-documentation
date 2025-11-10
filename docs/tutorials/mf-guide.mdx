@@ -14,6 +14,13 @@ import { Separator } from '../../components/ui/separator';
 
 Micro-Frontends' configuration and deployment processes are known to be complicated and painful to debug. Zephyr Cloud not only to helps with resolving dynamic URL and development process for applications applying Micro-Frontends architecture, but also deployment, versioning and more. This section will walk through the necessary configuration to ensure you have a smooth development workflow and deployment process.
 
+**Related Documentation:**
+
+- **[Remote Dependencies](/features/remote-dependencies)** - Understanding Zephyr's dependency resolution system
+- **[Versions](/features/versions)** - Managing application versions
+- **[Architecture](/reference/architecture)** - Deep dive into Zephyr's micro-frontend architecture
+- **[Create MF App Tutorial](/tutorials/create-mf-app)** - Step-by-step guide to creating module federation apps
+
 ## Checklist
 
 <Steps>
@@ -21,7 +28,7 @@ Micro-Frontends' configuration and deployment processes are known to be complica
 
 We have first class support for a Micro-Frontends architecture based on [Module Federation](https://module-federation.io). Other Micro-Frontends architectures may already work or will be supported in the future.
 
-An example working shell app's configuration can be seen below as well as [in our example repository](https://github.com/ZephyrCloudIO/zephyr-examples/blob/comprehensive-react-18/examples/comprehensive-react-18/app-01/rspack.config.js)
+An example working shell app's configuration can be seen below as well as [in our example repository](https://github.com/ZephyrCloudIO/zephyr-examples/blob/comprehensive-react-18/examples/comprehensive-react-18/app-01/rspack.config.js). For detailed bundler-specific configurations, see our [bundler guides](/bundlers/rspack).
 
 ```ts title="rspack.config.js"
 new ModuleFederationPluginV1({
@@ -108,6 +115,21 @@ Several details related to git are required to have a successful deployment.
 
 Do you have the admin or editor access to the application you are trying to deploy? You can check it on [Zephyr Dashboard](https://app.zephyr-cloud.io).
 
-If you don't have it yet, you can contact your Admin on Zephyr dashboard to invite you and set up the correct access right.
+If you don't have it yet, you can contact your Admin on Zephyr dashboard to invite you and set up the correct access right. Learn more about [Teams & Members](/features/teams-members).
 
 </Steps>
+
+## Related Documentation
+
+**Getting Started:**
+
+- **[Create MF App Tutorial](/tutorials/create-mf-app)** - Step-by-step module federation setup
+- **[Integration Guides](/integrations/existing-app)** - Add Zephyr to existing applications
+- **[Quick Start](/getting-started/quick-start)** - Initial setup guide
+
+**Core Concepts:**
+
+- **[Remote Dependencies](/features/remote-dependencies)** - Advanced dependency resolution
+- **[Versions](/features/versions)** - Version management strategies
+- **[Tags & Environments](/features/tags-environments)** - Deployment workflows
+- **[Architecture](/reference/architecture)** - Technical deep dive
