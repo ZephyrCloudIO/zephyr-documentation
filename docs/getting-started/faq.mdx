@@ -11,7 +11,7 @@ Zephyr integrates with [bundlers](/bundlers/webpack) like Webpack, Rspack, and V
 - Instant deployments (sub-second)
 - No separate deployment configuration needed
 - Automatic version management
-- Built-in rollback capabilities
+- [Bring Your Own Cloud (BYOC)](/cloud) support for custom infrastructure
 
 Learn more in our [Quick Start guide](/getting-started/quick-start) or [Architecture documentation](/reference/architecture).
 
@@ -36,7 +36,7 @@ No. Zephyr plugins only act during two specific phases:
 1. **Before build starts** - Authentication and initialization
 2. **After build completes** - Asset analysis and deployment
 
-The actual build process runs normally without any interference. Zephyr doesn't modify your build configuration or slow down compilation.
+The actual build process runs normally without any interference. While Zephyr does enhance Module Federation configurations and handle environment variables for remote resolution, these modifications happen transparently and don't impact build performance.
 
 See more about how we manage the deployment process in our [Architecture guide](/reference/architecture).
 
@@ -73,7 +73,7 @@ Need help? Jump into our [Discord Server](https://discord.gg/zephyrcloud) and we
 
 :::details{title="How does Zephyr help with Micro-Frontends?"}
 
-Micro-Frontends are notoriously complicated to deploy and configure. Zephyr simplifies this by:
+Micro-Frontends can be challenging to deploy and configure properly. Zephyr simplifies this by:
 
 - **Automatic [remote module resolution](/features/remote-dependencies)** - No hardcoded URLs needed
 - **Dynamic dependency management** - Resolves correct versions at runtime
@@ -92,8 +92,22 @@ When you authenticate with Zephyr, we store your authorization information local
 
 **To clear your local profile:**
 
+**macOS/Linux:**
+
 ```bash
 rm -rf ~/.zephyr
+```
+
+**Windows (PowerShell):**
+
+```powershell
+Remove-Item -Recurse -Force "$env:USERPROFILE\.zephyr"
+```
+
+**Windows (Command Prompt):**
+
+```cmd
+rmdir /s /q %USERPROFILE%\.zephyr
 ```
 
 This removes all cached authentication tokens. You'll need to log in again the next time you build.

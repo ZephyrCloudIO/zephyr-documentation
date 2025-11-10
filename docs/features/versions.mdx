@@ -37,7 +37,7 @@ Every version gets a permanent URL that works forever. Each version is uniquely 
 https://{username}-{buildId}-{app-name}-{project}-{hash}.{domain}
 ```
 
-**Example:** `https://john-doe-42-header-component-ecommerce-abc123.zephyr-cloud.io`
+**Example:** `https://john-doe-42-header-component-ecommerce-abc123-ze.zephyr-cloud.io`
 
 **URL Components:**
 
@@ -98,8 +98,8 @@ https://{username}-{buildId}-{app-name}-{project}-{hash}.{edge-domain}
 
 **Real Examples:**
 
-- `https://john-doe-42-header-component-ecommerce-abc123.zephyr-cloud.io`
-- `https://jane-smith-156-shopping-cart-monorepo-def456.zephyr-cloud.io`
+- `https://john-doe-42-header-component-ecommerce-abc123-ze.zephyr-cloud.io`
+- `https://jane-smith-156-shopping-cart-monorepo-def456-ze.zephyr-cloud.io`
 
 These URLs are served lightning-fast from Zephyr's global edge network, with assets distributed to 200+ locations worldwide.
 
@@ -141,7 +141,7 @@ When other applications depend on your application via Module Federation, Zephyr
 4. **Direct URL** - Use a specific version URL directly
    - `"https://my-app-v1-abc123.zephyr-cloud.io"`
 
-This resolution system ensures your dependencies are predictable and your application always loads the correct versions of remote modules.
+This resolution system ensures your dependencies are predictable and your application always loads the correct versions of remote modules. For more details on how remote dependencies are resolved and managed, see [Remote Dependencies](/features/remote-dependencies).
 
 ## Integration with Tags and Environments
 
