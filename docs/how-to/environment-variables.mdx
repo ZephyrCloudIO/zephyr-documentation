@@ -1,0 +1,217 @@
+# Environment Variables
+
+Zephyr's Environment Variables feature provides a powerful two-level system for managing `ZE_PUBLIC_*` variables across any number of custom environments. This system combines build-time version-level variables with [serve time](https://zephyr-cloud.io/blog/serve-time) environment-level overrides, giving you complete flexibility in configuration management.
+
+## Overview
+
+Environment variables in Zephyr work at two levels:
+
+- **Version-level variables**: Set during build time and captured automatically from any `ZE_PUBLIC_*` environment variables available in your build context
+- **Environment-level variables**: Override version-level variables for specific environments through the dashboard
+
+You can create unlimited environments beyond the traditional dev/staging/prod setup—whether you need feature-branch environments, hotfix environments, canary releases, or team-specific configurations.
+
+:::warning Security Notice
+
+All `ZE_PUBLIC_*` variables are **client-visible** in your bundled application. Never store secrets, API keys, passwords, or any sensitive data in these variables.
+
+**Safe for ZE_PUBLIC_*:**
+- API endpoints (e.g., `ZE_PUBLIC_API_URL=https://api.example.com`)
+- Feature flags (e.g., `ZE_PUBLIC_FEATURE_BETA=true`)
+- Public configuration (e.g., `ZE_PUBLIC_ANALYTICS_ID=GA-123456`)
+
+**Never use for:**
+- Database passwords
+- API keys or tokens
+- Private credentials
+- Internal system secrets
+
+:::
+
+## Getting Started
+
+### Local Development Setup
+
+1. Create a `.env` file in your project root:
+
+```bash
+ZE_PUBLIC_API_URL=https://api-dev.example.com
+ZE_PUBLIC_FEATURE_BETA=true
+ZE_PUBLIC_ANALYTICS_ID=dev-analytics-123
+```
+
+2. Use variables in your code:
+
+```javascript
+// Access environment variables in your application
+const apiUrl = process.env.ZE_PUBLIC_API_URL;
+const isBetaEnabled = process.env.ZE_PUBLIC_FEATURE_BETA === 'true';
+const analyticsId = process.env.ZE_PUBLIC_ANALYTICS_ID;
+
+console.log(`API URL: ${apiUrl}`);
+console.log(`Beta features: ${isBetaEnabled ? 'enabled' : 'disabled'}`);
+```
+
+3. Deploy your application:
+
+```bash
+# Your build process automatically captures ZE_PUBLIC_* variables
+# With zephyr you're app will be deployed to a version url automatically
+npm run build
+```
+
+Variables are automatically captured during the build process from your build environment and associated with your version.
+
+Zephyr captures any environment variables prefixed with `ZE_PUBLIC_` that are available when your application is built. This includes variables from `.env` files, shell exports, CI/CD systems, or any other source:
+
+```bash
+# From .env file
+ZE_PUBLIC_API_URL=https://api.example.com
+
+# Set directly in shell
+export ZE_PUBLIC_DEBUG=true
+npm run build
+
+# Or inline with build command  
+ZE_PUBLIC_FEATURE_BETA=true pnpm build
+```
+
+All `ZE_PUBLIC_*` variables present during the build are captured regardless of their source.
+
+## Environment Management
+
+### Creating Environments
+
+Navigate to your application's environment settings:
+```
+/org/[organization]/[project]/[application]/devops/environment/[env-name]#variables
+```
+
+1. Click **Create Environment**
+2. Choose a descriptive name that reflects your use case
+3. Configure your environment conditions (Tag or Version)
+4. Set up custom DNS if needed (optional)
+
+### Managing Environment Variables
+
+Once your environment is created:
+
+1. Go to the **Variables** tab in your environment settings
+2. Add, edit, or remove `ZE_PUBLIC_*` variables
+3. Changes take effect immediately for new deployments to that environment
+
+Example environments you might create:
+- `feature-user-dashboard` - For testing new dashboard features
+- `hotfix-payment-bug` - Quick fixes for critical issues  
+- `canary-release` - Gradual rollouts with different configuration
+- `team-frontend` - Frontend team's shared testing environment
+- `client-demo` - Customized environment for client presentations
+
+## Cascading System
+
+Environment variables follow a clear priority hierarchy:
+
+| Priority | Level | Source | When Applied |
+|----------|--------|--------|--------------|
+| 1 (Highest) | Environment | Dashboard override | Runtime - specific to environment |
+| 2 (Default) | Version | Build-time environment | Build time - captured with version |
+
+### Example Scenarios
+
+#### Scenario 1: API Configuration Across Environments
+
+**Version-level variables** (captured during build):
+```bash
+ZE_PUBLIC_API_URL=https://api-dev.example.com
+ZE_PUBLIC_TIMEOUT=5000
+```
+
+**Environment overrides:**
+
+*Production environment:*
+```bash
+ZE_PUBLIC_API_URL=https://api.example.com  # Override
+# ZE_PUBLIC_TIMEOUT uses version default (5000)
+```
+
+*Staging environment:*
+```bash
+ZE_PUBLIC_API_URL=https://api-staging.example.com  # Override  
+ZE_PUBLIC_TIMEOUT=10000  # Override for longer staging timeouts
+```
+
+*Feature-branch environment:*
+```bash
+ZE_PUBLIC_API_URL=https://api-feature.example.com  # Override
+# ZE_PUBLIC_TIMEOUT uses version default (5000)
+```
+
+#### Scenario 2: Feature Flag Management
+
+**Version-level variables:**
+```bash
+ZE_PUBLIC_FEATURE_NEW_UI=false
+ZE_PUBLIC_FEATURE_BETA_SEARCH=true
+ZE_PUBLIC_DEBUG_MODE=false
+```
+
+**Environment-specific overrides:**
+
+*Canary environment:*
+```bash
+ZE_PUBLIC_FEATURE_NEW_UI=true  # Enable new UI for canary users
+```
+
+*Team-qa environment:*
+```bash
+ZE_PUBLIC_DEBUG_MODE=true  # Enable debug for QA testing
+```
+
+*Client-demo environment:*
+```bash
+ZE_PUBLIC_FEATURE_NEW_UI=true     # Show latest features
+ZE_PUBLIC_FEATURE_BETA_SEARCH=false  # Stable search for demos
+```
+
+## Use Case: API Configuration
+
+A common pattern is having different API endpoints across environments:
+
+**Build-time default:**
+```bash
+ZE_PUBLIC_API_URL=https://api-dev.example.com
+```
+
+**Environment overrides:**
+- Production: `ZE_PUBLIC_API_URL=https://api.example.com`
+- Staging: `ZE_PUBLIC_API_URL=https://api-staging.example.com`  
+- Feature branch: `ZE_PUBLIC_API_URL=https://api-feature.example.com`
+
+The version uses the build-time default, while each environment can override with its specific API endpoint.
+
+## Troubleshooting
+
+### Variables Not Loading
+
+Ensure variables are properly prefixed with `ZE_PUBLIC_` and available during build:
+
+1. Check variables are captured at build time in your build logs
+2. Verify the `ZE_PUBLIC_` prefix is used correctly
+3. Clear browser cache if testing changes
+4. Confirm you're accessing the correct environment URL
+
+### Variable Priority
+
+Environment-level variables override version-level variables. Check:
+
+1. Dashboard environment settings for overrides
+2. Version-level variables from your build
+3. Use browser developer tools to inspect bundled values
+
+---
+
+## Related Documentation
+
+- [Environments](./environments.mdx) - Learn about DNS setup and environment creation
+- [Versioning & Tags](./versioning-tags.mdx) - Understand version management and tagging
+- [Cloud Integrations](../cloud.mdx) - Deploy to your preferred cloud provider
