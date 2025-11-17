@@ -1,0 +1,106 @@
+---
+title: Build Hooks
+description: Tap into the deployment lifecycle with build hooks to integrate external services, send notifications, and automate workflows
+head:
+  - - meta
+    - property: og:description
+      content: Tap into the deployment lifecycle with build hooks to integrate external services, send notifications, and automate workflows
+---
+
+# Build Hooks
+
+Build hooks allow you to execute custom logic at specific points in the deployment lifecycle. When your application deploys successfully, hooks provide comprehensive metadata about the deployment, enabling seamless integration with external services, notification systems, and custom workflows.
+
+## Understanding Build Hooks
+
+Build hooks let you tap into Zephyr's deployment process without modifying your application code. Think of them as event handlers that fire automatically when certain deployment events occur - similar to how you might listen for user interactions in your UI, but for your deployment pipeline instead.
+
+When a deployment completes, Zephyr calls your hook function with detailed information about what was just deployed: the URL, build ID, git information, dependencies, and more. You can use this data to update external systems, notify your team, or trigger downstream processes.
+
+### How Hooks Work
+
+Hooks are configured in your bundler configuration file (like `webpack.config.ts` or `vite.config.ts`) as part of the Zephyr plugin setup. During the build process, Zephyr captures metadata about your deployment. After successfully uploading assets to the edge network, it calls your hook function with this metadata.
+
+The hook system is designed to be fail-safe - if your hook encounters an error, Zephyr logs the error but doesn't fail the deployment. This ensures that integration problems don't prevent successful deployments.
+
+## When to Use Build Hooks
+
+Build hooks are perfect for integrating Zephyr with your existing development workflows:
+
+**Team notifications**: Send deployment updates to Slack, Discord, or email when new versions go live.
+
+**External registries**: Register your deployed micro-frontends in a service catalog or module registry for discovery and orchestration.
+
+**Deployment tracking**: Record deployment history in your database or monitoring systems for analytics and compliance.
+
+**Downstream automation**: Trigger subsequent CI/CD pipelines, update documentation sites, or notify dependent services about new versions.
+
+**Custom workflows**: Generate deployment manifests, update feature flags, or integrate with any system that needs to know about deployments.
+
+## Available Hooks
+
+### onDeployComplete
+
+The `onDeployComplete` hook fires after a successful deployment with comprehensive metadata about the deployed application.
+
+**When it fires:**
+
+- After all assets are uploaded to Zephyr Cloud
+- After the deployment URL is generated
+- Before the build process completes
+
+**Hook signature:**
+
+```typescript
+onDeployComplete?: (deploymentInfo: DeploymentInfo) => void | Promise<void>;
+```
+
+The hook receives a `DeploymentInfo` object containing:
+
+- **url**: The deployed application URL
+- **snapshot**: Build metadata including application name, build ID, git information, and timestamp
+- **federatedDependencies**: Array of resolved remote dependencies with names, versions, and URLs
+- **buildStats**: Build context including CI environment, platform, and duration
+
+Both synchronous and asynchronous hook functions are supported, allowing you to make API calls or perform other async operations.
+
+## Configuration
+
+Add hooks to your bundler configuration using the `withZephyr()` function. The configuration structure is identical across all supported bundlers.
+
+### Basic Setup
+
+```typescript
+import { withZephyr } from 'zephyr-webpack-plugin'; // or any other bundler plugin
+
+export default withZephyr({
+  hooks: {
+    onDeployComplete: (info) => {
+      console.log('🚀 Deployed to:', info.url);
+      console.log('📦 Build ID:', info.snapshot.uid.build);
+    },
+  },
+})(config);
+```
+
+### TypeScript Configuration
+
+For full type safety, import the hook types:
+
+```typescript
+import { withZephyr, type ZephyrBuildHooks } from 'zephyr-webpack-plugin';
+
+const hooks: ZephyrBuildHooks = {
+  onDeployComplete: async (deploymentInfo) => {
+    // Fully typed deployment info
+    console.log(`Deployed ${deploymentInfo.snapshot.uid.app_name}`);
+    console.log(`URL: ${deploymentInfo.url}`);
+  },
+};
+
+export default withZephyr({ hooks })(config);
+```
+
+:::tip Want More Hooks?
+Currently, `onDeployComplete` is the only available hook. If you need additional lifecycle hooks like `onBuildStart`, `onBuildComplete`, or `onUploadProgress`, please [open an issue](https://github.com/zephyrcloudio/zephyr-packages/issues) describing your use case!
+:::

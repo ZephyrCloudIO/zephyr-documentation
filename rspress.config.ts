@@ -90,6 +90,10 @@ const sidebar: Sidebar = {
           link: '/features/ci-cd',
         },
         {
+          text: 'Build Hooks',
+          link: '/features/build-hooks',
+        },
+        {
           text: 'Teams & Members',
           link: '/features/teams-members',
         },
