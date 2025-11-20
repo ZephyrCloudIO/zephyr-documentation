@@ -1,11 +1,15 @@
 ---
 title: Instant Rollbacks
 description: Quickly revert to previous application versions with zero downtime
+head:
+  - - meta
+    - property: og:description
+      content: Quickly revert to previous application versions with zero downtime
 ---
 
 # Instant Rollbacks
 
-Instant rollbacks let you immediately revert to a previous version of your application when something goes wrong. Whether you discover a bug in production or need to quickly undo a problematic deployment, rollbacks get your application back to a working state in seconds.
+Instant rollbacks let you immediately revert to a previous [version](/features/versions) of your application when something goes wrong. Whether you discover a bug in production or need to quickly undo a problematic deployment, rollbacks get your application back to a working state in seconds.
 
 ## Understanding Instant Rollbacks
 
@@ -47,9 +51,9 @@ The rollback typically completes in seconds. You'll see real-time updates in the
 
 You can roll back different types of deployments:
 
-**Environment rollbacks**: Roll back a specific environment like production or staging. This affects only that environment while leaving others unchanged.
+**Environment rollbacks**: Roll back a specific [environment](/features/tags-environments#environments) like production or staging. This affects only that environment while leaving others unchanged.
 
-**Tag rollbacks**: Roll back a tag like "latest" or "stable". This may affect multiple environments that use that tag, depending on your configuration.
+**Tag rollbacks**: Roll back a [tag](/features/tags-environments#tags) like "latest" or "stable". This may affect multiple environments that use that tag, depending on your configuration.
 
 ## What Happens During a Rollback
 
@@ -107,7 +111,7 @@ Rolling back only changes which version users see - it doesn't affect:
 
 **Database compatibility**: Structure your database changes to be backward compatible so rollbacks don't break data access.
 
-**Feature flags**: Use feature flags to control new functionality, allowing you to disable features without full rollbacks.
+**Feature flags**: Use [environment variables](/features/environment-overrides#environment-variable-overrides) or feature flags to control new functionality, allowing you to disable features without full rollbacks.
 
 **Gradual rollouts**: Deploy to staging or limited production environments first, so problems are caught before wide deployment.
 
@@ -171,6 +175,6 @@ You can also roll back environments individually if you need more granular contr
 
 When rolling back applications that depend on each other, consider the compatibility of different versions. The previous version of one application might not work correctly with the current version of its dependencies.
 
-Zephyr's remote dependency system helps manage this by allowing you to specify version constraints and compatibility rules.
+Zephyr's [remote dependency system](/features/remote-dependencies) helps manage this by allowing you to specify version constraints and compatibility rules.
 
 Instant rollbacks give you the confidence to deploy frequently, knowing that any issues can be resolved immediately. They're an essential safety net that enables rapid iteration while maintaining reliability for your users.

@@ -1,6 +1,10 @@
 ---
 title: 'Configure AWS on Zephyr'
 description: 'Configuring AWS as your deployment integration provider on Zephyr'
+head:
+  - - meta
+    - property: og:description
+      content: Configuring AWS as your deployment integration provider on Zephyr
 ---
 
 import { Steps } from '@rspress/core/theme';
@@ -83,6 +87,10 @@ aws_access_key_id = YOUR_ACCESS_KEY_ID
 aws_secret_access_key = YOUR_ACCESS_KEY_SECRET
 ```
 
+:::info AWS API Token
+This will be considered as your AWS API Token
+:::
+
 #### 2. Certificate arn
 
 - Choose **us-east-1** region
@@ -95,7 +103,7 @@ aws_secret_access_key = YOUR_ACCESS_KEY_SECRET
 
 ### Configuration Inputs
 
-Details for each input after clicking **Add Integration** under **AWS**:
+Back on Zephyr Dashboard, these are the details for each input after clicking **Add Integration** under **AWS**:
 
 <dt>Integration Name</dt>
 <dd>A unique name within your organization, used as a slug.</dd>
@@ -105,7 +113,7 @@ Details for each input after clicking **Add Integration** under **AWS**:
 
 <dt>API Token</dt>
 <dd>
-  Obtainable from AWS. [See instructions](#1-api-token) for creating your API
+  Obtainable from AWS. [See instructions](#1-credentials) for creating your API
   token.
 </dd>
 
@@ -121,6 +129,10 @@ Details for each input after clicking **Add Integration** under **AWS**:
   new one (default integration) is set. Deployment using integration won't work
   until AWS worker and property become activated.
 </dd>
+
+:::info Integration deployment process
+After completing the integration creation it can take up to 10 minutes to be complete.
+:::
 
 ### Validate domain and setup DNS
 
