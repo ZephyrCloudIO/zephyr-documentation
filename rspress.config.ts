@@ -90,6 +90,10 @@ const sidebar: Sidebar = {
           link: '/features/remote-dependencies',
         },
         {
+          text: 'Structured File Logs',
+          link: '/features/file-logging',
+        },
+        {
           text: 'CI/CD - Personal token',
           link: '/features/ci-cd-personal-token',
         },
