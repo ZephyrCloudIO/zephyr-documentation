@@ -1,0 +1,74 @@
+---
+title: Structured File Logs
+description: Persist Zephyr build output as structured files for easier debugging, CI archiving, and log ingestion.
+head:
+  - - meta
+    - property: og:description
+      content: Persist Zephyr build output as structured files for easier debugging, CI archiving, and log ingestion.
+---
+
+# Structured File Logs
+
+Zephyr build integrations now support structured, file-based logging for every build run. When enabled, logs are written to disk in addition to the terminal, making it easier to debug build issues locally and to store artifacts from CI.
+
+## Quick start
+
+- Enable logging for a single command:
+
+```bash
+ZEPHYR_LOG_TO_FILE=true pnpm build
+```
+
+- Choose TOON encoding instead of JSON:
+
+```bash
+ZEPHYR_LOG_TO_FILE=true ZEPHYR_LOG_FORMAT=toon pnpm build
+```
+
+- Override the default log directory:
+
+```bash
+ZEPHYR_LOG_TO_FILE=true ZEPHYR_LOG_PATH=/tmp/zephyr-logs pnpm build
+```
+
+## Where logs are stored
+
+- **Default path:** `~/.zephyr/logs/` (override with `ZEPHYR_LOG_PATH`)
+- **Per-run folders:** Each command creates `run-<timestamp>/` so logs from different runs never collide
+- **File naming:** Logs are split by intent to keep them targeted:
+  - `info.log`, `warn.log`, `error.log`
+  - `action-<action>.log` (actions use the Zephyr log action names; colons become hyphens)
+  - `debug-<context>.log` for `zephyr:*` debug namespaces (captured even if `DEBUG` is not set)
+- **Summary:** When the CLI writes run metadata, it is saved to `summary.json` with timestamps, duration, build ID, and any reported counts.
+
+### Example layout
+
+```
+~/.zephyr/logs/run-2024-06-14T18-22-05/
+  info.log
+  warn.log
+  error.log
+  action-build.log
+  debug-git.log
+  summary.json
+```
+
+## Log formats
+
+- **JSON (default):** One JSON object per line with `level`, `message`, `timestamp`, `action`, and any structured payloads.
+- **TOON:** Set `ZEPHYR_LOG_FORMAT=toon` to emit [TOON](https://www.npmjs.com/package/@toon-format/toon) encoded entries for downstream tooling that prefers the format.
+
+## Structured payload extraction
+
+- When a log line contains valid JSON (for example, API responses), the builder separates the text from the parsed payload:
+  - `message` keeps the human-readable text
+  - `payload` contains the parsed JSON object or array
+- ANSI color codes are stripped before writing, so files stay clean for parsers and artifact viewers.
+
+## CI recommendations
+
+- Turn on file logging for build steps where you already capture artifacts: `ZEPHYR_LOG_TO_FILE=1`
+- Set `ZEPHYR_LOG_PATH` to a workspace-relative folder (e.g., `./artifacts/zephyr-logs`) so your pipeline can zip and upload it
+- Keep `DEBUG` off if you do not want verbose console output—debug namespaced logs are still captured on disk when file logging is enabled
+
+With file logging enabled, every Zephyr build run produces durable, structured logs you can inspect locally, attach to bug reports, or feed into your log processing pipeline.
