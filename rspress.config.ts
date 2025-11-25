@@ -90,6 +90,8 @@ const sidebar: Sidebar = {
           link: '/features/remote-dependencies',
         },
         {
+          text: 'Deployment Hooks',
+          link: '/features/deployment-hooks',
           text: 'Structured File Logs',
           link: '/features/file-logging',
         },
