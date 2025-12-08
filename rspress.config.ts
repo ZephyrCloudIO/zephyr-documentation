@@ -21,7 +21,7 @@ const socialLinks: SocialLink[] = [
   {
     icon: 'discord',
     mode: 'link',
-    content: 'https://zephyr-cloud.io/discord',
+    content: 'https://discord.gg/zephyrcloud',
   },
   {
     icon: 'x',
@@ -54,6 +54,10 @@ const sidebar: Sidebar = {
           text: 'Quick Start',
           link: '/getting-started/quick-start',
         },
+        {
+          text: 'FAQ',
+          link: '/getting-started/faq',
+        },
       ],
     },
     {
@@ -70,6 +74,10 @@ const sidebar: Sidebar = {
           link: '/features/versions',
         },
         {
+          text: 'Version Statuses',
+          link: '/features/version-statuses',
+        },
+        {
           text: 'Tags & Environments',
           link: '/features/tags-environments',
         },
@@ -82,8 +90,22 @@ const sidebar: Sidebar = {
           link: '/features/remote-dependencies',
         },
         {
-          text: 'CI/CD',
-          link: '/features/ci-cd',
+          text: 'Deployment Hooks',
+          link: '/features/deployment-hooks',
+          text: 'Structured File Logs',
+          link: '/features/file-logging',
+        },
+        {
+          text: 'CI/CD - Personal token',
+          link: '/features/ci-cd-personal-token',
+        },
+        {
+          text: 'CI/CD - Server token',
+          link: '/features/ci-cd-server-token',
+        },
+        {
+          text: 'Environment Overrides',
+          link: '/features/environment-overrides',
         },
         {
           text: 'Teams & Members',
@@ -285,18 +307,6 @@ const sidebar: Sidebar = {
       collapsed: true,
       collapsible: true,
       items: [
-        {
-          text: 'Core Concepts',
-          link: '/reference/concepts',
-        },
-        {
-          text: 'Version Statuses',
-          link: '/reference/version-statuses',
-        },
-        {
-          text: 'FAQ',
-          link: '/reference/faq',
-        },
         {
           text: 'Additional Resources',
           link: '/reference/resources',

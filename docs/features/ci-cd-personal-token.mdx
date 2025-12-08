@@ -1,13 +1,21 @@
 ---
-title: CI/CD
+title: CI/CD - Personal token
 description: Integrate Zephyr Cloud with your continuous integration and deployment pipelines
+head:
+  - - meta
+    - property: og:description
+      content: Integrate Zephyr Cloud with your continuous integration and deployment pipelines
 ---
 
 import { Steps } from '@rspress/core/theme';
 
-# CI/CD Integration
+# CI/CD Integration using Personal token
 
 Integrate Zephyr Cloud into your continuous integration and deployment pipelines to automate your deployment workflow. This guide covers setup for GitHub Actions and GitLab CI/CD.
+
+:::info Alternative: Server Tokens
+Personal tokens authenticate as individual users. For organization-level authentication in CI/CD, consider using Server Tokens instead. Server tokens provide centralized management and don't require individual user credentials. See the [CI/CD Server Token guide](/features/ci-cd-server-token) for details.
+:::
 
 ## Overview
 
@@ -209,3 +217,16 @@ deploy:
 **Variable scope:**
 
 - Check that the variable scope matches your pipeline's environment requirements
+
+## Related Documentation
+
+**CI/CD & Deployment:**
+
+- **[Server Token CI/CD Integration](/features/ci-cd-server-token)** - Organization-level authentication for CI/CD
+- **[Automation](/features/automation)** - Automated workflows and deployment strategies
+- **[Tags & Environments](/features/tags-environments)** - Managing deployment targets
+
+**Getting Started:**
+
+- **[Quick Start](/getting-started/quick-start)** - Initial setup and first deployment
+- **[Integration Guides](/integrations/existing-app)** - Adding Zephyr to existing applications

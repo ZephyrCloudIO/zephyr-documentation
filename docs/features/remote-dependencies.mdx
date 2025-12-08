@@ -1,6 +1,10 @@
 ---
 title: Remote Dependencies
 description: Manage and visualize remote module dependencies across your applications
+head:
+  - - meta
+    - property: og:description
+      content: Manage and visualize remote module dependencies across your applications
 ---
 
 # Remote Dependencies
@@ -10,6 +14,10 @@ Zephyr implements a comprehensive dependency resolution system that enables micr
 In a micro-frontend architecture, applications are composed of multiple independent frontend modules that can be developed and deployed separately. Remote dependencies are other micro-frontend modules that your application needs to function - think of them as external components or services that your app imports and uses at runtime.
 
 The dependency management system operates through a combination of build-time analysis and intelligent resolution strategies. During the build process, Zephyr plugins capture contextual information about the build environment and use this data to resolve abstract dependency declarations into concrete URLs and versions.
+
+:::tip Environment-Level Overrides
+Want to control which version of a remote your environment consumes without rebuilding? Check out [**Environment-Level Overrides**](/features/environment-overrides) to learn how to dynamically override remote dependencies per deployment environment.
+:::
 
 ## Overview
 
@@ -53,6 +61,8 @@ For example, if you have:
 - Git organization: `my-company`
 
 The Application UID would be: `ui-components.design-system.my-company`
+
+**Learn more:** See the [Architecture guide](/reference/architecture#application-uid) for detailed information about Application UIDs and how they're used throughout Zephyr's infrastructure.
 
 ## Zephyr Dependencies Configuration
 
@@ -205,6 +215,10 @@ When you use `workspace:*`, Zephyr intelligently resolves dependencies by matchi
 - **Username**: The developer username or CI identity
 
 The resolution returns the **most recent version** (by creation date) that matches all four criteria. If no exact match is found, it falls back to the default environment.
+
+:::info Fallback Resolution
+To further understand how fallback refer to [Default Environment Fallback](#default-environment-fallback) section.
+:::
 
 **Key Benefits:**
 
@@ -500,6 +514,20 @@ When migrating existing applications to use advanced selectors:
 :::tip Progressive Adoption
 You don't need to use all features at once. Start with basic version tags and gradually adopt more sophisticated selectors as your needs grow.
 :::
+
+## Related Documentation
+
+**Core Concepts:**
+
+- **[Versions](/features/versions)** - Understanding version management and resolution
+- **[Tags & Environments](/features/tags-environments)** - Label-based deployment strategies
+- **[Environment Overrides](/features/environment-overrides)** - Override dependencies per environment without rebuilding
+
+**Implementation Guides:**
+
+- **[Module Federation Guide](/tutorials/mf-guide)** - Complete guide to micro-frontends with Zephyr
+- **[Architecture](/reference/architecture)** - Deep dive into dependency resolution architecture
+- **[Integration Guides](/integrations/existing-app)** - Adding Zephyr to existing applications
 
 ### Common Patterns
 

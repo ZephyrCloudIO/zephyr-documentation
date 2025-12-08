@@ -1,3 +1,12 @@
+---
+title: Rslib
+description: Deploy your JavaScript/TypeScript libraries to Zephyr Cloud using Rslib. Build fast, flexible libraries with excellent TypeScript support and multiple output formats powered by Rsbuild.
+head:
+  - - meta
+    - property: og:description
+      content: Deploy your JavaScript/TypeScript libraries to Zephyr Cloud using Rslib. Build fast, flexible libraries with excellent TypeScript support and multiple output formats powered by Rsbuild.
+---
+
 import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
@@ -18,7 +27,14 @@ Deploy your JavaScript/TypeScript libraries to Zephyr Cloud using Rslib. Built o
 
 Install the Rsbuild plugin in your Rslib project:
 
-<PackageManagerTabs command="add --dev zephyr-rsbuild-plugin" />
+<PackageManagerTabs
+  command={{
+    npm: 'npm install --save-dev zephyr-rsbuild-plugin',
+    yarn: 'yarn add --dev zephyr-rsbuild-plugin',
+    pnpm: 'pnpm add -D zephyr-rsbuild-plugin',
+    bun: 'bun add --dev zephyr-rsbuild-plugin',
+  }}
+/>
 
 ## Configuration
 

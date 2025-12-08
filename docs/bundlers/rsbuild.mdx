@@ -1,3 +1,12 @@
+---
+title: Rsbuild
+description: Deploy Rsbuild applications to Zephyr Cloud with lightning-fast builds and Module Federation support.
+head:
+  - - meta
+    - property: og:description
+      content: Deploy Rsbuild applications to Zephyr Cloud with lightning-fast builds and Module Federation support.
+---
+
 import { PackageManagerTabs } from '@rspress/core/theme';
 import CodemodDisclaimer from '../../components/codemod-disclaimer.mdx';
 
@@ -18,7 +27,14 @@ Deploy your Rsbuild applications to Zephyr Cloud with lightning-fast Rust-based 
 
 Install the Rsbuild plugin in your project:
 
-<PackageManagerTabs command="add --dev zephyr-rsbuild-plugin" />
+<PackageManagerTabs
+  command={{
+    npm: 'npm install --save-dev zephyr-rsbuild-plugin',
+    yarn: 'yarn add --dev zephyr-rsbuild-plugin',
+    pnpm: 'pnpm add -D zephyr-rsbuild-plugin',
+    bun: 'bun add --dev zephyr-rsbuild-plugin',
+  }}
+/>
 
 ## Quick Start
 
@@ -154,4 +170,4 @@ export default defineConfig({
 
 - [React + Rsbuild Integration](/integrations/react-rsbuild)
 - [Module Federation Tutorial](/tutorials/create-mf-app)
-- [Join our Discord](https://zephyr-cloud.io/discord) for support
+- [Join our Discord](https://discord.gg/zephyrcloud) for support

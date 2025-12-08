@@ -1,6 +1,10 @@
 ---
 title: Tags & Environments
 description: Manage application deployments with smart tags and flexible environments in Zephyr Cloud
+head:
+  - - meta
+    - property: og:description
+      content: Manage application deployments with smart tags and flexible environments in Zephyr Cloud
 ---
 
 # Tags & Environments
@@ -15,7 +19,7 @@ Tags are smart pointers that automatically find and serve the right version of y
 
 When you create a tag, you define conditions that describe which version it should point to. Every time someone visits your tag's URL, Zephyr looks through all your versions, finds the ones that match your conditions, and serves the most recent match.
 
-For example, you might create a "production" tag that always points to the latest version built from your main branch by your CI system. When you push new code to main and your CI deploys it, the production tag automatically switches to that new version without you doing anything.
+For example, you might create a "production" tag that always points to the latest [version](/features/versions) built from your main branch by your [CI system](/features/ci-cd-personal-token). When you push new code to main and your CI deploys it, the production tag automatically switches to that new version without you doing anything.
 
 ### Tag Conditions
 
@@ -78,7 +82,32 @@ This rule means:
 
 Every tag gets its own permanent URL that you can share, bookmark, or use in other applications. These URLs never change, even when the tag switches to point to different versions. This means your links always work, but they automatically serve the most up-to-date content based on your rules.
 
-When someone visits a tag URL, they see whatever version the tag currently points to. Behind the scenes, Zephyr evaluates your tag conditions in real-time and serves the appropriate content from its global edge network.
+**Tag URL Format:**
+
+```
+https://t-{tagname}-{app-uid}-{hash}.{domain}
+```
+
+**Example:** `https://t-main-header-component-ecommerce-acme-abc123.zephyr-cloud.io`
+
+**URL Components:**
+
+- `t-` prefix indicates this is a tag URL
+- `tagname` - Your tag name (e.g., "main", "staging", "production")
+- `app-uid` - Application unique identifier
+- `hash` - Content hash for uniqueness
+- `domain` - Your edge domain
+
+When someone visits a tag URL, they see whatever version the tag currently points to. Behind the scenes, Zephyr evaluates your tag conditions in real-time against your application's version history, finds the most recent version matching the conditions, and serves that content from its global edge network.
+
+**How Tag Resolution Works:**
+
+1. Request arrives at tag URL
+2. Zephyr queries the database for versions matching the tag's conditions
+3. The most recent matching version is selected
+4. That version's assets are served from the edge network
+
+This dynamic evaluation means tags automatically update to serve the latest matching version without any manual intervention.
 
 ### Automatic Tag Creation
 
@@ -92,15 +121,30 @@ Environments are deployment destinations that represent different stages of your
 
 Think of environments as separate deployment targets for your application. You might have a "development" environment that automatically deploys the latest code for testing, a "staging" environment for final review, and a "production" environment that serves your live application to users.
 
-Each environment can have its own custom domain, environment variables, and deployment settings. This lets you run the same application code in different contexts - maybe your staging environment uses test data while production uses real customer information.
+Each environment can have its own custom domain, [environment variables](/features/environment-overrides), and deployment settings. This lets you run the same application code in different contexts - maybe your staging environment uses test data while production uses real customer information.
+
+**Environment URL Format:**
+
+```
+https://{env-name}-{app-uid}-{hash}.{domain}
+```
+
+**Example:** `https://production-header-component-ecommerce-acme-abc123.zephyr-cloud.io`
+
+**URL Components:**
+
+- `env-name` - Your environment name (e.g., "production", "staging", "dev")
+- `app-uid` - Application unique identifier
+- `hash` - Content hash for uniqueness
+- `domain` - Your edge domain
 
 ### Environment Configuration
 
 Environments can be configured to deploy in two ways:
 
-**Tag-based environments** automatically deploy when a specific tag updates. For example, your staging environment might watch the "beta" tag - whenever the beta tag points to a new version, staging automatically deploys that version.
+**Tag-based environments** point to a specific tag and automatically serve whatever version that tag currently resolves to. For example, if your staging environment points to the "beta" tag, it will always serve whichever version the beta tag's conditions currently select. When the beta tag resolves to a new version (either because you built a new version matching its conditions, or because you updated the tag's conditions), the staging environment automatically reflects that change.
 
-**Version-based environments** deploy a specific locked version that doesn't change until you manually update it. This gives you complete control over what's running in that environment.
+**Version-based environments** point to a specific locked version that doesn't change until you manually deploy a different version. This gives you complete control over exactly what's running in that environment, with no automatic updates.
 
 ### Custom Domains and DNS
 
@@ -113,11 +157,110 @@ Each environment can have multiple custom domains pointing to it. This is perfec
 
 Setting up custom domains is straightforward. When you add a domain to an environment, Zephyr automatically handles SSL certificates and creates the necessary routing. You just need to point your DNS records to Zephyr's edge network.
 
-### Environment Variables and Secrets
+### Environment Variables (ZE*PUBLIC*\*)
 
-Each environment maintains its own set of environment variables and secrets. This lets the same application code behave differently in different environments. Your development environment might connect to a test database while production connects to your live data.
+Zephyr provides a powerful system for managing environment variables that can be overridden on a per-environment basis at runtime. By prefixing environment variables with `ZE_PUBLIC_` in your local configuration, Zephyr captures them at build time and makes them available for environment-specific overrides.
 
-Zephyr securely stores sensitive values and provides a full audit trail of when variables are changed and by whom. You can also organize variables into groups and inherit settings from parent levels.
+#### How It Works
+
+The system operates through three stages:
+
+1. **Build-time capture**: During the build process, Zephyr identifies all environment variables prefixed with `ZE_PUBLIC_` and captures their values
+2. **Manifest generation**: These variables are stored in a `zephyr-manifest.json` file (generated automatically, no manual interaction needed)
+3. **Runtime override**: When your application is served from a specific environment, Zephyr dynamically injects the environment-specific values for these variables
+
+This means you can build your application once and deploy it to multiple environments, with each environment using its own configuration values without requiring a rebuild.
+
+#### Setting Up Build-Time Variables
+
+To make an environment variable manageable by Zephyr, prefix it with `ZE_PUBLIC_` in your local `.env` file or build environment:
+
+```bash title=".env"
+# Regular environment variables (not managed by Zephyr)
+DATABASE_URL=postgres://localhost/myapp
+
+# Zephyr-managed environment variables (prefix with ZE_PUBLIC_)
+ZE_PUBLIC_API_URL=https://api.development.example.com
+ZE_PUBLIC_FEATURE_FLAGS=beta-ui,new-checkout
+ZE_PUBLIC_ANALYTICS_KEY=dev_analytics_12345
+ZE_PUBLIC_CDN_URL=https://cdn.development.example.com
+```
+
+When Zephyr builds your application, it captures the values of all `ZE_PUBLIC_` variables and makes them available for environment-level overrides.
+
+:::info Variable Naming
+The `ZE_PUBLIC_` prefix is required for Zephyr to identify and manage these variables. In your application code, you'll reference them with the full name including the prefix (e.g., `process.env.ZE_PUBLIC_API_URL`).
+:::
+
+#### Configuring Environment-Level Overrides
+
+After building your application, you can override the values of `ZE_PUBLIC_` variables for each environment through the Zephyr dashboard:
+
+1. **Navigate to the DevOps section** in your Zephyr dashboard
+2. **Select the environment** you want to configure (e.g., staging, production)
+3. **Find the Environment Variables section** for that environment
+4. **For each `ZE_PUBLIC_` variable**, you can set an environment-specific override value
+
+{/* TODO: Add screenshot showing the DevOps environments section with environment variables configuration UI, highlighting ZE_PUBLIC_ variables and per-environment override values */}
+
+When your application is served from that environment's URL, it will use the overridden values instead of the build-time values.
+
+#### Practical Example
+
+Let's say you're building an e-commerce application that needs to connect to different API endpoints in different environments.
+
+**Local .env file** (build-time configuration):
+
+```bash title=".env"
+ZE_PUBLIC_API_URL=https://api.development.example.com
+ZE_PUBLIC_STRIPE_KEY=pk_test_51ABC123xyz
+ZE_PUBLIC_ANALYTICS_ID=UA-00000000-1
+```
+
+**Environment-level overrides**:
+
+| Environment     | ZE_PUBLIC_API_URL                 | ZE_PUBLIC_STRIPE_KEY  | ZE_PUBLIC_ANALYTICS_ID |
+| --------------- | --------------------------------- | --------------------- | ---------------------- |
+| **Development** | `https://api.dev.example.com`     | `pk_test_51ABC123xyz` | `UA-00000000-1`        |
+| **Staging**     | `https://api.staging.example.com` | `pk_test_51DEF456xyz` | `UA-11111111-1`        |
+| **Production**  | `https://api.example.com`         | `pk_live_51GHI789xyz` | `UA-22222222-1`        |
+
+**In your application code**:
+
+Use the environment variables exactly as you normally would - no special imports or configuration needed:
+
+```javascript title="src/config.js"
+// Use ZE_PUBLIC_ variables just like any other environment variable
+export const config = {
+  apiUrl: process.env.ZE_PUBLIC_API_URL,
+  stripeKey: process.env.ZE_PUBLIC_STRIPE_KEY,
+  analyticsId: process.env.ZE_PUBLIC_ANALYTICS_ID,
+};
+```
+
+Zephyr's bundler integration handles all the complexity behind the scenes. The implementation varies by bundler (Vite uses import maps, Webpack/Rspack use module resolution, Rollup uses code transformation), but the developer experience is consistent: simply prefix your variables with `ZE_PUBLIC_` and access them normally in your code.
+
+**What happens**:
+
+- You **build once** with the development values
+- When served from the **development** environment URL → uses development configuration
+- When served from the **staging** environment URL → uses staging configuration
+- When served from the **production** environment URL → uses production configuration
+
+The same built application adapts its configuration dynamically based on which environment URL serves it. No rebuild required.
+
+#### Security Considerations
+
+**Public vs Secret Variables:**
+
+The `ZE_PUBLIC_` prefix indicates that these variables are **client-side** and will be included in your bundled application code. This is important to understand:
+
+- ✅ **Safe for ZE*PUBLIC***: API endpoints, feature flags, CDN URLs, public analytics IDs, client-side configuration
+- ❌ **Never use ZE*PUBLIC* for**: API secrets, database passwords, authentication tokens, private keys, sensitive credentials
+
+:::warning Client-Side Exposure
+Variables prefixed with `ZE_PUBLIC_` are bundled into your client-side code and are visible to anyone who views your application. Never store sensitive secrets in these variables. Only use `ZE_PUBLIC_` for values that are safe to expose publicly.
+:::
 
 ## Working Together: Tags, Environments, and Promotion Workflows
 
@@ -131,9 +274,9 @@ This setup gives you automatic deployment for development, controlled promotion 
 
 ### Promoting Between Environments
 
-When you're ready to move a version from one environment to another, Zephyr provides promotion tools. You can select any version from your history and deploy it to any environment. This creates a clear audit trail showing what version was deployed where and when.
+When you're ready to move a version from one environment to another, Zephyr provides promotion tools. You can select any [version](/features/versions) from your history and deploy it to any environment. This creates a clear audit trail showing what version was deployed where and when.
 
-For example, after testing a version in staging, you can promote that exact same version to production with one click. Since versions are immutable, you know production will run exactly what you tested.
+For example, after testing a version in staging, you can promote that exact same version to production with one click. Since [versions are immutable](/features/versions#immutability-and-management), you know production will run exactly what you tested.
 
 ### Environment Ordering and Workflows
 
@@ -187,8 +330,8 @@ Both tags and environments maintain full audit logs, so you can always see who c
 
 ## Integration with CI/CD
 
-Tags and environments integrate seamlessly with your existing CI/CD pipelines. Your build systems can automatically create tags, deploy to environments, or trigger promotions based on your workflow needs.
+Tags and environments integrate seamlessly with your existing [CI/CD pipelines](/features/ci-cd-personal-token). Your build systems can automatically create tags, deploy to environments, or trigger promotions based on your workflow needs.
 
 Many teams configure their CI to automatically update a "latest" tag when tests pass, trigger staging deployments when code merges to main, and provide promotion tools for moving releases to production.
 
-Since everything works through Zephyr's API, you can integrate with any CI/CD system and create custom workflows that match your team's processes exactly.
+Since everything works through Zephyr's API, you can integrate with any CI/CD system and create custom workflows that match your team's processes exactly. Learn more about [automation workflows](/features/automation).
