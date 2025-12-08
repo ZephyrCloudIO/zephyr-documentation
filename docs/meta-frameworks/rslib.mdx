@@ -27,7 +27,14 @@ Deploy your JavaScript/TypeScript libraries to Zephyr Cloud using Rslib. Built o
 
 Install the Rsbuild plugin in your Rslib project:
 
-<PackageManagerTabs command="add --dev zephyr-rsbuild-plugin" />
+<PackageManagerTabs
+  command={{
+    npm: 'npm install --save-dev zephyr-rsbuild-plugin',
+    yarn: 'yarn add --dev zephyr-rsbuild-plugin',
+    pnpm: 'pnpm add -D zephyr-rsbuild-plugin',
+    bun: 'bun add --dev zephyr-rsbuild-plugin',
+  }}
+/>
 
 ## Configuration
 
