@@ -335,3 +335,12 @@ Tags and environments integrate seamlessly with your existing [CI/CD pipelines](
 Many teams configure their CI to automatically update a "latest" tag when tests pass, trigger staging deployments when code merges to main, and provide promotion tools for moving releases to production.
 
 Since everything works through Zephyr's API, you can integrate with any CI/CD system and create custom workflows that match your team's processes exactly. Learn more about [automation workflows](/features/automation).
+
+## Environment Access
+
+The Zephyr dashboard provides control deploy to environment. You can deploy with Zephyr to specific environment using env variable `ZE_ENV`.
+For this you have to create `Application Tag` with condition `environment is {ENVIRONMENT_NAME}` and create `Application Environment` for this tag.
+For example `environment is production` and build with zephyr using `ZE_ENV=production`.
+
+Also you can control who can update an environment using flag `Make environment protected` and section `Members`.
+If checkbox is checked only users added direct or through team to members can update an environment.

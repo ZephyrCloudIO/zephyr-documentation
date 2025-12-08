@@ -92,6 +92,8 @@ const sidebar: Sidebar = {
         {
           text: 'Deployment Hooks',
           link: '/features/deployment-hooks',
+        },
+        {
           text: 'Structured File Logs',
           link: '/features/file-logging',
         },
