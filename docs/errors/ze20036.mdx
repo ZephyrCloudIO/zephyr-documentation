@@ -27,11 +27,10 @@ This error occurs during deployment when Zephyr cannot verify your user identity
 
 ### Re-authenticate
 
-Log out and log back in:
+Clear your local credentials and log in again from the [dashboard](https://app.zephyr-cloud.io) or [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn):
 
 ```bash
-npx zephyr logout
-npx zephyr login
+rm -rf ~/.zephyr
 ```
 
 ### Verify your account

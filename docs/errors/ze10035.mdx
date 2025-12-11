@@ -27,11 +27,7 @@ This error occurs when Zephyr fails to retrieve the application configuration fr
 
 ### Verify authentication
 
-Ensure you're properly logged in:
-
-```bash
-npx zephyr login
-```
+Ensure you're properly logged in by authenticating from the [dashboard](https://app.zephyr-cloud.io) or [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn).
 
 ### Check your network connection
 
@@ -43,9 +39,10 @@ Try clearing the local cache and rebuilding:
 
 ```bash
 rm -rf ~/.zephyr
-npx zephyr login
 npm run build
 ```
+
+Then log in again from the dashboard or Chrome extension when prompted.
 
 </Steps>
 

@@ -25,22 +25,12 @@ This error occurs when the JWT token used for authentication is invalid, corrupt
 
 <Steps>
 
-### Re-authenticate
-
-Log out and log back in to get a fresh token:
-
-```bash
-npx zephyr logout
-npx zephyr login
-```
-
 ### Clear cached credentials
 
-Remove the cached Zephyr credentials and re-authenticate:
+Remove the cached Zephyr credentials and re-authenticate by logging in from the [dashboard](https://app.zephyr-cloud.io) or [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn):
 
 ```bash
 rm -rf ~/.zephyr
-npx zephyr login
 ```
 
 ### For CI/CD environments
