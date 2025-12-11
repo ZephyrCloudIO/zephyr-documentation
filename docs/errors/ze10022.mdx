@@ -1,0 +1,46 @@
+---
+title: 'ZE10022: Auth forbidden error'
+description: 'ZE10022: Authentication forbidden - access denied to requested resource'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE10022: Authentication forbidden - access denied to requested resource'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE10022')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE10022" terminal />
+
+This error occurs when your authentication credentials are valid but you don't have permission to access the requested resource or perform the requested action.
+
+## Debugging the error
+
+<Steps>
+
+### Verify your account permissions
+
+Ensure your account has the necessary permissions for the project or organization you're trying to access.
+
+### Check organization membership
+
+If working with an organization project, confirm you're a member of that organization with appropriate access rights.
+
+### Re-authenticate
+
+Try logging out and logging back in to refresh your credentials:
+
+```bash
+npx zephyr logout
+npx zephyr login
+```
+
+</Steps>
+

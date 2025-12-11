@@ -1,0 +1,49 @@
+---
+title: 'ZE40035: HTTP error'
+description: 'ZE40035: An HTTP error occurred during configuration operations'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE40035: An HTTP error occurred during configuration operations'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE40035')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE40035" terminal />
+
+This error occurs when an HTTP request fails during configuration-related operations. This can be due to network issues, server errors, or connectivity problems.
+
+## Debugging the error
+
+<Steps>
+
+### Check your network connection
+
+Ensure your internet connection is stable and you can reach external services.
+
+### Retry the operation
+
+HTTP errors can be transient. Try running the build again:
+
+```bash
+npm run build
+```
+
+### Check firewall and proxy settings
+
+If you're behind a corporate firewall or proxy, ensure it's not blocking requests to Zephyr's servers.
+
+### Check server status
+
+Visit the [Zephyr status page](https://status.zephyr-cloud.io) to check for any ongoing service issues.
+
+</Steps>
+

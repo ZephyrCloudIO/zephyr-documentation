@@ -1,0 +1,51 @@
+---
+title: 'ZE10032: JWT invalid'
+description: 'ZE10032: The JSON Web Token is invalid or expired'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE10032: The JSON Web Token is invalid or expired'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE10032')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE10032" terminal />
+
+This error occurs when the JWT token used for authentication is invalid, corrupted, or has expired.
+
+## Debugging the error
+
+<Steps>
+
+### Re-authenticate
+
+Log out and log back in to get a fresh token:
+
+```bash
+npx zephyr logout
+npx zephyr login
+```
+
+### Clear cached credentials
+
+Remove the cached Zephyr credentials and re-authenticate:
+
+```bash
+rm -rf ~/.zephyr
+npx zephyr login
+```
+
+### For CI/CD environments
+
+If using a `ZEPHYR_TOKEN` environment variable, ensure the token is still valid. Generate a new API token from the Zephyr dashboard if needed.
+
+</Steps>
+

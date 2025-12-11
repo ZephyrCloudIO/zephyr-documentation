@@ -1,0 +1,47 @@
+---
+title: 'ZE40005: MF config missing filename'
+description: 'ZE40005: Module Federation configuration is missing the filename field'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE40005: Module Federation configuration is missing the filename field'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE40005')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE40005" terminal />
+
+This error occurs when your Module Federation configuration is missing the required `filename` field.
+
+## Debugging the error
+
+<Steps>
+
+### Add the filename field
+
+Ensure your Module Federation configuration includes the `filename` property:
+
+```js
+new ModuleFederationPlugin({
+  name: 'myApp',
+  filename: 'remoteEntry.js', // Required field
+  exposes: {
+    './Component': './src/Component',
+  },
+})
+```
+
+### Use a standard filename
+
+The `filename` is typically set to `remoteEntry.js` for remote modules. This file serves as the entry point for consuming applications.
+
+</Steps>
+

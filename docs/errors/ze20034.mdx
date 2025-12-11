@@ -1,0 +1,45 @@
+---
+title: 'ZE20034: TLS cert altname invalid'
+description: 'ZE20034: TLS certificate alternative name validation failed'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE20034: TLS certificate alternative name validation failed'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE20034')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE20034" browser />
+
+This error occurs during deployment when there's a TLS/SSL certificate validation issue, specifically with the certificate's alternative names not matching the expected hostname.
+
+## Debugging the error
+
+<Steps>
+
+### Retry the deployment
+
+This can sometimes be a transient network issue. Try deploying again:
+
+```bash
+npm run build
+```
+
+### Check your network configuration
+
+If you're behind a corporate proxy or VPN, ensure it's not interfering with TLS connections.
+
+### Verify DNS settings
+
+Ensure your DNS is properly configured and resolving to the correct servers.
+
+</Steps>
+

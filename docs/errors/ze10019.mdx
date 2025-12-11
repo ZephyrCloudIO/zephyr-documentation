@@ -14,12 +14,14 @@ import { Steps } from '@rspress/core/theme';
 
 # {getErrorMessage('ZE10019')}
 
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
 <ErrorInfo code="ZE10019" terminal />
 
 ::: info
-
-This is one of the most common error during build.
-
+This is one of the most common errors during build.
 :::
 
 Once we find your `application_uid` (composed by your github organization's name, project name and the `name` field in package.json, refer to <ErrorLink code="ZE10017" />), we will be collecting data from your local cache, verifying your JWT token and checking your write access to the related project. If we fail to find all the necessary configuration, we won't be able to obtain appropriate build id for you to continue with the deployment.

@@ -1,0 +1,51 @@
+---
+title: 'ZE10035: Get app config error'
+description: 'ZE10035: Failed to retrieve application configuration'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE10035: Failed to retrieve application configuration'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE10035')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE10035" terminal />
+
+This error occurs when Zephyr fails to retrieve the application configuration from the server. This can be due to network issues, authentication problems, or server errors.
+
+## Debugging the error
+
+<Steps>
+
+### Verify authentication
+
+Ensure you're properly logged in:
+
+```bash
+npx zephyr login
+```
+
+### Check your network connection
+
+Ensure your network connection is stable and you can reach Zephyr's servers.
+
+### Clear cache and retry
+
+Try clearing the local cache and rebuilding:
+
+```bash
+rm -rf ~/.zephyr
+npx zephyr login
+npm run build
+```
+
+</Steps>
+

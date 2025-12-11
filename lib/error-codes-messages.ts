@@ -6,6 +6,7 @@ export const Categories = {
   build: '10',
   deploy: '20',
   browser: '30',
+  config: '40',
 } as const satisfies {
   [name: string]: `${Digit}${Digit}`;
 };
@@ -211,6 +212,114 @@ export const Errors = {
     id: '029',
     message: 'Error creating dist folder.',
     kind: 'build',
+  },
+  /** Auth forbidden error */
+  ERR_AUTH_FORBIDDEN_ERROR: {
+    id: '022',
+    message: 'Auth forbidden error.',
+    kind: 'build',
+  },
+  /** Invalid Module Federation config */
+  ERR_INVALID_MF_CONFIG: {
+    id: '023',
+    message: 'Invalid Module Federation config.',
+    kind: 'build',
+  },
+  /** Invalid app ID */
+  ERR_INVALID_APP_ID: {
+    id: '024',
+    message: 'Invalid app ID.',
+    kind: 'build',
+  },
+  /** No response for app config */
+  ERR_NO_RESPONSE_FOR_APP_CONFIG: {
+    id: '030',
+    message: 'No response for app config.',
+    kind: 'build',
+  },
+  /** No JWT */
+  ERR_NO_JWT: {
+    id: '031',
+    message: 'No JWT.',
+    kind: 'build',
+  },
+  /** JWT invalid */
+  ERR_JWT_INVALID: {
+    id: '032',
+    message: 'JWT invalid.',
+    kind: 'build',
+  },
+  /** WebSocket connection error */
+  ERR_WEBSOCKET_CONNECTION: {
+    id: '034',
+    message: 'WebSocket connection error.',
+    kind: 'build',
+  },
+  /** Get app config error */
+  ERR_GET_APP_CONFIG: {
+    id: '035',
+    message: 'Get app config error.',
+    kind: 'build',
+  },
+  /** Git commit hash error */
+  ERR_GIT_COMMIT_HASH: {
+    id: '036',
+    message: 'Git commit hash error.',
+    kind: 'build',
+  },
+  /** TLS cert altname invalid */
+  ERR_TLS_CERT_ALTNAME_INVALID: {
+    id: '034',
+    message: 'TLS cert altname invalid.',
+    kind: 'deploy',
+  },
+  /** User identity error */
+  ERR_USER_IDENTITY: {
+    id: '036',
+    message: 'User identity error.',
+    kind: 'deploy',
+  },
+  /** Max payload size exceeded */
+  ERR_MAX_PAYLOAD_SIZE_EXCEEDED: {
+    id: '037',
+    message: 'Max payload size exceeded.',
+    kind: 'deploy',
+  },
+  /** Resolve remotes error */
+  ERR_RESOLVE_REMOTES: {
+    id: '001',
+    message: 'Resolve remotes error.',
+    kind: 'config',
+  },
+  /** Cannot resolve app name with version */
+  ERR_CANNOT_RESOLVE_APP_NAME_WITH_VERSION: {
+    id: '003',
+    message: 'Cannot resolve app name with version.',
+    kind: 'config',
+  },
+  /** Shared package error */
+  ERR_SHARED_PACKAGE: {
+    id: '004',
+    message: 'Shared package error.',
+    kind: 'config',
+  },
+  /** MF config missing filename */
+  ERR_MF_CONFIG_MISSING_FILENAME: {
+    id: '005',
+    message: 'MF config missing filename.',
+    kind: 'config',
+  },
+  /** Missing platform */
+  ERR_MISSING_PLATFORM: {
+    id: '006',
+    message: 'Missing platform.',
+    kind: 'config',
+  },
+  /** HTTP error */
+  ERR_HTTP_ERROR: {
+    id: '035',
+    message: 'HTTP error.',
+    kind: 'config',
   },
 } as const satisfies {
   [name: string]: {

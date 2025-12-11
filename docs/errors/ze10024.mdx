@@ -1,0 +1,46 @@
+---
+title: 'ZE10024: Invalid app ID'
+description: 'ZE10024: The provided application ID is invalid'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE10024: The provided application ID is invalid'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE10024')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE10024" terminal />
+
+This error occurs when the application ID provided to Zephyr is invalid or doesn't match the expected format.
+
+## Debugging the error
+
+<Steps>
+
+### Verify the app ID format
+
+Application IDs should follow the expected format. Check your configuration to ensure the app ID is correctly specified.
+
+### Check your package.json
+
+Ensure your `package.json` has a valid `name` field, as this is often used to derive the application ID.
+
+### Clear local cache
+
+Try clearing the Zephyr cache and rebuilding:
+
+```bash
+rm -rf ~/.zephyr
+npm run build
+```
+
+</Steps>
+

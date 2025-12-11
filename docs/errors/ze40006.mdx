@@ -1,0 +1,50 @@
+---
+title: 'ZE40006: Missing platform'
+description: 'ZE40006: Platform configuration is missing'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE40006: Platform configuration is missing'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE40006')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE40006" terminal />
+
+This error occurs when Zephyr cannot determine the target platform for your deployment.
+
+## Debugging the error
+
+<Steps>
+
+### Check your Zephyr configuration
+
+Ensure your configuration specifies the target platform. This is typically determined automatically based on your bundler and setup.
+
+### Verify bundler plugin setup
+
+Make sure you're using the correct Zephyr plugin for your bundler:
+
+- `@anthropic-ai/zephyr-webpack-plugin` for Webpack
+- `@anthropic-ai/zephyr-vite-plugin` for Vite
+- `@anthropic-ai/zephyr-rspack-plugin` for Rspack
+
+### Reinstall dependencies
+
+Try removing `node_modules` and reinstalling:
+
+```bash
+rm -rf node_modules
+npm install
+```
+
+</Steps>
+

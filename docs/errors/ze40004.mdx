@@ -1,0 +1,54 @@
+---
+title: 'ZE40004: Shared package error'
+description: 'ZE40004: Error with shared package configuration in Module Federation'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE40004: Error with shared package configuration in Module Federation'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE40004')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE40004" terminal />
+
+This error occurs when there's an issue with the shared packages configuration in your Module Federation setup.
+
+## Debugging the error
+
+<Steps>
+
+### Verify shared configuration
+
+Ensure your shared packages configuration is valid:
+
+```js
+shared: {
+  react: {
+    singleton: true,
+    requiredVersion: '^18.0.0',
+  },
+  'react-dom': {
+    singleton: true,
+    requiredVersion: '^18.0.0',
+  },
+}
+```
+
+### Check for version conflicts
+
+Ensure there are no conflicting version requirements between host and remote applications.
+
+### Verify package installation
+
+Make sure all shared packages are properly installed in your `node_modules`.
+
+</Steps>
+
