@@ -418,6 +418,9 @@ export default defineConfig({
     pluginAlgolia(),
     pluginClientRedirects({
       redirects: [
+        // Legacy/removed error doc pages
+        { from: '/errors/ze10028', to: '/errors/ze00000' },
+        { from: '^/errors/ZE10028$', to: '/errors/ze00000' },
         { from: '/how-to/cloud-providers', to: '/cloud' },
         { from: '^/guide/general/get-started', to: '/general/get-started' },
         {
