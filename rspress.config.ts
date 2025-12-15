@@ -92,6 +92,8 @@ const sidebar: Sidebar = {
         {
           text: 'Deployment Hooks',
           link: '/features/deployment-hooks',
+        },
+        {
           text: 'Structured File Logs',
           link: '/features/file-logging',
         },
@@ -210,6 +212,10 @@ const sidebar: Sidebar = {
           text: 'Rslib',
           link: '/meta-frameworks/rslib',
         },
+        {
+          text: 'TanStack Start',
+          link: '/meta-frameworks/tanstack-start',
+        },
       ],
     },
     {
@@ -318,6 +324,10 @@ const sidebar: Sidebar = {
         {
           text: 'Architecture',
           link: '/reference/architecture',
+        },
+        {
+          text: 'SSR Worker (beta)',
+          link: '/reference/ssr-worker',
         },
         {
           text: 'IP Allowlists',
@@ -446,7 +456,6 @@ export default defineConfig({
         },
       ],
     }),
-    // @ts-expect-error Rspress plugin only accounts for stable not beta so there is type issues
     withZephyr(),
   ],
 });
