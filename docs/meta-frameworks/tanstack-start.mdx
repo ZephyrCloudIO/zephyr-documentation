@@ -1,0 +1,75 @@
+---
+title: TanStack Start
+description: Deploy TanStack Start (Cloudflare template) to Zephyr by adding the Zephyr TanStack Start Vite plugin.
+head:
+  - - meta
+    - property: og:description
+      content: Deploy TanStack Start (Cloudflare template) to Zephyr by adding the Zephyr TanStack Start Vite plugin.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+import BuildAuthInfo from '../../components/build-auth-info.mdx';
+
+# TanStack Start
+
+If you created your app with the **TanStack Start CLI** and selected the **Cloudflare** deployment option, deploying to Zephyr is just adding the Zephyr TanStack Start plugin to your Vite build.
+
+For the upstream CLI flow, see TanStack’s docs: **[TanStack Start (React) Quick Start](https://tanstack.com/start/latest/docs/framework/react/quick-start)**.
+
+For Cloudflare-specific setup details (Wrangler config, Cloudflare Vite plugin, etc.), see: **[Cloudflare Workers: TanStack Start](https://developers.cloudflare.com/workers/framework-guides/web-apps/tanstack-start/)**.
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/getting-started/installation) setup guide
+- Your organization is using **Zephyr’s managed Cloudflare integration** (the default integration)
+
+:::
+
+## Install
+
+Add the plugin to your project:
+
+<PackageManagerTabs command="add -D vite-plugin-tanstack-start-zephyr" />
+
+## Configure Vite
+
+In your `vite.config.ts`, import `withZephyrTanstackStart` and add it to the **end** of your `plugins` array (after TanStack Start):
+
+```ts filename="vite.config.ts"
+import { withZephyrTanstackStart } from 'vite-plugin-tanstack-start-zephyr';
+
+export default defineConfig({
+  plugins: [
+    // ...your existing plugins (cloudflare(), tanstackStart(), react(), etc.)
+    withZephyrTanstackStart(),
+  ],
+});
+```
+
+:::warning Git is required
+
+Zephyr derives your **Application UID** from your `package.json` and git context. Make sure your repo is initialized and has a remote (for example, GitHub).
+
+:::
+
+## Deploy
+
+Run your production build:
+
+```bash filename="Terminal"
+npm run build
+```
+
+On the first run, you’ll be prompted to authenticate:
+
+<BuildAuthInfo />
+
+## SSR Worker (beta)
+
+TanStack Start deployments on Zephyr use our **SSR Worker** runtime.
+
+- This is currently **beta** and **only available on Cloudflare**
+- It is **only available on Zephyr’s default (managed) Cloudflare integration**
+- It is **not available on Bring Your Own Cloud (BYOC)** deployments
+
+Learn more: **[SSR Worker (beta)](/reference/ssr-worker)**.

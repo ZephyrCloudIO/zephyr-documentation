@@ -1,0 +1,29 @@
+---
+title: SSR Worker (beta)
+description: Zephyr SSR Worker runtime for server-rendered deployments. Currently beta and Cloudflare-only on Zephyr's default integration.
+head:
+  - - meta
+    - property: og:description
+      content: Zephyr SSR Worker runtime for server-rendered deployments. Currently beta and Cloudflare-only on Zephyr's default integration.
+---
+
+# SSR Worker (beta)
+
+Zephyr’s **SSR Worker** is our runtime for serving **server-rendered** JavaScript applications at the edge. It runs your server entrypoint inside an isolate and serves the correct server/client assets for a deployed snapshot.
+
+## Availability (important)
+
+:::warning Beta + Cloudflare-only
+
+- **Beta**: this feature is in active development and the API/behavior may change
+- **Cloudflare-only**: currently available **only** on Cloudflare
+- **Default integration only**: available **only** on Zephyr’s default (managed) Cloudflare integration
+- **Not on BYOC**: not available on Bring Your Own Cloud deployments (including custom/non-default integrations)
+
+:::
+
+## How it relates to TanStack Start
+
+When you deploy a TanStack Start project using the Zephyr TanStack Start plugin, Zephyr uploads an **SSR snapshot** (server + client bundles) and configures the SSR Worker to execute the server entrypoint.
+
+See: **[TanStack Start](/meta-frameworks/tanstack-start)**.
