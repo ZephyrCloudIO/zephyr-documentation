@@ -39,12 +39,6 @@ export const Errors = {
     message: 'Package.json is not in a valid json format.',
     kind: 'build',
   },
-  /** Webpack config error*/
-  ERR_WEBPACK_CONFIG: {
-    id: '012',
-    message: 'Webpack config error.',
-    kind: 'build',
-  }, // TODO: we don't detect this error yet, will we be able to separate them?
   /** Package.json must have a name and version field. */
   ERR_PACKAGE_JSON_MUST_HAVE_NAME_VERSION: {
     id: '013',
@@ -87,18 +81,6 @@ export const Errors = {
     message: 'Could not get build id.',
     kind: 'build',
   },
-  /**Could not initialize Zephyr Agent. */
-  ERR_INITIALIZE_ZEPHYR_AGENT: {
-    id: '020',
-    message: 'Could not initialize Zephyr Agent.',
-    kind: 'build',
-  },
-  /** Cloudflare specific error */
-  ERR_UNABLE_CREATE_DIST_FOLDER: {
-    id: '021',
-    message: 'Error creating dist folder.',
-    kind: 'build',
-  },
   /** Deployment error, assets not found */
   ERR_ASSETS_NOT_FOUND: {
     id: '010',
@@ -128,28 +110,10 @@ export const Errors = {
     message: 'Failed to load application configuration.',
     kind: 'deploy',
   },
-  /**Failed to upload build stats. */
-  ERR_FAILED_UPLOAD_BUILD_STATS: {
-    id: '015',
-    message: 'Failed to upload build stats.',
-    kind: 'deploy',
-  },
-  /** Did not receive envs from build stats upload */
-  ERR_NOT_RECEIVE_ENVS_FROM_BUILD_STATS: {
-    id: '016',
-    message: 'Did not receive envs from build stats upload.',
-    kind: 'deploy',
-  },
   /** Failed to upload assets. */
   ERR_FAILED_UPLOAD_ASSETS: {
     id: '017',
     message: 'Failed to upload assets.',
-    kind: 'deploy',
-  },
-  /** Failed to upload snapshots. */
-  ERR_FAILED_UPLOAD_SNAPSHOTS: {
-    id: '018',
-    message: 'Failed to upload snapshots.',
     kind: 'deploy',
   },
   /** Snapshot uploads gave no results. */
@@ -162,12 +126,6 @@ export const Errors = {
   ERR_GET_APPLICATION_HASH_LIST: {
     id: '020',
     message: 'Failed to get application hash list.',
-    kind: 'deploy',
-  },
-  /** Could not resolve ${name} with verson ${version} */
-  ERR_NOT_RESOLVE_APP_NAME_WITH_VERSION: {
-    id: '021',
-    message: 'Could not resolve application name with version.',
     kind: 'deploy',
   },
   ERR_SNAPSHOT_ID_NOT_FOUND: {
@@ -185,27 +143,10 @@ export const Errors = {
     message: 'Failed to deploy local build.',
     kind: 'deploy',
   },
-  /** Cloudflare specific error */
-  ERR_WRANGLER_DEPENDENCY: {
-    id: '025',
-    message:
-      'Wrangler dependency is needed for Cloudflare deployment. Please install dependencies without --no-optional flag.',
-    kind: 'deploy',
-  },
   ERR_CONVERT_GRAPH_TO_DASHBOARD: {
     id: '026',
     message: 'Failed to convert graph to dashboard data.',
     kind: 'browser',
-  },
-  ERR_UPLOAD_TO_CLOUDFLARE_PAGES: {
-    id: '027',
-    message: 'Error upload to cloudflare pages.',
-    kind: 'deploy',
-  },
-  ERR_CREATE_DIST_FOLDER: {
-    id: '029',
-    message: 'Error creating dist folder.',
-    kind: 'build',
   },
   /** Auth forbidden error */
   ERR_AUTH_FORBIDDEN_ERROR: {
@@ -225,53 +166,11 @@ export const Errors = {
     message: 'Invalid app ID.',
     kind: 'build',
   },
-  /** No response for app config */
-  ERR_NO_RESPONSE_FOR_APP_CONFIG: {
-    id: '030',
-    message: 'No response for app config.',
-    kind: 'build',
-  },
-  /** No JWT */
-  ERR_NO_JWT: {
-    id: '031',
-    message: 'No JWT.',
-    kind: 'build',
-  },
   /** JWT invalid */
   ERR_JWT_INVALID: {
     id: '032',
     message: 'JWT invalid.',
     kind: 'build',
-  },
-  /** WebSocket connection error */
-  ERR_WEBSOCKET_CONNECTION: {
-    id: '034',
-    message: 'WebSocket connection error.',
-    kind: 'build',
-  },
-  /** Get app config error */
-  ERR_GET_APP_CONFIG: {
-    id: '035',
-    message: 'Get app config error.',
-    kind: 'build',
-  },
-  /** Git commit hash error */
-  ERR_GIT_COMMIT_HASH: {
-    id: '036',
-    message: 'Git commit hash error.',
-    kind: 'build',
-  },
-  /** TLS cert altname invalid */
-  ERR_TLS_CERT_ALTNAME_INVALID: {
-    id: '034',
-    message: 'TLS cert altname invalid.',
-    kind: 'deploy',
-  },
-  /** User identity error */
-  ERR_USER_IDENTITY: {
-    id: '036',
-    message: 'User identity error.',
-    kind: 'deploy',
   },
   /** Max payload size exceeded */
   ERR_MAX_PAYLOAD_SIZE_EXCEEDED: {
@@ -289,12 +188,6 @@ export const Errors = {
   ERR_CANNOT_RESOLVE_APP_NAME_WITH_VERSION: {
     id: '003',
     message: 'Cannot resolve app name with version.',
-    kind: 'config',
-  },
-  /** Shared package error */
-  ERR_SHARED_PACKAGE: {
-    id: '004',
-    message: 'Shared package error.',
     kind: 'config',
   },
   /** MF config missing filename */
