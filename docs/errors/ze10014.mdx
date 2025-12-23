@@ -12,6 +12,10 @@ import { ErrorInfo } from '../../components/errors/info.tsx';
 
 # {getErrorMessage('ZE10014')}
 
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
 <ErrorInfo code="ZE10014" terminal />
 
 If you have successfully deployed one application, you will see your deployed url is a composition of your github's organization name, repository name as well as your `package.json`'s name (yep, we might we done some data sanitization for it). This information is also how we store your information locally (There is a `~/.zephyr` in your root dir) to enable lightning fast deployment. We extract your organization's name and repository name

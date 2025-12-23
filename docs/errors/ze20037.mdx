@@ -1,0 +1,51 @@
+---
+title: 'ZE20037: Max payload size exceeded'
+description: 'ZE20037: The deployment payload exceeds the maximum allowed size'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE20037: The deployment payload exceeds the maximum allowed size'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE20037')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE20037" browser />
+
+This error occurs when the total size of your deployment assets exceeds the maximum allowed payload size.
+
+## Debugging the error
+
+<Steps>
+
+### Analyze your bundle size
+
+Use your bundler's built-in analysis tools to identify large assets:
+
+```bash
+# For webpack
+npx webpack --analyze
+
+# For vite
+npx vite build --mode analyze
+```
+
+### Optimize your assets
+
+- Compress images and use modern formats (WebP, AVIF)
+- Enable code splitting to reduce initial bundle size
+- Remove unused dependencies
+- Use tree shaking to eliminate dead code
+
+### Check for accidentally included files
+
+Ensure large files like videos, datasets, or source maps aren't being included in the build output.
+
+</Steps>

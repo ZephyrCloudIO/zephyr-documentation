@@ -1,0 +1,29 @@
+---
+title: 'ZE00000: Unknown error'
+description: 'ZE00000: Unknown error occurred during Zephyr operation'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE00000: Unknown error occurred during Zephyr operation'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+
+# {getErrorMessage('ZE00000')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE00000" terminal />
+
+This is a catch-all error that occurs when an unexpected or unclassified error happens during Zephyr operations. The underlying cause may vary.
+
+## Debugging the error
+
+If you encounter this error, please:
+
+1. Check the complete error details in the temporary JSON file mentioned in the error output
+2. Review your network connection and ensure you can reach Zephyr's servers
+3. Verify your project configuration is correct
