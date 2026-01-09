@@ -6,6 +6,7 @@ export const Categories = {
   build: '10',
   deploy: '20',
   browser: '30',
+  config: '40',
 } as const satisfies {
   [name: string]: `${Digit}${Digit}`;
 };
@@ -38,12 +39,6 @@ export const Errors = {
     message: 'Package.json is not in a valid json format.',
     kind: 'build',
   },
-  /** Webpack config error*/
-  ERR_WEBPACK_CONFIG: {
-    id: '012',
-    message: 'Webpack config error.',
-    kind: 'build',
-  }, // TODO: we don't detect this error yet, will we be able to separate them?
   /** Package.json must have a name and version field. */
   ERR_PACKAGE_JSON_MUST_HAVE_NAME_VERSION: {
     id: '013',
@@ -86,18 +81,6 @@ export const Errors = {
     message: 'Could not get build id.',
     kind: 'build',
   },
-  /**Could not initialize Zephyr Agent. */
-  ERR_INITIALIZE_ZEPHYR_AGENT: {
-    id: '020',
-    message: 'Could not initialize Zephyr Agent.',
-    kind: 'build',
-  },
-  /** Cloudflare specific error */
-  ERR_UNABLE_CREATE_DIST_FOLDER: {
-    id: '021',
-    message: 'Error creating dist folder.',
-    kind: 'build',
-  },
   /** Deployment error, assets not found */
   ERR_ASSETS_NOT_FOUND: {
     id: '010',
@@ -127,28 +110,10 @@ export const Errors = {
     message: 'Failed to load application configuration.',
     kind: 'deploy',
   },
-  /**Failed to upload build stats. */
-  ERR_FAILED_UPLOAD_BUILD_STATS: {
-    id: '015',
-    message: 'Failed to upload build stats.',
-    kind: 'deploy',
-  },
-  /** Did not receive envs from build stats upload */
-  ERR_NOT_RECEIVE_ENVS_FROM_BUILD_STATS: {
-    id: '016',
-    message: 'Did not receive envs from build stats upload.',
-    kind: 'deploy',
-  },
   /** Failed to upload assets. */
   ERR_FAILED_UPLOAD_ASSETS: {
     id: '017',
     message: 'Failed to upload assets.',
-    kind: 'deploy',
-  },
-  /** Failed to upload snapshots. */
-  ERR_FAILED_UPLOAD_SNAPSHOTS: {
-    id: '018',
-    message: 'Failed to upload snapshots.',
     kind: 'deploy',
   },
   /** Snapshot uploads gave no results. */
@@ -161,12 +126,6 @@ export const Errors = {
   ERR_GET_APPLICATION_HASH_LIST: {
     id: '020',
     message: 'Failed to get application hash list.',
-    kind: 'deploy',
-  },
-  /** Could not resolve ${name} with verson ${version} */
-  ERR_NOT_RESOLVE_APP_NAME_WITH_VERSION: {
-    id: '021',
-    message: 'Could not resolve application name with version.',
     kind: 'deploy',
   },
   ERR_SNAPSHOT_ID_NOT_FOUND: {
@@ -184,33 +143,70 @@ export const Errors = {
     message: 'Failed to deploy local build.',
     kind: 'deploy',
   },
-  /** Cloudflare specific error */
-  ERR_WRANGLER_DEPENDENCY: {
-    id: '025',
-    message:
-      'Wrangler dependency is needed for Cloudflare deployment. Please install dependencies without --no-optional flag.',
-    kind: 'deploy',
-  },
   ERR_CONVERT_GRAPH_TO_DASHBOARD: {
     id: '026',
     message: 'Failed to convert graph to dashboard data.',
     kind: 'browser',
   },
-  ERR_UPLOAD_TO_CLOUDFLARE_PAGES: {
-    id: '027',
-    message: 'Error upload to cloudflare pages.',
+  /** Auth forbidden error */
+  ERR_AUTH_FORBIDDEN_ERROR: {
+    id: '022',
+    message: 'Auth forbidden error.',
+    kind: 'build',
+  },
+  /** Invalid Module Federation config */
+  ERR_INVALID_MF_CONFIG: {
+    id: '023',
+    message: 'Invalid Module Federation config.',
+    kind: 'build',
+  },
+  /** Invalid app ID */
+  ERR_INVALID_APP_ID: {
+    id: '024',
+    message: 'Invalid app ID.',
+    kind: 'build',
+  },
+  /** JWT invalid */
+  ERR_JWT_INVALID: {
+    id: '032',
+    message: 'JWT invalid.',
+    kind: 'build',
+  },
+  /** Max payload size exceeded */
+  ERR_MAX_PAYLOAD_SIZE_EXCEEDED: {
+    id: '037',
+    message: 'Max payload size exceeded.',
     kind: 'deploy',
   },
-  ERR_NO_WRANGLER: {
-    id: '028',
-    message:
-      'Wrangler dependency is needed for Cloudflare deployment. Please install dependencies without --no-optional flag.',
-    kind: 'build',
+  /** Resolve remotes error */
+  ERR_RESOLVE_REMOTES: {
+    id: '001',
+    message: 'Resolve remotes error.',
+    kind: 'config',
   },
-  ERR_CREATE_DIST_FOLDER: {
-    id: '029',
-    message: 'Error creating dist folder.',
-    kind: 'build',
+  /** Cannot resolve app name with version */
+  ERR_CANNOT_RESOLVE_APP_NAME_WITH_VERSION: {
+    id: '003',
+    message: 'Cannot resolve app name with version.',
+    kind: 'config',
+  },
+  /** MF config missing filename */
+  ERR_MF_CONFIG_MISSING_FILENAME: {
+    id: '005',
+    message: 'MF config missing filename.',
+    kind: 'config',
+  },
+  /** Missing platform */
+  ERR_MISSING_PLATFORM: {
+    id: '006',
+    message: 'Missing platform.',
+    kind: 'config',
+  },
+  /** HTTP error */
+  ERR_HTTP_ERROR: {
+    id: '035',
+    message: 'HTTP error.',
+    kind: 'config',
   },
 } as const satisfies {
   [name: string]: {

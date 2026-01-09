@@ -12,6 +12,10 @@ import { ErrorInfo } from '../../components/errors/info.tsx';
 
 # {getErrorMessage('ZE10013')}
 
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
 <ErrorInfo code="ZE10013" terminal related="ZE10017,ZE10011" />
 
 When you are running a build through Zephyr, we will verify your `package.json`'s fields to check whether you have the **name** and **version** fields. Later one we use those values to compose `application_uid`. Behind the scene we will be using your `applicaiton_uid` to deploy your application with related information as well as generating build id.

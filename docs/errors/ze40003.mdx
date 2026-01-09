@@ -1,0 +1,47 @@
+---
+title: 'ZE40003: Cannot resolve app name with version'
+description: 'ZE40003: Failed to resolve application name with the specified version'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE40003: Failed to resolve application name with the specified version'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE40003')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE40003" terminal />
+
+This error occurs when Zephyr cannot resolve an application with the specified name and version combination.
+
+## Debugging the error
+
+<Steps>
+
+### Verify the application exists
+
+Ensure the application you're trying to reference has been deployed to Zephyr.
+
+### Check the version format
+
+Verify that the version string matches the expected format and corresponds to an existing deployment.
+
+### Check your package.json
+
+Ensure the `name` and `version` fields in your `package.json` are correctly set:
+
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0"
+}
+```
+
+</Steps>

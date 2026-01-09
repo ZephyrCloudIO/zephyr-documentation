@@ -1,0 +1,46 @@
+---
+title: 'ZE40001: Resolve remotes error'
+description: 'ZE40001: Failed to resolve remote module configurations'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE40001: Failed to resolve remote module configurations'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE40001')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE40001" terminal />
+
+This error occurs when Zephyr fails to resolve the remote module configurations specified in your Module Federation setup.
+
+## Debugging the error
+
+<Steps>
+
+### Verify remote URLs
+
+Ensure all remote module URLs in your configuration are correct and accessible:
+
+```js
+remotes: {
+  app1: 'app1@https://example.com/remoteEntry.js',
+}
+```
+
+### Check remote availability
+
+Verify that the remote modules you're trying to consume are deployed and accessible.
+
+### Validate configuration syntax
+
+Ensure your remotes configuration follows the correct format for your Module Federation setup.
+
+</Steps>

@@ -1,0 +1,51 @@
+---
+title: 'ZE10023: Invalid Module Federation config'
+description: 'ZE10023: Invalid Module Federation configuration detected'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE10023: Invalid Module Federation configuration detected'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE10023')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE10023" terminal />
+
+This error occurs when your Module Federation configuration is invalid or missing required fields.
+
+## Debugging the error
+
+<Steps>
+
+### Check your Module Federation config
+
+Ensure your Module Federation configuration includes all required fields:
+
+```js
+new ModuleFederationPlugin({
+  name: 'myApp',
+  filename: 'remoteEntry.js',
+  exposes: {
+    './Component': './src/Component',
+  },
+  shared: ['react', 'react-dom'],
+});
+```
+
+### Verify the name field
+
+The `name` field is required and must be a valid JavaScript identifier (no spaces or special characters).
+
+### Check exposed modules
+
+Ensure paths in `exposes` are correct and the referenced files exist.
+
+</Steps>

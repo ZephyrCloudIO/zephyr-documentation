@@ -39,10 +39,6 @@ export const Errors = {
       code: 'ZE10019',
       name: 'Could not get build id.',
     },
-    {
-      code: 'ZE10020',
-      name: 'Could not initialize Zephyr Agent.',
-    },
   ],
   // Deploy specific errors
   deploy: [
@@ -67,20 +63,8 @@ export const Errors = {
       name: 'Failed to load application configuration.',
     },
     {
-      code: 'ZE20015',
-      name: 'Failed to upload build stats.',
-    },
-    {
-      code: 'ZE20016',
-      name: 'Did not receive envs from build stats upload.',
-    },
-    {
       code: 'ZE20017',
       name: 'Failed to upload assets.',
-    },
-    {
-      code: 'ZE20018',
-      name: 'Failed to upload snapshots.',
     },
 
     {
@@ -90,10 +74,6 @@ export const Errors = {
     {
       code: 'ZE20020',
       name: 'Failed to get application hash list.',
-    },
-    {
-      code: 'ZE20021',
-      name: 'Could not resolve application name with version.',
     },
     {
       code: 'ZE20022',
