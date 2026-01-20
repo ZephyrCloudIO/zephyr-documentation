@@ -245,6 +245,10 @@ const sidebar: Sidebar = {
           link: '/cloud/netlify',
         },
         {
+          text: 'Kubernetes',
+          link: '/cloud/kubernetes',
+        },
+        {
           text: 'Updating Integrations',
           link: '/cloud/updating-integrations',
         },

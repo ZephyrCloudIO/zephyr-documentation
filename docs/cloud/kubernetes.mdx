@@ -17,7 +17,7 @@ Zephyr's Kubernetes deployment option allows you to run the Zephyr edge worker o
 
 :::warning Enterprise Only
 
-Kubernetes deployment is available exclusively for **Enterprise customers**. If you're interested in deploying Zephyr on your own Kubernetes infrastructure, please [contact our sales team](https://zephyr-cloud.io/contact) to discuss your requirements.
+Kubernetes deployment is available exclusively for **Enterprise customers**. If you're interested in deploying Zephyr on your own K8S infrastructure, please [contact our sales team](https://zephyr-cloud.io/pricing) to discuss your requirements.
 
 :::
 
@@ -28,44 +28,187 @@ The Kubernetes edge worker (`ze-k8s-worker`) is a containerized service that han
 - **S3-compatible storage** (AWS S3, MinIO, Ceph, etc.) for asset storage
 - **Redis-compatible KV store** for environment configuration and snapshots
 
-## Environment Variables
+## Configuration
 
-All environment variables are prefixed with `ZE_WORKER_`. Configuration can be provided via:
+The recommended way to configure the worker is using a **JSON config file** mounted as a Kubernetes Secret. This approach keeps all your configuration in one place and makes it easier to manage secrets securely.
 
-1. **Environment variables** (standard approach)
-2. **JSON config file** (set `ZE_WORKER_CONFIG_JSON` to the file path; values in the JSON file take precedence over environment variables)
+Alternatively, you can use environment variables directly, though this is less recommended for production deployments.
 
-### Required Environment Variables
+### JSON Config File (Recommended)
 
-| Variable                         | Description                         | Example Value                                     |
+Create a JSON file containing all your configuration. All keys use the `ZE_WORKER_` prefix:
+
+```json
+{
+  "ZE_WORKER_JWT_SECRET": "your-secret-key",
+  "ZE_WORKER_S3_ENDPOINT": "https://s3.amazonaws.com",
+  "ZE_WORKER_S3_REGION": "us-east-1",
+  "ZE_WORKER_S3_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+  "ZE_WORKER_S3_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+  "ZE_WORKER_S3_BUCKET": "zephyr-assets",
+  "ZE_WORKER_S3_FORCE_PATH_STYLE": "false",
+  "ZE_WORKER_REDIS_HOST": "redis.default.svc.cluster.local",
+  "ZE_WORKER_REDIS_PORT": "6379",
+  "ZE_WORKER_REDIS_PASSWORD": "your-redis-password",
+  "ZE_WORKER_REDIS_TLS": "true",
+  "ZE_WORKER_PORT": "8080",
+  "ZE_WORKER_LOG_LEVEL": "info",
+  "ZE_WORKER_DELIMITER": "-"
+}
+```
+
+#### Deploying with Kubernetes Secret
+
+Mount the config file as a Secret for secure configuration:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ze-worker-config
+type: Opaque
+stringData:
+  config.json: |
+    {
+      "ZE_WORKER_JWT_SECRET": "your-production-secret",
+      "ZE_WORKER_S3_ENDPOINT": "https://s3.us-west-2.amazonaws.com",
+      "ZE_WORKER_S3_REGION": "us-west-2",
+      "ZE_WORKER_S3_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+      "ZE_WORKER_S3_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      "ZE_WORKER_S3_BUCKET": "zephyr-production",
+      "ZE_WORKER_S3_FORCE_PATH_STYLE": "false",
+      "ZE_WORKER_REDIS_HOST": "redis-cluster.example.com",
+      "ZE_WORKER_REDIS_PORT": "6380",
+      "ZE_WORKER_REDIS_PASSWORD": "your-redis-password",
+      "ZE_WORKER_REDIS_TLS": "true",
+      "ZE_WORKER_PORT": "8080",
+      "ZE_WORKER_LOG_LEVEL": "info",
+      "ZE_WORKER_DELIMITER": "-"
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ze-k8s-worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ze-k8s-worker
+  template:
+    metadata:
+      labels:
+        app: ze-k8s-worker
+    spec:
+      containers:
+        - name: worker
+          image: ze-k8s-worker:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ZE_WORKER_CONFIG_JSON
+              value: /etc/ze-worker/config.json
+          volumeMounts:
+            - name: config
+              mountPath: /etc/ze-worker
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: config
+          secret:
+            secretName: ze-worker-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ze-k8s-worker
+spec:
+  selector:
+    app: ze-k8s-worker
+  ports:
+    - port: 80
+      targetPort: 8080
+```
+
+#### Development Configuration (MinIO + Redis)
+
+For local development or testing with MinIO:
+
+```json
+{
+  "ZE_WORKER_JWT_SECRET": "dev-secret-key",
+  "ZE_WORKER_S3_ENDPOINT": "http://minio:9000",
+  "ZE_WORKER_S3_REGION": "us-east-1",
+  "ZE_WORKER_S3_ACCESS_KEY_ID": "minioadmin",
+  "ZE_WORKER_S3_SECRET_ACCESS_KEY": "minioadmin",
+  "ZE_WORKER_S3_BUCKET": "zephyr-dev",
+  "ZE_WORKER_S3_FORCE_PATH_STYLE": "true",
+  "ZE_WORKER_REDIS_HOST": "redis",
+  "ZE_WORKER_REDIS_PORT": "6379",
+  "ZE_WORKER_REDIS_TLS": "false",
+  "ZE_WORKER_PORT": "8080",
+  "ZE_WORKER_LOG_LEVEL": "debug",
+  "ZE_WORKER_DELIMITER": "-"
+}
+```
+
+:::tip
+When using MinIO or other S3-compatible storage, set `ZE_WORKER_S3_FORCE_PATH_STYLE` to `"true"`.
+:::
+
+## Health Check Endpoints
+
+The worker exposes the following health check endpoints for Kubernetes probes:
+
+| Endpoint       | Type            | Description                                                              |
+| -------------- | --------------- | ------------------------------------------------------------------------ |
+| `GET /healthz` | Liveness probe  | Always returns `200` if the process is running                           |
+| `GET /readyz`  | Readiness probe | Checks S3 and Redis connectivity; returns `200` if healthy, `503` if not |
+
+## Configuration Reference
+
+Below is the complete reference for all available configuration options. These can be set in your JSON config file or as environment variables.
+
+### Required Options
+
+| Key                              | Description                         | Example                                           |
 | -------------------------------- | ----------------------------------- | ------------------------------------------------- |
 | `ZE_WORKER_JWT_SECRET`           | Secret key for JWT token validation | `your-secret-key-here`                            |
 | `ZE_WORKER_S3_ENDPOINT`          | S3-compatible storage endpoint URL  | `https://s3.amazonaws.com` or `http://minio:9000` |
 | `ZE_WORKER_S3_ACCESS_KEY_ID`     | S3 access key ID                    | `AKIAIOSFODNN7EXAMPLE`                            |
 | `ZE_WORKER_S3_SECRET_ACCESS_KEY` | S3 secret access key                | `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`        |
 | `ZE_WORKER_S3_BUCKET`            | S3 bucket name for storing assets   | `zephyr-assets`                                   |
-| `ZE_WORKER_REDIS_HOST`           | Redis-compatible KV store hostname  | `localhost` or `redis.default.svc.cluster.local`  |
+| `ZE_WORKER_REDIS_HOST`           | Redis-compatible KV store hostname  | `redis.default.svc.cluster.local`                 |
 
-### Optional Environment Variables
+### Server Options
 
-#### Server Configuration
-
-| Variable              | Description                    | Default | Example Values                             |
+| Key                   | Description                    | Default | Example                                    |
 | --------------------- | ------------------------------ | ------- | ------------------------------------------ |
 | `ZE_WORKER_PORT`      | HTTP server port               | `8080`  | `3000`                                     |
 | `ZE_WORKER_LOG_LEVEL` | Logging level                  | `info`  | `debug`, `trace`, `warn`, `error`, `fatal` |
 | `ZE_WORKER_DELIMITER` | Delimiter for hostname parsing | `-`     | `.` or `_`                                 |
 
-#### S3 Configuration
+### S3 Options
 
-| Variable                        | Description                                   | Default     | Example     |
+| Key                             | Description                                   | Default     | Example     |
 | ------------------------------- | --------------------------------------------- | ----------- | ----------- |
 | `ZE_WORKER_S3_REGION`           | S3 region                                     | `us-east-1` | `eu-west-1` |
 | `ZE_WORKER_S3_FORCE_PATH_STYLE` | Use path-style URLs (required for MinIO/Ceph) | `true`      | `false`     |
 
-#### Redis/KV Configuration
+### Redis Options
 
-| Variable                           | Description                          | Default                      | Example               |
+| Key                                | Description                          | Default                      | Example               |
 | ---------------------------------- | ------------------------------------ | ---------------------------- | --------------------- |
 | `ZE_WORKER_REDIS_PORT`             | Redis port                           | `6379`                       | `6380`                |
 | `ZE_WORKER_REDIS_PASSWORD`         | Redis password (if required)         | _(empty)_                    | `your-redis-password` |
@@ -80,158 +223,27 @@ The curly braces `{}` in the default prefixes enable Redis Cluster hash tags. Th
 
 :::
 
-## Using JSON Config File
+## Using Environment Variables
 
-Instead of setting individual environment variables, you can create a JSON file with all configuration:
+While the JSON config file is recommended, you can also configure the worker using environment variables directly. This can be useful for simple setups or when integrating with external secret management systems.
 
-```json
-{
-  "ZE_WORKER_PORT": "8080",
-  "ZE_WORKER_JWT_SECRET": "your-secret-key",
-  "ZE_WORKER_LOG_LEVEL": "info",
-  "ZE_WORKER_DELIMITER": "-",
-  "ZE_WORKER_S3_ENDPOINT": "https://s3.amazonaws.com",
-  "ZE_WORKER_S3_REGION": "us-east-1",
-  "ZE_WORKER_S3_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
-  "ZE_WORKER_S3_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-  "ZE_WORKER_S3_BUCKET": "zephyr-assets",
-  "ZE_WORKER_S3_FORCE_PATH_STYLE": "true",
-  "ZE_WORKER_REDIS_HOST": "redis.default.svc.cluster.local",
-  "ZE_WORKER_REDIS_PORT": "6379",
-  "ZE_WORKER_REDIS_PASSWORD": "optional-password",
-  "ZE_WORKER_REDIS_TLS": "false",
-  "ZE_WORKER_REDIS_DB": "0",
-  "ZE_WORKER_REDIS_PREFIX_ENVS": "{ze-k8s-worker}:envs:",
-  "ZE_WORKER_REDIS_PREFIX_SNAPSHOTS": "{ze-k8s-worker}:snapshots:"
-}
-```
-
-Then set the path to this file:
-
-```bash
-export ZE_WORKER_CONFIG_JSON=/path/to/config.json
-```
-
-### Kubernetes Secret Example
-
-Mount a Secret as a JSON file for secure configuration:
+Set `ZE_WORKER_CONFIG_JSON` to the path of your config file. If both are provided, values in the JSON file take precedence over environment variables.
 
 ```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: ze-worker-config
-type: Opaque
-stringData:
-  config.json: |
-    {
-      "ZE_WORKER_JWT_SECRET": "...",
-      "ZE_WORKER_S3_ACCESS_KEY_ID": "...",
-      "ZE_WORKER_S3_SECRET_ACCESS_KEY": "...",
-      ...
-    }
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ze-k8s-worker
-spec:
-  template:
-    spec:
-      containers:
-        - name: worker
-          image: ze-k8s-worker:latest
-          env:
-            - name: ZE_WORKER_CONFIG_JSON
-              value: /etc/ze-worker/config.json
-          volumeMounts:
-            - name: config
-              mountPath: /etc/ze-worker
-              readOnly: true
-      volumes:
-        - name: config
-          secret:
-            secretName: ze-worker-config
-```
-
-## Health Check Endpoints
-
-The worker exposes the following health check endpoints for Kubernetes probes:
-
-| Endpoint       | Type            | Description                                                              |
-| -------------- | --------------- | ------------------------------------------------------------------------ |
-| `GET /healthz` | Liveness probe  | Always returns `200` if the process is running                           |
-| `GET /readyz`  | Readiness probe | Checks S3 and Redis connectivity; returns `200` if healthy, `503` if not |
-
-### Example Probe Configuration
-
-```yaml
-livenessProbe:
-  httpGet:
-    path: /healthz
-    port: 8080
-  initialDelaySeconds: 5
-  periodSeconds: 10
-
-readinessProbe:
-  httpGet:
-    path: /readyz
-    port: 8080
-  initialDelaySeconds: 5
-  periodSeconds: 10
-```
-
-## Example Configurations
-
-### Development (MinIO + Redis)
-
-```bash
-# Server
-export ZE_WORKER_PORT=8080
-export ZE_WORKER_JWT_SECRET=dev-secret-key
-export ZE_WORKER_LOG_LEVEL=debug
-export ZE_WORKER_DELIMITER=-
-
-# S3 (MinIO)
-export ZE_WORKER_S3_ENDPOINT=http://localhost:9000
-export ZE_WORKER_S3_REGION=us-east-1
-export ZE_WORKER_S3_ACCESS_KEY_ID=minioadmin
-export ZE_WORKER_S3_SECRET_ACCESS_KEY=minioadmin
-export ZE_WORKER_S3_BUCKET=zephyr-dev
-export ZE_WORKER_S3_FORCE_PATH_STYLE=true
-
-# Redis
-export ZE_WORKER_REDIS_HOST=localhost
-export ZE_WORKER_REDIS_PORT=6379
-export ZE_WORKER_REDIS_TLS=false
-export ZE_WORKER_REDIS_DB=0
-```
-
-### Production (AWS S3 + Redis Cluster)
-
-```bash
-# Server
-export ZE_WORKER_PORT=8080
-export ZE_WORKER_JWT_SECRET=your-production-secret
-export ZE_WORKER_LOG_LEVEL=info
-export ZE_WORKER_DELIMITER=-
-
-# S3 (AWS)
-export ZE_WORKER_S3_ENDPOINT=https://s3.us-west-2.amazonaws.com
-export ZE_WORKER_S3_REGION=us-west-2
-export ZE_WORKER_S3_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-export ZE_WORKER_S3_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-export ZE_WORKER_S3_BUCKET=zephyr-production
-export ZE_WORKER_S3_FORCE_PATH_STYLE=false
-
-# Redis Cluster with TLS
-export ZE_WORKER_REDIS_HOST=redis-cluster.example.com
-export ZE_WORKER_REDIS_PORT=6380
-export ZE_WORKER_REDIS_PASSWORD=your-redis-password
-export ZE_WORKER_REDIS_TLS=true
-export ZE_WORKER_REDIS_DB=0
-export ZE_WORKER_REDIS_PREFIX_ENVS={zephyr-prod}:envs:
-export ZE_WORKER_REDIS_PREFIX_SNAPSHOTS={zephyr-prod}:snapshots:
+env:
+  - name: ZE_WORKER_JWT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: ze-worker-secrets
+        key: jwt-secret
+  - name: ZE_WORKER_S3_ENDPOINT
+    value: 'https://s3.us-west-2.amazonaws.com'
+  - name: ZE_WORKER_S3_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: ze-worker-secrets
+        key: s3-access-key
+  # ... additional environment variables
 ```
 
 ## Troubleshooting
@@ -240,9 +252,10 @@ export ZE_WORKER_REDIS_PREFIX_SNAPSHOTS={zephyr-prod}:snapshots:
 
 #### Worker fails to start
 
-1. Verify all required environment variables are set
+1. Verify all required configuration options are set
 2. Check that S3 endpoint is reachable from within the cluster
 3. Ensure Redis host is resolvable and accessible
+4. Check the worker logs: `kubectl logs -l app=ze-k8s-worker`
 
 #### Readiness probe failing
 
