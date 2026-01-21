@@ -2,6 +2,7 @@ import { AkamaiIcon } from '@/components/icons/akamai';
 import { AWSIcon } from '@/components/icons/aws';
 import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { FastlyIcon } from '@/components/icons/fastly';
+import { KubernetesIcon } from '@/components/icons/kubernetes';
 import type React from 'react';
 import { EmberIcon } from '../components/icons/ember';
 import { ModernjsIcon } from '../components/icons/modernjs';
@@ -382,6 +383,13 @@ export const SiteConfig: CardProps = {
       variant: 'small',
       href: '/cloud/aws',
       icons: [<AWSIcon className="w-6 h-6" />],
+    },
+    {
+      title: 'Kubernetes',
+      description: 'Deploy to your own Kubernetes infrastructure (Enterprise)',
+      variant: 'small',
+      href: '/cloud/kubernetes',
+      icons: [<KubernetesIcon className="w-6 h-6" />],
     },
   ],
   metaFrameworks: [
