@@ -5,6 +5,7 @@ import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
+import pluginMermaid from 'rspress-plugin-mermaid';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
 import { defineConfig } from '@rspress/core';
 import { withZephyr } from 'zephyr-rspress-plugin';
@@ -430,6 +431,11 @@ export default defineConfig({
     pluginSitemap({ siteUrl: 'https://docs.zephyr-cloud.io' }),
     pluginLlms(),
     pluginAlgolia(),
+    pluginMermaid({
+      mermaidConfig: {
+        theme: 'dark',
+      },
+    }),
     pluginClientRedirects({
       redirects: [
         // Legacy/removed error doc pages

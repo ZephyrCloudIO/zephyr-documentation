@@ -223,6 +223,19 @@ The curly braces `{}` in the default prefixes enable Redis Cluster hash tags. Th
 
 :::
 
+### Replication Options
+
+| Key                       | Description                                                            | Default   | Example                                              |
+| ------------------------- | ---------------------------------------------------------------------- | --------- | ---------------------------------------------------- |
+| `ZE_WORKER_REPLICA_NAME`  | Name for this replica instance (enables replication)                   | _(empty)_ | `us-east-1`, `eu-west-1`                             |
+| `ZE_WORKER_REPLICAS_URLS` | List of replica worker URLs to sync to (JSON array or comma-separated) | _(empty)_ | `["https://a.example.com", "https://b.example.com"]` |
+
+:::tip Replication Mode
+
+Replication is enabled when `ZE_WORKER_REPLICA_NAME` is set. The replica name identifies this worker instance in logs.
+
+:::
+
 ## Using Environment Variables
 
 While the JSON config file is recommended, you can also configure the worker using environment variables directly. This can be useful for simple setups or when integrating with external secret management systems.
@@ -245,6 +258,170 @@ env:
         key: s3-access-key
   # ... additional environment variables
 ```
+
+## Cross-Region Replication
+
+For high availability and low latency across geographic regions, you can deploy multiple Zephyr workers that automatically replicate data between each other. When a deployment occurs on one worker, it automatically fans out to all configured replica workers. Authentication between replicas is handled automatically.
+
+### Architecture
+
+```mermaid
+flowchart TB
+    subgraph client[" "]
+        C[Client / Plugin]
+    end
+
+    subgraph workers["Zephyr K8s Workers"]
+        subgraph region1["US East"]
+            W1[Worker A]
+            R1[(Redis)]
+            S1[(S3)]
+            W1 --> R1
+            W1 --> S1
+        end
+
+        subgraph region2["EU West"]
+            W2[Worker B]
+            R2[(Redis)]
+            S2[(S3)]
+            W2 --> R2
+            W2 --> S2
+        end
+
+        subgraph region3["Asia Pacific"]
+            W3[Worker C]
+            R3[(Redis)]
+            S3[(S3)]
+            W3 --> R3
+            W3 --> S3
+        end
+
+        W1 <-.->|HTTP Sync| W2
+        W2 <-.->|HTTP Sync| W3
+        W1 <-.->|HTTP Sync| W3
+    end
+
+    C -->|POST /upload| W1
+
+    style client fill:none,stroke:none
+    style workers fill:none,stroke:none
+    style region1 fill:#3b82f620,stroke:#3b82f6
+    style region2 fill:#10b98120,stroke:#10b981
+    style region3 fill:#f59e0b20,stroke:#f59e0b
+```
+
+### Replication Flow
+
+When a client uploads to any worker:
+
+```mermaid
+sequenceDiagram
+    box rgba(107, 114, 128, 0.2) Client
+        participant C as Client
+    end
+    box rgba(59, 130, 246, 0.2) US East
+        participant A as Worker A
+    end
+    box rgba(16, 185, 129, 0.2) EU West
+        participant B as Worker B
+    end
+    box rgba(245, 158, 11, 0.2) Asia Pacific
+        participant D as Worker C
+    end
+
+    C->>A: POST ?type=file
+    activate A
+    A->>A: Write to local S3/Redis
+    A-->>C: 200 OK
+
+    par Fan out to replicas
+        A->>B: POST ?type=sync-file
+        activate B
+        B->>B: Write to local S3/Redis
+        B-->>A: 200 OK
+        deactivate B
+    and
+        A->>D: POST ?type=sync-file
+        activate D
+        D->>D: Write to local S3/Redis
+        D-->>A: 200 OK
+        deactivate D
+    end
+    deactivate A
+```
+
+### Example: Three-Region Setup
+
+Deploy workers in US, EU, and Asia-Pacific regions. Each worker is a peer that can receive deployments and replicate to others:
+
+**US East**
+
+```json
+{
+  "ZE_WORKER_JWT_SECRET": "shared-secret-across-all-regions",
+  "ZE_WORKER_REPLICA_NAME": "us-east-1",
+  "ZE_WORKER_REPLICAS_URLS": [
+    "https://zephyr-eu.example.com",
+    "https://zephyr-ap.example.com"
+  ],
+  "ZE_WORKER_S3_ENDPOINT": "https://s3.us-east-1.amazonaws.com",
+  "ZE_WORKER_S3_BUCKET": "zephyr-us-east",
+  "ZE_WORKER_REDIS_HOST": "redis-us-east.example.com"
+}
+```
+
+**EU West**
+
+```json
+{
+  "ZE_WORKER_JWT_SECRET": "shared-secret-across-all-regions",
+  "ZE_WORKER_REPLICA_NAME": "eu-west-1",
+  "ZE_WORKER_REPLICAS_URLS": [
+    "https://zephyr-us.example.com",
+    "https://zephyr-ap.example.com"
+  ],
+  "ZE_WORKER_S3_ENDPOINT": "https://s3.eu-west-1.amazonaws.com",
+  "ZE_WORKER_S3_BUCKET": "zephyr-eu-west",
+  "ZE_WORKER_REDIS_HOST": "redis-eu-west.example.com"
+}
+```
+
+**Asia Pacific**
+
+```json
+{
+  "ZE_WORKER_JWT_SECRET": "shared-secret-across-all-regions",
+  "ZE_WORKER_REPLICA_NAME": "ap-southeast-1",
+  "ZE_WORKER_REPLICAS_URLS": [
+    "https://zephyr-us.example.com",
+    "https://zephyr-eu.example.com"
+  ],
+  "ZE_WORKER_S3_ENDPOINT": "https://s3.ap-southeast-1.amazonaws.com",
+  "ZE_WORKER_S3_BUCKET": "zephyr-ap-southeast",
+  "ZE_WORKER_REDIS_HOST": "redis-ap-southeast.example.com"
+}
+```
+
+:::warning Important
+
+- **Same JWT secret**: All workers must share the same `ZE_WORKER_JWT_SECRET`
+- **Network connectivity**: Each worker must be able to reach the other workers' URLs
+- **Eventual consistency**: Replication is asynchronous; there may be brief delays between regions
+
+:::
+
+### Receive-Only Workers
+
+If you want a worker to receive replicated data but not fan out to others, simply omit `ZE_WORKER_REPLICAS_URLS`:
+
+```json
+{
+  "ZE_WORKER_REPLICA_NAME": "ap-southeast-1",
+  "ZE_WORKER_S3_BUCKET": "zephyr-ap-southeast"
+}
+```
+
+This worker will accept sync requests from other workers but won't replicate to others.
 
 ## Troubleshooting
 
