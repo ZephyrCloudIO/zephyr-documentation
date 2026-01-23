@@ -223,6 +223,19 @@ The curly braces `{}` in the default prefixes enable Redis Cluster hash tags. Th
 
 :::
 
+### Replication Options
+
+| Key                       | Description                                            | Default   | Example                                                       |
+| ------------------------- | ------------------------------------------------------ | --------- | ------------------------------------------------------------- |
+| `ZE_WORKER_REPLICA_NAME`  | Name for this replica instance (enables replication)   | _(empty)_ | `us-east-1`, `eu-west-1`                                      |
+| `ZE_WORKER_REPLICAS_URLS` | Comma-separated list of replica worker URLs to sync to | _(empty)_ | `https://worker-eu.example.com,https://worker-ap.example.com` |
+
+:::tip Replication Mode
+
+Replication is enabled when `ZE_WORKER_REPLICA_NAME` is set. The replica name identifies this worker instance in logs and is sent in the `X-Replica-Source` header during sync requests.
+
+:::
+
 ## Using Environment Variables
 
 While the JSON config file is recommended, you can also configure the worker using environment variables directly. This can be useful for simple setups or when integrating with external secret management systems.
@@ -245,6 +258,81 @@ env:
         key: s3-access-key
   # ... additional environment variables
 ```
+
+## Cross-Region Replication
+
+For high availability and low latency across geographic regions, you can deploy multiple Zephyr workers that automatically replicate data between each other. When a deployment occurs on one worker, it automatically fans out to all configured replica workers.
+
+### How It Works
+
+1. **Primary worker receives upload** - When a file, snapshot, or version is published to a worker
+2. **Hook triggers replication** - After successful storage, the worker sends the data to all configured replicas
+3. **Replicas store locally** - Each replica stores the data in its own S3 bucket and Redis instance
+4. **Auth token propagation** - The original user's JWT token is forwarded to replicas for authentication
+
+### Example: Three-Region Setup
+
+Deploy workers in US, EU, and Asia-Pacific regions, each with their own storage:
+
+**US East (Primary)**
+
+```json
+{
+  "ZE_WORKER_JWT_SECRET": "shared-secret-across-all-regions",
+  "ZE_WORKER_REPLICA_NAME": "us-east-1",
+  "ZE_WORKER_REPLICAS_URLS": "https://zephyr-eu.example.com,https://zephyr-ap.example.com",
+  "ZE_WORKER_S3_ENDPOINT": "https://s3.us-east-1.amazonaws.com",
+  "ZE_WORKER_S3_BUCKET": "zephyr-us-east",
+  "ZE_WORKER_REDIS_HOST": "redis-us-east.example.com"
+}
+```
+
+**EU West (Replica)**
+
+```json
+{
+  "ZE_WORKER_JWT_SECRET": "shared-secret-across-all-regions",
+  "ZE_WORKER_REPLICA_NAME": "eu-west-1",
+  "ZE_WORKER_REPLICAS_URLS": "https://zephyr-us.example.com,https://zephyr-ap.example.com",
+  "ZE_WORKER_S3_ENDPOINT": "https://s3.eu-west-1.amazonaws.com",
+  "ZE_WORKER_S3_BUCKET": "zephyr-eu-west",
+  "ZE_WORKER_REDIS_HOST": "redis-eu-west.example.com"
+}
+```
+
+**Asia Pacific (Replica)**
+
+```json
+{
+  "ZE_WORKER_JWT_SECRET": "shared-secret-across-all-regions",
+  "ZE_WORKER_REPLICA_NAME": "ap-southeast-1",
+  "ZE_WORKER_REPLICAS_URLS": "https://zephyr-us.example.com,https://zephyr-eu.example.com",
+  "ZE_WORKER_S3_ENDPOINT": "https://s3.ap-southeast-1.amazonaws.com",
+  "ZE_WORKER_S3_BUCKET": "zephyr-ap-southeast",
+  "ZE_WORKER_REDIS_HOST": "redis-ap-southeast.example.com"
+}
+```
+
+:::warning Important
+
+- **Same JWT secret**: All workers must share the same `ZE_WORKER_JWT_SECRET` for authentication to work across replicas
+- **Network connectivity**: Each worker must be able to reach the other workers' URLs
+- **Eventual consistency**: Replication is asynchronous; there may be brief delays between regions
+
+:::
+
+### Receive-Only Replicas
+
+If you want a worker to receive replicated data but not fan out to others, simply omit `ZE_WORKER_REPLICAS_URLS`:
+
+```json
+{
+  "ZE_WORKER_REPLICA_NAME": "ap-southeast-1",
+  "ZE_WORKER_S3_BUCKET": "zephyr-ap-southeast"
+}
+```
+
+This worker will accept sync requests from other workers but won't initiate replication itself.
 
 ## Troubleshooting
 
