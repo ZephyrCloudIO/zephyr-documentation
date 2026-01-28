@@ -71,8 +71,8 @@ importers:
         specifier: ^1.0.4
         version: 1.0.4(patch_hash=6002602d312e1a83bfd588644f8cd9f9b0d2085841d2809a45e424b4d8e2fdd4)(@rsbuild/core@1.5.12)
       rspress-plugin-file-tree:
-        specifier: ^0.4.0
-        version: 0.4.0(rspress@1.45.6(webpack@5.96.0))
+        specifier: ^1.0.0
+        version: 1.0.3(@rspress/core@2.0.0-beta.34(@types/react@19.1.13))
       rspress-plugin-mermaid:
         specifier: ^1.0.0
         version: 1.0.0(@rspress/core@2.0.0-beta.34(@types/react@19.1.13))
@@ -4764,10 +4764,10 @@ packages:
     peerDependencies:
       '@rspress/core': ^2.0.0-rc.4 || ^2.0.0
 
-  rspress-plugin-file-tree@0.4.0:
-    resolution: {integrity: sha512-VIOufC+0ljC2DJBpa7jV3TmqE+kkpQUXt1URNzWF5CJQINEwW3QMTCPby4uNtVGq5e+N2UpuCfHmG+TlqydI+w==}
+  rspress-plugin-file-tree@1.0.3:
+    resolution: {integrity: sha512-+z07cGbtxRELATSdDiM/TzsTfgxnycPgTNBjrzhljz9c4boaXCXX7X8slMBLY/QrZMRzIvV74sijoJT2V4iUhw==}
     peerDependencies:
-      rspress: '*'
+      '@rspress/core': ^2.0.0-rc.4 || ^2.0.0
 
   rspress-plugin-mermaid@1.0.0:
     resolution: {integrity: sha512-dxRU/e/i7MP3wE8XBpaJf29ddk0k0nfYCfvWFkjw5mVIFr+V8bey3Vzlc/CYrbWh0zmKpUtEgabwVeOCS0re9Q==}
@@ -7983,7 +7983,7 @@ snapshots:
       postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
-  axios-retry@4.5.0(axios@1.12.2(debug@4.4.0)):
+  axios-retry@4.5.0(axios@1.12.2):
     dependencies:
       axios: 1.12.2(debug@4.4.0)
       is-retry-allowed: 2.2.0
@@ -11454,11 +11454,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rspress-plugin-file-tree@0.4.0(rspress@1.45.6(webpack@5.96.0)):
+  rspress-plugin-file-tree@1.0.3(@rspress/core@2.0.0-beta.34(@types/react@19.1.13)):
     dependencies:
-      '@rspress/shared': 1.45.6
-      rspress: 1.45.6(webpack@5.96.0)
-      rspress-plugin-devkit: 0.3.0(rspress@1.45.6(webpack@5.96.0))
+      '@rspress/core': 2.0.0-beta.34(@types/react@19.1.13)
+      rspress-plugin-devkit: 1.0.0(@rspress/core@2.0.0-beta.34(@types/react@19.1.13))
     transitivePeerDependencies:
       - supports-color
 
@@ -12459,7 +12458,7 @@ snapshots:
   zephyr-agent@0.1.0-next.1:
     dependencies:
       axios: 1.12.2(debug@4.4.0)
-      axios-retry: 4.5.0(axios@1.12.2(debug@4.4.0))
+      axios-retry: 4.5.0(axios@1.12.2)
       cloudflare: 3.5.0
       debug: 4.4.0
       git-url-parse: 15.0.0
