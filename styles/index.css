@@ -1,3 +1,4 @@
+@import url('./fonts.css');
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
@@ -5,7 +6,6 @@
  * Some common css theme variables and they will be used in the tailwind theme as well.
  */
 
-@import url('./fonts.css');
 :root {
   /*--rp-nav-height: 72px;*/
   /*--rp-sidebar-width: 320px;*/

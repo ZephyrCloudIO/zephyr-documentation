@@ -388,10 +388,8 @@ export default defineConfig({
     editLink: {
       docRepoBaseUrl:
         'https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/docs',
-      text: 'Edit this page on GitHub',
     },
   },
-
   route: {
     cleanUrls: true,
   },
