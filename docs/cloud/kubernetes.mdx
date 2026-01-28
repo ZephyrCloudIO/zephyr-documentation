@@ -270,9 +270,23 @@ Zephyr workers support two scaling modes that can be used independently or combi
 | **Same-region scaling** | Shared S3/Redis     | None needed               | Horizontal scaling, high availability |
 | **Multi-region**        | Separate per region | HTTP sync between regions | Low latency, geo-distribution         |
 
+Check worker logs on startup to verify replication:
+
+```bash
+# Workers with REPLICAS_URLS set (replicate to other regions)
+[K8s Worker] Replica mode enabled
+[K8s Worker] Replica name: us-east-1
+[K8s Worker] Replicating to 1 replica(s): https://ze.eu.example.com
+
+# Workers without REPLICAS_URLS (receive-only, share storage with primary)
+[K8s Worker] Replica mode enabled
+[K8s Worker] Replica name: us-east-2
+[K8s Worker] No replica URLs configured (receive-only mode)
+```
+
 ### Same-Region Scaling
 
-Multiple workers sharing the same S3 bucket and Redis instance. No data replication needed—all workers read/write to the same storage.
+Multiple workers sharing the same S3 bucket and Redis instance. All workers read/write to the same storage, so no data replication is needed.
 
 ```mermaid
 flowchart LR
@@ -303,7 +317,7 @@ flowchart LR
     linkStyle 0,1,2,3,4,5 stroke:#9ca3af,stroke-width:1px
 ```
 
-**Configuration** — All workers use identical config, only `ZE_WORKER_REPLICA_NAME` differs:
+All workers use identical config. Only `ZE_WORKER_REPLICA_NAME` differs:
 
 ```jsonc
 // US East - Worker 1
@@ -354,7 +368,7 @@ flowchart TB
     linkStyle 0,1,2,3,4,5 stroke:#9ca3af,stroke-width:1px
 ```
 
-**Configuration** — Each region lists other regions' load balancer URLs:
+Each region lists other regions' load balancer URLs:
 
 ```jsonc
 // US East
@@ -413,7 +427,7 @@ flowchart TB
     linkStyle 0,1,2,3,4,5,6,7,8,9,10,11 stroke:#9ca3af,stroke-width:1px
 ```
 
-**Configuration** — All workers have `ZE_WORKER_REPLICAS_URLS` pointing to other regions' load balancers:
+All workers have `ZE_WORKER_REPLICAS_URLS` pointing to other regions' load balancers:
 
 | Worker      | `ZE_WORKER_REPLICA_NAME` | `ZE_WORKER_REPLICAS_URLS`       |
 | ----------- | ------------------------ | ------------------------------- |
