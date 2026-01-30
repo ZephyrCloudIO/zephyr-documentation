@@ -23,7 +23,7 @@ Kubernetes deployment is available exclusively for **Enterprise customers**. If 
 
 ## Overview
 
-The Kubernetes edge worker (`ze-k8s-worker`) is a containerized service that handles asset uploads and serves your deployed applications. It integrates with:
+The Kubernetes edge worker is a containerized service that handles asset uploads and serves your deployed applications. It integrates with:
 
 - **S3-compatible storage** (AWS S3, MinIO, Ceph, etc.) for asset storage
 - **Redis-compatible KV store** for environment configuration and snapshots
@@ -57,117 +57,6 @@ Create a JSON file containing all your configuration. All keys use the `ZE_WORKE
   "ZE_WORKER_DELIMITER": "-",
 }
 ```
-
-#### Deploying with Kubernetes Secret
-
-Mount the config file as a Secret for secure configuration:
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: ze-worker-config
-type: Opaque
-stringData:
-  config.json: |
-    {
-      "ZE_WORKER_JWT_SECRET": "your-production-secret",
-      "ZE_WORKER_S3_ENDPOINT": "https://s3.us-west-2.amazonaws.com",
-      "ZE_WORKER_S3_REGION": "us-west-2",
-      "ZE_WORKER_S3_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
-      "ZE_WORKER_S3_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-      "ZE_WORKER_S3_BUCKET": "zephyr-production",
-      "ZE_WORKER_S3_FORCE_PATH_STYLE": "false",
-      "ZE_WORKER_REDIS_HOST": "redis-cluster.example.com",
-      "ZE_WORKER_REDIS_PORT": "6380",
-      "ZE_WORKER_REDIS_PASSWORD": "your-redis-password",
-      "ZE_WORKER_REDIS_TLS": "true",
-      "ZE_WORKER_PORT": "8080",
-      "ZE_WORKER_LOG_LEVEL": "info",
-      "ZE_WORKER_DELIMITER": "-"
-    }
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ze-k8s-worker
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: ze-k8s-worker
-  template:
-    metadata:
-      labels:
-        app: ze-k8s-worker
-    spec:
-      containers:
-        - name: worker
-          image: ze-k8s-worker:latest
-          ports:
-            - containerPort: 8080
-          env:
-            - name: ZE_WORKER_CONFIG_JSON
-              value: /etc/ze-worker/config.json
-          volumeMounts:
-            - name: config
-              mountPath: /etc/ze-worker
-              readOnly: true
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
-      volumes:
-        - name: config
-          secret:
-            secretName: ze-worker-config
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ze-k8s-worker
-spec:
-  selector:
-    app: ze-k8s-worker
-  ports:
-    - port: 80
-      targetPort: 8080
-```
-
-#### Development Configuration (MinIO + Redis)
-
-For local development or testing with MinIO:
-
-```jsonc
-// Development (MinIO + Redis)
-{
-  "ZE_WORKER_JWT_SECRET": "dev-secret-key",
-  "ZE_WORKER_S3_ENDPOINT": "http://minio:9000",
-  "ZE_WORKER_S3_REGION": "us-east-1",
-  "ZE_WORKER_S3_ACCESS_KEY_ID": "minioadmin",
-  "ZE_WORKER_S3_SECRET_ACCESS_KEY": "minioadmin",
-  "ZE_WORKER_S3_BUCKET": "zephyr-dev",
-  "ZE_WORKER_S3_FORCE_PATH_STYLE": "true",
-  "ZE_WORKER_REDIS_HOST": "redis",
-  "ZE_WORKER_REDIS_PORT": "6379",
-  "ZE_WORKER_REDIS_TLS": "false",
-  "ZE_WORKER_PORT": "8080",
-  "ZE_WORKER_LOG_LEVEL": "debug",
-  "ZE_WORKER_DELIMITER": "-",
-}
-```
-
-:::tip
-When using MinIO or other S3-compatible storage, set `ZE_WORKER_S3_FORCE_PATH_STYLE` to `"true"`.
-:::
 
 ## Health Check Endpoints
 
@@ -453,7 +342,7 @@ All workers have `ZE_WORKER_REPLICAS_URLS` pointing to other regions' load balan
 1. Verify all required configuration options are set
 2. Check that S3 endpoint is reachable from within the cluster
 3. Ensure Redis host is resolvable and accessible
-4. Check the worker logs: `kubectl logs -l app=ze-k8s-worker`
+4. Check the worker logs using kubectl
 
 #### Readiness probe failing
 
