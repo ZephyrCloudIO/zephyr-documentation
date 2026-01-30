@@ -31,6 +31,10 @@ encoding: 'utf-8'
 # whether to use project's .gitignore files to ignore files
 ignore_all_files_in_gitignore: true
 
+# whether to open the web dashboard on launch
+web_dashboard_open_on_launch: false
+web_dashboard: false
+
 # list of additional paths to ignore in all projects
 # same syntax as gitignore, so you can use * and **
 ignored_paths: []
