@@ -5,7 +5,7 @@ import { INTERCOM_SETTINGS } from './intercom';
 import {
   Layout as DefaultLayout,
   getCustomMDXComponent as basicGetCustomMDXComponent,
-} from '@rspress/core/theme';
+} from '@rspress/core/theme-original';
 import { Card } from '@/components/ui/card';
 import { CardLayout } from '@/components/ui/card-layout';
 import {
@@ -233,4 +233,4 @@ function getCustomMDXComponent() {
 
 export { Layout, NotFoundLayout, Search, getCustomMDXComponent };
 
-export * from '@rspress/core/theme';
+export * from '@rspress/core/theme-original';
