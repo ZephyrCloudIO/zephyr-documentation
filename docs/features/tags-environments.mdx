@@ -157,7 +157,7 @@ Each environment can have multiple custom domains pointing to it. This is perfec
 
 Setting up custom domains is straightforward. When you add a domain to an environment, Zephyr automatically handles SSL certificates and creates the necessary routing. You just need to point your DNS records to Zephyr's edge network.
 
-### Environment Variables (ZE*PUBLIC*\*)
+### Environment Variables (`ZE_PUBLIC_*`)
 
 Zephyr provides a powerful system for managing environment variables that can be overridden on a per-environment basis at runtime. By prefixing environment variables with `ZE_PUBLIC_` in your local configuration, Zephyr captures them at build time and makes them available for environment-specific overrides.
 
@@ -255,8 +255,8 @@ The same built application adapts its configuration dynamically based on which e
 
 The `ZE_PUBLIC_` prefix indicates that these variables are **client-side** and will be included in your bundled application code. This is important to understand:
 
-- ✅ **Safe for ZE*PUBLIC***: API endpoints, feature flags, CDN URLs, public analytics IDs, client-side configuration
-- ❌ **Never use ZE*PUBLIC* for**: API secrets, database passwords, authentication tokens, private keys, sensitive credentials
+- ✅ **Safe for `ZE_PUBLIC_*`**: API endpoints, feature flags, CDN URLs, public analytics IDs, client-side configuration
+- ❌ **Never use `ZE_PUBLIC_*` for**: API secrets, database passwords, authentication tokens, private keys, sensitive credentials
 
 :::warning Client-Side Exposure
 Variables prefixed with `ZE_PUBLIC_` are bundled into your client-side code and are visible to anyone who views your application. Never store sensitive secrets in these variables. Only use `ZE_PUBLIC_` for values that are safe to expose publicly.
