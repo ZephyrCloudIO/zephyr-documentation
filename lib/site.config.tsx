@@ -10,7 +10,6 @@ import ModuleFederationIcon from '../components/icons/module-federation';
 // import { QwikIcon } from '../components/icons/qwik';
 // import { AngularIcon } from '../components/icons/angular';
 // import { LernaIcon } from '../components/icons/lerna';
-import { NetlifyIcon } from '../components/icons/netlify';
 import { NxIcon } from '../components/icons/nx';
 import { ParcelIcon } from '../components/icons/parcel';
 import { ReactIcon } from '../components/icons/react';
@@ -241,15 +240,6 @@ export const SiteConfig: CardProps = {
     // },
 
     // {
-    //   // qwik-1.5
-    //   title: "Qwik + Netlify",
-    //   description:
-    //     "Adding Zephyr to Vite config in a Qwik app scaffolded by Qwik city - deploy to Netlify.",
-    //   href: "/recipes/qwik/deploy",
-    //   variant: "small",
-    //   icons: [<QwikIcon />, <NetlifyIcon />],
-    // },
-    // {
     //   // ng-nx-webpack
     //   title: "Angular + Nx + Webpack",
     //   description: "Use Zephyr with Angular 15 in an Nx workspace.",
@@ -351,14 +341,6 @@ export const SiteConfig: CardProps = {
       variant: 'small',
       href: '/cloud/cloudflare',
       icons: [<CloudflareIcon className="w-6 h-6" />],
-    },
-    {
-      title: 'Netlify',
-      description:
-        'Manage your Netlify integration with Netlify function, site, and Blob storage',
-      variant: 'small',
-      href: '/cloud/netlify',
-      icons: [<NetlifyIcon className="w-6 h-6" />],
     },
     {
       title: 'Fastly',
@@ -540,11 +522,6 @@ export const supportedCloud = [
   },
   {
     name: 'Cloudflare',
-    icon: '',
-    supported: 'prod',
-  },
-  {
-    name: 'Netlify',
     icon: '',
     supported: 'prod',
   },

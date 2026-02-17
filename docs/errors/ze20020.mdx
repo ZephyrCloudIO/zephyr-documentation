@@ -1,10 +1,10 @@
 ---
 title: 'ZE20020: Unable to connect to cloud provider'
-description: 'ZE20020: Unable to connect to cloud provider (Cloudflare, Netlify, or Fastly)'
+description: 'ZE20020: Unable to connect to cloud provider (Cloudflare or Fastly)'
 head:
   - - meta
     - property: og:description
-      content: 'ZE20020: Unable to connect to cloud provider (Cloudflare, Netlify, or Fastly)'
+      content: 'ZE20020: Unable to connect to cloud provider (Cloudflare or Fastly)'
 ---
 
 import { getErrorMessage } from '../../lib/error-helpers.ts';
@@ -57,30 +57,6 @@ Check if a CNAME record is created on your Cloudflare account/domain - it needs 
 | :---: | :--: | :------------------: | :----------: | :--: |
 | CNAME | `*`  | `ze.zephyrcloud.app` |   Proxied    | Auto |
 
-### 2. Netlify Integration
-
-You must have a Netlify site project to use this integration.
-
-#### a. Blob Storage
-
-Check if the following blob storage spaces are created on your Netlify site project:
-
-- `site:ze_snapshots`
-- `site:ze_files`
-- `site:ze_env`
-
-#### b. Environment Variable
-
-Check if an environment variable named `JWT_SECRET` is created on your Netlify site project.
-
-#### c. Function
-
-Check if a function named `ze_worker_for_upload` is created on your Netlify site project.
-
-#### d. Edge Function
-
-Check if an edge function named `ze_worker_for_serve` is created on your Netlify site project.
-
-### 3. Fastly Integration
+### 2. Fastly Integration
 
 Coming soon.
