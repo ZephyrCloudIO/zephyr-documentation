@@ -242,10 +242,6 @@ const sidebar: Sidebar = {
           link: '/cloud/fastly',
         },
         {
-          text: 'Netlify',
-          link: '/cloud/netlify',
-        },
-        {
           text: 'Kubernetes',
           link: '/cloud/kubernetes',
         },
@@ -495,10 +491,6 @@ export default defineConfig({
         {
           from: '/guide/integrations/cloudflare',
           to: '/cloud/cloudflare',
-        },
-        {
-          from: '/guide/integrations/netlify',
-          to: '/cloud/netlify',
         },
         {
           from: '/recipes/react-vite',

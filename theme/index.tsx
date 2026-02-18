@@ -126,12 +126,6 @@ const items = [
     variant: 'small',
   },
   {
-    title: 'Netlify Integration',
-    href: '/cloud/netlify',
-    description: 'Add Netlify as your Deployment Integration on Zephyr Cloud.',
-    variant: 'small',
-  },
-  {
     title: 'Cloudflare Integration',
     href: '/cloud/cloudflare',
     description:

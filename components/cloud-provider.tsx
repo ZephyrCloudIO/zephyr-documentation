@@ -3,7 +3,6 @@ import type { CardItemProps } from '../lib/site.config';
 import { AkamaiIcon } from './icons/akamai';
 import { CloudflareIcon } from './icons/cloudflare';
 import { FastlyIcon } from './icons/fastly';
-import { NetlifyIcon } from './icons/netlify';
 import { Card } from './ui/card';
 export const CloudProviderCards = () => {
   return (
@@ -21,7 +20,7 @@ const item = {
   description:
     'Configure custom domain for your application with your deployment integration platform.',
   variant: 'default',
-  icons: [<CloudflareIcon />, <NetlifyIcon />, <FastlyIcon />, <AkamaiIcon />],
+  icons: [<CloudflareIcon />, <FastlyIcon />, <AkamaiIcon />],
 } satisfies CardItemProps;
 
 export const CustomDomain = () => {
