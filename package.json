@@ -41,14 +41,14 @@
     "@rspress/core": "^2.0.1",
     "@rspress/plugin-client-redirects": "^2.0.1",
     "@rspress/plugin-preview": "^2.0.1",
-    "@rspress/plugin-sitemap": "2.0.1",
+    "@rspress/plugin-sitemap": "2.0.3",
     "@rspress/runtime": "^2.0.0-beta.34",
     "@rspress/shared": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "commitlint": "^20.0.0",
     "husky": "^9.1.7",
-    "lucide-react": "^0.544.0",
+    "lucide-react": "^0.575.0",
     "react-wrap-balancer": "^1.1.1",
     "rsbuild-plugin-google-analytics": "^1.0.4",
     "rspress-plugin-file-tree": "^0.4.0",
@@ -61,7 +61,7 @@
     "@commitlint/config-conventional": "^20.0.0",
     "@eslint/js": "^9.36.0",
     "@rspress/plugin-algolia": "^2.0.1",
-    "@rspress/plugin-llms": "2.0.1",
+    "@rspress/plugin-llms": "2.0.3",
     "@tailwindcss/postcss": "^4.1.13",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^24.5.2",
@@ -85,5 +85,5 @@
       "rsbuild-plugin-google-analytics@1.0.4": "patches/rsbuild-plugin-google-analytics@1.0.4.patch"
     }
   },
-  "packageManager": "pnpm@10.17.1"
+  "packageManager": "pnpm@10.30.1"
 }
