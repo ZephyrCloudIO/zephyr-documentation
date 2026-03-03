@@ -49,6 +49,7 @@
     "commitlint": "^20.0.0",
     "husky": "^9.1.7",
     "lucide-react": "^0.544.0",
+    "posthog-js": "^1.272.0",
     "react-wrap-balancer": "^1.1.1",
     "rsbuild-plugin-google-analytics": "^1.0.4",
     "rspress-plugin-file-tree": "^0.4.0",

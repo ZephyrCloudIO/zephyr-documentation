@@ -395,8 +395,11 @@ export default defineConfig({
   builderConfig: {
     source: {
       define: {
-        'process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID': JSON.stringify(
-          process.env.PUBLIC_RSPRESS_INTERCOM_APP_ID,
+        'process.env.PUBLIC_POSTHOG_KEY': JSON.stringify(
+          process.env.PUBLIC_POSTHOG_KEY,
+        ),
+        'process.env.PUBLIC_POSTHOG_HOST': JSON.stringify(
+          process.env.PUBLIC_POSTHOG_HOST,
         ),
       },
     },

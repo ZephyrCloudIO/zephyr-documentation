@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDark, useLang } from '@rspress/core/runtime';
 import Intercom from '@intercom/messenger-js-sdk';
+import posthog from 'posthog-js';
 import { INTERCOM_SETTINGS } from './intercom';
 import {
   Layout as DefaultLayout,
@@ -27,6 +28,10 @@ import { cn } from '@/lib/cn';
 
 import { Footer } from '../components/footer';
 import { type CardItemProps, version } from '../lib/site.config';
+
+const POSTHOG_KEY = process.env.PUBLIC_POSTHOG_KEY;
+const POSTHOG_HOST =
+  process.env.PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com';
 
 export const CurrentVersion = () => {
   const dark = useDark();
@@ -192,8 +197,17 @@ const HelpButton = () => {
 
 const Layout = () => {
   useEffect(() => {
-    // Initialize Intercom when the theme loads
     Intercom(INTERCOM_SETTINGS);
+
+    if (!POSTHOG_KEY) {
+      return;
+    }
+
+    posthog.init(POSTHOG_KEY, {
+      api_host: POSTHOG_HOST,
+      defaults: '2026-01-30',
+      person_profiles: 'identified_only',
+    } as const);
   }, []);
 
   return (
