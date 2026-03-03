@@ -12,6 +12,13 @@ pnpm install
 pnpm build
 ```
 
+## Analytics
+
+Client analytics now use PostHog (`posthog-js`) instead of Google Analytics.
+
+- `PUBLIC_POSTHOG_KEY` (required to enable tracking)
+- `PUBLIC_POSTHOG_HOST` (optional, defaults to `https://us.i.posthog.com`)
+
 ## Sitemap Note
 
 Because sitemap is not visible to the bundler (for now). We need to manually update

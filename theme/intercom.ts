@@ -14,4 +14,4 @@ export const INTERCOM_SETTINGS = {
     name: 'Zephyr Cloud',
     src: 'https://zephyr-cloud.io/logo.png',
   },
-};
+} as const;

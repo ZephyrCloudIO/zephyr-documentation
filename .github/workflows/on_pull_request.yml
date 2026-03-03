@@ -6,10 +6,12 @@ on:
 
 env:
   NODE_VERSION: 24
+  PUBLIC_POSTHOG_KEY: ${{ secrets.PUBLIC_POSTHOG_KEY }}
+  PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
 
 jobs:
   deploy-on-pr-changes:
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
