@@ -32,6 +32,52 @@ import { type CardItemProps, version } from '../lib/site.config';
 const POSTHOG_KEY = process.env.PUBLIC_POSTHOG_KEY;
 const POSTHOG_HOST =
   process.env.PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com';
+const GA_TRACKING_ID = 'G-B7G266JZDH';
+const GA_SCRIPT_ID = 'zephyr-google-analytics';
+
+function initializeGoogleAnalytics() {
+  if (typeof window === 'undefined' || document.getElementById(GA_SCRIPT_ID)) {
+    return;
+  }
+
+  const gtagScript = document.createElement('script');
+  gtagScript.id = GA_SCRIPT_ID;
+  gtagScript.async = true;
+  gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
+  document.head.appendChild(gtagScript);
+
+  const gaConfigScript = document.createElement('script');
+  gaConfigScript.text = `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    const idName = '*_ze_id';
+    const getOrCreateZeId = () => {
+      const zeId = localStorage.getItem(idName);
+      if (zeId) return zeId;
+      const newId = Math.random().toString(36).slice(2, 15);
+      localStorage.setItem(idName, newId);
+      return newId;
+    };
+
+    const zeId = getOrCreateZeId();
+    gtag('config', '${GA_TRACKING_ID}', {
+      anonymize_ip: true,
+      page_path: window.location.pathname,
+      first_field_name: 'documentation',
+      linker: {
+        domains: ['docs.zephyr-cloud.io', 'zephyr-cloud.io', 'app.zephyr-cloud.io'],
+      },
+      link_id: zeId,
+    });
+
+    gtag('set', 'linker', {
+      accept_incoming: true,
+    });
+  `;
+  document.head.appendChild(gaConfigScript);
+}
 
 export const CurrentVersion = () => {
   const dark = useDark();
@@ -198,6 +244,7 @@ const HelpButton = () => {
 const Layout = () => {
   useEffect(() => {
     Intercom(INTERCOM_SETTINGS);
+    initializeGoogleAnalytics();
 
     if (!POSTHOG_KEY) {
       return;
