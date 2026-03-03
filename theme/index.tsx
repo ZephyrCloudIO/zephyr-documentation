@@ -30,8 +30,7 @@ import { Footer } from '../components/footer';
 import { type CardItemProps, version } from '../lib/site.config';
 
 const POSTHOG_KEY = process.env.PUBLIC_POSTHOG_KEY;
-const POSTHOG_HOST =
-  process.env.PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com';
+const POSTHOG_HOST = process.env.PUBLIC_POSTHOG_HOST;
 
 export const CurrentVersion = () => {
   const dark = useDark();
@@ -204,7 +203,8 @@ const Layout = () => {
     }
 
     posthog.init(POSTHOG_KEY, {
-      api_host: POSTHOG_HOST,
+      ...(POSTHOG_HOST ? { api_host: POSTHOG_HOST } : {}),
+      ui_host: 'https://us.posthog.com',
       defaults: '2026-01-30',
       person_profiles: 'identified_only',
     } as const);

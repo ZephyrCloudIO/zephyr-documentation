@@ -17,7 +17,8 @@ pnpm build
 Client analytics now use PostHog (`posthog-js`) instead of Google Analytics.
 
 - `PUBLIC_POSTHOG_KEY` (required to enable tracking)
-- `PUBLIC_POSTHOG_HOST` (optional, defaults to `https://us.i.posthog.com`)
+- `PUBLIC_POSTHOG_HOST` (optional)
+- `ui_host` is hardcoded in app init to `https://us.posthog.com`
 
 ## Sitemap Note
 
