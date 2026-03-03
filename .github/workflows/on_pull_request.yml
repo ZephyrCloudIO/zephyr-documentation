@@ -11,7 +11,7 @@ env:
 
 jobs:
   deploy-on-pr-changes:
-    runs-on: depot-ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
