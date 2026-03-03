@@ -14,7 +14,7 @@ pnpm build
 
 ## Analytics
 
-Client analytics currently run on both PostHog and Google Analytics.
+Client analytics now use PostHog (`posthog-js`) instead of Google Analytics.
 
 - `PUBLIC_POSTHOG_KEY` (required to enable tracking)
 - `PUBLIC_POSTHOG_HOST` (optional, defaults to `https://us.i.posthog.com`)
