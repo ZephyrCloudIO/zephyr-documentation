@@ -95,6 +95,10 @@ const sidebar: Sidebar = {
           link: '/features/deployment-hooks',
         },
         {
+          text: 'Generic Output Upload',
+          link: '/features/generic-output-upload',
+        },
+        {
           text: 'Structured File Logs',
           link: '/features/file-logging',
         },

@@ -1,0 +1,127 @@
+---
+title: Generic Output Upload
+description: Use zephyr-agent uploadOutputToZephyr to upload arbitrary framework output directories to Zephyr Cloud.
+head:
+  - - meta
+    - property: og:description
+      content: Use zephyr-agent uploadOutputToZephyr to upload arbitrary framework output directories to Zephyr Cloud.
+---
+
+# Generic Output Upload
+
+`uploadOutputToZephyr` is a low-level `zephyr-agent` helper for integrations that already have an output directory and want Zephyr deployment behavior without implementing a custom upload pipeline.
+
+Good fit:
+
+- framework adapters
+- custom build tools
+- plugin maintainers
+
+If you are an app developer using official Zephyr plugins directly, prefer the plugin-level setup guides.
+
+## Import and use
+
+```ts
+import { uploadOutputToZephyr } from 'zephyr-agent';
+
+const result = await uploadOutputToZephyr({
+  rootDir: process.cwd(),
+  outputDir: '.output',
+  publicDir: '.output/client/docs',
+  baseURL: '/docs/',
+  builder: 'nitro',
+  target: 'web',
+  ssr: true,
+  hooks: {
+    onDeployComplete(info) {
+      console.log('Deployment URL:', info.url);
+    },
+  },
+});
+
+console.log(result.deploymentUrl, result.entrypoint);
+```
+
+## API
+
+```ts
+interface UploadOutputToZephyrOptions {
+  rootDir: string;
+  outputDir: string;
+  publicDir?: string;
+  baseURL?: string;
+  builder?: ZephyrEngineOptions['builder'];
+  target?: Platform;
+  ssr?: boolean;
+  hooks?: ZephyrBuildHooks;
+}
+```
+
+```ts
+interface UploadOutputToZephyrResult {
+  deploymentUrl: string | null;
+  entrypoint?: string;
+}
+```
+
+## Option behavior
+
+- `rootDir`: project root used for Zephyr build context
+- `outputDir`: directory scanned recursively for deploy assets
+- `publicDir`: optional subtree remapped as `client/*` assets
+- `baseURL`: optional path segment inserted after `client/` for remapped public assets
+- `builder`: optional builder metadata (defaults to `'unknown'`)
+- `target`: optional deployment platform (defaults to `'web'`)
+- `ssr`: optional snapshot mode (defaults to `true`)
+- `hooks`: optional deployment hooks (same `onDeployComplete` shape as plugin hooks)
+
+## Asset handling rules
+
+The helper normalizes paths to `/`, then filters and remaps files.
+
+Skipped by default:
+
+- `*.map`
+- `node_modules/**`
+- `.git/**`
+- `.DS_Store`
+- `.zephyr/**`
+- `thumbs.db`
+
+`publicDir` remap:
+
+- with `baseURL='/docs/'`:
+  - `<publicDir>/app.js` -> `client/docs/app.js`
+- without `baseURL`:
+  - `<publicDir>/app.js` -> `client/app.js`
+
+## SSR and CSR modes
+
+Default is SSR mode (`ssr: true`):
+
+- snapshot type: `ssr`
+- requires detected entrypoint
+- candidate order:
+  - `server/index.js`
+  - `server/index.mjs`
+  - `server/server.js`
+  - `server/server.mjs`
+  - `server/_worker.js`
+  - `server/_worker.mjs`
+  - `index.mjs`
+  - `index.js`
+
+CSR mode (`ssr: false`):
+
+- snapshot type: `csr`
+- no entrypoint required
+
+## Errors
+
+- `ERR_ASSETS_NOT_FOUND` (`ZE20010`): no deployable assets after filtering
+- `ERR_SSR_ENTRYPOINT_NOT_FOUND` (`ZE20015`): SSR enabled but no supported entrypoint found
+
+## Related docs
+
+- [Deployment Hooks](/features/deployment-hooks)
+- [Error ZE20010](/errors/ze20010)
