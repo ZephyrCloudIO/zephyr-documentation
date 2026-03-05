@@ -56,6 +56,10 @@ const sidebar: Sidebar = {
           link: '/getting-started/quick-start',
         },
         {
+          text: 'Find Your SDK',
+          link: '/getting-started/find-your-sdk',
+        },
+        {
           text: 'FAQ',
           link: '/getting-started/faq',
         },
@@ -93,10 +97,6 @@ const sidebar: Sidebar = {
         {
           text: 'Deployment Hooks',
           link: '/features/deployment-hooks',
-        },
-        {
-          text: 'Generic Output Upload',
-          link: '/features/generic-output-upload',
         },
         {
           text: 'Structured File Logs',

@@ -1,0 +1,61 @@
+---
+title: Find the Right SDK
+description: Choose the right Zephyr SDK for your framework, bundler, or runtime integration.
+head:
+  - - meta
+    - property: og:description
+      content: Choose the right Zephyr SDK for your framework, bundler, or runtime integration.
+---
+
+# Find the Right SDK
+
+Use this page to quickly pick the Zephyr SDK that matches your stack.
+
+## SDK picker
+
+| Your stack                   | Zephyr SDK                          | Guide link                                                         |
+| ---------------------------- | ----------------------------------- | ------------------------------------------------------------------ |
+| Vite                         | `vite-plugin-zephyr`                | [/bundlers/vite](/bundlers/vite)                                   |
+| Webpack                      | `zephyr-webpack-plugin`             | [/bundlers/webpack](/bundlers/webpack)                             |
+| Rspack                       | `zephyr-rspack-plugin`              | [/bundlers/rspack](/bundlers/rspack)                               |
+| Rsbuild / Rslib              | `zephyr-rsbuild-plugin`             | [/bundlers/rsbuild](/bundlers/rsbuild)                             |
+| Rollup                       | `rollup-plugin-zephyr`              | [/bundlers/rollup](/bundlers/rollup)                               |
+| Rolldown                     | `zephyr-rolldown-plugin`            | [/bundlers/rolldown](/bundlers/rolldown)                           |
+| Metro (React Native)         | `zephyr-metro-plugin`               | [/bundlers/metro](/bundlers/metro)                                 |
+| Re.Pack (React Native)       | `zephyr-repack-plugin`              | [/bundlers/repack](/bundlers/repack)                               |
+| Astro                        | `zephyr-astro-integration`          | [/meta-frameworks/astro](/meta-frameworks/astro)                   |
+| Modern.js                    | `zephyr-modernjs-plugin`            | [/meta-frameworks/modernjs](/meta-frameworks/modernjs)             |
+| Rspress                      | `zephyr-rspress-plugin`             | [/meta-frameworks/rspress](/meta-frameworks/rspress)               |
+| Ember.js (via Vite pipeline) | `vite-plugin-zephyr`                | [/meta-frameworks/emberjs](/meta-frameworks/emberjs)               |
+| TanStack Start               | `vite-plugin-tanstack-start-zephyr` | [/meta-frameworks/tanstack-start](/meta-frameworks/tanstack-start) |
+
+## Quick decision flow
+
+1. If your bundler/framework exists in the table, use that SDK and guide.
+2. If you are integrating into an existing app with custom structure, check [/integrations/existing-app](/integrations/existing-app).
+3. If you need multi-bundler Module Federation, check [/integrations/vite-rspack-webpack-mf](/integrations/vite-rspack-webpack-mf).
+4. If your stack is not listed, use `zephyr-agent` as a low-level fallback.
+
+## Fallback for unsupported stacks
+
+If your framework has no official SDK yet, use `uploadOutputToZephyr` from `zephyr-agent` to upload a generated output directory.
+
+Best fit:
+
+- custom framework adapters
+- internal platform tooling
+- plugin maintainers
+
+Minimal usage:
+
+```ts
+import { uploadOutputToZephyr } from 'zephyr-agent';
+
+await uploadOutputToZephyr({
+  rootDir: process.cwd(),
+  outputDir: '.output',
+  ssr: true,
+});
+```
+
+For full fallback behavior (options, mapping, SSR/CSR, errors), see `zephyr-agent` docs in the packages repository.
