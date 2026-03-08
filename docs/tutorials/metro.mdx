@@ -109,7 +109,6 @@ Create or modify your `metro.config.js` file in the mini application:
 
 ```javascript
 // MiniApp/metro.config.js
-const path = require('node:path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withModuleFederation } = require('@module-federation/metro');
 const { withZephyr } = require('zephyr-metro-plugin');
@@ -122,11 +121,6 @@ const { withZephyr } = require('zephyr-metro-plugin');
  */
 const config = {
   resolver: { useWatchman: false },
-  watchFolders: [
-    // Add local workspace/package paths only if Metro must watch files
-    // outside this app. Example:
-    // path.resolve(__dirname, '..', '..', 'packages', 'shared'),
-  ],
 };
 
 async function getConfig() {
@@ -319,11 +313,6 @@ const miniAppPort = process.env.MINI_APP_PORT ?? '8082';
 
 const config = {
   resolver: { useWatchman: false },
-  watchFolders: [
-    // Add local workspace/package paths only if Metro must watch files
-    // outside this app. Example:
-    // path.resolve(__dirname, '..', '..', 'packages', 'shared'),
-  ],
 };
 
 const getConfig = async () => {
