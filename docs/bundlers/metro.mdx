@@ -42,17 +42,12 @@ Mini applications expose modules to be consumed by host applications:
 
 ```javascript
 // metro.config.js
-const path = require('node:path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withModuleFederation } = require('@module-federation/metro');
 const { withZephyr } = require('zephyr-metro-plugin');
 
 const config = {
   resolver: { useWatchman: false },
-  watchFolders: [
-    path.resolve(__dirname, '../../node_modules'),
-    path.resolve(__dirname, '../../packages/core'),
-  ],
 };
 
 async function getConfig() {
@@ -157,19 +152,18 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
 
+const miniAppPort = process.env.MINI_APP_PORT ?? '8082';
+
 const config = {
   resolver: { useWatchman: false },
-  watchFolders: [
-    path.resolve(__dirname, '../../node_modules'),
-    path.resolve(__dirname, '../../packages/core'),
-  ],
 };
 
 const getConfig = async () => {
   const zephyrConfig = await withZephyr()({
     name: 'hostApp',
     remotes: {
-      miniApp: 'miniApp@http://localhost:8082/mf-manifest.json',
+      // Match the port used by your MiniApp Metro server in local development.
+      miniApp: `miniApp@http://localhost:${miniAppPort}/mf-manifest.json`,
     },
     shared: {
       react: {
