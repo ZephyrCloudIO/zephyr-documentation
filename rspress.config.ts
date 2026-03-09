@@ -56,6 +56,10 @@ const sidebar: Sidebar = {
           link: '/getting-started/quick-start',
         },
         {
+          text: 'Find Your SDK',
+          link: '/getting-started/find-your-sdk',
+        },
+        {
           text: 'FAQ',
           link: '/getting-started/faq',
         },
