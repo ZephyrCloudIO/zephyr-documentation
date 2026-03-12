@@ -1,23 +1,35 @@
-### What's added in this PR?
+## 🎫 Ticket
 
-[_Provide an implementation summary. What did you add beyond the described task? What are the additional details you'd like people to pay attention to? To help people review this PR understand what's changed._]
+<!-- Link to the ClickUp ticket. e.g. https://app.clickup.com/t/9013031642/ZE-1234 -->
 
-### What's the issues or discussion related to this PR (optional) ?
+-
 
-[_Provide some background information related to this PR, including issues or task. Prior to this PR what's the behavior that wasn't expected._]
+## 🧠 Why
 
-[_If there wasn't discussion related to this PR, you can include the reasoning behind this PR of why you did it._]
+<!--
+What problem does this solve? Why are these changes needed?
+e.g. "Users couldn't save org settings when the name contained special characters."
+-->
 
-### Feature related update for this PR (if applicable)?
+## 📝 What changed
 
-### (Optional) What's left to be done for this PR?
+<!--
+Summarize key changes. Call out anything non-obvious or risky.
+e.g. "Added input sanitization to org settings form, updated validation schema in ze-sdk."
+-->
 
-### Who do you wish to review this PR other than required reviewers?
+## 🧪 How to test
 
-<!-- @zmzlois @arthurfiorette @zackarychapple -->
+<!--
+Step-by-step instructions for reviewers or QA.
+e.g.
+| Step | Expected result |
+|------|-----------------|
+| Go to Org Settings > General | Settings page loads |
+| Enter `My Org & Co.` in the name field | No validation error |
+| Click Save | Success toast appears, name persists on reload |
+-->
 
-### (Required) Pre-PR/Merge checklist
+## 📸 Screenshots
 
-- [ ] I have added/updated our feature to sync with this PR
-- [ ] I have added an explanation of my changes
-- [ ] I have/will run tests, or ask for help to add test
+<!-- Before/after screenshots or recordings for UI changes. Delete section if not applicable. -->
