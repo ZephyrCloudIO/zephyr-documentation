@@ -41,20 +41,33 @@ Create a JSON file containing all your configuration. All keys use the `ZE_WORKE
 ```jsonc
 // Example configuration
 {
+  "ZE_WORKER_PORT": "8080",
   "ZE_WORKER_JWT_SECRET": "your-secret-key",
+  "ZE_WORKER_LOG_LEVEL": "info",
+  "ZE_WORKER_DELIMITER": "-",
   "ZE_WORKER_S3_ENDPOINT": "https://s3.amazonaws.com",
   "ZE_WORKER_S3_REGION": "us-east-1",
   "ZE_WORKER_S3_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
   "ZE_WORKER_S3_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
   "ZE_WORKER_S3_BUCKET": "zephyr-assets",
   "ZE_WORKER_S3_FORCE_PATH_STYLE": "false",
+  "ZE_WORKER_S3_CONNECTION_TIMEOUT_MS": "5000",
+  "ZE_WORKER_S3_REQUEST_TIMEOUT_MS": "30000",
+  "ZE_WORKER_S3_UPLOAD_REQUEST_TIMEOUT_MS": "60000",
+  "ZE_WORKER_S3_MAX_SOCKETS": "200",
+  "ZE_WORKER_S3_SOCKET_ACQUISITION_WARNING_TIMEOUT_MS": "35000",
   "ZE_WORKER_REDIS_HOST": "redis.default.svc.cluster.local",
   "ZE_WORKER_REDIS_PORT": "6379",
   "ZE_WORKER_REDIS_PASSWORD": "your-redis-password",
   "ZE_WORKER_REDIS_TLS": "true",
-  "ZE_WORKER_PORT": "8080",
-  "ZE_WORKER_LOG_LEVEL": "info",
-  "ZE_WORKER_DELIMITER": "-",
+  "ZE_WORKER_REDIS_DB": "0",
+  "ZE_WORKER_REDIS_PREFIX_ENVS": "{ze-k8s-worker}:envs:",
+  "ZE_WORKER_REDIS_PREFIX_SNAPSHOTS": "{ze-k8s-worker}:snapshots:",
+  "ZE_WORKER_REPLICA_NAME": "us-east-1",
+  "ZE_WORKER_REPLICAS_URLS": [
+    "https://ze.eu.example.com",
+    "https://ze.ap.example.com",
+  ],
 }
 ```
 
@@ -70,6 +83,12 @@ The worker exposes the following health check endpoints for Kubernetes probes:
 ## Configuration Reference
 
 Below is the complete reference for all available configuration options. These can be set in your JSON config file or as environment variables.
+
+### Bootstrap Option
+
+| Key                     | Description                                                                                                  | Default   | Example                          |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------ | --------- | -------------------------------- |
+| `ZE_WORKER_CONFIG_JSON` | Path to a JSON config file. When set, values in the file take precedence over process environment variables. | _(unset)_ | `/etc/zephyr/worker-config.json` |
 
 ### Required Options
 
@@ -92,10 +111,15 @@ Below is the complete reference for all available configuration options. These c
 
 ### S3 Options
 
-| Key                             | Description                                   | Default     | Example     |
-| ------------------------------- | --------------------------------------------- | ----------- | ----------- |
-| `ZE_WORKER_S3_REGION`           | S3 region                                     | `us-east-1` | `eu-west-1` |
-| `ZE_WORKER_S3_FORCE_PATH_STYLE` | Use path-style URLs (required for MinIO/Ceph) | `true`      | `false`     |
+| Key                                                  | Description                                                              | Default     | Example     |
+| ---------------------------------------------------- | ------------------------------------------------------------------------ | ----------- | ----------- |
+| `ZE_WORKER_S3_REGION`                                | S3 region                                                                | `us-east-1` | `eu-west-1` |
+| `ZE_WORKER_S3_FORCE_PATH_STYLE`                      | Use path-style URLs (required for MinIO/Ceph)                            | `true`      | `false`     |
+| `ZE_WORKER_S3_CONNECTION_TIMEOUT_MS`                 | Timeout for establishing the S3 connection                               | `5000`      | `10000`     |
+| `ZE_WORKER_S3_REQUEST_TIMEOUT_MS`                    | Timeout for non-upload S3 requests                                       | `30000`     | `45000`     |
+| `ZE_WORKER_S3_UPLOAD_REQUEST_TIMEOUT_MS`             | Timeout for upload S3 requests                                           | `60000`     | `120000`    |
+| `ZE_WORKER_S3_MAX_SOCKETS`                           | Maximum keep-alive sockets used by the S3 client per worker instance     | `200`       | `400`       |
+| `ZE_WORKER_S3_SOCKET_ACQUISITION_WARNING_TIMEOUT_MS` | Delay before warning that requests are queuing behind the S3 socket pool | `35000`     | `60000`     |
 
 ### Redis Options
 
@@ -116,10 +140,10 @@ The curly braces `{}` in the default prefixes enable Redis Cluster hash tags. Th
 
 ### Replication Options
 
-| Key                       | Description                                                            | Default   | Example                                              |
-| ------------------------- | ---------------------------------------------------------------------- | --------- | ---------------------------------------------------- |
-| `ZE_WORKER_REPLICA_NAME`  | Name for this replica instance (enables replication)                   | _(empty)_ | `us-east-1`, `eu-west-1`                             |
-| `ZE_WORKER_REPLICAS_URLS` | List of replica worker URLs to sync to (JSON array or comma-separated) | _(empty)_ | `["https://a.example.com", "https://b.example.com"]` |
+| Key                       | Description                                                            | Default   | Example                                                                       |
+| ------------------------- | ---------------------------------------------------------------------- | --------- | ----------------------------------------------------------------------------- |
+| `ZE_WORKER_REPLICA_NAME`  | Name for this replica instance (enables replication)                   | _(empty)_ | `us-east-1`, `eu-west-1`                                                      |
+| `ZE_WORKER_REPLICAS_URLS` | List of replica worker URLs to sync to (JSON array or comma-separated) | `[]`      | `["https://a.example.com", "https://b.example.com"]` or `https://a,https://b` |
 
 :::tip Replication Mode
 
