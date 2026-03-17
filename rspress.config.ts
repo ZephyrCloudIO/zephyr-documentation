@@ -210,6 +210,14 @@ const sidebar: Sidebar = {
           link: '/meta-frameworks/modernjs',
         },
         {
+          text: 'Nitro',
+          link: '/meta-frameworks/nitro',
+        },
+        {
+          text: 'Nuxt',
+          link: '/meta-frameworks/nuxt',
+        },
+        {
           text: 'Rspress',
           link: '/meta-frameworks/rspress',
         },

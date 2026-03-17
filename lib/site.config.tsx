@@ -390,6 +390,19 @@ export const SiteConfig: CardProps = {
       icons: [<ModernjsIcon className="w-8 h-8" />],
     },
     {
+      title: 'Nitro',
+      description: 'Nitro v3 with the built-in Zephyr deploy target',
+      variant: 'small',
+      href: '/meta-frameworks/nitro',
+    },
+    {
+      title: 'Nuxt',
+      description:
+        'Deploy Nuxt with zephyr-nuxt-module and Nitro output upload',
+      variant: 'small',
+      href: '/meta-frameworks/nuxt',
+    },
+    {
       title: 'Rspress',
       description: 'Fast static site generator powered by Rspack',
       variant: 'small',

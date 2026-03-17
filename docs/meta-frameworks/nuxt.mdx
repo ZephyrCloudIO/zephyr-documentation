@@ -1,0 +1,130 @@
+---
+title: Nuxt
+description: Deploy Nuxt applications to Zephyr with zephyr-nuxt-module. Upload Nitro build output during nuxt build, with SSR entrypoint detection and optional Zephyr overrides.
+head:
+  - - meta
+    - property: og:description
+      content: Deploy Nuxt applications to Zephyr with zephyr-nuxt-module. Upload Nitro build output during nuxt build, with SSR entrypoint detection and optional Zephyr overrides.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+import BuildAuthInfo from '../../components/build-auth-info.mdx';
+
+# Nuxt
+
+Nuxt runs on top of Nitro, but the Zephyr integration path for Nuxt apps is the dedicated **`zephyr-nuxt-module`** package. The module hooks into `nuxt build`, reads the generated Nitro output, detects the server entrypoint when present, and uploads the result to Zephyr.
+
+:::warning Availability
+
+Nuxt SSR deployments on Zephyr currently work only on **Zephyr’s default (managed) Cloudflare integration**.
+
+If you need Nuxt support on another integration or deployment target, send us a DM on **[Discord](https://discord.gg/zephyrcloud)**.
+
+:::
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/getting-started/installation) setup guide
+- A Nuxt 3 or Nuxt 4 project
+
+:::
+
+## Install
+
+Add the Zephyr Nuxt module:
+
+<PackageManagerTabs command="add --dev zephyr-nuxt-module" />
+
+If you want local parity with Nitro’s Cloudflare module runtime, also add the dev helper used in Zephyr’s Nuxt example:
+
+<PackageManagerTabs command="add --dev nitro-cloudflare-dev" />
+
+## Minimal configuration
+
+Add the module to `nuxt.config.ts`:
+
+```ts filename="nuxt.config.ts"
+export default defineNuxtConfig({
+  modules: ['zephyr-nuxt-module'],
+});
+```
+
+This is enough when your Nitro output already matches the deployment shape you want.
+
+## Recommended SSR configuration
+
+For the current Zephyr Nuxt example, use Nitro’s Cloudflare module output:
+
+```ts filename="nuxt.config.ts"
+export default defineNuxtConfig({
+  nitro: {
+    preset: 'cloudflare_module',
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true,
+    },
+  },
+  modules: ['nitro-cloudflare-dev', 'zephyr-nuxt-module'],
+});
+```
+
+## Zephyr options
+
+You can tune how the module uploads your Nuxt build:
+
+```ts filename="nuxt.config.ts"
+export default defineNuxtConfig({
+  modules: ['zephyr-nuxt-module'],
+  zephyr: {
+    outputDir: '.output',
+    entrypoint: 'server/index.mjs',
+    snapshotType: 'ssr',
+    // hooks: { onDeployComplete(info) { ... } },
+  },
+});
+```
+
+Supported Zephyr options:
+
+- `outputDir`: override Nitro’s output directory
+- `entrypoint`: explicitly set the SSR entrypoint relative to `outputDir`
+- `snapshotType`: force `'ssr'` or `'csr'`
+- `hooks`: pass Zephyr build hooks to the upload step
+
+## Entrypoint detection
+
+If you do not set `entrypoint`, the module checks these files in your Nitro output:
+
+- `server/index.mjs`
+- `server/index.js`
+- `server/index.cjs`
+
+If none of them exists, the module falls back to a **CSR** snapshot.
+
+## Build and deploy
+
+Run your normal Nuxt production build:
+
+```bash filename="Terminal"
+npm run build
+```
+
+Or directly:
+
+```bash filename="Terminal"
+npx nuxt build
+```
+
+On the first run, you’ll be prompted to authenticate:
+
+<BuildAuthInfo />
+
+:::info Prepare hooks
+
+The module skips Zephyr upload during `nuxt prepare` and `postinstall` flows. Upload happens on the production build path.
+
+:::
+
+## Nitro-only apps
+
+If you are not using Nuxt and only have a Nitro app, use the built-in Nitro v3 preset instead. See **[Nitro](/meta-frameworks/nitro)**.

@@ -1,0 +1,80 @@
+---
+title: Nitro
+description: Deploy Nitro v3 applications to Zephyr using Nitro's built-in Zephyr deploy target. Configure Nitro once, then build and upload directly to Zephyr.
+head:
+  - - meta
+    - property: og:description
+      content: Deploy Nitro v3 applications to Zephyr using Nitro's built-in Zephyr deploy target. Configure Nitro once, then build and upload directly to Zephyr.
+---
+
+import BuildAuthInfo from '../../components/build-auth-info.mdx';
+
+# Nitro
+
+Nitro v3 ships with a built-in **Zephyr** deploy target, so a standalone Nitro app does not need a separate Zephyr adapter package. Set the preset, build, and Nitro will prepare the output Zephyr expects.
+
+For Nitro’s upstream deploy guide, see **[Deploy to Zephyr](https://v3.nitro.build/deploy/zephyr)**.
+
+:::warning Availability
+
+Nitro SSR deployments on Zephyr currently work only on **Zephyr’s default (managed) Cloudflare integration**.
+
+If you need Nitro support on another integration or deployment target, send us a DM on **[Discord](https://discord.gg/zephyrcloud)**.
+
+:::
+
+:::info Prerequisites
+
+- Finished our [Prerequisites](/getting-started/installation) setup guide
+- A Nitro v3 project
+
+:::
+
+## Configure Nitro
+
+Set Nitro to use the built-in Zephyr preset:
+
+```ts filename="nitro.config.ts"
+import { defineNitroConfig } from 'nitro/config';
+
+export default defineNitroConfig({
+  compatibilityDate: '2026-03-16',
+  preset: 'zephyr',
+});
+```
+
+:::info Compatibility date
+
+Nitro v3 expects a `compatibilityDate`. Keep it current and align it with your Nitro version and rollout window.
+
+:::
+
+## Build
+
+Run your production build:
+
+```bash filename="Terminal"
+npx nitro build
+```
+
+If your app already exposes a build script, use that instead:
+
+```bash filename="Terminal"
+npm run build
+```
+
+On the first run, you’ll be prompted to authenticate:
+
+<BuildAuthInfo />
+
+## What Zephyr gets
+
+With the `zephyr` preset enabled, Nitro handles the Zephyr-specific deploy output for you.
+
+- No extra Zephyr adapter package in the Nitro app
+- Nitro owns the runtime-specific output
+- Your Zephyr deployment flow stays in the normal Nitro build step
+
+## Next step
+
+If you are using **Nuxt**, use the dedicated **[Nuxt guide](/meta-frameworks/nuxt)** instead of configuring Nitro by hand.
