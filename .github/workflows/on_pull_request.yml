@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       # Install dependencies
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
         with:
           version: 10.17.1
           run_install: false
