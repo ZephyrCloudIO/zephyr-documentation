@@ -87,6 +87,10 @@ const sidebar: Sidebar = {
           link: '/features/tags-environments',
         },
         {
+          text: 'Locking Tags & Environments',
+          link: '/features/locking-tags-environments',
+        },
+        {
           text: 'Instant Rollbacks',
           link: '/features/instant-rollbacks',
         },
