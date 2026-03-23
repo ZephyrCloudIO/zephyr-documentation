@@ -357,6 +357,48 @@ All workers have `ZE_WORKER_REPLICAS_URLS` pointing to other regions' load balan
 
 :::
 
+## Emergency Direct-KV Rollback
+
+In rare cases where Zephyr Cloud is unavailable, and you need to perform a last-resort rollback of your deployed environment, you can do it by updating Redis directly.
+
+:::warning Important
+
+- This is an emergency procedure only. Prefer normal Zephyr publish and rollback flows whenever they are available.
+- Do not edit `snapshots:` entries during rollback. Copy from `snapshots:` and write to the live `envs:` key.
+- In multi-region deployments, apply the same change in each region's Redis instance manually.
+
+:::
+
+On publish, Zephyr overwrites the live environment key for the target hostname. The snapshot history remains in `snapshots:`.
+
+The live environment is served from the `envs:` key for that hostname:
+
+```text
+{ze-k8s-worker}:envs:hostname.tld
+```
+
+To roll back manually, copy the full JSON value from the older snapshot entry into the live environment key:
+
+```text
+source: {ze-k8s-worker}:snapshots:{snapshot_id}
+target: {ze-k8s-worker}:envs:{environment-hostname}
+```
+
+After that write, requests for that hostname resolve to the restored version immediately.
+
+:::details{title="If your environment uses Zephyr Environment Variable overrides"}
+
+If the environment uses Zephyr environment variables overrides, publish also rewrites the `zephyr-manifest.json` reference inside the live `envs:` payload.
+
+That manifest carries:
+
+- `ZE_PUBLIC_*` environment variable overrides
+- remote dependency overrides
+
+If you rollback manually from `snapshots:{snapshot_id}`, also restore the `zephyr-manifest.json` reference you want in the live `envs:` payload, and make sure that manifest object still exists in object storage. Otherwise the environment falls back to the snapshot's original build-time values.
+
+:::
+
 ## Troubleshooting
 
 ### Common Issues
