@@ -1,0 +1,95 @@
+---
+title: Locking Tags & Environments
+description: Prevent unintended changes by locking tags and environments in Zephyr Cloud
+head:
+  - - meta
+    - property: og:description
+      content: Prevent unintended changes by locking tags and environments in Zephyr Cloud
+---
+
+# Locking Tags & Environments
+
+Locking gives you hard protection against unintended changes to tags and environments. A locked resource keeps its current state — no new version can be deployed to it and no configuration changes are accepted — until it is explicitly unlocked by an authorized user.
+
+This is useful for production environments you want to freeze after a release, tags that must stay pinned to a verified version, or any resource that should not drift unexpectedly.
+
+## What Locking Does
+
+When a tag or environment is **locked**:
+
+- Deployments targeting that resource are rejected.
+- Automatic tag resolution no longer updates it (it will not follow new matching versions).
+- The Zephyr dashboard shows a **Locked** badge on the resource in list views.
+
+When it is **unlocked**, normal behavior resumes immediately.
+
+Locking does not delete history or affect URLs. It is a write-protection mechanism only.
+
+## Locking a Tag
+
+### At creation
+
+When creating a tag, enable the **Lock this tag** checkbox in the creation form. The tag will be created in a locked state from the start and will display the **Locked** badge in the tag list.
+
+### After creation
+
+Open the tag's settings page and toggle the **Locked** option. Save the form to apply the change.
+
+:::info
+Locking a tag prevents the tag from following new matching versions. The URL continues to work and serves whichever version was resolved at the time of locking (or the version that was set when the tag was last unlocked and updated).
+:::
+
+## Locking an Environment
+
+### At creation
+
+Enable the **Locked** checkbox on the environment creation form. The environment is created locked and appears with the **Locked** badge in the environment list.
+
+### After creation
+
+Open the environment's settings page and toggle the **Locked** option. You can change the locked state independently of other environment properties (name, version, variables). Saving a metadata-only change — such as toggling the lock — does not require re-specifying the application version.
+
+### After a deployment
+
+When deploying a version to an environment, enable **Lock this environment after deploy** in the deploy confirmation dialog. The environment will be locked automatically once the deployment completes, preventing any further automatic updates.
+
+:::tip Protecting production after a release
+Combine the post-deploy lock with environment protection (see [Managing Who Can Update an Environment](/features/tags-environments#managing-who-can-update-an-environment)) to create a two-layer safeguard: only authorized members can deploy, and the environment locks automatically after each release.
+:::
+
+## Protected Environments
+
+Environments also support a separate **Protected** flag. When protection is enabled:
+
+- Only users or teams explicitly listed as members of that environment are allowed to update or deploy to it.
+- The protected flag and the locked flag are independent — you can use either or both.
+
+See [Managing Who Can Update an Environment](/features/tags-environments#managing-who-can-update-an-environment) for the full setup steps.
+
+## Locked Badge in List Views
+
+Both the tag list and the environment list surface a **Locked** badge on any locked resource. This gives you an at-a-glance view of which resources are protected without opening individual settings pages.
+
+## Common Patterns
+
+### Freeze production after a release
+
+1. Deploy a verified version to your production environment.
+2. In the deploy confirmation, check **Lock this environment after deploy**.
+3. Production is now frozen. Future builds will not affect it until you unlock it for the next release cycle.
+
+### Pin a tag to a stable version
+
+1. Update the tag's conditions (or point it manually to a specific version).
+2. Open the tag settings and enable **Lock this tag**.
+3. The tag will continue resolving to that version regardless of new builds that would otherwise match its conditions.
+
+### Safe metadata edits without a redeployment
+
+If you need to toggle the locked state or rename an environment without pushing a new version, you can save the environment form with only the metadata fields changed. No application version id is required for metadata-only updates.
+
+## Related Documentation
+
+- [Tags & Environments](/features/tags-environments) — full reference for tags, environments, conditions, and URLs
+- [Instant Rollbacks](/features/instant-rollbacks) — revert an environment to a previous version
+- [Automation](/features/automation) — trigger lock/unlock operations from CI/CD workflows
