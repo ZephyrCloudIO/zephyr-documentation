@@ -22,7 +22,7 @@ In this guide, we’ll walk you through how to set up the integration and start 
 
 :::info
 
-- A registered AWS account, contract must include edge workers and edgekv
+- An AWS account with permission to create and update Zephyr-managed AWS resources
 - A registered Zephyr account
 - A registered domain
 
@@ -52,18 +52,155 @@ Before proceeding, you will need some data from AWS:
 
 - Go to **IAM -> User groups** in menu and click **Create group** button
 - Type group name
-- Choose the following permissions:
+- Choose **Create policy**
+- Open the **JSON** editor
+- Paste the policy below
+- Attach that custom policy to the IAM group/user you use for Zephyr
 
-| Permission name                     |
-| :---------------------------------- |
-| AmazonCloudWatchEvidentlyFullAccess |
-| AmazonDynamoDBFullAccess            |
-| AmazonS3FullAccess                  |
-| AWSLambda_FullAccess                |
-| CloudFrontFullAccess                |
-| CloudWatchLogsFullAccess            |
-| IAMFullAccess                       |
-| SecretsManagerReadWrite             |
+:::info
+
+- `AmazonCloudWatchEvidentlyFullAccess` is **not** used by the current Zephyr AWS integration.
+- This policy matches the current Zephyr AWS Terraform create/update flow.
+
+:::
+
+| Permission(s)                                                                                                                                                                                                                                                                                                                                              | Why Zephyr needs it                                                                                                                       |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `iam:CreateRole`, `iam:GetRole`, `iam:DeleteRole`, `iam:AttachRolePolicy`, `iam:DetachRolePolicy`, `iam:ListAttachedRolePolicies`, `iam:PassRole`                                                                                                                                                                                                          | Create and manage the Lambda@Edge execution role Zephyr uses for the AWS worker, then allow Lambda to assume that role during deployment. |
+| `iam:CreatePolicy`, `iam:GetPolicy`, `iam:DeletePolicy`, `iam:CreatePolicyVersion`, `iam:GetPolicyVersion`, `iam:DeletePolicyVersion`, `iam:ListPolicyVersions`                                                                                                                                                                                            | Create and manage the Zephyr-scoped IAM policies attached to the Lambda execution role.                                                   |
+| `lambda:CreateFunction`, `lambda:GetFunction`, `lambda:GetFunctionConfiguration`, `lambda:UpdateFunctionCode`, `lambda:UpdateFunctionConfiguration`, `lambda:DeleteFunction`, `lambda:PublishVersion`, `lambda:ListVersionsByFunction`                                                                                                                     | Create the Lambda@Edge worker, publish new versions during updates, and read function state while Terraform reconciles the deployment.    |
+| `cloudfront:CreateDistribution`, `cloudfront:GetDistribution`, `cloudfront:GetDistributionConfig`, `cloudfront:UpdateDistribution`, `cloudfront:DeleteDistribution`                                                                                                                                                                                        | Provision and update the CloudFront distribution that serves Zephyr traffic for `ze.yourdomain.com` and `*.ze.yourdomain.com`.            |
+| `cloudfront:CreateFunction`, `cloudfront:DescribeFunction`, `cloudfront:UpdateFunction`, `cloudfront:PublishFunction`, `cloudfront:DeleteFunction`                                                                                                                                                                                                         | Manage the CloudFront viewer-request function used for request rewriting before traffic reaches the Lambda@Edge origin-request handler.   |
+| `cloudfront:CreateCloudFrontOriginAccessIdentity`, `cloudfront:GetCloudFrontOriginAccessIdentity`, `cloudfront:DeleteCloudFrontOriginAccessIdentity`                                                                                                                                                                                                       | Create and manage the origin access identity CloudFront uses to read from the Zephyr S3 bucket.                                           |
+| `s3:CreateBucket`, `s3:ListBucket`, `s3:GetBucketLocation`, `s3:GetBucketPolicy`, `s3:PutBucketPolicy`, `s3:GetBucketTagging`, `s3:PutBucketTagging`, `s3:GetEncryptionConfiguration`, `s3:PutEncryptionConfiguration`, `s3:GetBucketPublicAccessBlock`, `s3:PutBucketPublicAccessBlock`, `s3:GetBucketOwnershipControls`, `s3:PutBucketOwnershipControls` | Create and configure the Zephyr-managed S3 bucket that stores static assets and acts as the CloudFront origin.                            |
+| `dynamodb:CreateTable`, `dynamodb:DescribeTable`, `dynamodb:TagResource`, `dynamodb:UntagResource`, `dynamodb:ListTagsOfResource`                                                                                                                                                                                                                          | Create and manage the Zephyr DynamoDB tables used for environment metadata and snapshot tracking.                                         |
+| `secretsmanager:CreateSecret`, `secretsmanager:DescribeSecret`, `secretsmanager:PutSecretValue`, `secretsmanager:GetSecretValue`, `secretsmanager:TagResource`                                                                                                                                                                                             | Create and populate the Zephyr secret store that holds the JWT secret and S3 bucket metadata used by the worker.                          |
+| `logs:CreateLogGroup`, `logs:PutRetentionPolicy`, `logs:DescribeLogGroups`                                                                                                                                                                                                                                                                                 | Create the CloudWatch log group for the Lambda@Edge worker and set log retention during provisioning.                                     |
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ZephyrIamRoles",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole",
+        "iam:GetRole",
+        "iam:DeleteRole",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:ListAttachedRolePolicies",
+        "iam:PassRole"
+      ],
+      "Resource": "arn:aws:iam::*:role/ze-*"
+    },
+    {
+      "Sid": "ZephyrIamPolicies",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreatePolicy",
+        "iam:GetPolicy",
+        "iam:DeletePolicy",
+        "iam:CreatePolicyVersion",
+        "iam:GetPolicyVersion",
+        "iam:DeletePolicyVersion",
+        "iam:ListPolicyVersions"
+      ],
+      "Resource": "arn:aws:iam::*:policy/ze-*"
+    },
+    {
+      "Sid": "ZephyrLambda",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateFunction",
+        "lambda:GetFunction",
+        "lambda:GetFunctionConfiguration",
+        "lambda:UpdateFunctionCode",
+        "lambda:UpdateFunctionConfiguration",
+        "lambda:DeleteFunction",
+        "lambda:PublishVersion",
+        "lambda:ListVersionsByFunction"
+      ],
+      "Resource": "arn:aws:lambda:us-east-1:*:function:ze-*"
+    },
+    {
+      "Sid": "ZephyrCloudFront",
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:CreateDistribution",
+        "cloudfront:GetDistribution",
+        "cloudfront:GetDistributionConfig",
+        "cloudfront:UpdateDistribution",
+        "cloudfront:DeleteDistribution",
+        "cloudfront:CreateFunction",
+        "cloudfront:DescribeFunction",
+        "cloudfront:UpdateFunction",
+        "cloudfront:PublishFunction",
+        "cloudfront:DeleteFunction",
+        "cloudfront:CreateCloudFrontOriginAccessIdentity",
+        "cloudfront:GetCloudFrontOriginAccessIdentity",
+        "cloudfront:DeleteCloudFrontOriginAccessIdentity"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ZephyrS3Buckets",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:GetBucketPolicy",
+        "s3:PutBucketPolicy",
+        "s3:GetBucketTagging",
+        "s3:PutBucketTagging",
+        "s3:GetEncryptionConfiguration",
+        "s3:PutEncryptionConfiguration",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:PutBucketPublicAccessBlock",
+        "s3:GetBucketOwnershipControls",
+        "s3:PutBucketOwnershipControls"
+      ],
+      "Resource": "arn:aws:s3:::ze-*"
+    },
+    {
+      "Sid": "ZephyrDynamoDb",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:CreateTable",
+        "dynamodb:DescribeTable",
+        "dynamodb:TagResource",
+        "dynamodb:UntagResource",
+        "dynamodb:ListTagsOfResource"
+      ],
+      "Resource": "arn:aws:dynamodb:*:*:table/ze-*"
+    },
+    {
+      "Sid": "ZephyrSecretsManager",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:CreateSecret",
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:PutSecretValue",
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:TagResource"
+      ],
+      "Resource": "arn:aws:secretsmanager:*:*:secret:ze-*"
+    },
+    {
+      "Sid": "ZephyrCloudWatchLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:PutRetentionPolicy",
+        "logs:DescribeLogGroups"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
 
 - Click **Create user group** button
 - Go to **IAM -> Users** in menu and click **Create user** button
