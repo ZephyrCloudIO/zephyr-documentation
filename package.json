@@ -82,6 +82,10 @@
     "zephyr-rspress-plugin": "^0.1.10"
   },
   "pnpm": {
+    "overrides": {
+      "protobufjs": ">=7.5.5 <8",
+      "handlebars": ">=4.7.9"
+    },
     "patchedDependencies": {
       "rsbuild-plugin-google-analytics@1.0.4": "patches/rsbuild-plugin-google-analytics@1.0.4.patch"
     }
