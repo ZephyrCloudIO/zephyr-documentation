@@ -91,70 +91,70 @@ importers:
         version: 3.3.1
     devDependencies:
       '@commitlint/cli':
-        specifier: ^20.0.0
+        specifier: 20.0.0
         version: 20.0.0(@types/node@24.5.2)(typescript@5.9.2)
       '@commitlint/config-conventional':
-        specifier: ^20.0.0
+        specifier: 20.0.0
         version: 20.0.0
       '@eslint/js':
-        specifier: ^9.36.0
+        specifier: 9.36.0
         version: 9.36.0
       '@rspress/plugin-algolia':
-        specifier: ^2.0.1
+        specifier: 2.0.1
         version: 2.0.1(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))(@types/react@19.1.13)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)
       '@rspress/plugin-llms':
         specifier: 2.0.1
         version: 2.0.1(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))
       '@tailwindcss/postcss':
-        specifier: ^4.1.13
+        specifier: 4.1.13
         version: 4.1.13
       '@tailwindcss/typography':
-        specifier: ^0.5.19
+        specifier: 0.5.19
         version: 0.5.19(tailwindcss@4.1.13)
       '@types/node':
-        specifier: ^24.5.2
+        specifier: 24.5.2
         version: 24.5.2
       '@types/react':
         specifier: ^19.1.13
         version: 19.1.13
       autoprefixer:
-        specifier: ^10.4.21
+        specifier: 10.4.21
         version: 10.4.21(postcss@8.5.6)
       eslint:
-        specifier: ^9.36.0
+        specifier: 9.36.0
         version: 9.36.0(jiti@2.6.1)
       globals:
-        specifier: ^16.4.0
+        specifier: 16.4.0
         version: 16.4.0
       lint-staged:
-        specifier: ^16.2.1
+        specifier: 16.2.1
         version: 16.2.1
       postcss:
-        specifier: ^8.5.6
+        specifier: 8.5.6
         version: 8.5.6
       postcss-loader:
-        specifier: ^8.2.0
+        specifier: 8.2.0
         version: 8.2.0(@rspack/core@2.0.0-alpha.1(@swc/helpers@0.5.18))(postcss@8.5.6)(typescript@5.9.2)(webpack@5.96.0)
       prettier:
-        specifier: ^3.6.2
+        specifier: 3.6.2
         version: 3.6.2
       rsbuild-plugin-open-graph:
-        specifier: ^1.1.0
+        specifier: 1.1.0
         version: 1.1.0(@rsbuild/core@2.0.0-beta.0(core-js@3.45.1))
       semantic-release:
-        specifier: ^25.0.0
+        specifier: 25.0.2
         version: 25.0.2(typescript@5.9.2)
       tailwindcss:
-        specifier: ^4.1.13
+        specifier: 4.1.13
         version: 4.1.13
       typescript:
-        specifier: ^5.9.2
+        specifier: 5.9.2
         version: 5.9.2
       typescript-eslint:
-        specifier: ^8.44.1
+        specifier: 8.44.1
         version: 8.44.1(eslint@9.36.0(jiti@2.6.1))(typescript@5.9.2)
       zephyr-rspress-plugin:
-        specifier: ^0.1.10
+        specifier: 0.1.10
         version: 0.1.10(@rsbuild/core@2.0.0-beta.0(core-js@3.45.1))(@rspack/core@2.0.0-alpha.1(@swc/helpers@0.5.18))(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))(https-proxy-agent@7.0.6)(webpack@5.96.0)
 
 packages:
