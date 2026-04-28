@@ -103,8 +103,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))(@types/react@19.1.13)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)
       '@rspress/plugin-llms':
-        specifier: 2.0.1
-        version: 2.0.1(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))
+        specifier: 2.0.9
+        version: 2.0.9(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))
       '@tailwindcss/postcss':
         specifier: ^4.1.13
         version: 4.1.13
@@ -1547,11 +1547,11 @@ packages:
     resolution: {integrity: sha512-Q/M7NFGCreajXZBz/P3TEaohDsO233TGahqyNH3loE+drvlcgOyMehsAVcsQyt2hlDtgQHp9oVX78EfZmJ+8gA==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-llms@2.0.1':
-    resolution: {integrity: sha512-7CRCz0C/DIr46NkIp4uTX/yq6xTj/ljW+7HcsljmUwBAzzaMQdQb1Orv6ufg52esdiJBvpW4xdq9XohAVRPHdw==}
+  '@rspress/plugin-llms@2.0.9':
+    resolution: {integrity: sha512-jXSo7o89w0XH2OTdR//iP5pL5E7xR/fBpdpuA4H2aJsFP/Lk/4xMKnpm4BrrrDlsPFNFotv8kZy5YmgHH715Cw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      '@rspress/core': ^2.0.1
+      '@rspress/core': ^2.0.9
 
   '@rspress/plugin-medium-zoom@1.45.6':
     resolution: {integrity: sha512-o+mqg7NlwJuXrba1dMtQzJSmrtgyonif7lPm3MNF9dHnQrCBAtr8mKMoDnzMkh0JN0hjqaLERJmHz8fAK/q3iA==}
@@ -7253,7 +7253,7 @@ snapshots:
     dependencies:
       '@rspress/shared': 1.45.6
 
-  '@rspress/plugin-llms@2.0.1(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))':
+  '@rspress/plugin-llms@2.0.9(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))':
     dependencies:
       '@rspress/core': 2.0.1(@types/react@19.1.13)(core-js@3.45.1)
       remark-mdx: 3.1.1
@@ -7945,7 +7945,7 @@ snapshots:
       postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
-  axios-retry@4.5.0(axios@1.12.2):
+  axios-retry@4.5.0(axios@1.12.2(debug@4.4.0)):
     dependencies:
       axios: 1.12.2(debug@4.4.0)
       is-retry-allowed: 2.2.0
@@ -12316,7 +12316,7 @@ snapshots:
     dependencies:
       '@toon-format/toon': 0.9.0
       axios: 1.12.2(debug@4.4.0)
-      axios-retry: 4.5.0(axios@1.12.2)
+      axios-retry: 4.5.0(axios@1.12.2(debug@4.4.0))
       debug: 4.4.0
       eventsource: 4.1.0
       git-url-parse: 15.0.0
