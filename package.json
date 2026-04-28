@@ -51,7 +51,6 @@
     "lucide-react": "^0.544.0",
     "posthog-js": "^1.272.0",
     "react-wrap-balancer": "^1.1.1",
-    "rsbuild-plugin-google-analytics": "^1.0.4",
     "rspress-plugin-file-tree": "^0.4.0",
     "rspress-plugin-mermaid": "^1.0.0",
     "rspress-plugin-reading-time": "^1.0.0",
@@ -86,9 +85,7 @@
       "protobufjs": ">=7.5.5 <8",
       "handlebars": ">=4.7.9"
     },
-    "patchedDependencies": {
-      "rsbuild-plugin-google-analytics@1.0.4": "patches/rsbuild-plugin-google-analytics@1.0.4.patch"
-    }
+    "patchedDependencies": {}
   },
   "packageManager": "pnpm@10.33.0"
 }
