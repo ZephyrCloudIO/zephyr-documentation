@@ -2,7 +2,7 @@ import * as path from 'node:path';
 import { pluginClientRedirects } from '@rspress/plugin-client-redirects';
 import type { Nav, Sidebar, SocialLink } from '@rspress/shared';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
-import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
+
 import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import pluginMermaid from 'rspress-plugin-mermaid';
@@ -431,9 +431,6 @@ export default defineConfig({
           site: '@ZephyrCloudIO',
           card: 'summary_large_image',
         },
-      }),
-      pluginGoogleAnalytics({
-        id: 'G-B7G266JZDH',
       }),
     ],
     output: {

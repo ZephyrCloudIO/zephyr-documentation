@@ -8,11 +8,6 @@ overrides:
   protobufjs: '>=7.5.5 <8'
   handlebars: '>=4.7.9'
 
-patchedDependencies:
-  rsbuild-plugin-google-analytics@1.0.4:
-    hash: 6002602d312e1a83bfd588644f8cd9f9b0d2085841d2809a45e424b4d8e2fdd4
-    path: patches/rsbuild-plugin-google-analytics@1.0.4.patch
-
 importers:
 
   .:
@@ -74,9 +69,6 @@ importers:
       react-wrap-balancer:
         specifier: ^1.1.1
         version: 1.1.1(react@19.2.4)
-      rsbuild-plugin-google-analytics:
-        specifier: ^1.0.4
-        version: 1.0.4(patch_hash=6002602d312e1a83bfd588644f8cd9f9b0d2085841d2809a45e424b4d8e2fdd4)(@rsbuild/core@2.0.0-beta.0(core-js@3.45.1))
       rspress-plugin-file-tree:
         specifier: ^0.4.0
         version: 0.4.0(rspress@1.45.6(webpack@5.96.0))
@@ -4800,14 +4792,6 @@ packages:
 
   robust-predicates@3.0.2:
     resolution: {integrity: sha512-IXgzBWvWQwE6PrDI05OvmXUIruQTcoMDzRsOd5CDvHCVLcLHMTSYvOK5Cm46kWqlV3yAbuSpBZdJ5oP5OUoStg==}
-
-  rsbuild-plugin-google-analytics@1.0.4:
-    resolution: {integrity: sha512-K7KkgIUJWtoBpcCLBDLnBXezvQWdue5LCDO4NDvSDe/TEFxOlKb8wG6dDtp/A+CwbnZRVeNOZ9cB6vNg/y/Suw==}
-    peerDependencies:
-      '@rsbuild/core': 1.x
-    peerDependenciesMeta:
-      '@rsbuild/core':
-        optional: true
 
   rsbuild-plugin-open-graph@1.1.0:
     resolution: {integrity: sha512-ETrmQxhs/hW7xFzDGb6CIiZ1tVOrsrGPDgPTC/49bQ+sK75y6LZ3/CvcqPNxMwdnI3Ba79l62FIFvR0uC+UISw==}
@@ -11334,10 +11318,6 @@ snapshots:
   rfdc@1.4.1: {}
 
   robust-predicates@3.0.2: {}
-
-  rsbuild-plugin-google-analytics@1.0.4(patch_hash=6002602d312e1a83bfd588644f8cd9f9b0d2085841d2809a45e424b4d8e2fdd4)(@rsbuild/core@2.0.0-beta.0(core-js@3.45.1)):
-    optionalDependencies:
-      '@rsbuild/core': 2.0.0-beta.0(core-js@3.45.1)
 
   rsbuild-plugin-open-graph@1.1.0(@rsbuild/core@2.0.0-beta.0(core-js@3.45.1)):
     optionalDependencies:
