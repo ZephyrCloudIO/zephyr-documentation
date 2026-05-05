@@ -1,0 +1,91 @@
+---
+title: Multi-Organization Subscriptions
+description: Link child organizations to an Enterprise subscription so multiple organizations can share billing, quotas, and seats
+---
+
+# Multi-Organization Subscriptions
+
+Multi-organization subscriptions let an Enterprise organization share its subscription with other Zephyr organizations. The Enterprise organization becomes the parent organization, and each invited organization becomes a child organization after accepting the invitation.
+
+Use this when one company, agency, or platform team manages billing for multiple separate Zephyr organizations.
+
+## How It Works
+
+The parent organization keeps ownership of the subscription. Child organizations keep their own projects, applications, members, and organization settings, but use the parent's subscription benefits.
+
+After an invite is accepted:
+
+- The child organization shares the parent's subscription plan and limits.
+- Users can belong to multiple linked organizations and only count once toward the shared seat limit.
+- Subscription management stays with the parent organization.
+- The child organization's current subscription is replaced by the shared subscription.
+
+## Requirements
+
+Before inviting a child organization, make sure:
+
+- The parent organization is on an Enterprise plan.
+- The parent organization owns its subscription and is not already managed by another parent organization.
+- The child organization is on the Personal free tier.
+- The child organization has no pending or unpaid invoices.
+- The child organization is not already linked to another parent subscription.
+- The parent organization has not reached the child organization limit.
+
+## Invite a Child Organization
+
+1. Open the [Zephyr dashboard](https://app.zephyr-cloud.io).
+2. Select the Enterprise organization that should own the shared subscription.
+3. Go to **Settings** > **Subscription**.
+4. Open the **Child Organizations** tab.
+5. Click **Invite Organization**.
+6. Enter the child organization's organization name.
+7. Wait for Zephyr to validate that the organization can join.
+8. Click **Send Invitation**.
+
+The child organization appears as a pending invite until one of its owners accepts or rejects the invitation.
+
+## Accept an Invitation
+
+1. Open the invited child organization in the dashboard.
+2. Go to **Settings** > **Subscription**.
+3. Review the subscription invitation details.
+4. Click **Accept Invitation**.
+
+Accepting replaces the child organization's current subscription with the parent's shared subscription. This is a billing change, so review the parent organization, plan, billing cycle, and shared seat limit before accepting.
+
+## Reject or Cancel an Invitation
+
+Child organization owners can reject an invitation from the subscription invitation dialog.
+
+Parent organization owners can cancel a pending invitation:
+
+1. Open the parent organization.
+2. Go to **Settings** > **Subscription** > **Child Organizations**.
+3. Find the pending child organization.
+4. Click the cancel action.
+
+## Manage Linked Organizations
+
+The **Child Organizations** tab lists linked child organizations and pending invites. For each linked child organization, Zephyr shows the organization name, user count, project count, and application count.
+
+Pending invites can be cancelled from the parent organization. Removing an already-linked child organization is not currently a self-serve action from this table.
+
+## Troubleshooting
+
+### The Child Organizations tab is missing
+
+The tab only appears for Enterprise subscriptions. If the organization is on Personal, Team, or Pro, upgrade to Enterprise or contact Zephyr support.
+
+### The organization cannot be invited
+
+Check that the child organization exists, is on the Personal free tier, has no open invoices, and is not already linked to another parent subscription.
+
+### The invitation is no longer valid
+
+The invite may have been cancelled, the child organization may no longer qualify, or the parent organization name in the invite link may be wrong. Ask the parent organization owner to send a new invitation.
+
+## Related
+
+- [Subscriptions](/features/subscriptions)
+- [Organization Structure](/features/organization-structure)
+- [Teams & Members](/features/teams-members)
