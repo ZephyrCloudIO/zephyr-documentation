@@ -126,6 +126,10 @@ const sidebar: Sidebar = {
           text: 'Subscriptions',
           link: '/features/subscriptions',
         },
+        {
+          text: 'Multi-Organization Subscriptions',
+          link: '/features/multi-organization-subscriptions',
+        },
       ],
     },
     {
