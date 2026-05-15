@@ -95,6 +95,10 @@ const sidebar: Sidebar = {
           link: '/features/instant-rollbacks',
         },
         {
+          text: 'React Native OTA Updates',
+          link: '/features/react-native-ota-updates',
+        },
+        {
           text: 'Remote Dependencies',
           link: '/features/remote-dependencies',
         },

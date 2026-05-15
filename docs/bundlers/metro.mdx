@@ -28,9 +28,21 @@ Deploy your React Native applications with Module Federation to Zephyr Cloud usi
 
 ## Installation
 
-Install the Metro plugin and required dependencies in your project:
+Install the Metro plugin and required Module Federation dependencies in your project:
 
-<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro @module-federation/metro-plugin-rnc-cli @module-federation/runtime" />
+<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro @module-federation/runtime" />
+
+If you use React Native CLI custom commands, install the React Native CLI command package:
+
+<PackageManagerTabs command="add --dev @module-federation/metro-plugin-rnc-cli" />
+
+If you use RNEF, install the RNEF Module Federation plugin:
+
+<PackageManagerTabs command="add --dev @module-federation/metro-plugin-rnef" />
+
+To enable React Native OTA updates in a host app, also install the native cache runtime:
+
+<PackageManagerTabs command="add zephyr-native-cache" />
 
 ## Module Federation with Metro
 
@@ -50,43 +62,45 @@ const config = {
   resolver: { useWatchman: false },
 };
 
-async function getConfig() {
-  const zephyrConfig = await withZephyr()({
-    name: 'miniApp',
-    filename: 'miniApp.bundle',
-    exposes: {
-      './example': './src/example.tsx',
+const mfConfig = {
+  name: 'miniApp',
+  filename: 'miniApp.bundle',
+  exposes: {
+    './example': './src/example.tsx',
+  },
+  shared: {
+    react: {
+      singleton: true,
+      eager: false,
+      requiredVersion: '19.1.0',
+      version: '19.1.0',
+      import: false,
     },
-    shared: {
-      react: {
-        singleton: true,
-        eager: false,
-        requiredVersion: '19.1.0',
-        version: '19.1.0',
-        import: false,
-      },
-      'react-native': {
-        singleton: true,
-        eager: false,
-        requiredVersion: '0.80.0',
-        version: '0.80.0',
-        import: false,
-      },
+    'react-native': {
+      singleton: true,
+      eager: false,
+      requiredVersion: '0.80.0',
+      version: '0.80.0',
+      import: false,
     },
-    shareStrategy: 'version-first',
-  });
+  },
+  shareStrategy: 'version-first',
+};
 
-  return withModuleFederation(
-    mergeConfig(getDefaultConfig(__dirname), config),
-    zephyrConfig,
-    {
-      flags: {
-        unstable_patchHMRClient: true,
-        unstable_patchInitializeCore: true,
-        unstable_patchRuntimeRequire: true,
-      },
+async function getConfig() {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
+  const zephyrConfig = await withZephyr({
+    name: mfConfig.name,
+    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
+  })(baseConfig);
+
+  return withModuleFederation(zephyrConfig, mfConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
     },
-  );
+  });
 }
 
 module.exports = getConfig();
@@ -147,57 +161,88 @@ Host applications load and orchestrate mini-applications:
 
 ```javascript
 // metro.config.js
-const path = require('node:path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
 
 const miniAppPort = process.env.MINI_APP_PORT ?? '8082';
+const useZephyrRemotes = process.env.ZEPHYR_REMOTE_RESOLUTION === '1';
 
 const config = {
   resolver: { useWatchman: false },
 };
 
-const getConfig = async () => {
-  const zephyrConfig = await withZephyr()({
-    name: 'hostApp',
-    remotes: {
-      // Match the port used by your MiniApp Metro server in local development.
-      miniApp: `miniApp@http://localhost:${miniAppPort}/mf-manifest.json`,
+const mfConfig = {
+  name: 'hostApp',
+  remotes: {
+    miniApp: useZephyrRemotes
+      ? 'zephyr:miniApp@yourEnvironment'
+      : `miniApp@http://localhost:${miniAppPort}/mf-manifest.json`,
+  },
+  shared: {
+    react: {
+      singleton: true,
+      eager: true,
+      requiredVersion: '19.1.0',
+      version: '19.1.0',
     },
-    shared: {
-      react: {
-        singleton: true,
-        eager: true,
-        requiredVersion: '19.1.0',
-        version: '19.1.0',
-      },
-      'react-native': {
-        singleton: true,
-        eager: true,
-        requiredVersion: '0.80.0',
-        version: '0.80.0',
-      },
+    'react-native': {
+      singleton: true,
+      eager: true,
+      requiredVersion: '0.80.0',
+      version: '0.80.0',
     },
-    shareStrategy: 'loaded-first',
-    plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
-  });
-
-  return withModuleFederation(
-    mergeConfig(getDefaultConfig(__dirname), config),
-    zephyrConfig,
-    {
-      flags: {
-        unstable_patchHMRClient: true,
-        unstable_patchInitializeCore: true,
-        unstable_patchRuntimeRequire: true,
-      },
-    },
-  );
+  },
+  shareStrategy: 'loaded-first',
+  runtimePlugins: [require.resolve('zephyr-native-cache/runtime-plugin')],
 };
 
-module.exports = getConfig;
+const getConfig = async () => {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
+  const zephyrConfig = await withZephyr({
+    name: mfConfig.name,
+    remotes: mfConfig.remotes,
+    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
+  })(baseConfig);
+
+  return withModuleFederation(zephyrConfig, mfConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
+    },
+  });
+};
+
+module.exports = getConfig();
 ```
+
+Use local HTTP manifest URLs during local development. Use Zephyr selectors such as `zephyr:miniApp@yourEnvironment` for builds that should resolve remotes from Zephyr Cloud.
+
+To enable OTA behavior, register the native cache before the host loads remote bundles:
+
+```javascript
+// index.js
+import ZephyrNativeCache from 'zephyr-native-cache';
+import { withAsyncStartup } from '@module-federation/metro/bootstrap';
+import { AppRegistry } from 'react-native';
+import { name as appName } from './app.json';
+
+ZephyrNativeCache.register({
+  enablePolling: true,
+  pollIntervalMs: 5 * 60 * 1000,
+});
+
+AppRegistry.registerComponent(
+  appName,
+  withAsyncStartup(
+    () => require('./src/App'),
+    () => require('./src/Fallback'),
+  ),
+);
+```
+
+For full OTA behavior, update policies, cache status APIs, and rollback behavior, see [React Native OTA Updates](/features/react-native-ota-updates).
 
 ### Zephyr Dependencies
 
@@ -215,9 +260,13 @@ Configure Zephyr dependencies in your host application's `package.json`:
 
 For more details, see [Remote Dependencies](/features/remote-dependencies).
 
+When building a host for Zephyr-resolved remotes, use the same selector in `mfConfig.remotes` and `zephyr:dependencies` so the Metro plugin can replace the selector with the resolved manifest URL.
+
 ## Next Steps
 
 - Check out our [Metro Tutorial](/tutorials/metro) for a complete walkthrough
+- Configure [React Native OTA Updates](/features/react-native-ota-updates) with `zephyr-native-cache`
 - Explore the [example repository](https://github.com/ZephyrCloudIO/zephyr-metro-example/) for working examples
+- Explore the [OTA example repository](https://github.com/ZephyrCloudIO/zephyr-native-cache-test) for native cache behavior
 - Learn about [Tags & Environments](/features/tags-environments) for managing deployment stages
 - Review [End-to-End Testing](/tutorials/e2e-testing) for testing federated applications
