@@ -1,20 +1,24 @@
 ---
-title: React Native OTA Updates
-description: Ship over-the-air updates for React Native Metro Module Federation remotes with Zephyr Cloud.
+title: React Native OTA Updates (Beta)
+description: Ship beta over-the-air updates for React Native Metro Module Federation remotes with Zephyr Cloud.
 head:
   - - meta
     - property: og:description
-      content: Ship over-the-air updates for React Native Metro Module Federation remotes with Zephyr Cloud.
+      content: Ship beta over-the-air updates for React Native Metro Module Federation remotes with Zephyr Cloud.
 ---
 
 import { PackageManagerTabs } from '@rspress/core/theme';
 
-# React Native OTA Updates
+# React Native OTA Updates (Beta)
 
 React Native OTA updates let an installed host app load newer Metro Module Federation remote bundles without releasing a new binary through the App Store or Play Store. Zephyr supports this flow with two packages:
 
 - `zephyr-metro-plugin` publishes Metro Module Federation bundles to Zephyr Cloud and resolves remote manifests for `ios` and `android` builds.
 - `zephyr-native-cache` runs in the host app, verifies remote bundle hashes, stores valid bundles on device, polls remote manifests for changes, and exposes APIs to apply downloaded updates.
+
+:::warning Beta
+React Native OTA support for Metro is currently in beta. APIs and recommended wiring may change while the native cache and Metro integration continue to stabilize.
+:::
 
 :::warning Native Code Boundary
 OTA updates only update JavaScript bundles loaded through Metro Module Federation. Native code changes, new native modules, native dependency linking changes, permission changes, and host-shell changes still require a normal app-store release.
