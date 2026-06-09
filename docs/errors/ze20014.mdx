@@ -29,11 +29,9 @@ A stale or corrupted cached configuration is the most common cause. Remove the c
 
 rm -rf ~/.zephyr
 
-### Re-authenticate with Zephyr
+### Sign in again on your next build
 
-The configuration request is authenticated with your token. If it has expired, sign in again before retrying.
-
-npx ze login
+Clearing the cache also removes your stored credentials. The next time you build, Zephyr will open a browser window and prompt you to sign in again, refreshing the token used to load your application configuration.
 
 ### Ensure you are running the latest Zephyr plugin
 
@@ -41,9 +39,9 @@ Update your Zephyr plugin to the latest version to ensure you have the latest fi
 
 # Choose the plugin you are using
 
-npm install zephyr-webpack-plugin --latest
-npm install rollup-plugin-zephyr --latest
-npm install vite-plugin-zephyr --latest
+npm install zephyr-webpack-plugin@latest
+npm install rollup-plugin-zephyr@latest
+npm install vite-plugin-zephyr@latest
 
 ### Retry your deployment
 
