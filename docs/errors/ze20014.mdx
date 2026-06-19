@@ -1,14 +1,15 @@
 ---
-title: 'ZE20014: Error not yet documented'
-description: 'ZE20014: Error code not yet documented'
+title: 'ZE20014: Failed to load application configuration'
+description: 'ZE20014: Zephyr could not load the application configuration during deployment'
 head:
   - - meta
     - property: og:description
-      content: 'ZE20014: Error code not yet documented'
+      content: 'ZE20014: Zephyr could not load the application configuration during deployment'
 ---
 
 import { getErrorMessage } from '../../lib/error-helpers.ts';
 import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
 
 # {getErrorMessage('ZE20014')}
 
@@ -18,6 +19,38 @@ The fastest way to resolve this error is to [join our Discord](https://discord.g
 
 <ErrorInfo code="ZE20014" terminal />
 
+This error happens during deployment when the Zephyr plugin requests your application configuration from the Zephyr API (using your `application_uid`), but the request fails or returns no configuration. It is most often caused by a stale local cache in `~/.zephyr`, an expired authentication token, or a temporary network/API issue.
+
+<Steps>
+
+### Clear the local Zephyr cache
+
+A stale or corrupted cached configuration is the most common cause. Remove the cache folder and re-run your deployment:
+
+rm -rf ~/.zephyr
+
+### Sign in again on your next build
+
+Clearing the cache also removes your stored credentials. The next time you build, Zephyr will open a browser window and prompt you to sign in again, refreshing the token used to load your application configuration.
+
+### Ensure you are running the latest Zephyr plugin
+
+Update your Zephyr plugin to the latest version to ensure you have the latest fixes.
+
+# Choose the plugin you are using
+
+npm install zephyr-webpack-plugin@latest
+npm install rollup-plugin-zephyr@latest
+npm install vite-plugin-zephyr@latest
+
+### Retry your deployment
+
+This error can be transient. After clearing the cache and re-authenticating, run your build again.
+
+npm run build
+
+</Steps>
+
 ::: warning
-This error is not yet documented. Please contact us on Discord for assistance.
+If the error persists after clearing `~/.zephyr` and re-authenticating, your `application_uid` may not be resolvable or the API may be temporarily unavailable. Please [contact us on Discord](https://discord.gg/zephyrcloud) with your deployment logs so we can help.
 :::
