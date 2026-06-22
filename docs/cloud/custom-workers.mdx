@@ -1,0 +1,132 @@
+---
+title: 'Custom Worker Hosts'
+description: 'Enterprise guide for building custom Zephyr worker hosts with @zephyrcloudio/worker-engine'
+head:
+  - - meta
+    - property: og:description
+      content: Enterprise guide for building custom Zephyr worker hosts with @zephyrcloudio/worker-engine
+---
+
+import { Badge } from '@rspress/core/theme';
+
+# Custom Worker Hosts
+
+<Badge text="Enterprise" type="warning" />
+
+Custom worker hosts let Enterprise customers run Zephyr's worker request engine in infrastructure that is not covered by the managed Cloudflare, AWS, Akamai, Fastly, Netlify, or Kubernetes integrations.
+
+:::warning Enterprise Only
+
+Custom worker hosts are available exclusively for **Enterprise customers**. They require Zephyr coordination for integration provisioning, token validation, routing, and support boundaries. If you need a custom worker host, [contact our sales team](https://zephyr-cloud.io/pricing).
+
+:::
+
+## Overview
+
+Custom hosts use `@zephyrcloudio/worker-engine`, the storage-agnostic request engine shared by Zephyr workers. The package handles Zephyr request routing, uploads, publish updates, static asset serving, manifest reads, and replication hooks.
+
+The package is not a complete worker by itself. Your host wraps the engine with platform-specific request conversion, response conversion, storage adapters, background work, fetch, hashing, and JWT verification.
+
+Use a custom worker host when an Enterprise deployment needs a runtime that Zephyr does not ship directly, a different storage layout, or a custom edge/server environment with the same Zephyr deployment contract.
+
+## Host Responsibilities
+
+| Responsibility            | What the host provides                                                                 |
+| ------------------------- | -------------------------------------------------------------------------------------- |
+| Request adapter           | Convert the platform request into the engine `WorkerRequest` shape, including headers. |
+| Response adapter          | Convert the engine response back into the platform response type.                      |
+| Object storage            | Store and read uploaded asset bytes.                                                   |
+| KV storage                | Store snapshots and hostname-to-snapshot mappings.                                     |
+| Authentication            | Verify Zephyr upload and publish requests before allowing POST routes.                 |
+| Text and crypto utilities | Provide encode, decode, URL parsing, stream reading, and SHA-256 hashing.              |
+| Runtime primitives        | Provide platform `fetch` and background work through `wait_until`.                     |
+| Manifest filename         | Set `ZEPHYR_MANIFEST_FILENAME`, usually `zephyr-manifest.json`.                        |
+
+## Request Flow
+
+`engine_router(bindings, props)` handles:
+
+- `GET` and `HEAD /__get_application_hash_list__`
+- `GET` and `HEAD /__get_version_info__`
+- `GET` and `HEAD /__get_zephyr_snapshot__`
+- `GET` and `HEAD /*` static asset serving from the current hostname snapshot
+- `POST ?type=snapshot` snapshot uploads
+- `POST ?type=file` asset uploads
+- `POST ?type=publish` publish target updates
+- `OPTIONS` CORS preflight
+
+Snapshot serving is hostname-first. Serving routes resolve the active snapshot from the request hostname, then resolve assets by request path inside that snapshot.
+
+## Minimal Host Shape
+
+```ts
+import {
+  createAssetActions,
+  createEnvActions,
+  createHashListActions,
+  createSnapshotActions,
+  engine_router,
+  type EngineBindings,
+  type EngineRouterProps,
+} from '@zephyrcloudio/worker-engine';
+
+const bindings: EngineBindings = {
+  assets: createAssetActions(objectStorage),
+  snapshots: createSnapshotActions(kvStorage, 'snapshot:'),
+  envs: createEnvActions(kvStorage, 'env:'),
+  hash_list: createHashListActions(objectStorage, ':'),
+  options: { separator: ':' },
+  fetch: platformFetch,
+  wait_until: platformWaitUntil,
+  textUtils,
+  ZEPHYR_MANIFEST_FILENAME: 'zephyr-manifest.json',
+};
+
+const props: EngineRouterProps = {
+  req: toWorkerRequest(platformRequest),
+  env: {
+    delimiter: '-',
+    jwt_secret: process.env.JWT_SECRET,
+  },
+  application_uid: verifiedApplicationUid,
+};
+
+const engineResponse = await engine_router(bindings, props);
+return fromWorkerResponse(engineResponse);
+```
+
+## Production Checklist
+
+- Confirm the deployment is approved for Enterprise custom-worker support.
+- Keep the worker package version aligned with the Zephyr integration version used by your organization.
+- Pass request headers through to `WorkerRequest.headers`; the engine uses them for content negotiation, ETags, and conditional responses.
+- Verify JWTs before upload or publish POST routes.
+- Preserve the `x-server: zephyr-cloud` response header for compatibility.
+- Use hostname-based routing unless Zephyr has explicitly provisioned a different routing model for your deployment.
+- Run package and host build checks before publishing the worker.
+
+## Local Verification
+
+In the worker-engine source repository, verify the package before building a custom host:
+
+```sh
+pnpm worker-engine:pack:dry-run
+pnpm nx test zephyr-worker-engine --runInBand
+pnpm nx build zephyr-worker-engine
+```
+
+For the custom host itself, run the platform build, typecheck, and a request smoke test that covers:
+
+- Static asset serving with `Accept` headers.
+- `If-None-Match` handling for cached assets.
+- Snapshot upload.
+- Asset upload.
+- Publish target update.
+- Unauthorized POST rejection.
+
+## Related Documentation
+
+- [Manage Cloud Providers](/cloud)
+- [Kubernetes Deployment](/cloud/kubernetes)
+- [Updating Integrations](/cloud/updating-integrations)
+- [Architecture](/reference/architecture)
