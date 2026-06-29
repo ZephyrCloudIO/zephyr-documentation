@@ -37,7 +37,7 @@ Alternatively, you can use environment variables directly, though this is less r
 
 ### JSON Config File (Recommended)
 
-Create a JSON file containing all your configuration. All keys use the `ZE_WORKER_` prefix:
+Create a JSON file containing all your configuration. Worker-specific keys use the `ZE_WORKER_` prefix; OpenTelemetry keys use the standard `OTEL_` prefix:
 
 ```jsonc
 // Example configuration
@@ -46,12 +46,11 @@ Create a JSON file containing all your configuration. All keys use the `ZE_WORKE
   "ZE_WORKER_JWT_SECRET": "your-secret-key",
   "ZE_WORKER_LOG_LEVEL": "info",
   "ZE_WORKER_DELIMITER": "-",
-  "ZE_WORKER_OTEL_ENABLED": "true",
-  "ZE_WORKER_OTEL_SERVICE_NAME": "ze-k8s-workers",
-  "ZE_WORKER_OTEL_DEPLOYMENT_ENVIRONMENT": "production",
-  "ZE_WORKER_OTEL_METRIC_EXPORT_INTERVAL_MS": "60000",
-  "ZE_WORKER_OTEL_EXPORTER_OTLP_ENDPOINT": "http://otel-collector.observability.svc.cluster.local:4318/v1",
-  "ZE_WORKER_OTEL_EXPORTER_OTLP_HEADERS": "Authorization=Bearer%20your-token",
+  "OTEL_SERVICE_NAME": "ze-k8s-workers",
+  "OTEL_RESOURCE_ATTRIBUTES": "deployment.environment.name=production",
+  "OTEL_METRIC_EXPORT_INTERVAL": "60000",
+  "OTEL_EXPORTER_OTLP_ENDPOINT": "http://otel-collector.observability.svc.cluster.local:4318",
+  "OTEL_EXPORTER_OTLP_HEADERS": "Authorization=Bearer%20your-token",
   "ZE_WORKER_S3_ENDPOINT": "https://s3.amazonaws.com",
   "ZE_WORKER_S3_REGION": "us-east-1",
   "ZE_WORKER_S3_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
@@ -89,23 +88,21 @@ The worker exposes the following health check endpoints for Kubernetes probes:
 
 ## Observability
 
-The Kubernetes worker emits OpenTelemetry traces, metrics, and logs over OTLP HTTP. Enable telemetry with `ZE_WORKER_OTEL_ENABLED=true`, any `ZE_WORKER_OTEL_EXPORTER_OTLP_*` endpoint, or standard `OTEL_EXPORTER_OTLP_*` environment variables.
+The Kubernetes worker emits OpenTelemetry traces, metrics, and logs over OTLP HTTP. Enable telemetry with any `OTEL_EXPORTER_OTLP_*` endpoint or by explicitly setting a signal exporter such as `OTEL_TRACES_EXPORTER=otlp`.
 
-If you set only `ZE_WORKER_OTEL_EXPORTER_OTLP_ENDPOINT`, the worker treats it as the versioned OTLP HTTP endpoint and sends each signal to:
+If you set only `OTEL_EXPORTER_OTLP_ENDPOINT`, the worker treats it as the collector base URL and sends each signal to:
 
-- Traces: `<endpoint>/traces`
-- Metrics: `<endpoint>/metrics`
-- Logs: `<endpoint>/logs`
-
-Unversioned collector base URLs are also accepted for compatibility. For example, `http://otel-collector:4318` resolves to `/v1/traces`, `/v1/metrics`, and `/v1/logs`.
+- Traces: `<endpoint>/v1/traces`
+- Metrics: `<endpoint>/v1/metrics`
+- Logs: `<endpoint>/v1/logs`
 
 Use the signal-specific endpoint variables when your collector exposes separate routes:
 
 ```jsonc
 {
-  "ZE_WORKER_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT": "http://otel-collector:4318/v1/traces",
-  "ZE_WORKER_OTEL_EXPORTER_OTLP_METRICS_ENDPOINT": "http://otel-collector:4318/v1/metrics",
-  "ZE_WORKER_OTEL_EXPORTER_OTLP_LOGS_ENDPOINT": "http://otel-collector:4318/v1/logs",
+  "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT": "http://otel-collector:4318/v1/traces",
+  "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT": "http://otel-collector:4318/v1/metrics",
+  "OTEL_EXPORTER_OTLP_LOGS_ENDPOINT": "http://otel-collector:4318/v1/logs",
 }
 ```
 
@@ -115,8 +112,8 @@ For collectors that require authentication, set OTLP headers using comma-separat
 
 ```jsonc
 {
-  "ZE_WORKER_OTEL_EXPORTER_OTLP_HEADERS": "Authorization=Bearer%20your-token",
-  "ZE_WORKER_OTEL_EXPORTER_OTLP_TRACES_HEADERS": "x-api-key=trace-key",
+  "OTEL_EXPORTER_OTLP_HEADERS": "Authorization=Bearer%20your-token",
+  "OTEL_EXPORTER_OTLP_TRACES_HEADERS": "x-api-key=trace-key",
 }
 ```
 
@@ -175,22 +172,23 @@ Below is the complete reference for all available configuration options. These c
 
 ### OpenTelemetry Options
 
-| Key                                             | Description                                  | Default                            | Example                                 |
-| ----------------------------------------------- | -------------------------------------------- | ---------------------------------- | --------------------------------------- |
-| `ZE_WORKER_OTEL_ENABLED`                        | Enables OpenTelemetry export                 | `false`                            | `true`                                  |
-| `ZE_WORKER_OTEL_SERVICE_NAME`                   | Service name resource attribute              | `ze-k8s-workers`                   | `ze-k8s-workers-prod`                   |
-| `ZE_WORKER_OTEL_DEPLOYMENT_ENVIRONMENT`         | Deployment environment resource attribute    | `NODE_ENV`, otherwise `production` | `production`                            |
-| `ZE_WORKER_OTEL_METRIC_EXPORT_INTERVAL_MS`      | OTLP metric export interval in milliseconds  | `60000`                            | `30000`                                 |
-| `ZE_WORKER_OTEL_EXPORTER_OTLP_ENDPOINT`         | Versioned OTLP HTTP endpoint for all signals | _(unset)_                          | `http://otel-collector:4318/v1`         |
-| `ZE_WORKER_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`  | Signal-specific OTLP HTTP traces endpoint    | _(unset)_                          | `http://otel-collector:4318/v1/traces`  |
-| `ZE_WORKER_OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` | Signal-specific OTLP HTTP metrics endpoint   | _(unset)_                          | `http://otel-collector:4318/v1/metrics` |
-| `ZE_WORKER_OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`    | Signal-specific OTLP HTTP logs endpoint      | _(unset)_                          | `http://otel-collector:4318/v1/logs`    |
-| `ZE_WORKER_OTEL_EXPORTER_OTLP_HEADERS`          | Base OTLP HTTP headers for all signals       | _(unset)_                          | `Authorization=Bearer%20TOKEN`          |
-| `ZE_WORKER_OTEL_EXPORTER_OTLP_TRACES_HEADERS`   | Signal-specific OTLP HTTP traces headers     | _(unset)_                          | `x-api-key=trace-key`                   |
-| `ZE_WORKER_OTEL_EXPORTER_OTLP_METRICS_HEADERS`  | Signal-specific OTLP HTTP metrics headers    | _(unset)_                          | `x-api-key=metrics-key`                 |
-| `ZE_WORKER_OTEL_EXPORTER_OTLP_LOGS_HEADERS`     | Signal-specific OTLP HTTP logs headers       | _(unset)_                          | `x-api-key=logs-key`                    |
-
-The worker also honors standard `OTEL_EXPORTER_OTLP_*` environment variables, including `OTEL_EXPORTER_OTLP_HEADERS` and signal-specific header variables. Standard `OTEL_EXPORTER_OTLP_ENDPOINT` keeps the OpenTelemetry base endpoint behavior and appends `/v1/{signal}`. Signal-specific endpoint and header variables take precedence over the base values. `OTEL_SDK_DISABLED=true` disables telemetry.
+| Key                                   | Description                                 | Default                                                               | Example                                  |
+| ------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------------- |
+| `OTEL_SDK_DISABLED`                   | Disables OpenTelemetry export               | _(unset)_                                                             | `true`                                   |
+| `OTEL_SERVICE_NAME`                   | Service name resource attribute             | `ze-k8s-workers`                                                      | `ze-k8s-workers-prod`                    |
+| `OTEL_RESOURCE_ATTRIBUTES`            | Additional resource attributes              | `deployment.environment.name` from `NODE_ENV`, otherwise `production` | `deployment.environment.name=production` |
+| `OTEL_METRIC_EXPORT_INTERVAL`         | OTLP metric export interval in milliseconds | `60000`                                                               | `30000`                                  |
+| `OTEL_TRACES_EXPORTER`                | Trace exporter selection                    | _(unset)_                                                             | `otlp` or `none`                         |
+| `OTEL_METRICS_EXPORTER`               | Metrics exporter selection                  | _(unset)_                                                             | `otlp` or `none`                         |
+| `OTEL_LOGS_EXPORTER`                  | Logs exporter selection                     | _(unset)_                                                             | `otlp` or `none`                         |
+| `OTEL_EXPORTER_OTLP_ENDPOINT`         | Base OTLP HTTP endpoint for all signals     | _(unset)_                                                             | `http://otel-collector:4318`             |
+| `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`  | Signal-specific OTLP HTTP traces endpoint   | _(unset)_                                                             | `http://otel-collector:4318/v1/traces`   |
+| `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` | Signal-specific OTLP HTTP metrics endpoint  | _(unset)_                                                             | `http://otel-collector:4318/v1/metrics`  |
+| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`    | Signal-specific OTLP HTTP logs endpoint     | _(unset)_                                                             | `http://otel-collector:4318/v1/logs`     |
+| `OTEL_EXPORTER_OTLP_HEADERS`          | Base OTLP HTTP headers for all signals      | _(unset)_                                                             | `Authorization=Bearer%20TOKEN`           |
+| `OTEL_EXPORTER_OTLP_TRACES_HEADERS`   | Signal-specific OTLP HTTP traces headers    | _(unset)_                                                             | `x-api-key=trace-key`                    |
+| `OTEL_EXPORTER_OTLP_METRICS_HEADERS`  | Signal-specific OTLP HTTP metrics headers   | _(unset)_                                                             | `x-api-key=metrics-key`                  |
+| `OTEL_EXPORTER_OTLP_LOGS_HEADERS`     | Signal-specific OTLP HTTP logs headers      | _(unset)_                                                             | `x-api-key=logs-key`                     |
 
 ### S3 Options
 
@@ -459,7 +457,7 @@ All workers have `ZE_WORKER_REPLICAS_URLS` pointing to other regions' load balan
 
 1. Confirm the collector accepts OTLP HTTP, not only OTLP gRPC
 2. Verify the worker pod can resolve and connect to the collector service
-3. Use the versioned OTLP HTTP endpoint for `ZE_WORKER_OTEL_EXPORTER_OTLP_ENDPOINT`, for example `http://otel-collector:4318/v1`
+3. Use the collector base URL for `OTEL_EXPORTER_OTLP_ENDPOINT`, for example `http://otel-collector:4318`
 4. Include the full `/v1/traces`, `/v1/metrics`, or `/v1/logs` path when using signal-specific endpoints
 5. Configure OTLP headers when the collector requires a bearer token, API key, or tenant header
 6. Confirm `OTEL_SDK_DISABLED` is not set to `true`
