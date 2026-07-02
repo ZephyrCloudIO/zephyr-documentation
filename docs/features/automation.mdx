@@ -1,19 +1,23 @@
 ---
 title: CI/CD Automation
-description: Configure CI/CD automation for Zephyr Cloud using API tokens with GitHub Actions and GitLab CI/CD pipelines
+description: Configure CI/CD automation for Zephyr Cloud using CI tokens with GitHub Actions and GitLab CI/CD pipelines
 head:
   - - meta
     - property: og:description
-      content: Configure CI/CD automation for Zephyr Cloud using API tokens with GitHub Actions and GitLab CI/CD pipelines
+      content: Configure CI/CD automation for Zephyr Cloud using CI tokens with GitHub Actions and GitLab CI/CD pipelines
 ---
 
 # CI/CD Automation
 
-Zephyr requires an authenticated user to publish updates. To configure your CI/CD pipeline to build and deploy with Zephyr, you'll need to add a token to your pipeline configuration.
+Zephyr requires authenticated CI/CD pipelines to publish updates. Use CI tokens for deployment authentication.
 
-## Creating an API Token
+:::warning Deployment authentication has changed
+Do not use personal tokens with `ZE_SECRET_TOKEN` for deployments. Existing pipelines that use personal tokens or server tokens should migrate to CI tokens.
+:::
 
-First, create a token on your [API token](https://app.zephyr-cloud.io/profile/settings/user-tokens) page. This token will be used to authenticate your CI/CD pipeline with Zephyr.
+## Creating a CI Token
+
+First, create a CI token from **Organization Settings** > **CI tokens**. This token will be used to authenticate your CI/CD pipeline with Zephyr.
 
 ## GitHub Actions
 
@@ -25,12 +29,12 @@ Add your Zephyr token as a repository secret:
 2. Go to **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret**
 4. Set:
-   - **Name**: `ZEPHYR_AUTH_TOKEN`
-   - **Secret**: Your Zephyr API token
+   - **Name**: `ZEPHYR_CI_TOKEN`
+   - **Secret**: Your Zephyr CI token
 
 ### Using in Workflow
 
-The secret must be assigned to the `ZE_SECRET_TOKEN` environment variable:
+The secret must be assigned to the `ZE_CI_TOKEN` environment variable:
 
 ```yml title=".github/workflows/deploy.yml"
 name: Deploy with Zephyr
@@ -44,7 +48,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_AUTH_TOKEN }}
+      ZE_CI_TOKEN: ${{ secrets.ZEPHYR_CI_TOKEN }}
 
     steps:
       - uses: actions/checkout@v3
@@ -71,8 +75,8 @@ Add your Zephyr token as a CI/CD variable:
 3. Expand the **Variables** section
 4. Click **Add variable**
 5. Set:
-   - **Key**: `ZE_SECRET_TOKEN`
-   - **Value**: Your Zephyr API token
+   - **Key**: `ZE_CI_TOKEN`
+   - **Value**: Your Zephyr CI token
    - **Type**: Variable
    - **Environment scope**: All (or specify environments)
    - **Protect variable**: ✓ (recommended)
@@ -109,7 +113,7 @@ build:
   script:
     - npm run build
   variables:
-    ZE_SECRET_TOKEN: $ZE_SECRET_TOKEN
+    ZE_CI_TOKEN: $ZE_CI_TOKEN
   artifacts:
     paths:
       - dist/
@@ -124,26 +128,26 @@ deploy:
   environment:
     name: production
   variables:
-    ZE_SECRET_TOKEN: $ZE_SECRET_TOKEN
+    ZE_CI_TOKEN: $ZE_CI_TOKEN
 ```
 
 ## Plugin Behavior
 
-When the Zephyr plugin detects the `ZE_SECRET_TOKEN` environment variable, it will:
+When the Zephyr plugin detects the `ZE_CI_TOKEN` environment variable, it will:
 
 1. Use the token for automatic authentication
 2. Skip the interactive login step
 3. Display this message in the console:
 
 ```shell
- ZEPHYR   Token found in environment. Using secret token for authentication
+ ZEPHYR   Token found in environment. Using CI token for authentication
 ```
 
 ## Troubleshooting
 
 ### Token not found
 
-- Ensure the variable name is exactly `ZE_SECRET_TOKEN`
+- Ensure the variable name is exactly `ZE_CI_TOKEN`
 - Verify the variable is available in the job environment
 - Check that the token hasn't expired
 

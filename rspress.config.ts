@@ -107,11 +107,11 @@ const sidebar: Sidebar = {
           link: '/features/file-logging',
         },
         {
-          text: 'CI/CD - Personal token',
+          text: 'Personal token deployments',
           link: '/features/ci-cd-personal-token',
         },
         {
-          text: 'CI/CD - Server token',
+          text: 'Server token deployments',
           link: '/features/ci-cd-server-token',
         },
         {
@@ -129,6 +129,17 @@ const sidebar: Sidebar = {
         {
           text: 'Multi-Organization Subscriptions',
           link: '/features/multi-organization-subscriptions',
+        },
+      ],
+    },
+    {
+      text: 'Migrations',
+      collapsed: false,
+      collapsible: true,
+      items: [
+        {
+          text: 'Server tokens to CI tokens',
+          link: '/migrations/ci-token-migration',
         },
       ],
     },
