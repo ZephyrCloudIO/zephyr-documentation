@@ -1,18 +1,23 @@
 ---
-title: Migrate server tokens to CI tokens
-description: Replace ZE_SERVER_TOKEN and ZE_USER_EMAIL CI/CD authentication with organization-scoped CI tokens using ZE_CI_TOKEN.
+title: Migrate deployment auth to CI tokens
+description: Replace ZE_SERVER_TOKEN, ZE_USER_EMAIL, and ZE_SECRET_TOKEN deployment authentication with organization-scoped CI tokens using ZE_CI_TOKEN.
 ---
 
-# Migrate server tokens to CI tokens
+# Migrate deployment auth to CI tokens
 
-Server tokens are being replaced by CI tokens for CI/CD authentication. CI tokens are organization-scoped credentials made for build pipelines and use the `ZE_CI_TOKEN` environment variable.
+CI tokens are becoming the supported way to authenticate deployments from build pipelines. CI tokens are organization-scoped credentials made for CI/CD and use the `ZE_CI_TOKEN` environment variable.
 
-Use this guide when an existing pipeline authenticates Zephyr with `ZE_SERVER_TOKEN` and `ZE_USER_EMAIL`.
+This migration affects both older deployment-auth paths:
+
+- Server tokens are going away.
+- Personal tokens remain available, but personal-token deployment auth is going away.
+
+Use this guide when an existing pipeline authenticates Zephyr with `ZE_SERVER_TOKEN` and `ZE_USER_EMAIL`, or with `ZE_SECRET_TOKEN`.
 
 ## Before you start
 
 - You need access to the organization settings in Zephyr Cloud.
-- Keep the existing server token secret available until one CI-token build succeeds.
+- Keep the existing deployment secret available until one CI-token build succeeds.
 - Update one repository or pipeline first, then repeat for the rest.
 
 ## Create a CI token
@@ -32,12 +37,13 @@ env:
   ZE_CI_TOKEN: ${{ secrets.ZEPHYR_CI_TOKEN }}
 ```
 
-Remove the old server-token variables from that job:
+Remove the old deployment-auth variables from that job:
 
 ```yml
 # Remove these after ZE_CI_TOKEN is working.
 ZE_SERVER_TOKEN: ${{ secrets.ZEPHYR_SERVER_TOKEN }}
 ZE_USER_EMAIL: user@example.com
+ZE_SECRET_TOKEN: ${{ secrets.ZEPHYR_PERSONAL_TOKEN }}
 ```
 
 ## Update GitLab CI/CD
@@ -54,11 +60,11 @@ build:
     ZE_CI_TOKEN: $ZE_CI_TOKEN
 ```
 
-Remove `ZE_SERVER_TOKEN` and `ZE_USER_EMAIL` after the CI-token pipeline succeeds.
+Remove `ZE_SERVER_TOKEN`, `ZE_USER_EMAIL`, and `ZE_SECRET_TOKEN` after the CI-token pipeline succeeds.
 
 ## Verify the migration
 
-Run the pipeline and confirm the Zephyr build authenticates without `ZE_SERVER_TOKEN`.
+Run the pipeline and confirm the Zephyr build authenticates without `ZE_SERVER_TOKEN` or `ZE_SECRET_TOKEN`.
 
 If the build fails:
 
@@ -66,9 +72,11 @@ If the build fails:
 - Confirm the CI token still exists in Zephyr Cloud.
 - Generate a new CI token if the original token value was lost.
 
-## Clean up server tokens
+## Clean up old deployment tokens
 
 After every pipeline for the repository uses `ZE_CI_TOKEN`, revoke the old server token from **Organization Settings** > **Server Tokens**.
+
+If a personal token was only used for deployments, revoke it from your profile settings. If the personal token is used for non-deployment workflows, keep it there and remove it only from CI/CD deployment jobs.
 
 ## Related docs
 
