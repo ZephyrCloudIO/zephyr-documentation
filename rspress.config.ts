@@ -115,6 +115,10 @@ const sidebar: Sidebar = {
           link: '/features/ci-cd-server-token',
         },
         {
+          text: 'Migrate server tokens to CI tokens',
+          link: '/features/ci-token-migration',
+        },
+        {
           text: 'Environment Overrides',
           link: '/features/environment-overrides',
         },

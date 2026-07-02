@@ -1,0 +1,76 @@
+---
+title: Migrate server tokens to CI tokens
+description: Replace ZE_SERVER_TOKEN and ZE_USER_EMAIL CI/CD authentication with organization-scoped CI tokens using ZE_CI_TOKEN.
+---
+
+# Migrate server tokens to CI tokens
+
+Server tokens are being replaced by CI tokens for CI/CD authentication. CI tokens are organization-scoped credentials made for build pipelines and use the `ZE_CI_TOKEN` environment variable.
+
+Use this guide when an existing pipeline authenticates Zephyr with `ZE_SERVER_TOKEN` and `ZE_USER_EMAIL`.
+
+## Before you start
+
+- You need access to the organization settings in Zephyr Cloud.
+- Keep the existing server token secret available until one CI-token build succeeds.
+- Update one repository or pipeline first, then repeat for the rest.
+
+## Create a CI token
+
+1. Open Zephyr Cloud.
+2. Go to **Organization Settings**.
+3. Open **CI tokens**.
+4. Generate a CI token.
+5. Copy the token value. It is only shown when the token is created.
+
+## Update GitHub Actions
+
+Add the CI token as a repository or organization secret, then expose it as `ZE_CI_TOKEN` in the job that runs the Zephyr build.
+
+```yml title=".github/workflows/build.yml"
+env:
+  ZE_CI_TOKEN: ${{ secrets.ZEPHYR_CI_TOKEN }}
+```
+
+Remove the old server-token variables from that job:
+
+```yml
+# Remove these after ZE_CI_TOKEN is working.
+ZE_SERVER_TOKEN: ${{ secrets.ZEPHYR_SERVER_TOKEN }}
+ZE_USER_EMAIL: user@example.com
+```
+
+## Update GitLab CI/CD
+
+Add the CI token as a masked CI/CD variable, then expose it as `ZE_CI_TOKEN`.
+
+```yml title=".gitlab-ci.yml"
+build:
+  stage: build
+  script:
+    - pnpm install --frozen-lockfile
+    - pnpm build
+  variables:
+    ZE_CI_TOKEN: $ZE_CI_TOKEN
+```
+
+Remove `ZE_SERVER_TOKEN` and `ZE_USER_EMAIL` after the CI-token pipeline succeeds.
+
+## Verify the migration
+
+Run the pipeline and confirm the Zephyr build authenticates without `ZE_SERVER_TOKEN`.
+
+If the build fails:
+
+- Confirm the secret name in the CI provider matches `ZE_CI_TOKEN`.
+- Confirm the CI token still exists in Zephyr Cloud.
+- Generate a new CI token if the original token value was lost.
+
+## Clean up server tokens
+
+After every pipeline for the repository uses `ZE_CI_TOKEN`, revoke the old server token from **Organization Settings** > **Server Tokens**.
+
+## Related docs
+
+- [CI/CD server token guide](/features/ci-cd-server-token)
+- [CI/CD personal token guide](/features/ci-cd-personal-token)
