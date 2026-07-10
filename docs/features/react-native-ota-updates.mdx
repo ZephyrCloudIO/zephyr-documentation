@@ -1,0 +1,281 @@
+---
+title: React Native OTA Updates (Beta)
+description: Ship beta over-the-air updates for React Native Metro Module Federation remotes with Zephyr Cloud.
+head:
+  - - meta
+    - property: og:description
+      content: Ship beta over-the-air updates for React Native Metro Module Federation remotes with Zephyr Cloud.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+# React Native OTA Updates (Beta)
+
+React Native OTA updates let an installed host app load newer Metro Module Federation remote bundles without releasing a new binary through the App Store or Play Store. Zephyr supports this flow with two packages:
+
+- `zephyr-metro-plugin` publishes Metro Module Federation bundles to Zephyr Cloud and resolves remote manifests for `ios` and `android` builds.
+- `zephyr-native-cache` runs in the host app, verifies remote bundle hashes, stores valid bundles on device, polls remote manifests for changes, and exposes APIs to apply downloaded updates.
+
+:::warning Beta
+React Native OTA support for Metro is currently in beta. APIs and recommended wiring may change while the native cache and Metro integration continue to stabilize.
+:::
+
+:::warning Native Code Boundary
+OTA updates only update JavaScript bundles loaded through Metro Module Federation. Native code changes, new native modules, native dependency linking changes, permission changes, and host-shell changes still require a normal app-store release.
+:::
+
+For a complete working reference, see the [`zephyr-native-cache-test` example](https://github.com/ZephyrCloudIO/zephyr-native-cache-test). The example includes a host app, two remotes, local OTA fixtures, Zephyr-backed OTA scripts, update prompts, cache status UI, and rollback coverage.
+
+## How It Works
+
+1. You publish a Metro Module Federation remote with `zephyr-metro-plugin`.
+2. Zephyr Cloud creates an immutable version with platform-specific artifacts and an `mf-manifest.json`.
+3. Your released host app resolves a remote manifest through a Zephyr dependency such as `zephyr:profile@production`.
+4. `zephyr-native-cache` reads bundle hashes from the manifest through its Module Federation runtime plugin.
+5. When a remote is loaded, the cache layer downloads the bundle natively, verifies its SHA-256 hash, caches it on device, and evaluates it.
+6. Background polling or a manual update check fetches known manifests again. If hashes changed, the cache layer pre-downloads the new bundles.
+7. Your app decides when to apply the update by reloading the React Native JavaScript context.
+
+Rollbacks use the same mechanism. If you roll back a Zephyr environment or move a tag back to an older remote version, manifest polling sees the older bundle hash as the active target, downloads it, and the host can apply it on the next reload.
+
+## Install Packages
+
+Install the Metro and Module Federation packages in every host and remote app:
+
+<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro @module-federation/runtime @module-federation/metro-plugin-rnef" />
+
+Install the native cache package in the host app:
+
+<PackageManagerTabs command="add zephyr-native-cache" />
+
+For iOS, run CocoaPods after adding `zephyr-native-cache`:
+
+```bash
+cd ios
+pod install
+```
+
+## Configure The Host
+
+Add the native cache runtime plugin to the host's Module Federation config. The plugin extracts bundle hashes from remote manifests and registers the manifest URLs that polling will check later.
+
+```js title="apps/host/metro.config.js"
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withModuleFederation } = require('@module-federation/metro');
+const { withZephyr } = require('zephyr-metro-plugin');
+
+const useZephyrRemotes = process.env.ZEPHYR_REMOTE_RESOLUTION === '1';
+
+const remotes = {
+  profile: useZephyrRemotes
+    ? 'zephyr:profile@production'
+    : 'profile@http://localhost:8082/mf-manifest.json',
+};
+
+const mfConfig = {
+  name: 'mobileHost',
+  remotes,
+  shared: {
+    react: {
+      singleton: true,
+      eager: true,
+      requiredVersion: '19.1.0',
+      version: '19.1.0',
+    },
+    'react-native': {
+      singleton: true,
+      eager: true,
+      requiredVersion: '0.80.0',
+      version: '0.80.0',
+    },
+  },
+  shareStrategy: 'loaded-first',
+  runtimePlugins: [require.resolve('zephyr-native-cache/runtime-plugin')],
+};
+
+const mfFlags = {
+  flags: {
+    unstable_patchHMRClient: true,
+    unstable_patchInitializeCore: true,
+    unstable_patchRuntimeRequire: true,
+  },
+};
+
+async function getConfig() {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), {
+    resolver: { useWatchman: false },
+  });
+
+  const zephyrConfig = await withZephyr({
+    name: mfConfig.name,
+    remotes: mfConfig.remotes,
+    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
+  })(baseConfig);
+
+  return withModuleFederation(zephyrConfig, mfConfig, mfFlags);
+}
+
+module.exports = getConfig();
+```
+
+Use local HTTP manifest URLs during local development. Use Zephyr selectors such as `zephyr:profile@production`, `zephyr:profile@staging`, or `zephyr:profile@latest` for builds that should resolve through Zephyr Cloud and receive OTA changes from the corresponding environment or tag.
+
+You can also declare the same dependency in the host `package.json` so Zephyr dependency relationships are visible in the dashboard:
+
+```json title="apps/host/package.json"
+{
+  "name": "mobile-host",
+  "zephyr:dependencies": {
+    "profile": "zephyr:profile@production"
+  }
+}
+```
+
+For more dependency selector options, see [Remote Dependencies](/features/remote-dependencies).
+
+## Register The Cache At Startup
+
+Register the native cache before any remote bundle can load. In a Metro Module Federation host, this usually means registering it in `index.js` before `AppRegistry.registerComponent`.
+
+```js title="apps/host/index.js"
+import ZephyrNativeCache from 'zephyr-native-cache';
+import { withAsyncStartup } from '@module-federation/metro/bootstrap';
+import { AppRegistry } from 'react-native';
+import { name as appName } from './app.json';
+
+ZephyrNativeCache.register({
+  enablePolling: true,
+  pollIntervalMs: 5 * 60 * 1000,
+  maxCacheSizeBytes: 50 * 1024 * 1024,
+});
+
+AppRegistry.registerComponent(
+  appName,
+  withAsyncStartup(
+    () => require('./src/App'),
+    () => require('./src/Fallback'),
+  ),
+);
+```
+
+Production builds enable the cache automatically. Development builds keep the cache disabled by default so normal Metro development behavior is preserved. Set `forceCacheInDev: true` only when you intentionally want to debug OTA behavior against Metro dev servers.
+
+## Configure Remote Builds
+
+Use the Zephyr RNEF plugin so `rnef bundle-mf-remote` and `rnef bundle-mf-host` upload Metro artifacts to Zephyr after the Module Federation build completes.
+
+```js title="apps/remote/rnef.config.mjs"
+import { platformAndroid } from '@rnef/platform-android';
+import { platformIOS } from '@rnef/platform-ios';
+import { pluginMetro } from '@rnef/plugin-metro';
+import { zephyrMetroRNEFPlugin } from 'zephyr-metro-plugin';
+
+export default {
+  bundler: pluginMetro(),
+  platforms: {
+    ios: platformIOS(),
+    android: platformAndroid(),
+  },
+  plugins: [zephyrMetroRNEFPlugin()],
+};
+```
+
+Then publish a remote for each platform you support:
+
+```bash
+# iOS remote build and upload
+rnef bundle-mf-remote --platform ios --dev false
+
+# Android remote build and upload
+rnef bundle-mf-remote --platform android --dev false
+```
+
+The host must resolve the same platform that the remote was published for. `withZephyr({ target: 'ios' })` resolves iOS remote artifacts, and `withZephyr({ target: 'android' })` resolves Android remote artifacts.
+
+## Apply Updates In The App
+
+The cache layer intentionally does not force a restart UX. It provides state and controls so your app can choose whether to apply updates silently, show a banner, wait for a safe navigation point, or expose controls in a settings screen.
+
+Use `useCacheStatus` to drive an update prompt:
+
+```tsx title="UpdateBanner.tsx"
+import { Button, Text, View } from 'react-native';
+import ZephyrNativeCache, { useCacheStatus } from 'zephyr-native-cache';
+
+export function UpdateBanner() {
+  const { latestUpdateEvent, status } = useCacheStatus();
+
+  if (!latestUpdateEvent && status.pendingUpdates.length === 0) return null;
+
+  return (
+    <View>
+      <Text>Update ready</Text>
+      <Button
+        title="Reload now"
+        onPress={() => ZephyrNativeCache.reloadApp()}
+      />
+    </View>
+  );
+}
+```
+
+Use manual checks when you want a pull-to-refresh, settings, or internal QA flow:
+
+```ts
+import ZephyrNativeCache from 'zephyr-native-cache';
+
+await ZephyrNativeCache.checkForUpdates({ policy: 'downloadOnly' });
+```
+
+Use `downloadAndApply` only when an immediate JavaScript reload is acceptable:
+
+```ts
+await ZephyrNativeCache.checkForUpdates({ policy: 'downloadAndApply' });
+```
+
+`downloadAndApply` downloads updated bundles and triggers the native React Native reload path. Persist any critical UI state before using it.
+
+## Runtime Behavior
+
+When a remote bundle loads, the cache layer returns one of these statuses:
+
+| Status       | Meaning                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------- |
+| `cache-hit`  | A verified bundle with the expected hash was loaded from disk.                                    |
+| `downloaded` | The bundle was downloaded, hash-verified, stored on disk, and evaluated.                          |
+| `skipped`    | The cache could not use the bundle, so Module Federation falls back to the normal network loader. |
+
+The cache skips safely when a bundle has no manifest hash, a hash verification fails, a native file operation fails, or the native module is unavailable. Hash mismatches are not cached.
+
+The default cache limits are:
+
+| Option              | Default     |
+| ------------------- | ----------- |
+| `enablePolling`     | `true`      |
+| `pollIntervalMs`    | `5 minutes` |
+| `maxCacheSizeBytes` | `20 MB`     |
+| `maxAgeMs`          | `7 days`    |
+| `forceCacheInDev`   | `false`     |
+
+The cache evicts stale bundles with an LRU policy on cold start. Fresh bundles are preserved even if the cache is temporarily over the size limit.
+
+## Deploy And Roll Back
+
+To deploy an OTA update:
+
+1. Publish a new remote version for `ios` and `android`.
+2. Move the Zephyr environment or tag that the host depends on to the new version.
+3. Wait for polling or call `ZephyrNativeCache.checkForUpdates()`.
+4. Prompt the user or call `ZephyrNativeCache.reloadApp()` when your app is ready to apply the downloaded update.
+
+To roll back, use the Zephyr dashboard to roll the remote environment back or move the tag back to a previous version. The next update check downloads the rolled-back bundle and applies it through the same reload flow.
+
+## Example Repository
+
+Use [`zephyr-native-cache-test`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test) as the implementation reference. Start with these files:
+
+- [`apps/host/index.js`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test/blob/main/apps/host/index.js) for cache registration.
+- [`apps/host/metro.config.js`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test/blob/main/apps/host/metro.config.js) for host runtime plugin wiring.
+- [`apps/host/rnef.config.mjs`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test/blob/main/apps/host/rnef.config.mjs) for RNEF command integration.
+- [`apps/host/src/components/DevToolsPanel.tsx`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test/blob/main/apps/host/src/components/DevToolsPanel.tsx) for polling status and manual controls.
+- [`ZEPHYR_OTA_DEMO.md`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test/blob/main/ZEPHYR_OTA_DEMO.md) for the Zephyr-backed OTA dashboard walkthrough.
