@@ -277,6 +277,10 @@ const sidebar: Sidebar = {
           link: '/cloud/kubernetes',
         },
         {
+          text: 'Custom Worker Hosts',
+          link: '/cloud/custom-workers',
+        },
+        {
           text: 'Updating Integrations',
           link: '/cloud/updating-integrations',
         },
