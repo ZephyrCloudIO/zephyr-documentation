@@ -95,8 +95,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))(@types/react@19.1.13)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(search-insights@2.17.3)
       '@rspress/plugin-llms':
-        specifier: 2.0.1
-        version: 2.0.1(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))
+        specifier: 2.0.18
+        version: 2.0.18(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))
       '@tailwindcss/postcss':
         specifier: ^4.1.13
         version: 4.1.13
@@ -1539,11 +1539,11 @@ packages:
     resolution: {integrity: sha512-Q/M7NFGCreajXZBz/P3TEaohDsO233TGahqyNH3loE+drvlcgOyMehsAVcsQyt2hlDtgQHp9oVX78EfZmJ+8gA==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-llms@2.0.1':
-    resolution: {integrity: sha512-7CRCz0C/DIr46NkIp4uTX/yq6xTj/ljW+7HcsljmUwBAzzaMQdQb1Orv6ufg52esdiJBvpW4xdq9XohAVRPHdw==}
+  '@rspress/plugin-llms@2.0.18':
+    resolution: {integrity: sha512-kSjRip/IR2D9L65OR1nxt+CWjjmMLEntgyy3p12G4EKqeLYZLclGIZ2UweuPUPHEM8bKRIwHWV1wjfZOxTsqqA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      '@rspress/core': ^2.0.1
+      '@rspress/core': ^2.0.10
 
   '@rspress/plugin-medium-zoom@1.45.6':
     resolution: {integrity: sha512-o+mqg7NlwJuXrba1dMtQzJSmrtgyonif7lPm3MNF9dHnQrCBAtr8mKMoDnzMkh0JN0hjqaLERJmHz8fAK/q3iA==}
@@ -1909,6 +1909,7 @@ packages:
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
+    deprecated: Potential CWE-502 - Update to 1.3.1 or higher
 
   '@unhead/react@2.1.2':
     resolution: {integrity: sha512-VNKa0JJZq5Jp28VuiOMfjAA7CTLHI0SdW/Hs1ZPq2PsNV/cgxGv8quFBGXWx4gfoHB52pejO929RKjIpYX5+iQ==}
@@ -3055,7 +3056,7 @@ packages:
   git-raw-commits@4.0.0:
     resolution: {integrity: sha512-ICsMM1Wk8xSGMowkOmPrzo2Fgmfo4bMHLNX6ytHjajRJUqvHOw/TFapQ+QG75c3X/tTDDhOSRPGC52dDbNM8FQ==}
     engines: {node: '>=16'}
-    deprecated: This package is no longer maintained. For the JavaScript API, please use @conventional-changelog/git-client instead.
+    deprecated: Deprecated and no longer maintained. Use @conventional-changelog/git-client instead.
     hasBin: true
 
   git-up@7.0.0:
@@ -5525,6 +5526,7 @@ packages:
 
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uvu@0.5.6:
@@ -7237,7 +7239,7 @@ snapshots:
     dependencies:
       '@rspress/shared': 1.45.6
 
-  '@rspress/plugin-llms@2.0.1(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))':
+  '@rspress/plugin-llms@2.0.18(@rspress/core@2.0.1(@types/react@19.1.13)(core-js@3.45.1))':
     dependencies:
       '@rspress/core': 2.0.1(@types/react@19.1.13)(core-js@3.45.1)
       remark-mdx: 3.1.1
@@ -7929,7 +7931,7 @@ snapshots:
       postcss: 8.5.6
       postcss-value-parser: 4.2.0
 
-  axios-retry@4.5.0(axios@1.12.2):
+  axios-retry@4.5.0(axios@1.12.2(debug@4.4.0)):
     dependencies:
       axios: 1.12.2(debug@4.4.0)
       is-retry-allowed: 2.2.0
@@ -12296,7 +12298,7 @@ snapshots:
     dependencies:
       '@toon-format/toon': 0.9.0
       axios: 1.12.2(debug@4.4.0)
-      axios-retry: 4.5.0(axios@1.12.2)
+      axios-retry: 4.5.0(axios@1.12.2(debug@4.4.0))
       debug: 4.4.0
       eventsource: 4.1.0
       git-url-parse: 15.0.0
