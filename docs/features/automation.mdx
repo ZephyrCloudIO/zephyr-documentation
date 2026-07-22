@@ -49,6 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ZE_CI_TOKEN: ${{ secrets.ZEPHYR_CI_TOKEN }}
+      ZE_FAIL_BUILD: true
 
     steps:
       - uses: actions/checkout@v3
@@ -114,6 +115,7 @@ build:
     - npm run build
   variables:
     ZE_CI_TOKEN: $ZE_CI_TOKEN
+    ZE_FAIL_BUILD: true
   artifacts:
     paths:
       - dist/
@@ -129,7 +131,18 @@ deploy:
     name: production
   variables:
     ZE_CI_TOKEN: $ZE_CI_TOKEN
+    ZE_FAIL_BUILD: true
 ```
+
+## Fail the build on Zephyr errors
+
+By default, Zephyr logs plugin and deployment errors without failing your application build. In CI/CD, set `ZE_FAIL_BUILD` to `true` so Zephyr rethrows these errors and the build exits with a failure status:
+
+```bash
+ZE_FAIL_BUILD=true npm run build
+```
+
+Only the value `true` enables this behavior. If `ZE_FAIL_BUILD` is unset or set to any other value, Zephyr logs the error and allows the build to continue.
 
 ## Plugin Behavior
 
