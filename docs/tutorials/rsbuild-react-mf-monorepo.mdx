@@ -1,0 +1,572 @@
+---
+title: Rsbuild + React Module Federation Monorepo
+description: Build, deploy, diagnose, and browser-verify a pnpm monorepo with an Rsbuild host, two React remotes, Module Federation, and Zephyr Cloud.
+head:
+  - - meta
+    - property: og:description
+      content: Build, deploy, diagnose, and browser-verify a pnpm monorepo with an Rsbuild host, two React remotes, Module Federation, and Zephyr Cloud.
+---
+
+# Rsbuild + React Module Federation Monorepo
+
+This is the canonical end-to-end setup for a pnpm monorepo with an Rsbuild
+host, `header` and `hero` React remotes, Module Federation, and Zephyr Cloud.
+It covers a new scaffold and an existing application, then follows the same
+configuration, deployment, diagnosis, watch, and browser-verification path for
+both.
+
+Every code block on this page is copied from the
+[committed fixture](https://github.com/ZephyrCloudIO/zephyr-documentation/tree/main/fixtures/rsbuild-react-mf-monorepo).
+Pull requests run those blocks with Node 24 and pnpm 10.33.0, build all three
+applications, reproduce the DTS failure path, and render the host in Chromium.
+
+:::info Pinned compatibility set
+
+The fixture pins Rsbuild 2.1.8, `@module-federation/rsbuild-plugin` 2.8.0,
+`zephyr-rsbuild-plugin` 1.2.0, `zephyr-agent` 1.2.0, TypeScript 6.0.3,
+React 19.2.7, and React DOM 19.2.7. Keep declared, locked, and installed
+versions aligned before changing configuration.
+
+:::
+
+## Choose the correct starting path
+
+### New project: scaffold first
+
+Use the official `create-rsbuild` CLI. Do not synthesize an Rsbuild project
+from remembered defaults. The fixture executes this script in a temporary
+directory on every pull request:
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/scripts/scaffold-new.sh -->
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+target_root=${1:?"Pass an empty destination directory"}
+
+pnpm dlx create-rsbuild@2.1.8 "${target_root}/host" \
+  --template react-ts \
+  --packageName host
+pnpm dlx create-rsbuild@2.1.8 "${target_root}/header" \
+  --template react-ts \
+  --packageName header
+pnpm dlx create-rsbuild@2.1.8 "${target_root}/hero" \
+  --template react-ts \
+  --packageName hero
+```
+
+Move the three generated applications under `apps/`, add `apps/*` to
+`pnpm-workspace.yaml`, and then apply the configuration below.
+
+### Existing project: install in place
+
+Do not run a scaffolder over an existing application. Inspect its current
+entry, TypeScript config, output path, and package manager first. The verified
+installation script uses exact versions so the package manifest, lockfile, and
+installed tree cannot silently select different major or minor releases:
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/scripts/add-existing-dependencies.sh -->
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+app_directory=${1:?"Pass an existing Rsbuild application directory"}
+
+pnpm --dir "${app_directory}" --save-exact add \
+  react@19.2.7 \
+  react-dom@19.2.7
+pnpm --dir "${app_directory}" --save-exact add --save-dev \
+  @module-federation/rsbuild-plugin@2.8.0 \
+  @rsbuild/core@2.1.8 \
+  @rsbuild/plugin-react@2.1.0 \
+  @types/node@24.5.2 \
+  @types/react@19.2.14 \
+  @types/react-dom@19.2.3 \
+  typescript@6.0.3 \
+  zephyr-agent@1.2.0 \
+  zephyr-rsbuild-plugin@1.2.0
+
+# pnpm preserves existing scaffold prefixes while changing versions. Once the
+# requested versions are installed, repeat those existing dependencies so -E
+# normalizes their declarations to exact pins.
+pnpm --dir "${app_directory}" --save-exact add \
+  react@19.2.7 \
+  react-dom@19.2.7
+pnpm --dir "${app_directory}" --save-exact add --save-dev \
+  @rsbuild/core@2.1.8 \
+  @rsbuild/plugin-react@2.1.0 \
+  @types/node@24.5.2 \
+  @types/react@19.2.14 \
+  @types/react-dom@19.2.3 \
+  typescript@6.0.3
+```
+
+Commit the generated `pnpm-lock.yaml`. In CI and when reproducing a teammate's
+failure, install with `pnpm install --frozen-lockfile`.
+
+## Configure the remotes
+
+The `header` remote establishes the complete contract:
+
+- `source.entry` is explicit and points inside the application's source root.
+- Module Federation emits `remoteEntry.js` and advertises `./Header`.
+- React and React DOM are singleton shared dependencies with pinned required
+  versions.
+- `output.assetPrefix` is `"auto"` so runtime chunks resolve from the remote's
+  own deployment URL.
+- `withZephyr()` runs after Module Federation so it can inspect and rewrite the
+  federation output.
+
+The `ZEPHYR_DOCS_FIXTURE_OFFLINE` branch is only the fixture's non-publishing
+CI mode. It is never set by the normal build or the live deployment workflow.
+In an application without an equivalent isolated fixture, use `withZephyr()`
+unconditionally.
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/rsbuild.config.ts -->
+
+```ts
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+const docsFixtureOffline = process.env['ZEPHYR_DOCS_FIXTURE_OFFLINE'] === '1';
+
+export default defineConfig({
+  source: {
+    entry: {
+      index: './src/index.ts',
+    },
+  },
+  server: {
+    port: 3001,
+  },
+  output: {
+    assetPrefix: 'auto',
+  },
+  plugins: [
+    pluginReact(),
+    pluginModuleFederation({
+      name: 'header',
+      filename: 'remoteEntry.js',
+      manifest: true,
+      exposes: {
+        './Header': './src/Header.tsx',
+      },
+      shared: {
+        react: {
+          singleton: true,
+          requiredVersion: '19.2.7',
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: '19.2.7',
+        },
+      },
+      dts: {
+        generateTypes: {
+          tsConfigPath: './tsconfig.json',
+        },
+      },
+    }),
+    ...(!docsFixtureOffline ? [withZephyr()] : []),
+  ],
+});
+```
+
+Keep the TypeScript root explicit and keep every exposed file and its imports
+inside it:
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/tsconfig.json -->
+
+```json
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src"
+  },
+  "include": ["src"]
+}
+```
+
+The pinned Header makes browser verification unambiguous:
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/src/Header.tsx -->
+
+```tsx
+export default function Header() {
+  return (
+    <header data-testid="header">
+      <strong>Header fixture v1</strong>
+    </header>
+  );
+}
+```
+
+The `hero` remote uses its own name, port, expose, and entry while preserving
+the same plugin ordering and shared dependency contract:
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/hero/rsbuild.config.ts -->
+
+```ts
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+const docsFixtureOffline = process.env['ZEPHYR_DOCS_FIXTURE_OFFLINE'] === '1';
+
+export default defineConfig({
+  source: {
+    entry: {
+      index: './src/index.ts',
+    },
+  },
+  server: {
+    port: 3002,
+  },
+  output: {
+    assetPrefix: 'auto',
+  },
+  plugins: [
+    pluginReact(),
+    pluginModuleFederation({
+      name: 'hero',
+      filename: 'remoteEntry.js',
+      manifest: true,
+      exposes: {
+        './Hero': './src/Hero.tsx',
+      },
+      shared: {
+        react: {
+          singleton: true,
+          requiredVersion: '19.2.7',
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: '19.2.7',
+        },
+      },
+      dts: {
+        generateTypes: {
+          tsConfigPath: './tsconfig.json',
+        },
+      },
+    }),
+    ...(!docsFixtureOffline ? [withZephyr()] : []),
+  ],
+});
+```
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/hero/src/Hero.tsx -->
+
+```tsx
+export default function Hero() {
+  return (
+    <main data-testid="hero">
+      <h1>Hero fixture</h1>
+      <p>Rsbuild, Module Federation, and Zephyr Cloud are connected.</p>
+    </main>
+  );
+}
+```
+
+## Configure the host
+
+The host's Module Federation aliases and `zephyr:dependencies` keys must match
+exactly. Here, both contracts use `header` and `hero`. A spelling or casing
+difference creates two unrelated identities and prevents Zephyr from replacing
+the local remote URL.
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/package.json -->
+
+```json
+{
+  "name": "host",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "rsbuild build",
+    "dev": "rsbuild dev",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@module-federation/rsbuild-plugin": "2.8.0",
+    "@rsbuild/core": "2.1.8",
+    "@rsbuild/plugin-react": "2.1.0",
+    "@types/node": "24.5.2",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "6.0.3",
+    "zephyr-agent": "1.2.0",
+    "zephyr-rsbuild-plugin": "1.2.0"
+  },
+  "zephyr:dependencies": {
+    "header": "workspace:*",
+    "hero": "workspace:*"
+  }
+}
+```
+
+Use object-form remotes. `external` contains the normal local development
+fallback; Zephyr resolves the matching dependency alias during a publishing
+build.
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/rsbuild.config.ts -->
+
+```ts
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { withZephyr } from 'zephyr-rsbuild-plugin';
+
+const docsFixtureOffline = process.env['ZEPHYR_DOCS_FIXTURE_OFFLINE'] === '1';
+
+export default defineConfig({
+  source: {
+    entry: {
+      index: './src/index.ts',
+    },
+  },
+  server: {
+    port: 3000,
+  },
+  output: {
+    assetPrefix: 'auto',
+  },
+  plugins: [
+    pluginReact(),
+    pluginModuleFederation({
+      name: 'host',
+      remotes: {
+        header: {
+          external: 'header@http://localhost:3001/remoteEntry.js',
+        },
+        hero: {
+          external: 'hero@http://localhost:3002/remoteEntry.js',
+        },
+      },
+      shared: {
+        react: {
+          singleton: true,
+          requiredVersion: '19.2.7',
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: '19.2.7',
+        },
+      },
+    }),
+    ...(!docsFixtureOffline ? [withZephyr()] : []),
+  ],
+});
+```
+
+The host entry must be asynchronous. Keep `index.ts` free of static React and
+remote imports and load a separate bootstrap:
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/src/index.ts -->
+
+```ts
+import('./bootstrap').catch((error: unknown) => {
+  console.error('Host bootstrap failed', error);
+});
+```
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/src/bootstrap.tsx -->
+
+```tsx
+import Header from 'header/Header';
+import Hero from 'hero/Hero';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+
+const rootElement = document.getElementById('root');
+
+if (!rootElement) {
+  throw new Error('Expected Rsbuild to provide #root');
+}
+
+createRoot(rootElement).render(
+  <StrictMode>
+    <Header />
+    <Hero />
+  </StrictMode>,
+);
+```
+
+## Choose remote dependency selectors deliberately
+
+These three forms cover the common monorepo and production cases:
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/dependency-selectors.json -->
+
+```json
+{
+  "sameProjectWorkspaceBuild": {
+    "header": "workspace:*"
+  },
+  "sameProjectProductionEnvironment": {
+    "header": "header@production"
+  },
+  "crossProjectProductionEnvironment": {
+    "header": "header.design-system.acme@production"
+  }
+}
+```
+
+- `workspace:*` uses the alias key as the application UID and selects the most
+  recent remote built with the same branch, target, CI state, and user context.
+- `header@production` is the short UID form for an application in the same
+  project and organization. `production` resolves as an environment first,
+  then a tag, then a version.
+- `header.design-system.acme@production` is the full
+  `application.project.organization` UID and is required across projects or
+  organizations.
+
+See [Remote Dependencies](/features/remote-dependencies) for the complete
+selector grammar.
+
+Selection and emitted URL identity are separate decisions. The default
+`dependencyUrlMode: "selector"` keeps a mutable environment or tag URL in the
+host. Moving that environment can retarget an already-built host.
+`dependencyUrlMode: "version"` still uses `workspace:*` or `@production` to
+choose the deployment at build time, but embeds the selected version's
+immutable root, remote entry, and manifest URLs:
+
+<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/zephyr.config.ts -->
+
+```ts
+import { defineConfig } from 'zephyr-agent';
+
+export default defineConfig({
+  dependencyUrlMode: 'version',
+});
+```
+
+Use selector URLs when an environment should retarget consumers without a host
+rebuild. Use version URLs when a host artifact must always load the exact
+remote deployment selected during its build.
+
+## Build remotes first and the host last
+
+The fixture's root `package.json` makes `pnpm build` run `header`, then `hero`,
+then `host`. This remote-first order is required for a cold Zephyr workspace:
+the host cannot resolve `workspace:*` until matching remote deployments exist.
+If a remote consumes another remote, topologically order the graph from leaves
+to the host and remove circular dependencies before relying on automation.
+
+For local, non-publishing CI, the fixture uses `pnpm build:offline`. The
+protected live workflow leaves the offline flag unset and uses the same
+remote-first `pnpm build` command.
+
+Before changing configuration in response to a failure, prove package state:
+
+1. Declared: inspect each application with
+   `pnpm --filter header exec node -p "require('./package.json').devDependencies"`.
+2. Locked: inspect `pnpm-lock.yaml` or run `pnpm install --frozen-lockfile`.
+3. Installed: run `pnpm --filter header list --depth 0` and
+   `pnpm why @module-federation/rsbuild-plugin`.
+
+The fixture's verification script compares all three states for every pinned
+Rsbuild, Module Federation, Zephyr, React, and TypeScript package.
+
+## Diagnose from evidence
+
+Start with generated configuration, not speculative edits:
+
+1. Run `pnpm --filter header exec rsbuild inspect`. Inspect
+   `apps/header/dist/.rsbuild/rsbuild.config.mjs` and
+   `rspack.config.web.mjs` for the final entry, expose, plugin order, and output
+   path.
+2. Re-run the failing application with
+   `FEDERATION_DEBUG=true pnpm --filter header build`.
+3. If Module Federation reports `TYPE-001`, copy and run the exact `args.cmd`
+   command printed in that error. It invokes the pinned TypeScript compiler
+   against Module Federation's generated tsconfig and exposes the underlying
+   diagnostic.
+4. In development mode, inspect `.mf/typesGenerate.log` for DTS worker,
+   broker, type download, and hot-reload evidence.
+
+The committed failure fixture intentionally imports a file outside
+`compilerOptions.rootDir`. With the pinned stack, the asset build can finish
+after logging `TYPE-001`; its generated command exits nonzero with `TS6059`.
+Treat the `TYPE-001` event as a DTS failure even when the overall Rsbuild exit
+code is zero. `.mf/typesGenerate.log` is a development-worker log and may not
+contain the TypeScript compiler diagnostic itself—the generated command is the
+source of truth.
+
+Do not disable DTS, change child-process behavior, pin a different TypeScript
+version, or repeatedly move `rootDir` until that reproduction command shows
+which file is outside the compilation boundary.
+
+### Troubleshooting matrix
+
+| Symptom                                              | Failure stage           | First command                                     | Required evidence                                                                   |
+| ---------------------------------------------------- | ----------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Package or export cannot be found                    | install/resolution      | `pnpm install --frozen-lockfile`                  | Same version is declared, locked, and installed                                     |
+| Zephyr leaves a localhost remote in a published host | dependency mapping      | `pnpm --filter host build` with Zephyr logs       | MF remote key exactly matches the `zephyr:dependencies` key and selected UID exists |
+| `remoteEntry.js` is 404                              | remote build or serving | request the remote's `mf-manifest.json`           | Manifest is 200 and names the expected remote entry and expose                      |
+| Host fails before rendering                          | runtime initialization  | inspect browser console and Network               | `index.ts` only imports `./bootstrap`; remote entry and chunks are 200              |
+| `TYPE-001` or no type archive                        | DTS generation          | run the printed `args.cmd`                        | Concrete TypeScript diagnostic such as `TS6059`, plus the generated tsconfig path   |
+| Types do not update in development                   | DTS dev worker          | `FEDERATION_DEBUG=true pnpm --filter header dev`  | `.mf/typesGenerate.log` shows worker and broker activity                            |
+| Web output does not update                           | web bundler watch       | `pnpm --filter header exec rsbuild build --watch` | Changed output artifact and a successful rebuild                                    |
+| TAP watch rejects the publication                    | TAP output publishing   | `pnpm exec ze-cli --help`                         | `tap-app` target, metadata sidecar, and watched output directory are all present    |
+
+## Use the correct watch workflow
+
+Web and TAP watch modes solve different problems:
+
+- For a web production-output loop, run
+  `pnpm --filter header exec rsbuild build --watch`. For local browser HMR, use
+  `pnpm --filter header dev`.
+- For a TAP mini-app whose build already emits a publication sidecar, run
+  `pnpm exec ze-cli watch ./dist --target tap-app --metadata ./dist/zephyr-publication.json`
+  from that application's directory.
+
+`ze-cli watch` is reserved for `tap-app`; it does not replace Rsbuild's web
+watch mode. The fixture pins `zephyr-cli` 1.2.0 and CI checks that `watch`,
+`--target`, `tap-app`, and `--metadata` remain valid CLI names and flags.
+
+## Verify in a browser
+
+Start `header`, `hero`, and `host`, then verify this chain:
+
+1. `http://localhost:3001/mf-manifest.json` and
+   `http://localhost:3002/mf-manifest.json` return 200.
+2. Both `remoteEntry.js` URLs return JavaScript, and each manifest advertises
+   its expected `./Header` or `./Hero` expose.
+3. `http://localhost:3000` renders `Header fixture v1` and `Hero fixture`.
+4. Browser console and failed network-request lists are empty.
+5. Change the Header text to `Header fixture v2`, wait for the remote rebuild,
+   reload the host, and confirm the new remote renders without rebuilding the
+   host.
+
+The committed
+[Playwright test](https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/fixtures/rsbuild-react-mf-monorepo/tests/host.spec.ts)
+performs all five checks and restores the Header source after the update test.
+
+## Verification and maintenance
+
+The guide is protected at three levels:
+
+- [Snippet verification](https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/scripts/verify-rsbuild-mf-guide.mjs)
+  requires every code block to exactly match a committed fixture file.
+- [Pull-request verification](https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/.github/workflows/on_pull_request.yml)
+  runs the official scaffolder, verified `pnpm add` commands, frozen install,
+  typecheck, remote-first build, `rsbuild inspect`, CLI flag checks,
+  `TYPE-001`/`TS6059` reproduction, and Chromium test.
+- [The protected weekly live workflow](https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/.github/workflows/rsbuild-mf-live-fixture.yml)
+  requires the `rsbuild-mf-live-fixture` GitHub environment and Zephyr
+  credential, then publishes both remotes before the host.
+
+Run `pnpm verify:rsbuild-mf-guide` from the documentation root to check snippet
+drift. Run `pnpm verify` and `pnpm verify:browser` inside the fixture to execute
+the local build, diagnostic, and browser contracts.

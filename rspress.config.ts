@@ -331,6 +331,10 @@ const sidebar: Sidebar = {
           link: '/tutorials/mf-guide',
         },
         {
+          text: 'Rsbuild MF Monorepo',
+          link: '/tutorials/rsbuild-react-mf-monorepo',
+        },
+        {
           text: 'React Native with Metro',
           link: '/tutorials/metro',
         },

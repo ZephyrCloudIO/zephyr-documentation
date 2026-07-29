@@ -14,7 +14,8 @@
     "prepare": "husky",
     "preview": "rspress preview",
     "typecheck": "tsc --noEmit",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "verify:rsbuild-mf-guide": "node scripts/verify-rsbuild-mf-guide.mjs"
   },
   "commitlint": {
     "extends": [
