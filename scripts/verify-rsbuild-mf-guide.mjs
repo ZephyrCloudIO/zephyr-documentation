@@ -16,7 +16,7 @@ while ((match = codeFencePattern.exec(guide)) !== null) {
   const contentBeforeFence = guide.slice(0, match.index).trimEnd();
   const precedingLine = contentBeforeFence.split('\n').at(-1) ?? '';
   const fixtureMarker = precedingLine.match(
-    /^<!-- fixture: ([a-zA-Z0-9_./-]+) -->$/,
+    /^\{\/\* fixture: ([a-zA-Z0-9_./-]+) \*\/\}$/,
   );
 
   if (!fixtureMarker) {
@@ -37,7 +37,7 @@ while ((match = codeFencePattern.exec(guide)) !== null) {
   verifiedBlocks += 1;
 }
 
-const markerCount = (guide.match(/<!-- fixture: /g) ?? []).length;
+const markerCount = (guide.match(/\{\/\* fixture: /g) ?? []).length;
 if (verifiedBlocks === 0 || verifiedBlocks !== markerCount) {
   throw new Error(
     `Verified ${verifiedBlocks} code blocks but found ${markerCount} fixture markers.`,

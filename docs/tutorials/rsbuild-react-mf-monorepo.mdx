@@ -37,7 +37,7 @@ Use the official `create-rsbuild` CLI. Do not synthesize an Rsbuild project
 from remembered defaults. The fixture executes this script in a temporary
 directory on every pull request:
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/scripts/scaffold-new.sh -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/scripts/scaffold-new.sh */}
 
 ```bash
 #!/usr/bin/env bash
@@ -66,7 +66,7 @@ entry, TypeScript config, output path, and package manager first. The verified
 installation script uses exact versions so the package manifest, lockfile, and
 installed tree cannot silently select different major or minor releases:
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/scripts/add-existing-dependencies.sh -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/scripts/add-existing-dependencies.sh */}
 
 ```bash
 #!/usr/bin/env bash
@@ -124,7 +124,7 @@ CI mode. It is never set by the normal build or the live deployment workflow.
 In an application without an equivalent isolated fixture, use `withZephyr()`
 unconditionally.
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/rsbuild.config.ts -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/rsbuild.config.ts */}
 
 ```ts
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -179,7 +179,7 @@ export default defineConfig({
 Keep the TypeScript root explicit and keep every exposed file and its imports
 inside it:
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/tsconfig.json -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/tsconfig.json */}
 
 ```json
 {
@@ -193,7 +193,7 @@ inside it:
 
 The pinned Header makes browser verification unambiguous:
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/src/Header.tsx -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/src/Header.tsx */}
 
 ```tsx
 export default function Header() {
@@ -208,7 +208,7 @@ export default function Header() {
 The `hero` remote uses its own name, port, expose, and entry while preserving
 the same plugin ordering and shared dependency contract:
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/hero/rsbuild.config.ts -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/hero/rsbuild.config.ts */}
 
 ```ts
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -260,7 +260,7 @@ export default defineConfig({
 });
 ```
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/hero/src/Hero.tsx -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/hero/src/Hero.tsx */}
 
 ```tsx
 export default function Hero() {
@@ -280,7 +280,7 @@ exactly. Here, both contracts use `header` and `hero`. A spelling or casing
 difference creates two unrelated identities and prevents Zephyr from replacing
 the local remote URL.
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/package.json -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/package.json */}
 
 ```json
 {
@@ -319,7 +319,7 @@ Use object-form remotes. `external` contains the normal local development
 fallback; Zephyr resolves the matching dependency alias during a publishing
 build.
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/rsbuild.config.ts -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/rsbuild.config.ts */}
 
 ```ts
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -372,7 +372,7 @@ export default defineConfig({
 The host entry must be asynchronous. Keep `index.ts` free of static React and
 remote imports and load a separate bootstrap:
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/src/index.ts -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/src/index.ts */}
 
 ```ts
 import('./bootstrap').catch((error: unknown) => {
@@ -380,7 +380,7 @@ import('./bootstrap').catch((error: unknown) => {
 });
 ```
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/src/bootstrap.tsx -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/src/bootstrap.tsx */}
 
 ```tsx
 import Header from 'header/Header';
@@ -406,7 +406,7 @@ createRoot(rootElement).render(
 
 These three forms cover the common monorepo and production cases:
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/dependency-selectors.json -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/dependency-selectors.json */}
 
 ```json
 {
@@ -441,7 +441,7 @@ host. Moving that environment can retarget an already-built host.
 choose the deployment at build time, but embeds the selected version's
 immutable root, remote entry, and manifest URLs:
 
-<!-- fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/zephyr.config.ts -->
+{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/zephyr.config.ts */}
 
 ```ts
 import { defineConfig } from 'zephyr-agent';
