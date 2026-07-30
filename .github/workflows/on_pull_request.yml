@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: ZephyrCloudIO/zephyr-examples
-          ref: 1683e07bc22f203a1e7502f375d87f4faa5305b7
+          ref: d047d474a1b786bb6e000332fb759ef107c16f7f
           path: .fixtures/zephyr-examples
 
       - name: Set up Node.js

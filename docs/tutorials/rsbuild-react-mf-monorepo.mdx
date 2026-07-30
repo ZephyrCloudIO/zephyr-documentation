@@ -317,9 +317,10 @@ the local remote URL.
 }
 ```
 
-Use object-form remotes. `external` contains the normal local development
-fallback; Zephyr resolves the matching dependency alias during a publishing
-build.
+Use `name@URL` string remotes with the currently released Zephyr `1.2.x`
+plugins. Zephyr identifies the alias and replaces the local URL during a
+publishing build. Object-form `external` remotes currently serialize into an
+invalid runtime expression when the released plugin rewrites them.
 
 {/* fixture: module-federation/react-rsbuild-monorepo/apps/host/rsbuild.config.ts */}
 
@@ -349,12 +350,8 @@ export default defineConfig({
       name: 'host',
       filename: 'remoteEntry.js',
       remotes: {
-        header: {
-          external: 'header@http://localhost:3001/remoteEntry.js',
-        },
-        hero: {
-          external: 'hero@http://localhost:3002/remoteEntry.js',
-        },
+        header: 'header@http://localhost:3001/remoteEntry.js',
+        hero: 'hero@http://localhost:3002/remoteEntry.js',
       },
       shared: {
         react: {
