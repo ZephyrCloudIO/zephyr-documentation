@@ -42,46 +42,34 @@ export function McpPromo() {
           >
             <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-            <div className="relative z-10 flex h-full flex-col">
-              <div className="mb-3 flex items-center justify-between">
-                <img
-                  src="/dark-bg-icon.webp"
-                  alt=""
-                  aria-hidden="true"
-                  className="h-6 w-6"
-                />
-                <button
-                  type="button"
-                  aria-label={`Copy ${client.label} install commands`}
-                  className="rounded p-1.5 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)]"
-                  onClick={() => copyInstallCommand(clientName)}
-                >
-                  {copied === clientName ? (
-                    <Check
-                      aria-hidden="true"
-                      className="text-blue-300"
-                      size={16}
-                    />
-                  ) : (
-                    <Copy aria-hidden="true" size={16} />
-                  )}
-                </button>
-              </div>
+            <button
+              type="button"
+              aria-label={`Copy ${client.label} install commands`}
+              className="absolute top-4 right-4 z-20 rounded p-1.5 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)]"
+              onClick={() => copyInstallCommand(clientName)}
+            >
+              {copied === clientName ? (
+                <Check aria-hidden="true" className="text-blue-300" size={16} />
+              ) : (
+                <Copy aria-hidden="true" size={16} />
+              )}
+            </button>
 
-              <h3 className="!m-0 !text-xl !leading-tight !font-semibold !text-white">
+            <div className="relative z-10 flex h-full flex-col">
+              <h3 className="!m-0 !pr-10 !text-xl !leading-tight !font-semibold !text-white">
                 {client.label}
               </h3>
               <p className="!mt-2 !mb-3 !text-sm !leading-snug !text-zinc-400">
                 {client.description}
               </p>
 
-              <div className="mt-auto rounded-lg border border-zinc-800 bg-zinc-950/70 px-3 py-2.5 font-mono text-xs leading-5">
+              <div className="mt-auto rounded-lg border border-zinc-800 bg-zinc-950/70 px-3 py-2.5 font-mono text-sm leading-6">
                 {client.commands.map((command) => (
-                  <div key={command} className="flex gap-2">
+                  <div key={command} className="flex min-w-0 gap-2">
                     <span aria-hidden="true" className="shrink-0 text-zinc-600">
                       $
                     </span>
-                    <code className="break-all !bg-transparent !p-0 !text-zinc-300">
+                    <code className="min-w-0 break-words whitespace-normal !bg-transparent !p-0 !text-zinc-300">
                       {command}
                     </code>
                   </div>
