@@ -2,3 +2,6 @@
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+# Vendored brand assets
+docs/public/ai-tools/*.svg

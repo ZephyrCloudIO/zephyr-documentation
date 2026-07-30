@@ -66,6 +66,17 @@ const sidebar: Sidebar = {
       ],
     },
     {
+      text: 'AI',
+      collapsed: false,
+      collapsible: true,
+      items: [
+        {
+          text: 'Zephyr API MCP',
+          link: '/tools/api-mcp',
+        },
+      ],
+    },
+    {
       text: 'Features & Workflows',
       collapsed: false,
       collapsible: true,
