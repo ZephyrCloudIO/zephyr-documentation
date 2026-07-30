@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Copy, RadioTower } from 'lucide-react';
+import { ArrowRight, Check, Copy } from 'lucide-react';
 import { useState } from 'react';
 
 const clients = {
@@ -34,49 +34,50 @@ export function McpPromo() {
   return (
     <section
       aria-labelledby="zephyr-mcp-heading"
-      className="group relative my-10 overflow-hidden rounded-[1.75rem] border border-sky-300/20 bg-[#061018] text-white shadow-[0_24px_80px_-36px_rgba(14,165,233,0.65)]"
+      className="group relative my-8 overflow-hidden rounded-xl border border-zinc-800/50 bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 p-4 text-white transition-all duration-300 hover:border-zinc-700/70 hover:shadow-lg hover:shadow-zinc-950/20 md:p-6"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_8%,rgba(56,189,248,0.18),transparent_30%),radial-gradient(circle_at_90%_95%,rgba(16,185,129,0.13),transparent_34%)]" />
-      <div className="pointer-events-none absolute inset-0 opacity-[0.09] [background-image:linear-gradient(rgba(255,255,255,0.35)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.35)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:linear-gradient(to_bottom,black,transparent_76%)]" />
+      <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-      <div className="relative grid gap-8 p-6 md:p-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-10">
-        <div>
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-300/20 bg-sky-300/10 px-3 py-1 font-mono text-[0.68rem] font-semibold tracking-[0.18em] text-sky-200 uppercase">
-            <RadioTower aria-hidden="true" size={13} />
-            Zephyr API MCP
+      <div className="relative z-10 grid gap-6 md:grid-cols-[0.8fr_1.2fr] md:items-center">
+        <div className="flex flex-col items-start">
+          <div className="mb-3 flex items-center gap-2">
+            <img
+              src="/dark-bg-icon.webp"
+              alt=""
+              aria-hidden="true"
+              className="h-7 w-7"
+            />
+            <span className="text-xs font-medium text-zinc-500">
+              Zephyr API MCP
+            </span>
           </div>
 
           <h2
             id="zephyr-mcp-heading"
-            className="!m-0 max-w-xl !text-[clamp(1.75rem,4vw,2.75rem)] !leading-[1.04] !font-semibold !tracking-[-0.035em] !text-white"
-            style={{ fontFamily: "'Nebulica-SemiBold', sans-serif" }}
+            className="!m-0 !text-xl !leading-tight !font-semibold !text-white"
           >
-            Give your AI assistant a live view of Zephyr.
+            Use Zephyr from your AI assistant
           </h2>
-          <p className="!mt-4 !mb-6 max-w-lg !text-[0.98rem] !leading-7 !text-slate-300">
-            Inspect deployments, trace versions, promote releases, and roll
-            back—through your existing Zephyr account and permissions.
+          <p className="!mt-2 !mb-4 max-w-md !text-sm !leading-snug !text-zinc-400">
+            Inspect deployments, promote versions, and roll back through your
+            existing Zephyr account and permissions.
           </p>
 
           <a
             href="/tools/api-mcp"
-            className="inline-flex items-center gap-2 rounded-full bg-sky-300 px-4 py-2.5 text-sm font-bold text-slate-950 no-underline transition-all duration-300 hover:gap-3 hover:bg-white hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-300"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-300 no-underline transition-colors hover:text-blue-200 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--rp-c-brand)]"
           >
-            Open the MCP guide
-            <ArrowRight aria-hidden="true" size={16} />
+            Setup and usage guide
+            <ArrowRight aria-hidden="true" size={14} />
           </a>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#03080c]/90 shadow-2xl shadow-black/30">
-          <div className="flex flex-col gap-3 border-b border-white/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2 font-mono text-[0.68rem] tracking-[0.14em] text-slate-500 uppercase">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
-              Quick connect
-            </div>
-
+        <div className="overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950/70">
+          <div className="flex items-center justify-between border-b border-zinc-800 px-3">
+            <span className="text-xs text-zinc-500">Quick connect</span>
             <div
               aria-label="Choose an MCP client"
-              className="flex w-fit rounded-lg border border-white/10 bg-white/[0.04] p-1"
+              className="flex"
               role="group"
             >
               {(Object.keys(clients) as Client[]).map((clientName) => (
@@ -84,10 +85,10 @@ export function McpPromo() {
                   key={clientName}
                   type="button"
                   aria-pressed={client === clientName}
-                  className={`rounded-md px-3 py-1.5 font-mono text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300 ${
+                  className={`border-b-2 px-3 py-2.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)] ${
                     client === clientName
-                      ? 'bg-sky-300 font-bold text-slate-950'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'border-[var(--rp-c-brand)] text-white'
+                      : 'border-transparent text-zinc-500 hover:text-zinc-300'
                   }`}
                   onClick={() => {
                     setClient(clientName);
@@ -100,13 +101,13 @@ export function McpPromo() {
             </div>
           </div>
 
-          <div className="relative min-h-36 px-5 py-6 pr-14 font-mono text-[0.76rem] leading-7 sm:text-[0.82rem]">
+          <div className="relative min-h-28 px-4 py-5 pr-12 font-mono text-xs leading-6 sm:text-[0.8rem]">
             {selectedClient.commands.map((command) => (
               <div key={command} className="flex gap-3">
-                <span aria-hidden="true" className="shrink-0 text-emerald-400">
+                <span aria-hidden="true" className="shrink-0 text-zinc-600">
                   $
                 </span>
-                <code className="break-all !bg-transparent !p-0 !text-slate-200">
+                <code className="break-all !bg-transparent !p-0 !text-zinc-300">
                   {command}
                 </code>
               </div>
@@ -115,15 +116,11 @@ export function McpPromo() {
             <button
               type="button"
               aria-label={`Copy ${selectedClient.label} install commands`}
-              className="absolute top-5 right-4 rounded-lg border border-white/10 bg-white/[0.06] p-2 text-slate-400 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
+              className="absolute top-4 right-3 rounded p-1.5 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)]"
               onClick={copyInstallCommand}
             >
               {copied ? (
-                <Check
-                  aria-hidden="true"
-                  className="text-emerald-400"
-                  size={16}
-                />
+                <Check aria-hidden="true" className="text-blue-300" size={16} />
               ) : (
                 <Copy aria-hidden="true" size={16} />
               )}
@@ -131,23 +128,6 @@ export function McpPromo() {
             <span className="sr-only" aria-live="polite">
               {copied ? 'Install commands copied' : ''}
             </span>
-          </div>
-
-          <div className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 bg-white/[0.025]">
-            {[
-              ['2 tools', 'search + execute'],
-              ['Live schema', 'no hard-coded paths'],
-              ['OAuth', 'your permissions'],
-            ].map(([title, detail]) => (
-              <div key={title} className="px-3 py-3 sm:px-4">
-                <div className="font-mono text-[0.66rem] font-bold text-sky-200 sm:text-xs">
-                  {title}
-                </div>
-                <div className="mt-0.5 text-[0.58rem] leading-tight text-slate-500 sm:text-[0.68rem]">
-                  {detail}
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
