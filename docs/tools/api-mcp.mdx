@@ -17,10 +17,6 @@ Production endpoint:
 https://mcp.zephyr-cloud.io/mcp
 ```
 
-:::warning Live Zephyr account
-The MCP server uses your real Zephyr account and production API. Requests that change data execute immediately after the AI client invokes them. Always name the exact organization, project, application, version, and destination when requesting a change.
-:::
-
 ## Prerequisites
 
 You need:
@@ -130,17 +126,16 @@ You normally do not need to mention these tools. Describe the outcome you want a
 Start with read-only requests when you do not know the exact organization, project, or application name:
 
 ```text
-List the Zephyr organizations I can access. Do not modify anything.
+List the Zephyr organizations I can access.
 ```
 
 ```text
 In organization "acme", list its projects and the applications in each project.
-Do not modify anything.
 ```
 
 ```text
 Show the latest ten versions, tags, and environments for
-header-component.ecommerce.acme. Do not modify anything.
+header-component.ecommerce.acme.
 ```
 
 Zephyr applications follow the `{application}.{project}.{organization}` identifier format. See [Organization Structure](/features/organization-structure) for details.
@@ -152,13 +147,11 @@ Ask for the current state and the evidence you need:
 ```text
 For header-component.ecommerce.acme, show which version the "production"
 tag currently resolves to and include the version's branch, commit, and URL.
-Do not modify anything.
 ```
 
 ```text
 Compare versions 124 and 125 of header-component.ecommerce.acme.
 Summarize their deployment metadata and remote dependencies.
-Do not modify anything.
 ```
 
 ## Promote or roll back a version
