@@ -175,28 +175,6 @@ to version 124, then read the tag again and report the final state.
 
 Review [Versions](/features/versions), [Tags & Environments](/features/tags-environments), and [Instant Rollbacks](/features/instant-rollbacks) before changing production routing.
 
-## Permissions and safety
-
-- The MCP server inherits your Zephyr identity and permissions.
-- Zephyr API authorization remains the final permission boundary.
-- Your Zephyr access token stays in trusted server code and is not exposed to model-generated Code Mode scripts.
-- API requests are restricted to the configured Zephyr API origin.
-- The MCP server does not add a separate confirmation step. Your AI client may still ask you to approve tool calls.
-- Never paste Zephyr tokens or other credentials into a prompt.
-
-For sensitive changes, first make a read-only request, review the result, then request the specific mutation.
-
-## Scope and limitations
-
-The MCP server can use operations exposed by the Zephyr control-plane API. It cannot:
-
-- Read your local source code or bundler configuration
-- Run local builds or modify your repository
-- Bypass Zephyr permissions
-- Manage services that are not exposed by the Zephyr API
-
-Use the relevant [bundler guide](/getting-started/find-your-sdk) when you need to install or configure Zephyr in an application.
-
 ## Troubleshooting
 
 ### Authentication fails
@@ -222,17 +200,3 @@ A healthy server returns:
 ```json
 { "ok": true }
 ```
-
-### An organization or application is missing
-
-Ask the assistant to list accessible organizations first. Then discover projects and applications from the selected organization instead of guessing identifiers. If the resource still does not appear, verify your membership and team permissions in the Zephyr dashboard.
-
-### An operation fails
-
-Ask the assistant to:
-
-1. Search the live OpenAPI description again.
-2. Show the HTTP status and API error details.
-3. Re-read the target without making another change.
-
-An authorization error usually means your Zephyr role does not permit that operation. A validation error usually means an identifier or request field does not match the API schema.
