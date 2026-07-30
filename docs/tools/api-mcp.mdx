@@ -1,0 +1,209 @@
+---
+title: Zephyr API MCP
+description: Connect an AI assistant to Zephyr Cloud to inspect and manage organizations, projects, applications, versions, tags, and environments.
+head:
+  - - meta
+    - property: og:description
+      content: Connect an AI assistant to Zephyr Cloud through the Zephyr API MCP server.
+---
+
+# Zephyr API MCP
+
+The Zephyr API MCP server connects compatible AI assistants to the Zephyr Cloud control plane. You can use natural-language requests to inspect organizations and applications, review deployment state, and perform authorized operations such as promoting a version or updating a tag.
+
+Production endpoint:
+
+```text
+https://mcp.zephyr-cloud.io/mcp
+```
+
+:::warning Live Zephyr account
+The MCP server uses your real Zephyr account and production API. Requests that change data execute immediately after the AI client invokes them. Always name the exact organization, project, application, version, and destination when requesting a change.
+:::
+
+## Prerequisites
+
+You need:
+
+- A Zephyr Cloud account
+- Access to the organizations and applications you want to manage
+- An MCP client that supports remote HTTP servers and OAuth
+
+The server opens the standard Zephyr sign-in flow. You do not need to create or paste an API token.
+
+## Connect an MCP client
+
+### Codex
+
+Add the server, then sign in:
+
+```bash
+codex mcp add zephyr --url https://mcp.zephyr-cloud.io/mcp
+codex mcp login zephyr
+```
+
+Your browser opens the Zephyr login page. After authorization, restart or refresh the MCP connection if your current Codex session does not show the server.
+
+### Claude Code
+
+Add the remote server for your user account:
+
+```bash
+claude mcp add --transport http --scope user zephyr https://mcp.zephyr-cloud.io/mcp
+```
+
+Start Claude Code, open `/mcp`, select `zephyr`, and complete the Zephyr login flow.
+
+### Other MCP clients
+
+Use the production endpoint in your client's remote MCP configuration. For clients that accept JSON configuration, the shape is typically:
+
+```json
+{
+  "mcpServers": {
+    "zephyr": {
+      "url": "https://mcp.zephyr-cloud.io/mcp"
+    }
+  }
+}
+```
+
+Configuration fields differ between clients. Choose the HTTP or Streamable HTTP transport when the client asks for a transport type.
+
+## How the MCP server works
+
+The server uses Code Mode to expose the full Zephyr API through two tools:
+
+| Tool      | Purpose                                                                                 |
+| --------- | --------------------------------------------------------------------------------------- |
+| `search`  | Searches the live Zephyr OpenAPI description for relevant operations and request shapes |
+| `execute` | Runs authenticated Zephyr API requests selected from that description                   |
+
+API paths are not hard-coded into the MCP server. It loads the current OpenAPI description from the production Zephyr API and uses that description to discover available operations.
+
+The normal sequence is:
+
+1. The assistant uses `search` to identify the correct API operations.
+2. It uses `execute` to read or change data through those operations.
+3. For changes, it reads the affected resource again to verify the final state.
+
+You normally do not need to mention these tools. Describe the outcome you want and provide the relevant Zephyr identifiers.
+
+## Explore your Zephyr account
+
+Start with read-only requests when you do not know the exact organization, project, or application name:
+
+```text
+List the Zephyr organizations I can access. Do not modify anything.
+```
+
+```text
+In organization "acme", list its projects and the applications in each project.
+Do not modify anything.
+```
+
+```text
+Show the latest ten versions, tags, and environments for
+header-component.ecommerce.acme. Do not modify anything.
+```
+
+Zephyr applications follow the `{application}.{project}.{organization}` identifier format. See [Organization Structure](/features/organization-structure) for details.
+
+## Inspect a deployment
+
+Ask for the current state and the evidence you need:
+
+```text
+For header-component.ecommerce.acme, show which version the "production"
+tag currently resolves to and include the version's branch, commit, and URL.
+Do not modify anything.
+```
+
+```text
+Compare versions 124 and 125 of header-component.ecommerce.acme.
+Summarize their deployment metadata and remote dependencies.
+Do not modify anything.
+```
+
+## Promote or roll back a version
+
+For a change, provide the complete source and destination. Ask the assistant to inspect both before changing anything and to verify the result afterward:
+
+```text
+For header-component.ecommerce.acme:
+1. Inspect version 125 and the current "production" tag.
+2. Deploy version 125 to the "production" tag.
+3. Read the tag again and confirm which version it resolves to.
+```
+
+For a rollback:
+
+```text
+For header-component.ecommerce.acme, inspect versions 124 and 125 and the
+current "production" tag. If version 124 is available, move "production" back
+to version 124, then read the tag again and report the final state.
+```
+
+Review [Versions](/features/versions), [Tags & Environments](/features/tags-environments), and [Instant Rollbacks](/features/instant-rollbacks) before changing production routing.
+
+## Permissions and safety
+
+- The MCP server inherits your Zephyr identity and permissions.
+- Zephyr API authorization remains the final permission boundary.
+- Your Zephyr access token stays in trusted server code and is not exposed to model-generated Code Mode scripts.
+- API requests are restricted to the configured Zephyr API origin.
+- The MCP server does not add a separate confirmation step. Your AI client may still ask you to approve tool calls.
+- Never paste Zephyr tokens or other credentials into a prompt.
+
+For sensitive changes, first make a read-only request, review the result, then request the specific mutation.
+
+## Scope and limitations
+
+The MCP server can use operations exposed by the Zephyr control-plane API. It cannot:
+
+- Read your local source code or bundler configuration
+- Run local builds or modify your repository
+- Bypass Zephyr permissions
+- Manage services that are not exposed by the Zephyr API
+
+Use the relevant [bundler guide](/getting-started/find-your-sdk) when you need to install or configure Zephyr in an application.
+
+## Troubleshooting
+
+### Authentication fails
+
+Reconnect the MCP server and repeat the Zephyr login flow. A `401` response means the client did not provide a valid MCP credential.
+
+For Codex:
+
+```bash
+codex mcp login zephyr
+```
+
+### The server appears unavailable
+
+Check the public health endpoint:
+
+```bash
+curl -fsS https://mcp.zephyr-cloud.io/healthz
+```
+
+A healthy server returns:
+
+```json
+{ "ok": true }
+```
+
+### An organization or application is missing
+
+Ask the assistant to list accessible organizations first. Then discover projects and applications from the selected organization instead of guessing identifiers. If the resource still does not appear, verify your membership and team permissions in the Zephyr dashboard.
+
+### An operation fails
+
+Ask the assistant to:
+
+1. Search the live OpenAPI description again.
+2. Show the HTTP status and API error details.
+3. Re-read the target without making another change.
+
+An authorization error usually means your Zephyr role does not permit that operation. A validation error usually means an identifier or request field does not match the API schema.

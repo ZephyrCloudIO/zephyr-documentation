@@ -149,6 +149,10 @@ const sidebar: Sidebar = {
       collapsible: true,
       items: [
         {
+          text: 'Zephyr API MCP',
+          link: '/tools/api-mcp',
+        },
+        {
           text: 'create-zephyr-apps',
           link: '/tools/create-zephyr-apps',
         },
