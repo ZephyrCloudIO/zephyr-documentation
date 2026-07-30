@@ -286,7 +286,7 @@ the local remote URL.
 
 ```json
 {
-  "name": "host",
+  "name": "rsbuild-mf-monorepo-host",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -311,8 +311,8 @@ the local remote URL.
     "zephyr-rsbuild-plugin": "1.2.0"
   },
   "zephyr:dependencies": {
-    "header": "workspace:*",
-    "hero": "workspace:*"
+    "header": "rsbuild-mf-monorepo-header@workspace:*",
+    "hero": "rsbuild-mf-monorepo-hero@workspace:*"
   }
 }
 ```
@@ -411,23 +411,24 @@ These three forms cover the common monorepo and production cases:
 ```json
 {
   "sameProjectWorkspaceBuild": {
-    "header": "workspace:*"
+    "header": "rsbuild-mf-monorepo-header@workspace:*"
   },
   "sameProjectProductionEnvironment": {
-    "header": "header@production"
+    "header": "rsbuild-mf-monorepo-header@production"
   },
   "crossProjectProductionEnvironment": {
-    "header": "header.design-system.acme@production"
+    "header": "rsbuild-mf-monorepo-header.design-system.acme@production"
   }
 }
 ```
 
-- `workspace:*` uses the alias key as the application UID and selects the most
-  recent remote built with the same branch, target, CI state, and user context.
-- `header@production` is the short UID form for an application in the same
-  project and organization. `production` resolves as an environment first,
-  then a tag, then a version.
-- `header.design-system.acme@production` is the full
+- `rsbuild-mf-monorepo-header@workspace:*` maps the local `header` alias to a
+  unique application UID and selects the most recent remote built with the same
+  branch, target, CI state, and user context.
+- `rsbuild-mf-monorepo-header@production` is the short UID form for an
+  application in the same project and organization. `production` resolves as
+  an environment first, then a tag, then a version.
+- `rsbuild-mf-monorepo-header.design-system.acme@production` is the full
   `application.project.organization` UID and is required across projects or
   organizations.
 
@@ -470,9 +471,9 @@ remote-first `pnpm build` command.
 Before changing configuration in response to a failure, prove package state:
 
 1. Declared: inspect each application with
-   `pnpm --filter header exec node -p "require('./package.json').devDependencies"`.
+   `pnpm --filter './apps/header' exec node -p "require('./package.json').devDependencies"`.
 2. Locked: inspect `pnpm-lock.yaml` or run `pnpm install --frozen-lockfile`.
-3. Installed: run `pnpm --filter header list --depth 0` and
+3. Installed: run `pnpm --filter './apps/header' list --depth 0` and
    `pnpm why @module-federation/rsbuild-plugin`.
 
 The example's verification script compares all three states for every pinned
@@ -482,12 +483,12 @@ Rsbuild, Module Federation, Zephyr, React, and TypeScript package.
 
 Start with generated configuration, not speculative edits:
 
-1. Run `pnpm --filter header exec rsbuild inspect`. Inspect
+1. Run `pnpm --filter './apps/header' exec rsbuild inspect`. Inspect
    `apps/header/dist/.rsbuild/rsbuild.config.mjs` and
    `rspack.config.web.mjs` for the final entry, expose, plugin order, and output
    path.
 2. Re-run the failing application with
-   `FEDERATION_DEBUG=true pnpm --filter header build`.
+   `FEDERATION_DEBUG=true pnpm --filter './apps/header' build`.
 3. If Module Federation reports `TYPE-001`, copy and run the exact `args.cmd`
    command printed in that error. It invokes the pinned TypeScript compiler
    against Module Federation's generated tsconfig and exposes the underlying
@@ -509,24 +510,24 @@ which file is outside the compilation boundary.
 
 ### Troubleshooting matrix
 
-| Symptom                                              | Failure stage           | First command                                     | Required evidence                                                                   |
-| ---------------------------------------------------- | ----------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Package or export cannot be found                    | install/resolution      | `pnpm install --frozen-lockfile`                  | Same version is declared, locked, and installed                                     |
-| Zephyr leaves a localhost remote in a published host | dependency mapping      | `pnpm --filter host build` with Zephyr logs       | MF remote key exactly matches the `zephyr:dependencies` key and selected UID exists |
-| `remoteEntry.js` is 404                              | remote build or serving | request the remote's `mf-manifest.json`           | Manifest is 200 and names the expected remote entry and expose                      |
-| Host fails before rendering                          | runtime initialization  | inspect browser console and Network               | `index.ts` only imports `./bootstrap`; remote entry and chunks are 200              |
-| `TYPE-001` or no type archive                        | DTS generation          | run the printed `args.cmd`                        | Concrete TypeScript diagnostic such as `TS6059`, plus the generated tsconfig path   |
-| Types do not update in development                   | DTS dev worker          | `FEDERATION_DEBUG=true pnpm --filter header dev`  | `.mf/typesGenerate.log` shows worker and broker activity                            |
-| Web output does not update                           | web bundler watch       | `pnpm --filter header exec rsbuild build --watch` | Changed output artifact and a successful rebuild                                    |
-| TAP watch rejects the publication                    | TAP output publishing   | `pnpm exec ze-cli --help`                         | `tap-app` target, metadata sidecar, and watched output directory are all present    |
+| Symptom                                              | Failure stage           | First command                                              | Required evidence                                                                   |
+| ---------------------------------------------------- | ----------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Package or export cannot be found                    | install/resolution      | `pnpm install --frozen-lockfile`                           | Same version is declared, locked, and installed                                     |
+| Zephyr leaves a localhost remote in a published host | dependency mapping      | `pnpm --filter './apps/host' build` with Zephyr logs       | MF remote key exactly matches the `zephyr:dependencies` key and selected UID exists |
+| `remoteEntry.js` is 404                              | remote build or serving | request the remote's `mf-manifest.json`                    | Manifest is 200 and names the expected remote entry and expose                      |
+| Host fails before rendering                          | runtime initialization  | inspect browser console and Network                        | `index.ts` only imports `./bootstrap`; remote entry and chunks are 200              |
+| `TYPE-001` or no type archive                        | DTS generation          | run the printed `args.cmd`                                 | Concrete TypeScript diagnostic such as `TS6059`, plus the generated tsconfig path   |
+| Types do not update in development                   | DTS dev worker          | `FEDERATION_DEBUG=true pnpm --filter './apps/header' dev`  | `.mf/typesGenerate.log` shows worker and broker activity                            |
+| Web output does not update                           | web bundler watch       | `pnpm --filter './apps/header' exec rsbuild build --watch` | Changed output artifact and a successful rebuild                                    |
+| TAP watch rejects the publication                    | TAP output publishing   | `pnpm exec ze-cli --help`                                  | `tap-app` target, metadata sidecar, and watched output directory are all present    |
 
 ## Use the correct watch workflow
 
 Web and TAP watch modes solve different problems:
 
 - For a web production-output loop, run
-  `pnpm --filter header exec rsbuild build --watch`. For local browser HMR, use
-  `pnpm --filter header dev`.
+  `pnpm --filter './apps/header' exec rsbuild build --watch`. For local browser
+  HMR, use `pnpm --filter './apps/header' dev`.
 - For a TAP mini-app whose build already emits a publication sidecar, run
   `pnpm exec ze-cli watch ./dist --target tap-app --metadata ./dist/zephyr-publication.json`
   from that application's directory.
