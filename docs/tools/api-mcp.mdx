@@ -33,6 +33,16 @@ The server opens the standard Zephyr sign-in flow. You do not need to create or 
 
 ## Connect an MCP client
 
+### Claude Code
+
+Add the remote server for your user account:
+
+```bash
+claude mcp add --transport http --scope user zephyr https://mcp.zephyr-cloud.io/mcp
+```
+
+Start Claude Code, open `/mcp`, select `zephyr`, and complete the Zephyr login flow.
+
 ### Codex
 
 Add the server, then sign in:
@@ -44,15 +54,41 @@ codex mcp login zephyr
 
 Your browser opens the Zephyr login page. After authorization, restart or refresh the MCP connection if your current Codex session does not show the server.
 
-### Claude Code
+### Cursor
 
-Add the remote server for your user account:
+Create `.cursor/mcp.json` in your project, or add the same server to your global Cursor MCP configuration:
 
-```bash
-claude mcp add --transport http --scope user zephyr https://mcp.zephyr-cloud.io/mcp
+```json
+{
+  "mcpServers": {
+    "zephyr": {
+      "url": "https://mcp.zephyr-cloud.io/mcp"
+    }
+  }
+}
 ```
 
-Start Claude Code, open `/mcp`, select `zephyr`, and complete the Zephyr login flow.
+Open **Cursor Settings → Tools & MCP**, enable `zephyr`, and complete the Zephyr login flow. See [Cursor's MCP documentation](https://cursor.com/docs/context/mcp) for global configuration and server controls.
+
+### Gemini CLI
+
+Add Zephyr to your user configuration:
+
+```bash
+gemini mcp add --transport http --scope user zephyr https://mcp.zephyr-cloud.io/mcp
+```
+
+Start Gemini CLI, run `/mcp auth zephyr`, and complete the Zephyr login flow. See the [Gemini CLI MCP documentation](https://geminicli.com/docs/tools/mcp-server/) for configuration and authentication details.
+
+### VS Code with GitHub Copilot
+
+Add Zephyr to your VS Code user profile:
+
+```bash
+code --add-mcp '{"name":"zephyr","type":"http","url":"https://mcp.zephyr-cloud.io/mcp"}'
+```
+
+Alternatively, run **MCP: Add Server** from the Command Palette, choose **HTTP**, and enter the production endpoint. Start the server and complete the Zephyr login flow when prompted. See [Use MCP servers in VS Code](https://code.visualstudio.com/docs/copilot/chat/mcp-servers) for workspace and user configuration options.
 
 ### Other MCP clients
 
