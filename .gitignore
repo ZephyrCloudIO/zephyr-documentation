@@ -24,6 +24,7 @@ dist-ssr
 *.sln
 *.sw?
 doc_build
+.fixtures/
 
 .nx/cache
 .nx/workspace-data

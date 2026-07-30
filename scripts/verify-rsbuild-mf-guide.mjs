@@ -3,6 +3,10 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const examplesRepositoryRoot = resolve(
+  repositoryRoot,
+  process.env['RSBUILD_MF_EXAMPLES_ROOT'] ?? '.fixtures/zephyr-examples',
+);
 const guidePath = resolve(
   repositoryRoot,
   'docs/tutorials/rsbuild-react-mf-monorepo.mdx',
@@ -25,9 +29,9 @@ while ((match = codeFencePattern.exec(guide)) !== null) {
     );
   }
 
-  const fixturePath = resolve(repositoryRoot, fixtureMarker[1]);
-  if (!fixturePath.startsWith(`${repositoryRoot}${sep}`)) {
-    throw new Error(`Fixture path escapes repository: ${fixtureMarker[1]}`);
+  const fixturePath = resolve(examplesRepositoryRoot, fixtureMarker[1]);
+  if (!fixturePath.startsWith(`${examplesRepositoryRoot}${sep}`)) {
+    throw new Error(`Example path escapes repository: ${fixtureMarker[1]}`);
   }
 
   const fixtureContent = (await readFile(fixturePath, 'utf8')).trimEnd();
@@ -75,5 +79,5 @@ if (!sidebar.includes('/tutorials/rsbuild-react-mf-monorepo')) {
 }
 
 console.log(
-  `Verified ${verifiedBlocks} executable guide blocks against committed fixture files.`,
+  `Verified ${verifiedBlocks} guide blocks against the canonical zephyr-examples files.`,
 );

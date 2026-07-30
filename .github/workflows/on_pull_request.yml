@@ -13,10 +13,17 @@ jobs:
   verify-rsbuild-mf-guide:
     if: github.event.action != 'closed'
     runs-on: depot-ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
-      - name: Checkout code
+      - name: Checkout documentation
         uses: actions/checkout@v6
+
+      - name: Checkout pinned canonical example
+        uses: actions/checkout@v6
+        with:
+          repository: ZephyrCloudIO/zephyr-examples
+          ref: c45e14a65032acaed98aaa27257355aac8e4c74f
+          path: .fixtures/zephyr-examples
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -29,27 +36,9 @@ jobs:
           run_install: false
 
       - name: Verify guide snippets
+        env:
+          RSBUILD_MF_EXAMPLES_ROOT: .fixtures/zephyr-examples
         run: pnpm verify:rsbuild-mf-guide
-
-      - name: Install pinned fixture dependencies
-        working-directory: fixtures/rsbuild-react-mf-monorepo
-        run: pnpm install --frozen-lockfile
-
-      - name: Verify official scaffold and pnpm add commands
-        working-directory: fixtures/rsbuild-react-mf-monorepo
-        run: pnpm verify:scaffold
-
-      - name: Build and diagnose the fixture
-        working-directory: fixtures/rsbuild-react-mf-monorepo
-        run: pnpm verify
-
-      - name: Install Chromium
-        working-directory: fixtures/rsbuild-react-mf-monorepo
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Verify remotes in a browser
-        working-directory: fixtures/rsbuild-react-mf-monorepo
-        run: pnpm verify:browser
 
   deploy-on-pr-changes:
     runs-on: depot-ubuntu-latest

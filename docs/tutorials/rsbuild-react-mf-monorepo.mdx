@@ -15,14 +15,16 @@ It covers a new scaffold and an existing application, then follows the same
 configuration, deployment, diagnosis, watch, and browser-verification path for
 both.
 
-Every code block on this page is copied from the
-[committed fixture](https://github.com/ZephyrCloudIO/zephyr-documentation/tree/main/fixtures/rsbuild-react-mf-monorepo).
-Pull requests run those blocks with Node 24 and pnpm 10.33.0, build all three
-applications, reproduce the DTS failure path, and render the host in Chromium.
+Every code block on this page is copied from the canonical
+[`zephyr-examples` application](https://github.com/ZephyrCloudIO/zephyr-examples/tree/main/module-federation/react-rsbuild-monorepo).
+Documentation pull requests compare those blocks with a pinned examples commit.
+The examples repository owns the Node 24 and pnpm 10.33.0 executable checks that
+build all three applications, reproduce the DTS failure path, and render the
+host in Chromium.
 
 :::info Pinned compatibility set
 
-The fixture pins Rsbuild 2.1.8, `@module-federation/rsbuild-plugin` 2.8.0,
+The example pins Rsbuild 2.1.8, `@module-federation/rsbuild-plugin` 2.8.0,
 `zephyr-rsbuild-plugin` 1.2.0, `zephyr-agent` 1.2.0, TypeScript 6.0.3,
 React 19.2.7, and React DOM 19.2.7. Keep declared, locked, and installed
 versions aligned before changing configuration.
@@ -34,10 +36,10 @@ versions aligned before changing configuration.
 ### New project: scaffold first
 
 Use the official `create-rsbuild` CLI. Do not synthesize an Rsbuild project
-from remembered defaults. The fixture executes this script in a temporary
+from remembered defaults. The example executes this script in a temporary
 directory on every pull request:
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/scripts/scaffold-new.sh */}
+{/* fixture: module-federation/react-rsbuild-monorepo/scripts/scaffold-new.sh */}
 
 ```bash
 #!/usr/bin/env bash
@@ -66,7 +68,7 @@ entry, TypeScript config, output path, and package manager first. The verified
 installation script uses exact versions so the package manifest, lockfile, and
 installed tree cannot silently select different major or minor releases:
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/scripts/add-existing-dependencies.sh */}
+{/* fixture: module-federation/react-rsbuild-monorepo/scripts/add-existing-dependencies.sh */}
 
 ```bash
 #!/usr/bin/env bash
@@ -119,12 +121,12 @@ The `header` remote establishes the complete contract:
 - `withZephyr()` runs after Module Federation so it can inspect and rewrite the
   federation output.
 
-The `ZEPHYR_DOCS_FIXTURE_OFFLINE` branch is only the fixture's non-publishing
-CI mode. It is never set by the normal build or the live deployment workflow.
+The `ZEPHYR_EXAMPLE_OFFLINE` branch is only the example's non-publishing CI
+mode. It is never set by the normal build or the live deployment workflow.
 In an application without an equivalent isolated fixture, use `withZephyr()`
 unconditionally.
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/rsbuild.config.ts */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/header/rsbuild.config.ts */}
 
 ```ts
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -132,7 +134,7 @@ import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { withZephyr } from 'zephyr-rsbuild-plugin';
 
-const docsFixtureOffline = process.env['ZEPHYR_DOCS_FIXTURE_OFFLINE'] === '1';
+const exampleOffline = process.env['ZEPHYR_EXAMPLE_OFFLINE'] === '1';
 
 export default defineConfig({
   source: {
@@ -171,7 +173,7 @@ export default defineConfig({
         },
       },
     }),
-    ...(!docsFixtureOffline ? [withZephyr()] : []),
+    ...(!exampleOffline ? [withZephyr()] : []),
   ],
 });
 ```
@@ -179,7 +181,7 @@ export default defineConfig({
 Keep the TypeScript root explicit and keep every exposed file and its imports
 inside it:
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/tsconfig.json */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/header/tsconfig.json */}
 
 ```json
 {
@@ -193,7 +195,7 @@ inside it:
 
 The pinned Header makes browser verification unambiguous:
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/header/src/Header.tsx */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/header/src/Header.tsx */}
 
 ```tsx
 export default function Header() {
@@ -208,7 +210,7 @@ export default function Header() {
 The `hero` remote uses its own name, port, expose, and entry while preserving
 the same plugin ordering and shared dependency contract:
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/hero/rsbuild.config.ts */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/hero/rsbuild.config.ts */}
 
 ```ts
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -216,7 +218,7 @@ import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { withZephyr } from 'zephyr-rsbuild-plugin';
 
-const docsFixtureOffline = process.env['ZEPHYR_DOCS_FIXTURE_OFFLINE'] === '1';
+const exampleOffline = process.env['ZEPHYR_EXAMPLE_OFFLINE'] === '1';
 
 export default defineConfig({
   source: {
@@ -255,12 +257,12 @@ export default defineConfig({
         },
       },
     }),
-    ...(!docsFixtureOffline ? [withZephyr()] : []),
+    ...(!exampleOffline ? [withZephyr()] : []),
   ],
 });
 ```
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/hero/src/Hero.tsx */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/hero/src/Hero.tsx */}
 
 ```tsx
 export default function Hero() {
@@ -280,7 +282,7 @@ exactly. Here, both contracts use `header` and `hero`. A spelling or casing
 difference creates two unrelated identities and prevents Zephyr from replacing
 the local remote URL.
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/package.json */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/host/package.json */}
 
 ```json
 {
@@ -319,7 +321,7 @@ Use object-form remotes. `external` contains the normal local development
 fallback; Zephyr resolves the matching dependency alias during a publishing
 build.
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/rsbuild.config.ts */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/host/rsbuild.config.ts */}
 
 ```ts
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
@@ -327,7 +329,7 @@ import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { withZephyr } from 'zephyr-rsbuild-plugin';
 
-const docsFixtureOffline = process.env['ZEPHYR_DOCS_FIXTURE_OFFLINE'] === '1';
+const exampleOffline = process.env['ZEPHYR_EXAMPLE_OFFLINE'] === '1';
 
 export default defineConfig({
   source: {
@@ -364,7 +366,7 @@ export default defineConfig({
         },
       },
     }),
-    ...(!docsFixtureOffline ? [withZephyr()] : []),
+    ...(!exampleOffline ? [withZephyr()] : []),
   ],
 });
 ```
@@ -372,7 +374,7 @@ export default defineConfig({
 The host entry must be asynchronous. Keep `index.ts` free of static React and
 remote imports and load a separate bootstrap:
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/src/index.ts */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/host/src/index.ts */}
 
 ```ts
 import('./bootstrap').catch((error: unknown) => {
@@ -380,7 +382,7 @@ import('./bootstrap').catch((error: unknown) => {
 });
 ```
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/src/bootstrap.tsx */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/host/src/bootstrap.tsx */}
 
 ```tsx
 import Header from 'header/Header';
@@ -406,7 +408,7 @@ createRoot(rootElement).render(
 
 These three forms cover the common monorepo and production cases:
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/dependency-selectors.json */}
+{/* fixture: module-federation/react-rsbuild-monorepo/dependency-selectors.json */}
 
 ```json
 {
@@ -441,7 +443,7 @@ host. Moving that environment can retarget an already-built host.
 choose the deployment at build time, but embeds the selected version's
 immutable root, remote entry, and manifest URLs:
 
-{/* fixture: fixtures/rsbuild-react-mf-monorepo/apps/host/zephyr.config.ts */}
+{/* fixture: module-federation/react-rsbuild-monorepo/apps/host/zephyr.config.ts */}
 
 ```ts
 import { defineConfig } from 'zephyr-agent';
@@ -457,13 +459,13 @@ remote deployment selected during its build.
 
 ## Build remotes first and the host last
 
-The fixture's root `package.json` makes `pnpm build` run `header`, then `hero`,
+The example's root `package.json` makes `pnpm build` run `header`, then `hero`,
 then `host`. This remote-first order is required for a cold Zephyr workspace:
 the host cannot resolve `workspace:*` until matching remote deployments exist.
 If a remote consumes another remote, topologically order the graph from leaves
 to the host and remove circular dependencies before relying on automation.
 
-For local, non-publishing CI, the fixture uses `pnpm build:offline`. The
+For local, non-publishing CI, the example uses `pnpm build:offline`. The
 protected live workflow leaves the offline flag unset and uses the same
 remote-first `pnpm build` command.
 
@@ -475,7 +477,7 @@ Before changing configuration in response to a failure, prove package state:
 3. Installed: run `pnpm --filter header list --depth 0` and
    `pnpm why @module-federation/rsbuild-plugin`.
 
-The fixture's verification script compares all three states for every pinned
+The example's verification script compares all three states for every pinned
 Rsbuild, Module Federation, Zephyr, React, and TypeScript package.
 
 ## Diagnose from evidence
@@ -495,7 +497,7 @@ Start with generated configuration, not speculative edits:
 4. In development mode, inspect `.mf/typesGenerate.log` for DTS worker,
    broker, type download, and hot-reload evidence.
 
-The committed failure fixture intentionally imports a file outside
+The committed failure case intentionally imports a file outside
 `compilerOptions.rootDir`. With the pinned stack, the asset build can finish
 after logging `TYPE-001`; its generated command exits nonzero with `TS6059`.
 Treat the `TYPE-001` event as a DTS failure even when the overall Rsbuild exit
@@ -532,7 +534,7 @@ Web and TAP watch modes solve different problems:
   from that application's directory.
 
 `ze-cli watch` is reserved for `tap-app`; it does not replace Rsbuild's web
-watch mode. The fixture pins `zephyr-cli` 1.2.0 and CI checks that `watch`,
+watch mode. The example pins `zephyr-cli` 1.2.0 and CI checks that `watch`,
 `--target`, `tap-app`, and `--metadata` remain valid CLI names and flags.
 
 ## Verify in a browser
@@ -550,7 +552,7 @@ Start `header`, `hero`, and `host`, then verify this chain:
    host.
 
 The committed
-[Playwright test](https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/fixtures/rsbuild-react-mf-monorepo/tests/host.spec.ts)
+[Playwright test](https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/module-federation/react-rsbuild-monorepo/tests/host.spec.ts)
 performs all five checks and restores the Header source after the update test.
 
 ## Verification and maintenance
@@ -558,15 +560,18 @@ performs all five checks and restores the Header source after the update test.
 The guide is protected at three levels:
 
 - [Snippet verification](https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/scripts/verify-rsbuild-mf-guide.mjs)
-  requires every code block to exactly match a committed fixture file.
-- [Pull-request verification](https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/.github/workflows/on_pull_request.yml)
+  requires every code block to exactly match the pinned canonical example.
+- [Example pull-request verification](https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/.github/workflows/verify-rsbuild-mf-monorepo.yml)
   runs the official scaffolder, verified `pnpm add` commands, frozen install,
   typecheck, remote-first build, `rsbuild inspect`, CLI flag checks,
   `TYPE-001`/`TS6059` reproduction, and Chromium test.
-- [The protected weekly live workflow](https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/.github/workflows/rsbuild-mf-live-fixture.yml)
+- [The protected weekly live workflow](https://github.com/ZephyrCloudIO/zephyr-examples/blob/main/.github/workflows/rsbuild-mf-live-fixture.yml)
   requires the `rsbuild-mf-live-fixture` GitHub environment and Zephyr
   credential, then publishes both remotes before the host.
 
-Run `pnpm verify:rsbuild-mf-guide` from the documentation root to check snippet
-drift. Run `pnpm verify` and `pnpm verify:browser` inside the fixture to execute
-the local build, diagnostic, and browser contracts.
+With `zephyr-examples` checked out beside this repository, run
+`RSBUILD_MF_EXAMPLES_ROOT=../zephyr-examples pnpm verify:rsbuild-mf-guide` from
+the documentation root to check snippet drift. Run `pnpm verify` and
+`pnpm verify:browser` inside
+`zephyr-examples/module-federation/react-rsbuild-monorepo` to execute the local
+build, diagnostic, and browser contracts.
