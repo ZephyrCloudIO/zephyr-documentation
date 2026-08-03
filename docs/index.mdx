@@ -18,10 +18,10 @@ import {
 import { CardLayout } from '../components/ui/card-layout';
 import { Separator } from '../components/ui/separator';
 import { InvertImage } from '../components/ui/invert-image';
+import { McpPromo } from '../components/mcp-promo';
 
 <InvertImage />
 <Separator />
-<br />
 
 **Zephyr Cloud** is a Module Federation platform that accelerates micro-frontend development by providing instant deployment, intelligent dependency resolution, and seamless version management—all while remaining cloud agnostic, framework agnostic, and bundler agnostic.
 
@@ -39,6 +39,14 @@ Deploy to Cloudflare, AWS, Fastly, or Vercel without changing a single line of c
 
 **Need help?** Join our [Discord community](https://discord.gg/zephyrcloud)—we're always here to help!
 
+## AI
+
+Connect your AI assistant to inspect deployments, promote versions, and roll back through your existing Zephyr account and permissions.
+
+<McpPromo />
+
+[Read the full MCP setup and usage guide](/tools/api-mcp)
+
 ## Main Features
 
 - **[Organization Structure](/features/organization-structure)** - Advanced org setup, multi-team management, and enterprise features
@@ -46,8 +54,8 @@ Deploy to Cloudflare, AWS, Fastly, or Vercel without changing a single line of c
 - **[Tags & Environments](/features/tags-environments)** - Detailed environment configuration and custom domains
 - **[Instant Rollbacks](/features/instant-rollbacks)** - Complex rollback scenarios and automated rollback triggers
 - **[Remote Dependencies](/features/remote-dependencies)** - Advanced dependency resolution and micro-frontend orchestration
-- **[CI/CD](/features/ci-cd-personal-token)** - Detailed integration guides for different CI/CD platforms with personal token
-- **[CI/CD](/features/ci-cd-server-token)** - Detailed integration guides for different CI/CD platforms with server token
+- **[CI/CD Automation](/features/automation)** - Configure deployments from build pipelines with CI tokens
+- **[Deployment auth migration](/migrations/ci-token-migration)** - Move server-token and personal-token deployments to CI tokens
 - **[Teams & Members](/features/teams-members)** - Team management, permissions, and collaboration features
 - **[Subscriptions](/features/subscriptions)** - Billing, usage monitoring, and plan management
 - **[Multi-Organization Subscriptions](/features/multi-organization-subscriptions)** - Link child organizations to an Enterprise subscription

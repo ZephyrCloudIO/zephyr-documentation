@@ -1,16 +1,22 @@
 ---
-title: CI/CD - Server token
+title: Server token deployments
 description: The Server Auth Token allows you to authenticate Zephyr plugins at the organization level without needing individual user credentials for every operation. It identifies the user performing actions via their email and enables secure access to Zephyr on behalf of your organization.
 ---
 
 import { Steps } from '@rspress/core/theme';
 
-# CI/CD Integration using Server token
+# Server token deployments
 
 The Server Auth Token allows you to authenticate Zephyr plugins at the organization level without needing individual user credentials for every operation. It identifies the user performing actions via their email and enables secure access to Zephyr on behalf of your organization.
 
+:::warning Server-token deployment auth is going away
+Do not add `ZE_SERVER_TOKEN` to new deployment pipelines. Existing deployment pipelines that use server tokens should migrate to CI tokens with `ZE_CI_TOKEN`.
+
+Follow the [deployment auth migration guide](/migrations/ci-token-migration).
+:::
+
 :::info Alternative: Personal Tokens
-Server tokens provide organization-level authentication. For individual user authentication, see the Personal Token CI/CD Integration guide. Personal tokens are useful for personal projects or when you need user-specific permissions. Learn more in the [CI/CD Personal Token guide](/features/ci-cd-personal-token).
+Personal tokens remain available for user-scoped access where supported, but personal-token deployment auth is also going away. For deployments, use CI tokens.
 :::
 
 ## Overview

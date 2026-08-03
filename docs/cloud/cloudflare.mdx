@@ -59,9 +59,56 @@ After signing in, select your organization.
 - On the left sidebar, select **Deployment Integration**.
 - Choose **Available** to find Cloudflare, then click on **Add integration**.
 
-### Retrieve Credentials and Configure Cloudflare
+### Configure Your DNS Record
 
-Before proceeding, you will need two details and one DNS configuration from Cloudflare:
+- Return to your domain’s home page (the **Overview** page should still be open) and click on **DNS** on the left sidebar.
+- Click **Add record** on the _Records_ page and enter the following details:
+
+![dns](../public/cf-dns-entry-cname.webp)
+
+<details>
+<summary>Click to view DNS record details</summary>
+
+| Type  | Name |       Content        | Proxy Status | TTL  |
+| :---: | :--: | :------------------: | :----------: | :--: |
+| CNAME | `*`  | `ze.zephyrcloud.app` |   Proxied    | Auto |
+
+</details>
+
+### Connect with Cloudflare (recommended)
+
+Zephyr Cloud now supports Cloudflare OAuth for deployment integrations. This is the recommended setup path because you authorize Zephyr in Cloudflare instead of manually copying a Cloudflare API token and Zone ID into Zephyr.
+
+![Cloudflare integration form with Connect with Cloudflare selected](../public/cloudflare-oauth-setup-mode.webp)
+
+After completing **Basic Info** and confirming the DNS record:
+
+- In **Configure Cloudflare**, choose **Connect with Cloudflare**.
+- Click **Connect with Cloudflare**.
+- In Cloudflare, select the Cloudflare account that owns the zone you want Zephyr to use.
+- Review the requested permissions, then select **Authorize**.
+- After Cloudflare redirects back to Zephyr, wait for Zephyr to load your Cloudflare zones.
+- Select the **Cloudflare Zone** for this integration.
+- Choose the delimiter for generated deployment URLs.
+- Click **Finish**.
+
+![Cloudflare zone selection after authorizing Zephyr](../public/cloudflare-oauth-zone-select.webp)
+
+:::info
+
+Cloudflare shows the application name, publisher domain, account selection, and requested permissions before you authorize. Zephyr completes the OAuth exchange server-side, so Cloudflare access and refresh tokens are not exposed in your browser.
+
+You can review or revoke authorized OAuth applications from your Cloudflare profile. Cloudflare account administrators can also restrict public OAuth application access for their account. See Cloudflare's [Authorizing an application](https://developers.cloudflare.com/fundamentals/oauth/authorizing-an-application/) guide for details.
+
+:::
+
+### Manual API token setup
+
+Manual setup remains available if OAuth is unavailable for your account, blocked by your Cloudflare account settings, or your organization requires manually managed Cloudflare API tokens.
+
+For manual setup, you will need your Cloudflare **Zone ID** and an **API Token**.
+
+![Cloudflare integration form with Manual setup selected](../public/cloudflare-manual-setup-mode.webp)
 
 #### 1. Zone ID
 
@@ -87,23 +134,7 @@ Before proceeding, you will need two details and one DNS configuration from Clou
 - Leave other configurations (e.g., Account resources, Client IP Address Filtering) as defaults.
 - Scroll to the bottom and select **Continue to summary** to review your configurations, then **Create Token**. The token will display on the next page.
 
-#### 4. Configure Your DNS Record
-
-- Return to your domain’s home page (the **Overview** page should still be open) and click on **DNS** on the left sidebar.
-- Click **Add record** on the _Records_ page and enter the following details:
-
-![dns](../public/cf-dns-entry-cname.webp)
-
-<details>
-<summary>Click to view DNS record details</summary>
-
-| Type  | Name |       Content        | Proxy Status | TTL  |
-| :---: | :--: | :------------------: | :----------: | :--: |
-| CNAME | `*`  | `ze.zephyrcloud.app` |   Proxied    | Auto |
-
-</details>
-
-#### 5. Configure advanced certificate (optional: required if you want to use domains like `*.ze.your.domain`)
+#### 4. Configure advanced certificate (optional: required if you want to use domains like `*.ze.your.domain`)
 
 - Go to **SSL/TLS** page and view **Edge Certificates**
 - Click on Purchase ACM and complete buying
@@ -112,6 +143,12 @@ Before proceeding, you will need two details and one DNS configuration from Clou
 ### Configuration Inputs
 
 Details for each input after clicking **Add Integration** under **Cloudflare**:
+
+<dt>Setup Method</dt>
+<dd>
+  Choose **Connect with Cloudflare** for OAuth setup, or **Manual setup** to
+  paste a Cloudflare API token and Zone ID.
+</dd>
 
 <dt>Integration Name</dt>
 <dd>A unique name within your organization, used as a slug.</dd>
@@ -127,12 +164,15 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 
 <dt>API Token</dt>
 <dd>
-  Obtainable from Cloudflare. [See instructions](#2-api-token) for creating your
-  API token.
+  Required only for **Manual setup**. Obtainable from Cloudflare. [See
+  instructions](#2-api-token) for creating your API token.
 </dd>
 
 <dt>Zone ID</dt>
-<dd>Obtainable from Cloudflare. Requires a valid domain on Cloudflare.</dd>
+<dd>
+  Required only for **Manual setup**. In OAuth setup, Zephyr lists the zones
+  available to the Cloudflare account you authorized.
+</dd>
 
 <dt>Cloudflare Project Name</dt>
 <dd>
@@ -159,6 +199,26 @@ Visit our [recipes](/recipes) to test an application. Your next deployment shoul
 When using our managed cloud (Cloudflare) or custom Cloudflare integration, avoid including capital letters in names for `package.json`, module federation configuration, or assets to prevent issues with Cloudflare queries.
 
 ## Troubleshooting
+
+### Cloudflare OAuth setup
+
+#### Cloudflare authorization was not completed
+
+If Zephyr says Cloudflare authorization was not completed, reconnect and try again. Confirm the browser completed the Cloudflare authorization flow and was not blocked by a popup, extension, or account access restriction.
+
+#### No Cloudflare zones found
+
+If Zephyr cannot find any Cloudflare zones after authorization, the Cloudflare account you selected may not have access to a zone. Add a zone in Cloudflare, ask an account administrator for access, or reconnect with a different Cloudflare account.
+
+![Cloudflare OAuth setup showing no zones found](../public/cloudflare-oauth-no-zones.webp)
+
+#### Zones keep loading or OAuth is temporarily unavailable
+
+Reconnect with Cloudflare and try again. If OAuth remains unavailable, you can use **Manual setup** as a fallback or contact us on [Discord](https://discord.gg/zephyrcloud).
+
+#### Revoke Zephyr access in Cloudflare
+
+You can revoke Zephyr's Cloudflare OAuth authorization from your Cloudflare profile's [OAuth authorization management page](https://dash.cloudflare.com/?to=/profile/access-management/authorization). After revoking access, remove the affected deployment integration in Zephyr or reconnect it with Cloudflare.
 
 ### What Will Be Created on Your Cloudflare Account?
 
@@ -210,6 +270,7 @@ In your Cloudflare dashboard, navigate to **Workers & Pages** and then **KV** to
 :::danger Warning
 
 - Zephyr Cloud does not manage deletion of API tokens or any Cloudflare account properties.
+- For OAuth-created integrations, revoke Zephyr from Cloudflare if you also want to remove the Cloudflare-side authorization.
 - Assets and information on your Cloudflare account are immutable by default. During a **clean uninstall**, previously deployed assets and information are unrecoverable.
 
 :::
