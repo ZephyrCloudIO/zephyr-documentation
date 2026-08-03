@@ -1,0 +1,177 @@
+---
+title: Declarative Configuration
+description: Configure Zephyr application identity, remote dependencies, and dependency URL behavior with zephyr.config files.
+head:
+  - - meta
+    - property: og:description
+      content: Configure Zephyr application identity, remote dependencies, and dependency URL behavior with zephyr.config files.
+---
+
+# Declarative Configuration
+
+Zephyr normally infers application identity from Git and `package.json`. Add an
+optional `zephyr.config` file when an application needs explicit identity, remote
+dependency declarations, or immutable dependency URLs.
+
+## Create a Configuration File
+
+For TypeScript projects, create `zephyr.config.ts`:
+
+```ts title="zephyr.config.ts"
+import { defineConfig } from 'zephyr-agent';
+
+export default defineConfig({
+  org: 'acme',
+  project: 'storefront',
+  appName: 'checkout',
+  remoteDependencies: {
+    header: 'zephyr:header.components.acme@production',
+  },
+  dependencyUrlMode: 'version',
+});
+```
+
+`defineConfig` provides TypeScript types and returns the configuration unchanged. A
+plain object is also valid:
+
+```ts title="zephyr.config.ts"
+export default {
+  appName: 'checkout',
+};
+```
+
+All fields are optional. Use only the fields that need to differ from Zephyr's inferred
+values or default behavior.
+
+## Supported File Names
+
+Zephyr supports TypeScript and JavaScript configuration files:
+
+- `zephyr.config.ts`
+- `zephyr.config.mts`
+- `zephyr.config.cts`
+- `zephyr.config.js`
+- `zephyr.config.mjs`
+- `zephyr.config.cjs`
+
+ES modules can use a default export. CommonJS files can use `module.exports`:
+
+```js title="zephyr.config.cjs"
+module.exports = {
+  appName: 'checkout',
+};
+```
+
+## File Discovery
+
+Zephyr starts at the bundler's project directory and searches upward. The nearest
+configuration file wins.
+
+This allows a monorepo to use one configuration at its root or a closer file for an
+individual application. Configuration files at different levels are not merged. If a
+directory contains more than one supported `zephyr.config` file, Zephyr rejects the
+ambiguous configuration before deployment.
+
+Zephyr resolves the configuration when the bundler initializes. Restart the bundler
+after changing the file.
+
+## Configuration Reference
+
+| Field                | Type                      | Default source or value              | Purpose                                                           |
+| -------------------- | ------------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `org`                | `string`                  | Inferred from the Git `origin`       | Overrides the organization portion of the application identity.   |
+| `project`            | `string`                  | Inferred from the Git `origin`       | Overrides the project portion of the application identity.        |
+| `appName`            | `string`                  | Nearest `package.json` `name`        | Overrides the application name.                                   |
+| `remoteDependencies` | `Record<string, string>`  | `package.json` `zephyr:dependencies` | Adds entries and overrides matching aliases.                      |
+| `dependencyUrlMode`  | `'selector' \| 'version'` | `'selector'`                         | Chooses mutable selector URLs or immutable resolved-version URLs. |
+
+The configuration is strict. Unknown fields, empty strings, non-string dependency
+references, and unsupported `dependencyUrlMode` values cause the build to fail.
+
+### `org` and `project`
+
+Use `org` and `project` when the application identity should differ from the repository
+`origin`, or when no remote is available:
+
+```ts title="zephyr.config.ts"
+import { defineConfig } from 'zephyr-agent';
+
+export default defineConfig({
+  org: 'acme',
+  project: 'storefront',
+});
+```
+
+Either field can override its inferred value independently. Provide both when replacing
+Git remote identity completely. Explicit identity does not replace the Git branch and
+commit metadata required for CI deployments.
+
+### `appName`
+
+Use `appName` when the Zephyr application name should differ from the nearest
+`package.json` name:
+
+```ts title="zephyr.config.ts"
+export default {
+  appName: 'checkout',
+};
+```
+
+Together, `appName`, `project`, and `org` form the application UID:
+`appName.project.org`.
+
+### `remoteDependencies`
+
+`remoteDependencies` is the config-file alternative to `package.json`
+`zephyr:dependencies`:
+
+```ts title="zephyr.config.ts"
+export default {
+  remoteDependencies: {
+    header: 'zephyr:header.components.acme@production',
+    recommendations: 'zephyr:recommendations@latest',
+  },
+};
+```
+
+You can use both locations. Zephyr merges them by alias: entries from
+`remoteDependencies` override same-named entries in `package.json`, while package-only
+entries remain.
+
+See [Remote Dependencies](/features/remote-dependencies) for application UID and version
+selector syntax.
+
+### `dependencyUrlMode`
+
+The default `selector` mode preserves tag or environment URLs in the built host. If the
+selector later moves, the existing host can load the newly selected deployment.
+
+Set `dependencyUrlMode` to `version` to embed the immutable URLs of the deployment
+selected at build time:
+
+```ts title="zephyr.config.ts"
+export default {
+  dependencyUrlMode: 'version',
+};
+```
+
+The selector still determines which deployment Zephyr resolves. The mode changes only
+the deployment root, remote entry, and Module Federation manifest URLs written into the
+host. Rebuild the host to adopt a newer dependency version.
+
+## Alternatives and Precedence
+
+You do not need a `zephyr.config` file when Zephyr's inferred values and defaults are
+correct.
+
+| Concern             | Without `zephyr.config`                                | With `zephyr.config`                                   |
+| ------------------- | ------------------------------------------------------ | ------------------------------------------------------ |
+| Organization        | Inferred from Git `origin`                             | `org` overrides the inferred organization.             |
+| Project             | Inferred from Git `origin`                             | `project` overrides the inferred project.              |
+| Application name    | Read from the nearest `package.json`                   | `appName` overrides the package name.                  |
+| Remote dependencies | Declared in `package.json` under `zephyr:dependencies` | `remoteDependencies` adds entries and wins by alias.   |
+| Dependency URLs     | Mutable selector URLs                                  | `dependencyUrlMode: 'version'` enables immutable URLs. |
+
+Environment variables are not an alternative configuration source for these fields.
+Zephyr does not read identity or remote dependency overrides from the environment, and
+loading the file does not copy values into `process.env`.
