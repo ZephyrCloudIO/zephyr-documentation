@@ -361,6 +361,10 @@ const sidebar: Sidebar = {
       collapsible: true,
       items: [
         {
+          text: 'Declarative Configuration',
+          link: '/reference/declarative-configuration',
+        },
+        {
           text: 'Additional Resources',
           link: '/reference/resources',
         },
