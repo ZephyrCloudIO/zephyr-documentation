@@ -24,6 +24,7 @@ Want to control which version of a remote your environment consumes without rebu
 - [Understanding Application UIDs](#understanding-application-uids)
 - [Configuration](#zephyr-dependencies-configuration)
 - [Version Selectors](#supported-declaration-formats)
+- [Immutable Version URLs](#pin-resolved-dependencies-to-version-urls)
 - [Build Context & Resolution](#build-context-and-dynamic-resolution)
 - [Best Practices](#best-practices)
 
@@ -278,6 +279,43 @@ Use the full UID format when:
 - The remote application is in a different repository
 - The remote application is in a different organization
 - You need to disambiguate between applications with the same name
+
+## Pin Resolved Dependencies to Version URLs
+
+By default, Zephyr keeps the URL identity of a tag or environment selector in the final
+Module Federation configuration. For example, `header@staging` resolves through the
+`staging` environment URL. If that environment later points to another version, an
+already-built host can load the newer version.
+
+To keep the deployment selected at build time, create an optional Zephyr project config
+and set `dependencyUrlMode` to `version`:
+
+```ts title="zephyr.config.ts"
+export default {
+  dependencyUrlMode: 'version',
+};
+```
+
+The config file does not exist until you add it. Zephyr searches upward from the
+bundler's project directory and supports `zephyr.config.ts`, `.mts`, `.cts`, `.js`,
+`.mjs`, and `.cjs`.
+
+The selector still decides which deployment Zephyr selects. Only the URL written into
+the build changes:
+
+| Mode                 | URL written into the host         | Effect when the selector moves                                  |
+| -------------------- | --------------------------------- | --------------------------------------------------------------- |
+| `selector` (default) | Tag or environment URL            | The existing host can load the newly selected version           |
+| `version`            | Immutable application-version URL | The existing host remains on the version selected at build time |
+
+`version` mode applies to tag, environment, semver, wildcard, and `workspace:*`
+resolution. Zephyr updates the deployment root, remote entry, and Module Federation
+manifest URLs together so runtimes that load either a manifest or a remote entry remain
+pinned to the same application version.
+
+:::tip Rebuild to update pinned dependencies
+After a tag or environment moves, rebuild the host to select and embed its new version.
+:::
 
 ## Build Context and Dynamic Resolution
 
