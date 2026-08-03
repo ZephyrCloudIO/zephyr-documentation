@@ -123,43 +123,45 @@ const config = {
   resolver: { useWatchman: false },
 };
 
-async function getConfig() {
-  const zephyrConfig = await withZephyr()({
-    name: 'miniApp',
-    filename: 'miniApp.bundle',
-    exposes: {
-      './example': './src/example.tsx',
+const mfConfig = {
+  name: 'miniApp',
+  filename: 'miniApp.bundle',
+  exposes: {
+    './example': './src/example.tsx',
+  },
+  shared: {
+    react: {
+      singleton: true,
+      eager: false,
+      requiredVersion: '19.1.0',
+      version: '19.1.0',
+      import: false,
     },
-    shared: {
-      react: {
-        singleton: true,
-        eager: false,
-        requiredVersion: '19.1.0',
-        version: '19.1.0',
-        import: false,
-      },
-      'react-native': {
-        singleton: true,
-        eager: false,
-        requiredVersion: '0.80.0',
-        version: '0.80.0',
-        import: false,
-      },
+    'react-native': {
+      singleton: true,
+      eager: false,
+      requiredVersion: '0.80.0',
+      version: '0.80.0',
+      import: false,
     },
-    shareStrategy: 'version-first',
-  });
+  },
+  shareStrategy: 'version-first',
+};
 
-  return withModuleFederation(
-    mergeConfig(getDefaultConfig(__dirname), config),
-    zephyrConfig,
-    {
-      flags: {
-        unstable_patchHMRClient: true,
-        unstable_patchInitializeCore: true,
-        unstable_patchRuntimeRequire: true,
-      },
+async function getConfig() {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
+  const zephyrConfig = await withZephyr({
+    name: mfConfig.name,
+    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
+  })(baseConfig);
+
+  return withModuleFederation(zephyrConfig, mfConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
     },
-  );
+  });
 }
 
 module.exports = getConfig();
@@ -310,50 +312,55 @@ const { withModuleFederation } = require('@module-federation/metro');
  */
 
 const miniAppPort = process.env.MINI_APP_PORT ?? '8082';
+const useZephyrRemotes = process.env.ZEPHYR_REMOTE_RESOLUTION === '1';
 
 const config = {
   resolver: { useWatchman: false },
 };
 
-const getConfig = async () => {
-  const zephyrConfig = await withZephyr()({
-    name: 'hostApp',
-    remotes: {
-      // Match the port used by your MiniApp Metro server in local development.
-      miniApp: `miniApp@http://localhost:${miniAppPort}/mf-manifest.json`,
+const mfConfig = {
+  name: 'hostApp',
+  remotes: {
+    miniApp: useZephyrRemotes
+      ? 'zephyr:miniApp@yourEnvironment'
+      : `miniApp@http://localhost:${miniAppPort}/mf-manifest.json`,
+  },
+  shared: {
+    react: {
+      singleton: true,
+      eager: true,
+      requiredVersion: '19.1.0',
+      version: '19.1.0',
     },
-    shared: {
-      react: {
-        singleton: true,
-        eager: true,
-        requiredVersion: '19.1.0',
-        version: '19.1.0',
-      },
-      'react-native': {
-        singleton: true,
-        eager: true,
-        requiredVersion: '0.80.0',
-        version: '0.80.0',
-      },
+    'react-native': {
+      singleton: true,
+      eager: true,
+      requiredVersion: '0.80.0',
+      version: '0.80.0',
     },
-    shareStrategy: 'loaded-first',
-    plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
-  });
-
-  return withModuleFederation(
-    mergeConfig(getDefaultConfig(__dirname), config),
-    zephyrConfig,
-    {
-      flags: {
-        unstable_patchHMRClient: true,
-        unstable_patchInitializeCore: true,
-        unstable_patchRuntimeRequire: true,
-      },
-    },
-  );
+  },
+  shareStrategy: 'loaded-first',
+  runtimePlugins: [path.resolve(__dirname, './runtime-plugin.ts')],
 };
 
-module.exports = getConfig;
+const getConfig = async () => {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
+  const zephyrConfig = await withZephyr({
+    name: mfConfig.name,
+    remotes: mfConfig.remotes,
+    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
+  })(baseConfig);
+
+  return withModuleFederation(zephyrConfig, mfConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
+    },
+  });
+};
+
+module.exports = getConfig();
 ```
 
 :::details{title="Configuration Breakdown"}
@@ -361,11 +368,11 @@ module.exports = getConfig;
 - **name**: Unique identifier for your host application
 - **remotes**: Mini-applications to load
   - Key is the local name you'll use to import
-  - Value is the remote entry URL (Zephyr will resolve this to the cloud URL)
+  - Value is a local manifest URL for development or a Zephyr selector such as `zephyr:miniApp@yourEnvironment` for cloud resolution
 - **shared**: Dependencies shared with mini-applications
   - **eager: true**: Host loads these dependencies immediately
 - **shareStrategy**: `'loaded-first'` prioritizes already loaded dependencies
-- **plugins**: Optional runtime plugins for custom logic
+- **runtimePlugins**: Optional Module Federation runtime plugins for custom logic
 
 :::
 
@@ -623,6 +630,8 @@ Common build issues and solutions:
 Now that you have Module Federation working with Metro, explore these advanced topics:
 
 - Explore our [example repository](https://github.com/ZephyrCloudIO/zephyr-metro-example/) for complete working examples
+- Add [React Native OTA Updates](/features/react-native-ota-updates) with `zephyr-native-cache`
+- Review the [OTA example repository](https://github.com/ZephyrCloudIO/zephyr-native-cache-test) for a full host/remotes setup
 - Learn about [Tags & Environments](/features/tags-environments) for managing different deployment stages
 - Check out [Remote Dependencies](/features/remote-dependencies) for advanced dependency configuration
 - Review [End-to-End Testing](/tutorials/e2e-testing) for testing federated applications
