@@ -10,6 +10,36 @@ env:
   PUBLIC_POSTHOG_HOST: ${{ secrets.PUBLIC_POSTHOG_HOST }}
 
 jobs:
+  verify-rsbuild-mf-guide:
+    if: github.event.action != 'closed'
+    runs-on: depot-ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout documentation
+        uses: actions/checkout@v6
+
+      - name: Checkout pinned canonical example
+        uses: actions/checkout@v6
+        with:
+          repository: ZephyrCloudIO/zephyr-examples
+          ref: c777c9fac419e674d16d8e608dc218c0e891e1e3
+          path: .fixtures/zephyr-examples
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+
+      - name: Verify guide snippets
+        env:
+          RSBUILD_MF_EXAMPLES_ROOT: .fixtures/zephyr-examples
+        run: pnpm verify:rsbuild-mf-guide
+
   deploy-on-pr-changes:
     runs-on: depot-ubuntu-latest
     steps:
