@@ -7,6 +7,8 @@ head:
       content: Connect an AI assistant to Zephyr Cloud through the Zephyr API MCP server.
 ---
 
+import { Image } from '../../components/ui/image';
+
 # Zephyr API MCP
 
 The Zephyr API MCP server connects compatible AI assistants to the Zephyr Cloud control plane. You can use natural-language requests to inspect organizations and applications, review deployment state, and perform authorized operations such as promoting a version or updating a tag.
@@ -28,6 +30,27 @@ You need:
 The server opens the standard Zephyr sign-in flow. You do not need to create or paste an API token.
 
 ## Connect an MCP client
+
+### Tap
+
+:::tip{title="Recommended: Tap"}
+Tap is our AI platform and the recommended way to use the Zephyr API MCP. It makes Zephyr Cloud available directly to your Tap specialists without local CLI setup.
+:::
+
+In Tap, open **Settings → MCP Servers** and select **Add Server**.
+
+<Image
+  src="/ai-tools/tap-add-mcp-server.png"
+  alt="Tap Add MCP Server dialog"
+  size="large"
+/>
+
+The dialog opens on **Command (stdio)**. Configure Zephyr as a remote server:
+
+1. Set **Server Name** to `zephyr`.
+2. Choose **Remote (HTTP)** and enter `https://mcp.zephyr-cloud.io/mcp` as the **Server URL**.
+3. Select **OAuth** for authentication.
+4. Select **Add Server**, then complete the Zephyr login flow in your browser.
 
 ### Claude Code
 
