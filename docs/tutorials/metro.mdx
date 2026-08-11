@@ -147,15 +147,19 @@ const mfConfig = {
   shareStrategy: 'version-first',
 };
 
-const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
+async function getConfig() {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
 
-module.exports = withModuleFederation(baseConfig, mfConfig, {
-  flags: {
-    unstable_patchHMRClient: true,
-    unstable_patchInitializeCore: true,
-    unstable_patchRuntimeRequire: true,
-  },
-});
+  return withModuleFederation(baseConfig, mfConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
+    },
+  });
+}
+
+module.exports = getConfig();
 ```
 
 :::details{title="Configuration Breakdown"}
@@ -333,15 +337,19 @@ const mfConfig = {
   runtimePlugins: [path.resolve(__dirname, './runtime-plugin.ts')],
 };
 
-const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
+const getConfig = async () => {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
 
-module.exports = withModuleFederation(baseConfig, mfConfig, {
-  flags: {
-    unstable_patchHMRClient: true,
-    unstable_patchInitializeCore: true,
-    unstable_patchRuntimeRequire: true,
-  },
-});
+  return withModuleFederation(baseConfig, mfConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
+    },
+  });
+};
+
+module.exports = getConfig();
 ```
 
 :::details{title="Configuration Breakdown"}

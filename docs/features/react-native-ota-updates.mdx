@@ -100,11 +100,15 @@ const mfFlags = {
   },
 };
 
-const baseConfig = mergeConfig(getDefaultConfig(__dirname), {
-  resolver: { useWatchman: false },
-});
+async function getConfig() {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), {
+    resolver: { useWatchman: false },
+  });
 
-module.exports = withModuleFederation(baseConfig, mfConfig, mfFlags);
+  return withModuleFederation(baseConfig, mfConfig, mfFlags);
+}
+
+module.exports = getConfig();
 ```
 
 Use local HTTP manifest URLs during local development. Use Zephyr selectors such as `zephyr:profile@production`, `zephyr:profile@staging`, or `zephyr:profile@latest` for builds that should resolve through Zephyr Cloud and receive OTA changes from the corresponding environment or tag.

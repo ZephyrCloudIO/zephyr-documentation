@@ -86,15 +86,19 @@ const mfConfig = {
   shareStrategy: 'version-first',
 };
 
-const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
+async function getConfig() {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
 
-module.exports = withModuleFederation(baseConfig, mfConfig, {
-  flags: {
-    unstable_patchHMRClient: true,
-    unstable_patchInitializeCore: true,
-    unstable_patchRuntimeRequire: true,
-  },
-});
+  return withModuleFederation(baseConfig, mfConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
+    },
+  });
+}
+
+module.exports = getConfig();
 ```
 
 ### React Native CLI Configuration
@@ -187,15 +191,19 @@ const mfConfig = {
   runtimePlugins: [require.resolve('zephyr-native-cache/runtime-plugin')],
 };
 
-const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
+const getConfig = async () => {
+  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
 
-module.exports = withModuleFederation(baseConfig, mfConfig, {
-  flags: {
-    unstable_patchHMRClient: true,
-    unstable_patchInitializeCore: true,
-    unstable_patchRuntimeRequire: true,
-  },
-});
+  return withModuleFederation(baseConfig, mfConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
+    },
+  });
+};
+
+module.exports = getConfig();
 ```
 
 Use local HTTP manifest URLs during local development. Use Zephyr selectors such as `zephyr:miniApp@yourEnvironment` for builds that should resolve remotes from Zephyr Cloud.
