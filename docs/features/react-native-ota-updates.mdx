@@ -162,7 +162,7 @@ Production builds enable the cache automatically. Development builds keep the ca
 
 ## Configure Remote Builds
 
-Use the Zephyr Rock plugin in place of the stock `@module-federation/metro-plugin-rock` config plugin so `rock bundle-mf-remote` and `rock bundle-mf-host` upload Metro artifacts to Zephyr after the Module Federation build completes. Do not register both plugins because they provide the same command names.
+Use the Zephyr Rock plugin so `rock bundle-mf-remote` and `rock bundle-mf-host` upload Metro artifacts to Zephyr after the Module Federation build completes.
 
 ```js title="apps/remote/rock.config.mjs"
 import { platformAndroid } from '@rock-js/platform-android';
