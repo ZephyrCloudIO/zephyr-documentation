@@ -56,7 +56,6 @@ Mini applications expose modules to be consumed by host applications:
 // metro.config.js
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withModuleFederation } = require('@module-federation/metro');
-const { withZephyr } = require('zephyr-metro-plugin');
 
 const config = {
   resolver: { useWatchman: false },
@@ -87,23 +86,15 @@ const mfConfig = {
   shareStrategy: 'version-first',
 };
 
-async function getConfig() {
-  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
-  const zephyrConfig = await withZephyr({
-    name: mfConfig.name,
-    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
-  })(baseConfig);
+const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
 
-  return withModuleFederation(zephyrConfig, mfConfig, {
-    flags: {
-      unstable_patchHMRClient: true,
-      unstable_patchInitializeCore: true,
-      unstable_patchRuntimeRequire: true,
-    },
-  });
-}
-
-module.exports = getConfig();
+module.exports = withModuleFederation(baseConfig, mfConfig, {
+  flags: {
+    unstable_patchHMRClient: true,
+    unstable_patchInitializeCore: true,
+    unstable_patchRuntimeRequire: true,
+  },
+});
 ```
 
 ### React Native CLI Configuration
@@ -162,7 +153,6 @@ Host applications load and orchestrate mini-applications:
 ```javascript
 // metro.config.js
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
 
 const miniAppPort = process.env.MINI_APP_PORT ?? '8082';
@@ -197,24 +187,15 @@ const mfConfig = {
   runtimePlugins: [require.resolve('zephyr-native-cache/runtime-plugin')],
 };
 
-const getConfig = async () => {
-  const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
-  const zephyrConfig = await withZephyr({
-    name: mfConfig.name,
-    remotes: mfConfig.remotes,
-    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
-  })(baseConfig);
+const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
 
-  return withModuleFederation(zephyrConfig, mfConfig, {
-    flags: {
-      unstable_patchHMRClient: true,
-      unstable_patchInitializeCore: true,
-      unstable_patchRuntimeRequire: true,
-    },
-  });
-};
-
-module.exports = getConfig();
+module.exports = withModuleFederation(baseConfig, mfConfig, {
+  flags: {
+    unstable_patchHMRClient: true,
+    unstable_patchInitializeCore: true,
+    unstable_patchRuntimeRequire: true,
+  },
+});
 ```
 
 Use local HTTP manifest URLs during local development. Use Zephyr selectors such as `zephyr:miniApp@yourEnvironment` for builds that should resolve remotes from Zephyr Cloud.
