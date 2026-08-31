@@ -35,7 +35,7 @@ importers:
         version: 2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2)
       '@rspress/plugin-client-redirects':
         specifier: ^2.0.1
-        version: 2.0.1(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))
+        version: 2.0.21(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))
       '@rspress/plugin-preview':
         specifier: ^2.0.1
         version: 2.0.1(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))(core-js@3.46.0)(react-router-dom@7.18.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
@@ -1757,11 +1757,11 @@ packages:
     resolution: {integrity: sha512-Iw1L/eaHM2SeIHsXjnr7PCHHl+jc1zHviDofeWCYz0hQ1XAoUM4vQWIez0a0bUzlXOWU+4BgJU4waVchFN0Ztg==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-client-redirects@2.0.1':
-    resolution: {integrity: sha512-6KPLnHEHPlH/GJzlO1345vqXwmzEI4V4xePLYY+e8jArzDW0RhrXgy9s0WRJup77lLAUNUDcKTBGX9k8pKrH4w==}
+  '@rspress/plugin-client-redirects@2.0.21':
+    resolution: {integrity: sha512-21giX10Blom+dOJBJOxXZUS+pjez1Tb9iNA7L7km8uUkn5L45KfdQvYqbBHY6Nv6L46zaDdz0Mt97eAqBPgNoA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      '@rspress/core': ^2.0.1
+      '@rspress/core': ^2.0.10
 
   '@rspress/plugin-container-syntax@1.45.6':
     resolution: {integrity: sha512-zKlVd+xj6huA6dkjSW05cnw29upLrH/tW0n0GFIwtqZmlJmj639yWxywphI1BeUyfvDEZfI29/ImGRrDY/H6Kw==}
@@ -2141,6 +2141,9 @@ packages:
 
   '@types/react@19.1.13':
     resolution: {integrity: sha512-hHkbU/eoO3EG5/MZkuFSKmYqPbSVk5byPFa3e7y/8TybHiLMACgI8seVYlicwk7H5K/rI2px9xrQp/C+AUDTiQ==}
+
+  '@types/react@19.2.18':
+    resolution: {integrity: sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==}
 
   '@types/supports-color@8.1.3':
     resolution: {integrity: sha512-Hy6UMpxhE3j1tLpl27exp1XqHD7n8chAiNPzWfz16LPZoMMoSc4dzLl6w9qijkEb/r5O1ozdu1CWGA2L83ZeZg==}
@@ -7959,7 +7962,7 @@ snapshots:
     dependencies:
       '@rspress/shared': 1.45.6
 
-  '@rspress/plugin-client-redirects@2.0.1(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))':
+  '@rspress/plugin-client-redirects@2.0.21(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))':
     dependencies:
       '@rspress/core': 2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2)
 
@@ -8505,6 +8508,10 @@ snapshots:
   '@types/normalize-package-data@2.4.4': {}
 
   '@types/react@19.1.13':
+    dependencies:
+      csstype: 3.2.3
+
+  '@types/react@19.2.18':
     dependencies:
       csstype: 3.2.3
 
