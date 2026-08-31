@@ -95,8 +95,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))(@types/react@19.1.13)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(search-insights@2.17.3)
       '@rspress/plugin-llms':
-        specifier: 2.0.1
-        version: 2.0.1(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))
+        specifier: 2.0.21
+        version: 2.0.21(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))
       '@tailwindcss/postcss':
         specifier: ^4.1.13
         version: 4.1.13
@@ -1771,11 +1771,11 @@ packages:
     resolution: {integrity: sha512-Q/M7NFGCreajXZBz/P3TEaohDsO233TGahqyNH3loE+drvlcgOyMehsAVcsQyt2hlDtgQHp9oVX78EfZmJ+8gA==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-llms@2.0.1':
-    resolution: {integrity: sha512-7CRCz0C/DIr46NkIp4uTX/yq6xTj/ljW+7HcsljmUwBAzzaMQdQb1Orv6ufg52esdiJBvpW4xdq9XohAVRPHdw==}
+  '@rspress/plugin-llms@2.0.21':
+    resolution: {integrity: sha512-Uc+3TLqgJU43X3ryC6Aw+rzvGe2O3feYJ9eyoDYFKbcIRKezcq1nW1axiaHNXDbr3g584myslDF+gYjg7/9RHw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      '@rspress/core': ^2.0.1
+      '@rspress/core': ^2.0.10
 
   '@rspress/plugin-medium-zoom@1.45.6':
     resolution: {integrity: sha512-o+mqg7NlwJuXrba1dMtQzJSmrtgyonif7lPm3MNF9dHnQrCBAtr8mKMoDnzMkh0JN0hjqaLERJmHz8fAK/q3iA==}
@@ -7974,7 +7974,7 @@ snapshots:
     dependencies:
       '@rspress/shared': 1.45.6
 
-  '@rspress/plugin-llms@2.0.1(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))':
+  '@rspress/plugin-llms@2.0.21(@rspress/core@2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2))':
     dependencies:
       '@rspress/core': 2.0.21(core-js@3.46.0)(micromark-util-types@2.0.2)(micromark@4.0.2)
       remark-mdx: 3.1.1
@@ -11004,7 +11004,7 @@ snapshots:
 
   micromark-core-commonmark@1.1.0:
     dependencies:
-      decode-named-character-reference: 1.0.2
+      decode-named-character-reference: 1.3.0
       micromark-factory-destination: 1.1.0
       micromark-factory-label: 1.1.0
       micromark-factory-space: 1.1.0
@@ -11529,7 +11529,7 @@ snapshots:
     dependencies:
       '@types/debug': 4.1.12
       debug: 4.4.0
-      decode-named-character-reference: 1.0.2
+      decode-named-character-reference: 1.3.0
       micromark-core-commonmark: 1.1.0
       micromark-factory-space: 1.1.0
       micromark-util-character: 1.2.0
@@ -12278,7 +12278,7 @@ snapshots:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
       flat: 6.0.1
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.3
       mdast-util-to-markdown: 2.1.2
       micromark: 4.0.2
       micromark-core-commonmark: 2.0.3
