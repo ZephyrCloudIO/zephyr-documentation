@@ -56,7 +56,6 @@ Mini applications expose modules to be consumed by host applications:
 // metro.config.js
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withModuleFederation } = require('@module-federation/metro');
-const { withZephyr } = require('zephyr-metro-plugin');
 
 const config = {
   resolver: { useWatchman: false },
@@ -89,12 +88,8 @@ const mfConfig = {
 
 async function getConfig() {
   const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
-  const zephyrConfig = await withZephyr({
-    name: mfConfig.name,
-    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
-  })(baseConfig);
 
-  return withModuleFederation(zephyrConfig, mfConfig, {
+  return withModuleFederation(baseConfig, mfConfig, {
     flags: {
       unstable_patchHMRClient: true,
       unstable_patchInitializeCore: true,
@@ -162,7 +157,6 @@ Host applications load and orchestrate mini-applications:
 ```javascript
 // metro.config.js
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
 
 const miniAppPort = process.env.MINI_APP_PORT ?? '8082';
@@ -199,13 +193,8 @@ const mfConfig = {
 
 const getConfig = async () => {
   const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
-  const zephyrConfig = await withZephyr({
-    name: mfConfig.name,
-    remotes: mfConfig.remotes,
-    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
-  })(baseConfig);
 
-  return withModuleFederation(zephyrConfig, mfConfig, {
+  return withModuleFederation(baseConfig, mfConfig, {
     flags: {
       unstable_patchHMRClient: true,
       unstable_patchInitializeCore: true,
@@ -215,6 +204,54 @@ const getConfig = async () => {
 };
 
 module.exports = getConfig();
+```
+
+### React Native CLI Configuration
+
+Create or modify the host application's `react-native.config.js` so host bundles are uploaded to Zephyr:
+
+```javascript
+// react-native.config.js
+const commands = require('@module-federation/metro-plugin-rnc-cli');
+const { updateManifest } = require('@module-federation/metro');
+const { zephyrCommandWrapper } = require('zephyr-metro-plugin');
+
+const wrappedFuncPromise = zephyrCommandWrapper(
+  commands.bundleMFHostCommand.func,
+  commands.loadMetroConfig,
+  () => {
+    updateManifest(
+      global.__METRO_FEDERATION_MANIFEST_PATH,
+      global.__METRO_FEDERATION_CONFIG,
+    );
+  },
+);
+
+const zephyrCommand = {
+  name: 'bundle-mf-host',
+  description: 'Bundles a Module Federation host with Zephyr Cloud',
+  func: async (...args) => {
+    const wrappedFunc = await wrappedFuncPromise;
+    return wrappedFunc(...args);
+  },
+  options: commands.bundleMFHostCommand.options,
+};
+
+module.exports = {
+  commands: [zephyrCommand],
+};
+```
+
+### Bundle Host Application
+
+Bundle your host application for the same platforms as its remotes:
+
+```bash
+# Bundle for iOS
+npx react-native bundle-mf-host --platform ios --dev false
+
+# Bundle for Android
+npx react-native bundle-mf-host --platform android --dev false
 ```
 
 Use local HTTP manifest URLs during local development. Use Zephyr selectors such as `zephyr:miniApp@yourEnvironment` for builds that should resolve remotes from Zephyr Cloud.

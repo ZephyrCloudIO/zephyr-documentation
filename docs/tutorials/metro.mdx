@@ -111,7 +111,6 @@ Create or modify your `metro.config.js` file in the mini application:
 // MiniApp/metro.config.js
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withModuleFederation } = require('@module-federation/metro');
-const { withZephyr } = require('zephyr-metro-plugin');
 
 /**
  * Metro configuration
@@ -150,12 +149,8 @@ const mfConfig = {
 
 async function getConfig() {
   const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
-  const zephyrConfig = await withZephyr({
-    name: mfConfig.name,
-    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
-  })(baseConfig);
 
-  return withModuleFederation(zephyrConfig, mfConfig, {
+  return withModuleFederation(baseConfig, mfConfig, {
     flags: {
       unstable_patchHMRClient: true,
       unstable_patchInitializeCore: true,
@@ -301,7 +296,6 @@ Create or modify your `metro.config.js` file in the host application:
 // HostApp/metro.config.js
 const path = require('node:path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
 
 /**
@@ -345,13 +339,8 @@ const mfConfig = {
 
 const getConfig = async () => {
   const baseConfig = mergeConfig(getDefaultConfig(__dirname), config);
-  const zephyrConfig = await withZephyr({
-    name: mfConfig.name,
-    remotes: mfConfig.remotes,
-    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
-  })(baseConfig);
 
-  return withModuleFederation(zephyrConfig, mfConfig, {
+  return withModuleFederation(baseConfig, mfConfig, {
     flags: {
       unstable_patchHMRClient: true,
       unstable_patchInitializeCore: true,
@@ -376,7 +365,54 @@ module.exports = getConfig();
 
 :::
 
-### Step 2: Configure Zephyr Dependencies
+### Step 2: Configure React Native CLI
+
+Create or modify the host application's `react-native.config.js` so host bundles are uploaded to Zephyr Cloud:
+
+```javascript
+// HostApp/react-native.config.js
+const commands = require('@module-federation/metro-plugin-rnc-cli');
+const { updateManifest } = require('@module-federation/metro');
+const { zephyrCommandWrapper } = require('zephyr-metro-plugin');
+
+const wrappedFuncPromise = zephyrCommandWrapper(
+  commands.bundleMFHostCommand.func,
+  commands.loadMetroConfig,
+  () => {
+    updateManifest(
+      global.__METRO_FEDERATION_MANIFEST_PATH,
+      global.__METRO_FEDERATION_CONFIG,
+    );
+  },
+);
+
+const zephyrCommand = {
+  name: 'bundle-mf-host',
+  description: 'Bundles a Module Federation host with Zephyr Cloud',
+  func: async (...args) => {
+    const wrappedFunc = await wrappedFuncPromise;
+    return wrappedFunc(...args);
+  },
+  options: commands.bundleMFHostCommand.options,
+};
+
+module.exports = {
+  commands: [zephyrCommand],
+};
+```
+
+:::details{title="Why This Configuration?"}
+
+This configuration adds a custom React Native CLI command that:
+
+- Resolves the host's Zephyr remote dependencies
+- Updates the Module Federation manifest
+- Bundles the host application
+- Uploads the host artifacts to Zephyr's edge network
+
+:::
+
+### Step 3: Configure Zephyr Dependencies
 
 To enable Zephyr Cloud integration, add the `zephyr:dependencies` field to your `package.json`:
 
@@ -405,7 +441,7 @@ For more information about managing dependencies, see [Remote Dependencies](/fea
 
 :::
 
-### Step 3: Load Mini Application in Your Code
+### Step 4: Load Mini Application in Your Code
 
 Now you can use the mini application in your host app:
 

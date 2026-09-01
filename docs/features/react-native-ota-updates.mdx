@@ -62,7 +62,6 @@ Add the native cache runtime plugin to the host's Module Federation config. The 
 ```js title="apps/host/metro.config.js"
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withModuleFederation } = require('@module-federation/metro');
-const { withZephyr } = require('zephyr-metro-plugin');
 
 const useZephyrRemotes = process.env.ZEPHYR_REMOTE_RESOLUTION === '1';
 
@@ -106,13 +105,7 @@ async function getConfig() {
     resolver: { useWatchman: false },
   });
 
-  const zephyrConfig = await withZephyr({
-    name: mfConfig.name,
-    remotes: mfConfig.remotes,
-    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
-  })(baseConfig);
-
-  return withModuleFederation(zephyrConfig, mfConfig, mfFlags);
+  return withModuleFederation(baseConfig, mfConfig, mfFlags);
 }
 
 module.exports = getConfig();
@@ -190,7 +183,7 @@ rnef bundle-mf-remote --platform ios --dev false
 rnef bundle-mf-remote --platform android --dev false
 ```
 
-The host must resolve the same platform that the remote was published for. `withZephyr({ target: 'ios' })` resolves iOS remote artifacts, and `withZephyr({ target: 'android' })` resolves Android remote artifacts.
+The host must resolve the same platform that the remote was published for.
 
 ## Apply Updates In The App
 
