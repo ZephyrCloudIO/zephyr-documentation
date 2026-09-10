@@ -1,10 +1,10 @@
 ---
-title: 'ZE10022: Auth forbidden error'
-description: 'ZE10022: Authentication forbidden - access denied to requested resource'
+title: 'ZE10022: Target access forbidden'
+description: 'ZE10022: The authenticated account cannot access the requested target'
 head:
   - - meta
     - property: og:description
-      content: 'ZE10022: Authentication forbidden - access denied to requested resource'
+      content: 'ZE10022: The authenticated account cannot access the requested target'
 ---
 
 import { getErrorMessage } from '../../lib/error-helpers.ts';
@@ -19,7 +19,7 @@ The fastest way to resolve this error is to [join our Discord](https://discord.g
 
 <ErrorInfo code="ZE10022" terminal />
 
-This error occurs when your authentication credentials are valid but you don't have permission to access the requested resource or perform the requested action.
+Authentication succeeded, but the account does not have permission to access the requested application, project, or organization. This is distinct from missing or expired authentication, which reports `ZE10018`.
 
 ## Debugging the error
 
@@ -29,16 +29,14 @@ This error occurs when your authentication credentials are valid but you don't h
 
 Ensure your account has the necessary permissions for the project or organization you're trying to access.
 
+### Verify the target
+
+Confirm that the configured organization, project, and application identify the target you intended to deploy.
+
 ### Check organization membership
 
-If working with an organization project, confirm you're a member of that organization with appropriate access rights.
+Confirm that the authenticated account belongs to the organization with the required role. Ask an organization administrator to grant access if necessary.
 
-### Re-authenticate
-
-Try clearing your local Zephyr credentials and logging in again from the [dashboard](https://app.zephyr-cloud.io) or [Chrome extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn):
-
-```bash
-rm -rf ~/.zephyr
-```
+Re-running Git setup or logging in again with the same account will not change target authorization. Do not print, export, share, or manually delete files from `~/.zephyr`.
 
 </Steps>
