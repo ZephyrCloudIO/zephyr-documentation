@@ -52,6 +52,10 @@ The codemod scans your project for bundler configuration files and automatically
 3. **Updates your configuration** to include Zephyr
 4. **Shows you what changed**
 
+For Metro, configuration and publication are separate. Supported React Native CLI projects receive Zephyr-wrapped `bundle-mf-host` and `bundle-mf-remote` commands in addition to `withZephyr()`. Supported RNEF projects receive the Zephyr RNEF plugin, which registers the same commands.
+
+If the codemod cannot determine the project type or safely preserve a non-standard companion configuration, it does not guess. It reports the manual React Native CLI and RNEF completion options instead of claiming publication setup is complete. Review and run one of those publication paths explicitly. See [Metro configuration and publication](/bundlers/metro#configuration-and-publication) for the required setup and upload boundary.
+
 ## Supported Bundlers
 
 - **Webpack** → `zephyr-webpack-plugin`
@@ -64,6 +68,7 @@ The codemod scans your project for bundler configuration files and automatically
 - **RSPress** → `zephyr-rspress-plugin`
 - **Parcel** → `parcel-reporter-zephyr`
 - **Re.Pack** → `zephyr-repack-plugin`
+- **Metro** → `zephyr-metro-plugin`
 
 ## Examples
 
