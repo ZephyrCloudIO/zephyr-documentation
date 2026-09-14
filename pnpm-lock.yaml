@@ -71,7 +71,7 @@ importers:
         version: 1.1.1(react@19.2.8)
       rspress-plugin-file-tree:
         specifier: ^0.4.0
-        version: 0.4.0(rspress@1.45.6(webpack@5.96.0(postcss@8.5.23)))
+        version: 0.4.0(rspress@1.45.6(webpack@5.96.0(postcss@8.5.28)))
       rspress-plugin-mermaid:
         specifier: ^1.0.0
         version: 1.0.0(@rspress/core@2.0.21(core-js@3.47.0)(micromark-util-types@2.0.2)(micromark@4.0.2))
@@ -111,7 +111,7 @@ importers:
         version: 19.1.13
       autoprefixer:
         specifier: ^10.4.21
-        version: 10.4.21(postcss@8.5.23)
+        version: 10.4.21(postcss@8.5.28)
       eslint:
         specifier: ^9.36.0
         version: 9.36.0(jiti@2.7.0)
@@ -122,11 +122,11 @@ importers:
         specifier: ^16.2.1
         version: 16.2.1
       postcss:
-        specifier: ^8.5.6
-        version: 8.5.23
+        specifier: ^8.5.23
+        version: 8.5.28
       postcss-loader:
         specifier: ^8.2.0
-        version: 8.2.0(postcss@8.5.23)(typescript@5.9.2)(webpack@5.96.0(postcss@8.5.23))
+        version: 8.2.0(postcss@8.5.28)(typescript@5.9.2)(webpack@5.96.0(postcss@8.5.28))
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -147,7 +147,7 @@ importers:
         version: 8.44.1(eslint@9.36.0(jiti@2.7.0))(typescript@5.9.2)
       zephyr-rspress-plugin:
         specifier: ^0.1.10
-        version: 0.1.10(@rsbuild/core@2.2.5(core-js@3.47.0))(@rspress/core@2.0.21(core-js@3.47.0)(micromark-util-types@2.0.2)(micromark@4.0.2))(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.23))
+        version: 0.1.10(@rsbuild/core@2.2.5(core-js@3.47.0))(@rspress/core@2.0.21(core-js@3.47.0)(micromark-util-types@2.0.2)(micromark@4.0.2))(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.28))
 
 packages:
 
@@ -4387,11 +4387,6 @@ packages:
     resolution: {integrity: sha512-jtpsQDetTnvS2Ts1fiRdci5rx0VYws5jGyC+4IYOTnIQ/wwdf6JdomlHBwqC3bJYOvaKu0C2GSZ1A60anrYpaA==}
     engines: {node: '>=20.17'}
 
-  nanoid@3.3.18:
-    resolution: {integrity: sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==}
-    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
-    hasBin: true
-
   nanoid@3.3.19:
     resolution: {integrity: sha512-Y2tUNy4ouw6tq5oDSKeQYGOyhkUBhNOcGV/02KC+6kd9eDGqdZd++mjMiIDilrBYvjEnCYvVtsuHCuP+okSfug==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -4735,10 +4730,6 @@ packages:
 
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
-
-  postcss@8.5.23:
-    resolution: {integrity: sha512-g50586zr4bZmwFiTlflMu8E0bDTb5I5gertgwAKmsdUlTQIhZtunzUlD1WSzwcVWPoAVpsrA6vlfCD7oXvRwgg==}
-    engines: {node: ^10 || ^12 || >=14}
 
   postcss@8.5.28:
     resolution: {integrity: sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==}
@@ -6432,11 +6423,11 @@ snapshots:
       '@jsonjoy.com/codegen': 17.67.0(tslib@2.8.1)
       tslib: 2.8.1
 
-  '@mdx-js/loader@2.3.0(webpack@5.96.0(postcss@8.5.23))':
+  '@mdx-js/loader@2.3.0(webpack@5.96.0(postcss@8.5.28))':
     dependencies:
       '@mdx-js/mdx': 2.3.0
       source-map: 0.7.6
-      webpack: 5.96.0(postcss@8.5.23)
+      webpack: 5.96.0(postcss@8.5.28)
     transitivePeerDependencies:
       - supports-color
 
@@ -6504,10 +6495,10 @@ snapshots:
       '@types/react': 19.2.18
       react: 19.2.8
 
-  '@module-federation/automatic-vendor-federation@1.2.1(webpack@5.96.0(postcss@8.5.23))':
+  '@module-federation/automatic-vendor-federation@1.2.1(webpack@5.96.0(postcss@8.5.28))':
     dependencies:
       find-package-json: 1.2.0
-      webpack: 5.96.0(postcss@8.5.23)
+      webpack: 5.96.0(postcss@8.5.28)
 
   '@module-federation/error-codes@0.14.0': {}
 
@@ -7382,9 +7373,9 @@ snapshots:
     dependencies:
       react-refresh: 0.18.0
 
-  '@rspress/core@1.45.6(webpack@5.96.0(postcss@8.5.23))':
+  '@rspress/core@1.45.6(webpack@5.96.0(postcss@8.5.28))':
     dependencies:
-      '@mdx-js/loader': 2.3.0(webpack@5.96.0(postcss@8.5.23))
+      '@mdx-js/loader': 2.3.0(webpack@5.96.0(postcss@8.5.28))
       '@mdx-js/mdx': 2.3.0
       '@mdx-js/react': 2.3.0(react@18.3.1)
       '@rsbuild/core': 1.3.22
@@ -7885,7 +7876,7 @@ snapshots:
       '@alloc/quick-lru': 5.2.0
       '@tailwindcss/node': 4.1.13
       '@tailwindcss/oxide': 4.1.13
-      postcss: 8.5.23
+      postcss: 8.5.28
       tailwindcss: 4.1.13
 
   '@tailwindcss/typography@0.5.19(tailwindcss@4.1.13)':
@@ -8299,17 +8290,17 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  autoprefixer@10.4.21(postcss@8.5.23):
+  autoprefixer@10.4.21(postcss@8.5.28):
     dependencies:
       browserslist: 4.24.4
       caniuse-lite: 1.0.30001743
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.1.1
-      postcss: 8.5.23
+      postcss: 8.5.28
       postcss-value-parser: 4.2.0
 
-  axios-retry@4.5.0(axios@1.12.2):
+  axios-retry@4.5.0(axios@1.12.2(debug@4.4.0)):
     dependencies:
       axios: 1.12.2(debug@4.4.0)
       is-retry-allowed: 2.2.0
@@ -11110,8 +11101,6 @@ snapshots:
 
   nano-spawn@1.0.3: {}
 
-  nanoid@3.3.18: {}
-
   nanoid@3.3.19: {}
 
   natural-compare@1.4.0: {}
@@ -11352,14 +11341,14 @@ snapshots:
       find-up: 2.1.0
       load-json-file: 4.0.0
 
-  postcss-loader@8.2.0(postcss@8.5.23)(typescript@5.9.2)(webpack@5.96.0(postcss@8.5.23)):
+  postcss-loader@8.2.0(postcss@8.5.28)(typescript@5.9.2)(webpack@5.96.0(postcss@8.5.28)):
     dependencies:
       cosmiconfig: 9.0.0(typescript@5.9.2)
       jiti: 2.6.1
-      postcss: 8.5.23
+      postcss: 8.5.28
       semver: 7.7.1
     optionalDependencies:
-      webpack: 5.96.0(postcss@8.5.23)
+      webpack: 5.96.0(postcss@8.5.28)
     transitivePeerDependencies:
       - typescript
 
@@ -11369,12 +11358,6 @@ snapshots:
       util-deprecate: 1.0.2
 
   postcss-value-parser@4.2.0: {}
-
-  postcss@8.5.23:
-    dependencies:
-      nanoid: 3.3.18
-      picocolors: 1.1.1
-      source-map-js: 1.2.1
 
   postcss@8.5.28:
     dependencies:
@@ -11865,7 +11848,7 @@ snapshots:
     dependencies:
       fs-extra: 11.4.0
 
-  rspress-plugin-devkit@0.3.0(rspress@1.45.6(webpack@5.96.0(postcss@8.5.23))):
+  rspress-plugin-devkit@0.3.0(rspress@1.45.6(webpack@5.96.0(postcss@8.5.28))):
     dependencies:
       '@rspress/shared': 1.47.2
       '@types/estree-jsx': 1.0.5
@@ -11880,7 +11863,7 @@ snapshots:
       mdast-util-to-markdown: 1.5.0
       mdast-util-to-string: 4.0.0
       remark-mdc: 1.2.0
-      rspress: 1.45.6(webpack@5.96.0(postcss@8.5.23))
+      rspress: 1.45.6(webpack@5.96.0(postcss@8.5.28))
       ts-morph: 22.0.0
       unified: 10.1.2
       unist-util-visit: 5.1.0
@@ -11916,11 +11899,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rspress-plugin-file-tree@0.4.0(rspress@1.45.6(webpack@5.96.0(postcss@8.5.23))):
+  rspress-plugin-file-tree@0.4.0(rspress@1.45.6(webpack@5.96.0(postcss@8.5.28))):
     dependencies:
       '@rspress/shared': 1.47.2
-      rspress: 1.45.6(webpack@5.96.0(postcss@8.5.23))
-      rspress-plugin-devkit: 0.3.0(rspress@1.45.6(webpack@5.96.0(postcss@8.5.23)))
+      rspress: 1.45.6(webpack@5.96.0(postcss@8.5.28))
+      rspress-plugin-devkit: 0.3.0(rspress@1.45.6(webpack@5.96.0(postcss@8.5.28)))
     transitivePeerDependencies:
       - supports-color
 
@@ -11940,10 +11923,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rspress@1.45.6(webpack@5.96.0(postcss@8.5.23)):
+  rspress@1.45.6(webpack@5.96.0(postcss@8.5.28)):
     dependencies:
       '@rsbuild/core': 1.3.22
-      '@rspress/core': 1.45.6(webpack@5.96.0(postcss@8.5.23))
+      '@rspress/core': 1.45.6(webpack@5.96.0(postcss@8.5.28))
       '@rspress/shared': 1.45.6
       cac: 6.7.14
       chokidar: 3.6.0
@@ -12377,15 +12360,15 @@ snapshots:
       type-fest: 2.19.0
       unique-string: 3.0.0
 
-  terser-webpack-plugin@5.6.1(postcss@8.5.23)(webpack@5.96.0(postcss@8.5.23)):
+  terser-webpack-plugin@5.6.1(postcss@8.5.28)(webpack@5.96.0(postcss@8.5.28)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.4.0
       terser: 5.51.2
-      webpack: 5.96.0(postcss@8.5.23)
+      webpack: 5.96.0(postcss@8.5.28)
     optionalDependencies:
-      postcss: 8.5.23
+      postcss: 8.5.28
 
   terser@5.51.2:
     dependencies:
@@ -12737,7 +12720,7 @@ snapshots:
 
   webpack-sources@3.5.1: {}
 
-  webpack@5.96.0(postcss@8.5.23):
+  webpack@5.96.0(postcss@8.5.28):
     dependencies:
       '@types/estree': 1.0.9
       '@webassemblyjs/ast': 1.14.1
@@ -12758,7 +12741,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.3.3
-      terser-webpack-plugin: 5.6.1(postcss@8.5.23)(webpack@5.96.0(postcss@8.5.23))
+      terser-webpack-plugin: 5.6.1(postcss@8.5.28)(webpack@5.96.0(postcss@8.5.28))
       watchpack: 2.5.2
       webpack-sources: 3.5.1
     transitivePeerDependencies:
@@ -12848,7 +12831,7 @@ snapshots:
     dependencies:
       '@toon-format/toon': 0.9.0
       axios: 1.12.2(debug@4.4.0)
-      axios-retry: 4.5.0(axios@1.12.2)
+      axios-retry: 4.5.0(axios@1.12.2(debug@4.4.0))
       debug: 4.4.0
       eventsource: 4.1.0
       git-url-parse: 15.0.0
@@ -12867,34 +12850,34 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  zephyr-rsbuild-plugin@0.1.10(@rsbuild/core@2.2.5(core-js@3.47.0))(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.23)):
+  zephyr-rsbuild-plugin@0.1.10(@rsbuild/core@2.2.5(core-js@3.47.0))(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.28)):
     dependencies:
       '@rsbuild/core': 2.2.5(core-js@3.47.0)
-      zephyr-rspack-plugin: 0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.23))
+      zephyr-rspack-plugin: 0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.28))
     transitivePeerDependencies:
       - '@rspack/core'
       - https-proxy-agent
       - supports-color
       - webpack
 
-  zephyr-rspack-plugin@0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.23)):
+  zephyr-rspack-plugin@0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.28)):
     dependencies:
       tslib: 2.8.1
       zephyr-agent: 0.1.10(https-proxy-agent@7.0.6)
-      zephyr-xpack-internal: 0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.23))
+      zephyr-xpack-internal: 0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.28))
     transitivePeerDependencies:
       - https-proxy-agent
       - supports-color
       - webpack
 
-  zephyr-rspress-plugin@0.1.10(@rsbuild/core@2.2.5(core-js@3.47.0))(@rspress/core@2.0.21(core-js@3.47.0)(micromark-util-types@2.0.2)(micromark@4.0.2))(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.23)):
+  zephyr-rspress-plugin@0.1.10(@rsbuild/core@2.2.5(core-js@3.47.0))(@rspress/core@2.0.21(core-js@3.47.0)(micromark-util-types@2.0.2)(micromark@4.0.2))(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.28)):
     dependencies:
       '@rspress/core': 2.0.21(core-js@3.47.0)(micromark-util-types@2.0.2)(micromark@4.0.2)
       tslib: 2.8.1
       zephyr-agent: 0.1.10(https-proxy-agent@7.0.6)
       zephyr-edge-contract: 0.1.10
-      zephyr-rsbuild-plugin: 0.1.10(@rsbuild/core@2.2.5(core-js@3.47.0))(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.23))
-      zephyr-xpack-internal: 0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.23))
+      zephyr-rsbuild-plugin: 0.1.10(@rsbuild/core@2.2.5(core-js@3.47.0))(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.28))
+      zephyr-xpack-internal: 0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.28))
     transitivePeerDependencies:
       - '@rsbuild/core'
       - '@rspack/core'
@@ -12902,9 +12885,9 @@ snapshots:
       - supports-color
       - webpack
 
-  zephyr-xpack-internal@0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.23)):
+  zephyr-xpack-internal@0.1.10(https-proxy-agent@7.0.6)(webpack@5.96.0(postcss@8.5.28)):
     dependencies:
-      '@module-federation/automatic-vendor-federation': 1.2.1(webpack@5.96.0(postcss@8.5.23))
+      '@module-federation/automatic-vendor-federation': 1.2.1(webpack@5.96.0(postcss@8.5.28))
       tslib: 2.8.1
       zephyr-agent: 0.1.10(https-proxy-agent@7.0.6)
       zephyr-edge-contract: 0.1.10
