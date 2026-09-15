@@ -23,6 +23,7 @@ With this integration, you can leverage your existing Akamai infrastructure to r
 - A registered Akamai account, contract must include edge workers and edgekv
 - A registered Zephyr account
 - A registered domain
+- EdgeKV enabled for the Akamai account before the first deployment. Zephyr checks this during setup and initializes EdgeKV when Akamai reports the account as uninitialized.
 
 :::
 
@@ -62,6 +63,7 @@ Before proceeding, you will need some data from Akamai:
 | Property Manager (PAPI)           |  READ-WRITE  |
 
 - Copy or download token and add `[default]` as a header, so token will look like:
+- If your Akamai account uses account switching, include `account_key` in the same section.
 
 :::warning Secure Your Credentials
 Keep your API token secure. Never commit credentials to version control or share them publicly.
@@ -73,6 +75,7 @@ client_secret = YOUR_CLIENT_SECRET
 host = YOUR_AKAMAI_HOST
 access_token = YOUR_ACCESS_TOKEN
 client_token = YOUR_CLIENT_TOKEN
+# account_key = YOUR_ACCOUNT_KEY
 ```
 
 #### 2. Contract id
@@ -84,6 +87,7 @@ client_token = YOUR_CLIENT_TOKEN
 
 - Click on **Properties** in the menu
 - Numeric value in the url is your group id `https://control.akamai.com/apps/property-manager/#/groups/<groupId>/properties`
+- Use a top-level group that has access to EdgeKV, EdgeWorkers, Property Manager, Edge Hostnames, and CPcode resources for the selected contract.
 
 #### 4. Product id
 
@@ -126,6 +130,12 @@ Details for each input after clicking **Add Integration** under **Akamai**:
   product id.
 </dd>
 
+<dt>Akamai account key</dt>
+<dd>
+  Optional. Required only when your API client authenticates through an Akamai
+  account-switching context.
+</dd>
+
 <dt>Set Integration as Default</dt>
 <dd>
   When set as default, all Zephyr deployments will use this integration until a
@@ -152,6 +162,13 @@ Details for each input after clicking **Add Integration** under **Akamai**:
 ### Wait until worker and property become activated
 
 It may take up to 30 minutes.
+
+### Retry after EdgeKV initialization
+
+If setup failed because EdgeKV was not initialized, verify that the API client
+has **EdgeKV READ-WRITE** permission and then retry the same integration from
+Zephyr. Retry reuses the saved Akamai configuration and continues setup after
+the EdgeKV preflight completes.
 
 </Steps>
 
