@@ -1,3 +1,6 @@
+packages:
+  - .
+
 # Fails if trusted package stops being trusted
 trustPolicy: no-downgrade
 # Ignores trust policies for packages older than a week
