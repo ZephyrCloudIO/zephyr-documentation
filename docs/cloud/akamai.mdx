@@ -20,7 +20,7 @@ With this integration, you can leverage your existing Akamai infrastructure to r
 
 :::info
 
-- A registered Akamai account, contract must include edge workers and edgekv
+- A registered Akamai account, contract must include EdgeWorkers (entitled for the **Basic Compute** resource tier, ID `100` — see [Resource tier](#5-resource-tier)) and EdgeKV
 - A registered Zephyr account
 - A registered domain
 - EdgeKV enabled for the Akamai account before the first deployment. Zephyr checks this during setup and initializes EdgeKV when Akamai reports the account as uninitialized.
@@ -92,6 +92,15 @@ client_token = YOUR_CLIENT_TOKEN
 #### 4. Product id
 
 Find your product [here](https://techdocs.akamai.com/property-mgr/reference/id-prefixes#common-product-ids) and choose the product id matching your contract. Available products: **prd_Security_Failover** (Security Failover), **prd_API_Accel** (API Accelerator), **prd_Site_Accel** (Site Accelerator). For this delivery-property integration, use **prd_Site_Accel**.
+
+#### 5. Resource tier
+
+Zephyr provisions your EdgeWorker on the **Basic Compute** resource tier (`resourceTierId: 100`). Confirm this tier is entitled on the contract you selected above before starting:
+
+- Akamai Control Center → **Account Admin** → **Contracts** → open your contract → search the product list for **EdgeWorkers** and check which tier(s) are listed.
+- Or, with the [EdgeWorkers CLI](https://github.com/akamai/cli-edgeworkers) installed, run `akamai edgeworkers list-restiers --contractId <your-contract-id>` and confirm `resourceTierId: 100` (`Basic Compute`) is in the response.
+
+If your contract is only entitled for Dynamic Compute or Enterprise Compute, EdgeWorker creation fails with an Akamai `403 Forbidden` error (`errorCode: EW0401`, `detail: Permission Invalid`), even when your API token has the correct EdgeWorkers permission.
 
 ### Configuration Inputs
 
@@ -169,6 +178,15 @@ If setup failed because EdgeKV was not initialized, verify that the API client
 has **EdgeKV READ-WRITE** permission and then retry the same integration from
 Zephyr. Retry reuses the saved Akamai configuration and continues setup after
 the EdgeKV preflight completes.
+
+### Retry after a resource tier error
+
+If setup failed with an Akamai `403 Forbidden` error (`errorCode: EW0401`,
+`detail: Permission Invalid`) while creating the EdgeWorker, this usually means
+the contract isn't entitled for the **Basic Compute** resource tier Zephyr
+requests. Verify entitlement with your Akamai account team or the [Resource
+tier](#5-resource-tier) check above, then retry the same integration from
+Zephyr. Retry reuses the saved Akamai configuration.
 
 </Steps>
 
