@@ -30,7 +30,7 @@ Fastly is available as a Bring Your Own Cloud (BYOC) deployment integration. Zep
 
 <Steps>
 
-### Log in and open the Fastly integration
+### Open the Fastly custom integration form
 
 <a href="https://app.zephyr-cloud.io">
   <Button variant="outline" className="hover:bg-zinc-100 hover:text-black">
@@ -38,7 +38,12 @@ Fastly is available as a Bring Your Own Cloud (BYOC) deployment integration. Zep
   </Button>
 </a>
 
-After signing in, select your organization. Go to **Settings > Deployment Integrations**, select **Add integration**, and choose **Fastly**.
+After signing in:
+
+1. Use the organization selector at the top of the dashboard to select the organization that should own the integration.
+2. Select **Settings**.
+3. Select **Deployment Integrations**.
+4. Select **+ Add integration**, then select **Fastly**. The Fastly custom integration creation form opens.
 
 ### 1. Basic Info
 
@@ -97,7 +102,9 @@ Fastly tokens cannot be edited, and an expired token returns HTTP 401. Track its
 
 :::
 
-#### Enter the Fastly settings
+#### Enter the Fastly settings in Zephyr
+
+In the Fastly custom integration creation form, confirm that the correct organization is selected at the top of the dashboard. Then complete the **API Token** panel:
 
 - **API token**: Paste the token value copied from Fastly.
 - **Domain**: Enter the root domain, such as `example.com`. Do not enter a URL or the derived `ze.example.com` hostname.
