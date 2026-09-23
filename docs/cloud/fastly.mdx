@@ -8,93 +8,167 @@ head:
 ---
 
 import { Button } from '../../components/ui/button.tsx';
-import { Steps, Badge } from '@rspress/core/theme';
-import { Separator } from '../../components/ui/separator.tsx';
+import { Steps } from '@rspress/core/theme';
 
 # Configure Fastly on Zephyr
 
 ## Overview
 
-Fastly's best-in-class edge cloud platform helps you modernize and automate to meet your biggest challenges. Integration with Zephyr enables better margins, higher developer productivity, faster innovation cycles, and enhanced reliability.
+Fastly is available as a Bring Your Own Cloud (BYOC) deployment integration. Zephyr provisions and updates a Fastly Compute service in your Fastly account while your organization retains control of the account, domain, DNS, and API credential.
 
 ## Prerequisites
 
 :::info
 
-- A registered Fastly account on the _'Usage'_ plan
-- A registered Zephyr account
-- A Fastly site project with a [custom domain](https://docs.fastly.com/en/guides/working-with-domains) configured
-- A registered domain
+- A Zephyr account
+- A Fastly account on the paid **Usage** plan with Compute available
+- A registered root domain whose DNS records you can manage
 
 :::
 
-## Integration Setup
-
-:::info
-API Token Configuration
-
-- Create your API token [here](https://manage.fastly.com/account/personal/tokens). For detailed steps on creating an API token, refer to the [Fastly API token documentation](https://www.fastly.com/documentation/guides/account-info/account-management/using-api-tokens/).
-- Required permissions:
-  - Type: any
-  - Scope: Global API access
-
-:::
+## Configure and enable Fastly
 
 <Steps>
 
-### Enable Fastly Integration
+### Log in and open the Fastly integration
 
-1. Navigate to the Organization Level in Zephyr
-2. Select **Settings** tab, choose **Deployment integration** and then click on **Available**
-3. On this page choose **Fastly Integration** and click on **Add integration**
-4. Complete the form with:
-   - API Token
-   - Site ID
-5. Click **Add Integration**
+<a href="https://app.zephyr-cloud.io">
+  <Button variant="outline" className="hover:bg-zinc-100 hover:text-black">
+    Dashboard
+  </Button>
+</a>
 
-### Configure DNS Domain
+After signing in, select your organization. Go to **Settings > Deployment Integrations**, select **Add integration**, and choose **Fastly**.
 
-1. In Fastly, go to **Security > Subscriptions**
-2. Click "Secure another domain"
-3. Add two domains:
-   - `ze.yourdomain.com`
-   - `*.ze.yourdomain.com`
-4. Click "Add" then "Submit"
-5. You'll see a "Pending verification" status
-6. You will see CNAME records here that you'll need for the next step
+### 1. Basic Info
 
-### Set Up DNS Records
+- **Name**: Enter a recognizable name between 3 and 100 characters. It can contain letters, digits, spaces, hyphens, underscores, and apostrophes.
+- **Unique identifier**: Enter a value between 3 and 50 characters using lowercase letters, digits, hyphens, and underscores. Zephyr uses this identifier in URLs, and it cannot be changed after the integration is created.
+- **Set integration as default**: Enable this option to use Fastly for deployments that do not select another integration.
 
-1. Go to your domain provider (e.g., GoDaddy)
-2. Add the verification CNAME record from the fastly Subscription Details page. [**Step 6 of the previous section**](#configure-dns-domain)
-3. Wait for domain verification in Fastly
-4. Click "View/Edit" once verified
-5. Create two CNAME records:
+Select **Continue**.
 
-| Subdomain            | Type  | Priority | Target                  |
-| -------------------- | ----- | -------- | ----------------------- |
-| ze.yourdomain.com    | CNAME | -        | t.sni.global.fastly.net |
-| \*.ze.yourdomain.com | CNAME | -        | t.sni.global.fastly.net |
+### 2. Configure DNS Record
 
-_Note: Actual target values will be shown in your Fastly dashboard_
+Zephyr uses `ze.example.com` and `*.ze.example.com` for a root domain of `example.com`. Configure Fastly's TLS subscription first, then add the records at your DNS provider:
+
+1. In Fastly, open **Security > TLS management > Subscriptions** and select **Secure another domain**.
+2. Add `ze.example.com` and `*.ze.example.com`, submit the subscription, and wait for Fastly to display the verification CNAME records.
+3. At your DNS provider, add the verification CNAME records shown by Fastly.
+4. After Fastly verifies the domains, add these routing records:
+
+| Name               | Type  | Target                    |
+| ------------------ | ----- | ------------------------- |
+| `ze.example.com`   | CNAME | `t.sni.global.fastly.net` |
+| `*.ze.example.com` | CNAME | `t.sni.global.fastly.net` |
+
+Use the target Fastly displays if it differs from the example above. See Fastly's [domain documentation](https://www.fastly.com/documentation/guides/getting-started/domains/working-with-domains/) for more information.
+
+You can select **Test DNS** in Zephyr to check the records. This check is optional: it does not validate the Fastly API token and does not prevent you from selecting **Continue**.
+
+### 3. API Token
+
+#### Create a Fastly API token
+
+Open Fastly's [API token management page](https://manage.fastly.com/account/personal/tokens). If you belong to more than one Fastly account, switch to the account where Zephyr should create the Compute service. Then:
+
+1. Go to **Account > API tokens** and select **Create token**.
+2. Reauthenticate when Fastly prompts you.
+3. Choose **Automation token**. Fastly recommends automation tokens for non-human deployment systems, but only a Fastly **Superuser** can create one.
+4. If an automation token is unavailable, create a **User token** instead. A user token inherits its creator's role and lifecycle, so the creator must be an **Engineer** or **Superuser**.
+5. Configure the token:
+
+| Setting            | Value                                                                          | Why                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| **Name**           | `zephyr-cloud`, or another descriptive name                                    | Identifies the credential in Fastly                                                            |
+| **Role**           | **Engineer** for an automation token                                           | Allows Zephyr to create and manage the Compute service                                         |
+| **TLS management** | Off                                                                            | Zephyr does not call Fastly TLS APIs                                                           |
+| **Scope**          | **Global API access (`global`)**                                               | Read-only and purge scopes cannot provision the service, package, domains, or service versions |
+| **Service access** | All services in the account                                                    | The Zephyr-managed service does not exist when you create the token                            |
+| **Expiration**     | Fastly's default 90 days, unless your organization requires a shorter lifetime | Limits credential lifetime while allowing planned rotation                                     |
+
+6. Create the token and copy its value immediately. Fastly displays the secret only once. Fastly's [API token guide](https://www.fastly.com/documentation/guides/account-info/user-and-account-management/using-api-tokens/) explains the token types and settings in more detail.
+
+:::warning Secure and rotate the credential
+
+Save the token in a password manager. Never commit it to version control or share it. Paste only the token value into Zephyr.
+
+Fastly tokens cannot be edited, and an expired token returns HTTP 401. Track its expiration and replace the credential in Zephyr before revoking the old token. Revoking it first breaks later provisioning retries, settings reprovisioning, and worker updates; Zephyr does not rotate it automatically.
+
+:::
+
+#### Enter the Fastly settings
+
+- **API token**: Paste the token value copied from Fastly.
+- **Domain**: Enter the root domain, such as `example.com`. Do not enter a URL or the derived `ze.example.com` hostname.
+
+Select **Continue**. Zephyr validates the credential through provisioning rather than a separate token preflight.
+
+### 4. Configure Worker
+
+The final panel states that **Deploy URL routing is managed automatically**. Review the configuration and select **Finish**.
+
+Zephyr returns to the integrations list and shows setup in progress while it polls Fastly. The integration becomes active after provisioning succeeds, or failed if Fastly rejects the request. An active result confirms that the token worked.
 
 </Steps>
 
-## System Components
+## Configuration inputs
 
-The integration creates:
+<dl>
+  <dt>**Name**</dt>
+  <dd>
+    A display name between 3 and 100 characters. Letters, digits, spaces,
+    hyphens, underscores, and apostrophes are allowed.
+  </dd>
 
-- Config store for jwt-secret
-- KV stores:
-  - ze-snapshots
-  - ze-envs
-  - ze-files
-- Compute service: ze-worker
+<dt>**Unique identifier**</dt>
+<dd>
+  A URL identifier between 3 and 50 characters, using lowercase letters, digits,
+  hyphens, and underscores. It is immutable after creation.
+</dd>
 
-## Usage Instructions
+<dt>**Set integration as default**</dt>
+<dd>
+  Makes this integration the default for deployments that do not explicitly
+  select another integration.
+</dd>
 
-1. Create a new Fastly deployment integration
-2. Build a new application with Zephyr
-3. During deployment:
-   - System retrieves site information using provided parameters
-   - Zephyr Plugin uploads build assets to KV stores
+<dt>**API token**</dt>
+<dd>
+  The Fastly token value. Zephyr never redisplays the stored token while
+  editing. Leave this field blank to retain the existing credential, or enter a
+  new token to replace it and reprovision the integration.
+</dd>
+
+  <dt>**Domain**</dt>
+  <dd>
+    The registered root domain, such as `example.com`, without a protocol,
+    path, or `ze.` prefix. It is immutable after creation.
+  </dd>
+</dl>
+
+:::warning Replacing a credential
+
+Replacing the API token reprovisions the integration. Zephyr does not revoke the old Fastly token or delete the previous Fastly service and related resources. Revoke and remove those resources in Fastly after the replacement is active.
+
+:::
+
+## What Zephyr creates
+
+For `example.com`, Zephyr uploads the Compute package, activates the service version, and creates:
+
+- Compute service `ze-worker-example-com`
+- Domains `ze.example.com` and `*.ze.example.com`
+- Config store `config` with the `jwt-secret` entry
+- KV stores `ze_envs`, `ze_files`, and `ze_snapshots`
+
+## Troubleshooting
+
+Zephyr reports Fastly provisioning failures generically. If the integration is marked failed, check:
+
+- The token is an automation token with the **Engineer** role, or a user token owned by an **Engineer** or **Superuser**.
+- The token has **Global API access (`global`)** and access to all account services.
+- The token has not expired or been revoked.
+- **Domain** contains only the registered root domain, such as `example.com`.
+
+Correct the integration settings and retry provisioning. **Test DNS** checks DNS records only; it does not validate the API token. TLS subscriptions and certificate validation remain managed in Fastly.
