@@ -52,7 +52,7 @@ Select **Continue**.
 
 Zephyr uses `ze.example.com` and `*.ze.example.com` for a root domain of `example.com`. Configure Fastly's TLS subscription first, then add the records at your DNS provider:
 
-1. In Fastly, open **Security > TLS management > Subscriptions** and select **Create subscription**.
+1. In Fastly, open **Domains > TLS management > Subscriptions** and select **Create subscription**.
 2. Add `ze.example.com` and `*.ze.example.com`, submit the subscription, and wait for Fastly to display the verification CNAME records.
 3. At your DNS provider, add the verification CNAME records shown by Fastly.
 4. After Fastly verifies the domains, add these routing records:
