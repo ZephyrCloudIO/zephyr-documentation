@@ -28,8 +28,6 @@ Fastly is available as a Bring Your Own Cloud (BYOC) deployment integration. Zep
 
 ## Configure and enable Fastly
 
-<Steps>
-
 ### Open the Fastly custom integration form
 
 <a href="https://app.zephyr-cloud.io">
@@ -44,8 +42,9 @@ After signing in:
 2. Select **Settings**.
 3. Select **Deployment Integrations**.
 4. Select **+ Add integration**, then select **Fastly**. The Fastly custom integration creation form opens.
+   <Steps>
 
-### 1. Basic Info
+### Basic Info
 
 - **Name**: Enter a recognizable name between 3 and 100 characters. It can contain letters, digits, spaces, hyphens, underscores, and apostrophes.
 - **Unique identifier**: Enter a value between 3 and 50 characters using lowercase letters, digits, hyphens, and underscores. Zephyr uses this identifier in URLs, and it cannot be changed after the integration is created.
@@ -53,7 +52,7 @@ After signing in:
 
 Select **Continue**.
 
-### 2. Configure DNS Record
+### Configure DNS Record
 
 Zephyr uses `ze.example.com` and `*.ze.example.com` for a root domain of `example.com`. Configure Fastly's TLS subscription first, then add the records at your DNS provider:
 
@@ -71,7 +70,7 @@ Use the target Fastly displays if it differs from the example above. See Fastly'
 
 You can select **Test DNS** in Zephyr to check the records. This check is optional: it does not validate the Fastly API token and does not prevent you from selecting **Continue**.
 
-### 3. API Token
+### API Token
 
 #### Create a Fastly API token
 
@@ -111,7 +110,7 @@ In the Fastly custom integration creation form, confirm that the correct organiz
 
 Select **Continue**. Zephyr validates the credential through provisioning rather than a separate token preflight.
 
-### 4. Configure Worker
+### Configure Worker
 
 The final panel states that **Deploy URL routing is managed automatically**. Review the configuration and select **Finish**.
 
