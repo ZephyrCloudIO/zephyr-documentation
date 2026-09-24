@@ -30,19 +30,38 @@ Deploy your React Native applications with Module Federation to Zephyr Cloud usi
 
 Install the Metro plugin and required Module Federation dependencies in your project:
 
-<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro @module-federation/runtime" />
-
-If you use React Native CLI custom commands, install the React Native CLI command package:
-
-<PackageManagerTabs command="add --dev @module-federation/metro-plugin-rnc-cli" />
-
-If you use RNEF, install the RNEF Module Federation plugin:
-
-<PackageManagerTabs command="add --dev @module-federation/metro-plugin-rnef" />
+<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro@^2.9.0 @module-federation/runtime" />
 
 To enable React Native OTA updates in a host app, also install the native cache runtime:
 
 <PackageManagerTabs command="add zephyr-native-cache" />
+
+## Configuration and Publication
+
+Metro configuration and publication are separate stages:
+
+| Stage                                 | Purpose                                                                                     | Creates dashboard records |
+| ------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------- |
+| `withZephyr()`                        | Resolves remotes and generates the local Zephyr manifest when Metro loads its configuration | No                        |
+| `bundle-mf-remote` / `bundle-mf-host` | Builds and uploads artifacts to Zephyr Cloud                                                | Yes                       |
+
+Loading `withZephyr()` can request `/application-config` and `/build-id`, but those requests do not persist an organization membership, project, application, or application version. Publication reaches `/build-stats`; the first successful upload creates the dashboard entities for that application identity. A token claim of `can_write: true` grants permission to create that identity. It does not mean the records already exist.
+
+You must register the publication commands through either the React Native CLI configuration or the RNEF plugin below, then run the appropriate `bundle-mf-*` command. `start`, `run-ios`, and `run-android` load Metro configuration but do not publish artifacts.
+
+### Application Identity
+
+By default, Zephyr infers the organization and project from the Git `origin` remote and the application name from the nearest `package.json`. To override that identity, add a `zephyr.config.ts` file:
+
+```ts title="zephyr.config.ts"
+export default {
+  org: 'acme',
+  project: 'mobile',
+  appName: 'mini-app',
+};
+```
+
+The resulting application UID is `mini-app.mobile.acme`. See [Declarative Configuration](/reference/declarative-configuration) for file discovery, precedence, and other options.
 
 ## Module Federation with Metro
 
@@ -106,40 +125,44 @@ async function getConfig() {
 module.exports = getConfig();
 ```
 
-### React Native CLI Configuration
+### React Native CLI Publication Commands
 
-Create or modify `react-native.config.js` to enable bundling with Zephyr:
+Create or modify `react-native.config.js` in each host and remote application. The adapter registers both publication commands while preserving existing React Native CLI settings:
 
 ```javascript
 // react-native.config.js
-const commands = require('@module-federation/metro-plugin-rnc-cli');
-const { updateManifest } = require('@module-federation/metro');
-const { zephyrCommandWrapper } = require('zephyr-metro-plugin');
+const { zephyrMetroReactNativeCli } = require('zephyr-metro-plugin');
 
-const wrappedFuncPromise = zephyrCommandWrapper(
-  commands.bundleMFRemoteCommand.func,
-  commands.loadMetroConfig,
-  () => {
-    updateManifest(
-      global.__METRO_FEDERATION_MANIFEST_PATH,
-      global.__METRO_FEDERATION_CONFIG,
-    );
-  },
-);
-
-const zephyrCommand = {
-  name: 'bundle-mf-remote',
-  description:
-    'Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications',
-  func: async (...args) => {
-    const wrappedFunc = await wrappedFuncPromise;
-    return wrappedFunc(...args);
-  },
-  options: commands.bundleMFRemoteCommand.options,
+const config = {
+  assets: ['./assets'],
 };
 
 module.exports = {
-  commands: [zephyrCommand],
+  ...config,
+  commands: [
+    ...(config.commands ?? []),
+    ...zephyrMetroReactNativeCli().commands,
+  ],
+};
+```
+
+### RNEF Publication Commands
+
+RNEF projects must register the Zephyr RNEF plugin. It provides the same `bundle-mf-host` and `bundle-mf-remote` publication commands:
+
+```javascript title="rnef.config.mjs"
+import { platformAndroid } from '@rnef/platform-android';
+import { platformIOS } from '@rnef/platform-ios';
+import { pluginMetro } from '@rnef/plugin-metro';
+import { zephyrMetroRNEFPlugin } from 'zephyr-metro-plugin';
+
+export default {
+  bundler: pluginMetro(),
+  platforms: {
+    ios: platformIOS(),
+    android: platformAndroid(),
+  },
+  plugins: [zephyrMetroRNEFPlugin()],
 };
 ```
 
@@ -148,12 +171,17 @@ module.exports = {
 Bundle your mini application for different platforms:
 
 ```bash
-# Bundle for iOS
+# React Native CLI: bundle and upload for iOS
 npx react-native bundle-mf-remote --platform ios --dev false
 
-# Bundle for Android
+# React Native CLI: bundle and upload for Android
 npx react-native bundle-mf-remote --platform android --dev false
+
+# RNEF: bundle and upload for iOS
+rnef bundle-mf-remote --platform ios --dev false
 ```
+
+After the first command completes, open the Zephyr dashboard and verify that the inferred or configured application appears with a new version. If no version appears, publication did not complete; Metro configuration logs alone are not deployment confirmation.
 
 ### Host Application (Consumer)
 
@@ -218,6 +246,16 @@ module.exports = getConfig();
 ```
 
 Use local HTTP manifest URLs during local development. Use Zephyr selectors such as `zephyr:miniApp@yourEnvironment` for builds that should resolve remotes from Zephyr Cloud.
+
+To publish the host itself, run its registered host command. Zephyr discovers Metro artifacts under `dist/<platform>`, so keep `--bundle-output` in that directory:
+
+```bash
+# React Native CLI
+npx react-native bundle-mf-host --platform ios --dev false --entry-file index.js --bundle-output dist/ios/host.bundle
+
+# RNEF
+rnef bundle-mf-host --platform ios --dev false --entry-file index.js --bundle-output dist/ios/host.bundle
+```
 
 To enable OTA behavior, register the native cache before the host loads remote bundles:
 

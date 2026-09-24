@@ -28,8 +28,8 @@ For a complete working reference, see the [`zephyr-native-cache-test` example](h
 
 ## How It Works
 
-1. You publish a Metro Module Federation remote with `zephyr-metro-plugin`.
-2. Zephyr Cloud creates an immutable version with platform-specific artifacts and an `mf-manifest.json`.
+1. You run a Zephyr-wrapped React Native CLI or RNEF `bundle-mf-remote` command.
+2. The command uploads the Metro Module Federation artifacts, and Zephyr Cloud creates an immutable version with platform-specific artifacts and an `mf-manifest.json`.
 3. Your released host app resolves a remote manifest through a Zephyr dependency such as `zephyr:profile@production`.
 4. `zephyr-native-cache` reads bundle hashes from the manifest through its Module Federation runtime plugin.
 5. When a remote is loaded, the cache layer downloads the bundle natively, verifies its SHA-256 hash, caches it on device, and evaluates it.
@@ -38,11 +38,13 @@ For a complete working reference, see the [`zephyr-native-cache-test` example](h
 
 Rollbacks use the same mechanism. If you roll back a Zephyr environment or move a tag back to an older remote version, manifest polling sees the older bundle hash as the active target, downloads it, and the host can apply it on the next reload.
 
+`withZephyr()` configures remote resolution; it does not publish an OTA version. See [Metro configuration and publication](/bundlers/metro#configuration-and-publication) for the upload boundary, Git identity inference, and explicit `zephyr.config.ts` overrides.
+
 ## Install Packages
 
 Install the Metro and Module Federation packages in every host and remote app:
 
-<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro @module-federation/runtime @module-federation/metro-plugin-rnef" />
+<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro@^2.9.0 @module-federation/runtime" />
 
 Install the native cache package in the host app:
 
@@ -162,7 +164,7 @@ Production builds enable the cache automatically. Development builds keep the ca
 
 ## Configure Remote Builds
 
-Use the Zephyr RNEF plugin so `rnef bundle-mf-remote` and `rnef bundle-mf-host` upload Metro artifacts to Zephyr after the Module Federation build completes.
+RNEF projects must use the Zephyr RNEF plugin so `rnef bundle-mf-remote` and `rnef bundle-mf-host` upload Metro artifacts to Zephyr after the Module Federation build completes. React Native CLI projects must register the equivalent Zephyr-wrapped commands described in the [Metro bundler guide](/bundlers/metro#react-native-cli-publication-commands).
 
 ```js title="apps/remote/rnef.config.mjs"
 import { platformAndroid } from '@rnef/platform-android';
@@ -189,6 +191,8 @@ rnef bundle-mf-remote --platform ios --dev false
 # Android remote build and upload
 rnef bundle-mf-remote --platform android --dev false
 ```
+
+Running `start`, `run-ios`, or `run-android` is not publication. After the first `bundle-mf-remote` upload completes, verify in the Zephyr dashboard that the remote application exists and has a version before configuring an OTA environment or tag.
 
 The host must resolve the same platform that the remote was published for. `withZephyr({ target: 'ios' })` resolves iOS remote artifacts, and `withZephyr({ target: 'android' })` resolves Android remote artifacts.
 

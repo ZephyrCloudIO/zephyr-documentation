@@ -87,7 +87,7 @@ cd MiniApp
 
 If you have existing React Native applications, you can convert them to use Module Federation. Install the required dependencies in both host and mini applications:
 
-<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro @module-federation/metro-plugin-rnc-cli @module-federation/runtime" />
+<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro@^2.9.0 @module-federation/runtime" />
 
 <Separator />
 
@@ -167,6 +167,8 @@ async function getConfig() {
 module.exports = getConfig();
 ```
 
+This configures Zephyr remote resolution and the local manifest, but it does not upload a bundle. See [Metro configuration and publication](/bundlers/metro#configuration-and-publication) for the lifecycle, Git-based identity inference, and an explicit `zephyr.config.ts` identity override.
+
 :::details{title="Configuration Breakdown"}
 
 - **name**: Unique identifier for your mini application
@@ -181,51 +183,27 @@ module.exports = getConfig();
 
 :::
 
-### Step 2: Configure React Native CLI
+### Step 2: Register Publication Commands
 
-Create or modify your `react-native.config.js` file to enable uploading mini application bundles to Zephyr Cloud:
+Create `react-native.config.js` in both applications. The adapter registers the remote and host publication commands:
 
 ```javascript
 // MiniApp/react-native.config.js
-const commands = require('@module-federation/metro-plugin-rnc-cli');
-const { updateManifest } = require('@module-federation/metro');
-const { zephyrCommandWrapper } = require('zephyr-metro-plugin');
+const { zephyrMetroReactNativeCli } = require('zephyr-metro-plugin');
 
-const wrappedFuncPromise = zephyrCommandWrapper(
-  commands.bundleMFRemoteCommand.func,
-  commands.loadMetroConfig,
-  () => {
-    updateManifest(
-      global.__METRO_FEDERATION_MANIFEST_PATH,
-      global.__METRO_FEDERATION_CONFIG,
-    );
-  },
-);
-
-const zephyrCommand = {
-  name: 'bundle-mf-remote',
-  description:
-    'Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications',
-  func: async (...args) => {
-    const wrappedFunc = await wrappedFuncPromise;
-    return wrappedFunc(...args);
-  },
-  options: commands.bundleMFRemoteCommand.options,
-};
-
-module.exports = {
-  commands: [zephyrCommand],
-};
+module.exports = zephyrMetroReactNativeCli();
 ```
+
+If either application already has React Native CLI settings, merge the adapter commands instead of replacing the existing config. See [React Native CLI publication commands](/bundlers/metro#react-native-cli-publication-commands) for the preserving form.
 
 :::details{title="Why This Configuration?"}
 
-This configuration adds a custom React Native CLI command that:
+This configuration adds React Native CLI commands that:
 
-- Handles Module Federation bundling
-- Integrates with Zephyr Cloud for asset upload
-- Updates the Module Federation manifest
-- Enables deployment to Zephyr's edge network
+- Handle Module Federation bundling
+- Integrate with Zephyr Cloud for asset upload
+- Update the Module Federation manifest
+- Enable deployment to Zephyr's edge network
 
 :::
 
@@ -274,7 +252,7 @@ npx react-native bundle-mf-remote --platform android --dev false
 
 :::tip
 
-After bundling, configure your mini app environments and tags in the [Tags & Environments](/features/tags-environments) section of your Zephyr Cloud dashboard.
+After the first bundle finishes, open the Zephyr Cloud dashboard and verify that the mini application exists with a new version. Then configure its environments and tags in [Tags & Environments](/features/tags-environments).
 
 :::
 
@@ -405,7 +383,17 @@ For more information about managing dependencies, see [Remote Dependencies](/fea
 
 :::
 
-### Step 3: Load Mini Application in Your Code
+### Step 3: Publish the Host Application
+
+Run the host publication command when you need to upload a host version. Keep the bundle output under `dist/<platform>` so Zephyr can discover the artifacts:
+
+```bash
+npx react-native bundle-mf-host --platform ios --dev false --entry-file index.js --bundle-output dist/ios/host.bundle
+```
+
+Verify the first host version in the dashboard just as you did for the mini application. For RNEF projects, use the required plugin and commands in the [Metro bundler guide](/bundlers/metro#rnef-publication-commands).
+
+### Step 4: Load Mini Application in Your Code
 
 Now you can use the mini application in your host app:
 
@@ -483,7 +471,7 @@ npx react-native run-android
 
 :::info
 
-During development, the host will load mini-applications from the URLs specified in your Metro configuration. In production, Zephyr will automatically resolve these to your deployed versions based on your environment configuration.
+During development, the host will load mini-applications from the URLs specified in your Metro configuration. In production, Zephyr will automatically resolve these to your deployed versions based on your environment configuration. `start`, `run-ios`, and `run-android` do not publish an application version; run `bundle-mf-remote` or `bundle-mf-host` explicitly to build and upload one.
 
 :::
 

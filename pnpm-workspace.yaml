@@ -1,5 +1,5 @@
 packages:
-  - .
+  - '.'
 
 # Fails if trusted package stops being trusted
 trustPolicy: no-downgrade

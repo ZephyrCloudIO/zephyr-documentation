@@ -1,10 +1,10 @@
 ---
 title: 'ZE10019: Failed to obtain build ID'
-description: 'ZE10019: Failed to obtain build ID due to missing configuration or insufficient write access'
+description: 'ZE10019: Build ID creation failed; inspect the reported reason for recovery'
 head:
   - - meta
     - property: og:description
-      content: 'ZE10019: Failed to obtain build ID due to missing configuration or insufficient write access'
+      content: 'ZE10019: Build ID creation failed; inspect the reported reason for recovery'
 ---
 
 import { getErrorMessage } from '../../lib/error-helpers.ts';
@@ -20,30 +20,28 @@ The fastest way to resolve this error is to [join our Discord](https://discord.g
 
 <ErrorInfo code="ZE10019" terminal />
 
-::: info
-This is one of the most common errors during build.
-:::
-
-Once we find your `application_uid` (composed by your github organization's name, project name and the `name` field in package.json, refer to <ErrorLink code="ZE10017" />), we will be collecting data from your local cache, verifying your JWT token and checking your write access to the related project. If we fail to find all the necessary configuration, we won't be able to obtain appropriate build id for you to continue with the deployment.
+Zephyr identified the application but could not create a Build ID. The diagnostic includes `Operation: create-build-id` and a `Reason` code that identifies the immediate blocker.
 
 ## Debugging the error
 
 <Steps>
 
-### Check your write access
+### Authentication reason
 
-You current logged in account on Zephyr dashboard might not have write access to this application
+For <ErrorLink code="ZE10018" />, complete normal browser login in an interactive terminal or provide a valid token in a non-interactive environment.
 
-You can log out either from our [Chrome Extension](https://chromewebstore.google.com/detail/zephyr-mission-control/liflhldchhinbaeplljlplhnbkdidedn) or from [dashboard](https://app.zephyr-cloud.io) and log in again with the correct account having write access.
+### Target access reason
 
-### Clear cache
+For <ErrorLink code="ZE10022" />, verify the application target and account permissions or ask an organization administrator for access. Reconfiguring Git or logging in with the same account will not grant access.
 
-Git configuration details for the project is different from previous build
+### Service availability reason
 
-One of the plausible way to debug this error is to remove your local zephyr configuration by running:
+For `ZE40035`, retry after confirming Zephyr service availability. If the problem persists, include the operation and reason codes when contacting support.
 
-rm -rf ~/.zephyr
+### Unexpected response
 
-And then try to run a build again.
+If no more specific reason is shown, confirm the `application_uid` is correct. See <ErrorLink code="ZE10017" /> for how Zephyr derives it.
+
+Do not print, export, share, or manually delete files from `~/.zephyr` while troubleshooting.
 
 </Steps>

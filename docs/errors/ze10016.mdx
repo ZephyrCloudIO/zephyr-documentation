@@ -1,10 +1,10 @@
 ---
-title: 'ZE10016: Missing git configuration'
-description: 'ZE10016: Missing git configuration including remote origin URL, username, or email'
+title: 'ZE10016: Missing Git information'
+description: 'ZE10016: Stable Git branch, commit, identity, or remote information is unavailable'
 head:
   - - meta
     - property: og:description
-      content: 'ZE10016: Missing git configuration including remote origin URL, username, or email'
+      content: 'ZE10016: Stable Git branch, commit, identity, or remote information is unavailable'
 ---
 
 import { getErrorMessage } from '../../lib/error-helpers.ts';
@@ -19,16 +19,23 @@ The fastest way to resolve this error is to [join our Discord](https://discord.g
 
 <ErrorInfo code="ZE10016" terminal related="ZE10014,ZE10015,ZE10017" />
 
-There could be several reason why this error shows up - it could be because remote origin wasn't configured for the project directory; it could be because you haven't set a username for git; or it could be because you don't have an email set to your git config.
+Zephyr could not determine the stable repository information required for this deployment. Depending on the build, this can include the Git branch, commit, author identity, or `origin` remote.
 
-All of these information will affect your build and deployment through Zephyr as we use them to both authenticate you and deploy your application.
+Authentication failures use <ErrorLink code="ZE10018" /> instead. Logging in again does not create missing Git history or repository metadata.
 
 ## Debugging the error
 
-To make sure you have all the configuration set up correctly, you can do so by running this in your project directory (use arrow key to scroll down and check your remote origin's url)
+Run these commands in the project directory to identify the missing information:
 
-git config --list
+```bash
+git rev-parse --is-inside-work-tree
+git rev-parse HEAD
+git branch --show-current
+git remote -v
+git config user.name
+git config user.email
+```
 
-If you are missing username and email, please refer to <ErrorLink code="ZE10015" /> to configure it correctly.
+CI deployments require a checked-out commit and stable branch metadata. Ensure the checkout step includes the commit history and the CI provider exposes its branch or pull-request variables.
 
-If you are missing `remote origin url`, refer to <ErrorLink code="ZE10014" />.
+If the username or email is missing, see <ErrorLink code="ZE10015" />. If `origin` is missing, see <ErrorLink code="ZE10014" />.
