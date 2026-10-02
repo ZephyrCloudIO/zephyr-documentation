@@ -52,6 +52,22 @@ Tags use flexible condition rules to decide which version to serve. You can comb
 
 You can create sophisticated rules by combining conditions. A "stable" tag might point to versions that are from the main branch, built by CI, and match a version pattern - ensuring only production-ready builds are served.
 
+### Who Appears in the User List
+
+The user list in a **User** condition does not show everyone in your organization. It only shows people connected to the application's project:
+
+- The person who created the project
+- Project members with the **Owner**, **Admin**, or **Editor** role
+- Members of a team that has **Owner**, **Admin**, or **Editor** access to the project
+- Anyone who has already deployed a version of this application
+
+If someone is missing from the list, do one of the following:
+
+- Add them, or a team they belong to, to the project with the **Editor** role or higher. See [Teams & Members](/features/teams-members).
+- Ask them to build and deploy the application once with Zephyr.
+
+Users with only **Viewer** access do not appear in the list.
+
 ---
 
 ### Nested Conditions
