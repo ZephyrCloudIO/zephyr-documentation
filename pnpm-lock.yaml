@@ -35,7 +35,7 @@ importers:
         version: 2.0.23(core-js@3.47.0)(micromark-util-types@2.0.3)(micromark@4.0.3)
       '@rspress/plugin-client-redirects':
         specifier: ^2.0.1
-        version: 2.0.22(@rspress/core@2.0.23(core-js@3.47.0)(micromark-util-types@2.0.3)(micromark@4.0.3))
+        version: 2.0.23(@rspress/core@2.0.23(core-js@3.47.0)(micromark-util-types@2.0.3)(micromark@4.0.3))
       '@rspress/plugin-preview':
         specifier: ^2.0.1
         version: 2.0.21(@rspress/core@2.0.23(core-js@3.47.0)(micromark-util-types@2.0.3)(micromark@4.0.3))(core-js@3.47.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -1725,8 +1725,8 @@ packages:
     resolution: {integrity: sha512-Iw1L/eaHM2SeIHsXjnr7PCHHl+jc1zHviDofeWCYz0hQ1XAoUM4vQWIez0a0bUzlXOWU+4BgJU4waVchFN0Ztg==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-client-redirects@2.0.22':
-    resolution: {integrity: sha512-pyOLIfxji1xbh//H0egdmhXVdO5hfp9dLXCTnZKcet9K3FJpre21/syuhRbRwWviMpcKtE73PZVcSaNVTYQYZw==}
+  '@rspress/plugin-client-redirects@2.0.23':
+    resolution: {integrity: sha512-TdpvO3TREv6s2mE32ztFvG3P232qUwjyQCKKsb9g0XT0q7rzcStZFRE7XT/L8i0XTzH/mfli1tVl4guTea/J3Q==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rspress/core': ^2.0.10
@@ -7815,7 +7815,7 @@ snapshots:
     dependencies:
       '@rspress/shared': 1.45.6
 
-  '@rspress/plugin-client-redirects@2.0.22(@rspress/core@2.0.23(core-js@3.47.0)(micromark-util-types@2.0.3)(micromark@4.0.3))':
+  '@rspress/plugin-client-redirects@2.0.23(@rspress/core@2.0.23(core-js@3.47.0)(micromark-util-types@2.0.3)(micromark@4.0.3))':
     dependencies:
       '@rspress/core': 2.0.23(core-js@3.47.0)(micromark-util-types@2.0.3)(micromark@4.0.3)
 
@@ -8659,7 +8659,7 @@ snapshots:
       postcss: 8.5.28
       postcss-value-parser: 4.2.0
 
-  axios-retry@4.5.0(axios@1.12.2):
+  axios-retry@4.5.0(axios@1.12.2(debug@4.4.0)):
     dependencies:
       axios: 1.12.2(debug@4.4.0)
       is-retry-allowed: 2.2.0
@@ -13316,7 +13316,7 @@ snapshots:
     dependencies:
       '@toon-format/toon': 0.9.0
       axios: 1.12.2(debug@4.4.0)
-      axios-retry: 4.5.0(axios@1.12.2)
+      axios-retry: 4.5.0(axios@1.12.2(debug@4.4.0))
       debug: 4.4.0
       eventsource: 4.1.0
       git-url-parse: 15.0.0
