@@ -28,34 +28,44 @@ This error means that the application is not able to correctly connect to your C
 
 #### a. KV Namespaces
 
-Check if the following namespaces are created on your Cloudflare account:
+Check the configured KV namespaces on your Cloudflare account. Their defaults are:
 
 - `ze_snapshots`
 - `ze_files`
-- `ze_env`
+- `ze_envs`
 
 #### b. Workers
 
-Check if the following workers are created on your Cloudflare account:
-
-- `ze-worker-for-static-upload`
+Check that the configured public/static Worker exists. Its default name is `ze-worker-for-static-upload`.
 
 #### c. Worker Routes
 
-Check if the following worker routes are created on your Cloudflare account:
+For generated URLs and the base upload endpoint, check that both base Routes target the configured public/static Worker:
 
-- `ze.<domain.com>/*`
-- `*-ze.<domain.com>/*`
+- `ze.<zone>/*`
+- `*-ze.<zone>/*`, or `*.ze.<zone>/*` for the existing dot delimiter
+
+The `/*` covers all paths. Dot-delimiter hostnames also require wildcard TLS coverage for `*.ze.<zone>`.
 
 #### d. DNS Records
 
-Check if a CNAME record is created on your Cloudflare account/domain - it needs to be a wildcard record (e.g. `*`) and point to `ze.<your-domain>.com`.
+Check proxied DNS coverage for the base and generated hostnames. The documented customer-configured wildcard CNAME convention is shown below; Zephyr does not create it, and its target is not a Cloudflare requirement. Do not confuse this coverage with an exact environment Custom Domain.
 
 ##### Example
 
 | Type  | Name |       Content        | Proxy Status | TTL  |
 | :---: | :--: | :------------------: | :----------: | :--: |
 | CNAME | `*`  | `ze.zephyrcloud.app` |   Proxied    | Auto |
+
+#### e. Environment Custom Domains
+
+For an exact environment alias, check the configured public/static Worker's **Domains** in **Workers & Pages** (alternate **Settings → Domains & Routes**). The exact hostname, with no `/*`, must have an enabled Custom Domain targeting that Worker, with native Worker-version previews disabled.
+
+Cloudflare provisions the alias's DNS and TLS; it does not need a manual CNAME pointing to `ze.zephyrcloud.app`. An existing exact CNAME can block attachment: explicitly resolve or migrate the conflicting record and retry. Zephyr does not automatically delete customer DNS records.
+
+The hostname must also have a published environment-to-snapshot mapping. An environment without a deployed version cannot serve an application yet. Allow DNS, TLS, and deployment changes to propagate, and check that subsequent deployments include the alias.
+
+See the [Cloudflare integration guide](/cloud/cloudflare) for permissions, setup, and the Route-versus-Custom-Domain routing contract.
 
 ### 2. Fastly Integration
 
