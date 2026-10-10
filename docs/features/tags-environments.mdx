@@ -171,7 +171,14 @@ Each environment can have multiple custom domains pointing to it. This is perfec
 - **A/B testing** where you can split traffic between different versions
 - **Brand management** where staging uses "staging.company.com" and production uses "app.company.com"
 
-Setting up custom domains is straightforward. When you add a domain to an environment, Zephyr automatically handles SSL certificates and creates the necessary routing. You just need to point your DNS records to Zephyr's edge network.
+The connection flow depends on the environment's effective deployment integration:
+
+- **BYOC Cloudflare:** enter an exact hostname from the integration's selected zone, such as `app.example.com`, without a wildcard or `/*`. Zephyr attaches it to the public/static Worker as an enabled **Worker Custom Domain**, with native Cloudflare Worker-version previews disabled. Cloudflare provisions DNS and TLS; Zephyr publishes the hostname's environment-to-snapshot mapping through normal deployment. No deployed version means no application is served yet, even if the hostname is connected.
+- **Other supported integration flows:** retain the Entri connection flow and follow its provider-specific DNS instructions.
+
+DNS, TLS, and deployment changes may take time to propagate. An existing exact CNAME can block Cloudflare attachment; resolve or migrate that conflicting record explicitly before retrying. This flow does not change the integration's base Routes or customer-configured wildcard DNS coverage. See the [Cloudflare integration guide](/cloud/cloudflare) for setup and permissions.
+
+Custom-domain availability remains subject to the existing integration availability gate. Connected project environments cannot add or remove domain connections; manage those policies on the source environment rather than the connected environment.
 
 ### Environment Variables (`ZE_PUBLIC_*`)
 
