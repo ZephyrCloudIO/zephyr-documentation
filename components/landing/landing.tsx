@@ -8,6 +8,7 @@ import {
   Eye,
   GitBranch,
   History,
+  KeyRound,
   Lock,
   Network,
   Rocket,
@@ -249,28 +250,28 @@ function TerminalPreview() {
       </div>
       <div className="zc-terminal__body">
         <p>
-          <span className="text-zinc-500">$</span> npm run build
+          <span className="text-[var(--ze-ink-faint)]">$</span> npm run build
         </p>
-        <p className="text-zinc-500">✓ built in 1.84s</p>
+        <p className="text-[var(--ze-ink-faint)]">✓ built in 1.84s</p>
         <p>
           <span className="zc-ze">ZEPHYR</span> Building to{' '}
-          <span className="text-cyan-300">cart.shop.acme</span>
-          <span className="text-amber-200">#142</span>
+          <span className="text-[var(--ze-violet-ink)]">cart.shop.acme</span>
+          <span className="text-[var(--ze-violet-ink)]">#142</span>
         </p>
         <p>
           <span className="zc-ze">ZEPHYR</span> Uploaded{' '}
-          <span className="text-amber-200">3</span> new assets in{' '}
-          <span className="text-amber-200">412</span>ms
+          <span className="text-[var(--ze-violet-ink)]">3</span> new assets in{' '}
+          <span className="text-[var(--ze-violet-ink)]">412</span>ms
         </p>
         <p>
           <span className="zc-ze">ZEPHYR</span> Deployed to edge in{' '}
-          <span className="text-emerald-300">1.2s</span>
+          <span className="text-[var(--ze-live)]">1.2s</span>
         </p>
-        <p className="pl-4 text-sky-300 underline decoration-sky-300/40 underline-offset-4">
+        <p className="pl-4 text-[var(--ze-ink)] underline decoration-[var(--ze-violet-ink)]/50 underline-offset-4">
           https://ana-142-cart-shop-acme-ze.zephyr-cloud.io
         </p>
         <p className="mt-3 flex items-center gap-2">
-          <span className="text-zinc-500">$</span>
+          <span className="text-[var(--ze-ink-faint)]">$</span>
           <span className="zc-caret" />
         </p>
       </div>
@@ -284,9 +285,9 @@ function Hero() {
       <div className="zc-hero__glow" aria-hidden="true" />
       <div className="zc-container grid items-center gap-14 lg:grid-cols-[1.25fr_1fr]">
         <div className="flex flex-col items-start">
-          <Link href="/tools/api-mcp" className="zc-pill">
-            <Sparkles size={14} className="text-[var(--rp-c-brand)]" />
-            <span>New: manage deployments from your AI assistant</span>
+          <Link href="/features/ci-tokens" className="zc-pill">
+            <KeyRound size={14} className="text-[var(--rp-c-brand)]" />
+            <span>New: CI tokens for every pipeline</span>
             <ArrowRight size={14} />
           </Link>
 
@@ -417,7 +418,7 @@ function Stack() {
               className={cn(
                 'cursor-pointer rounded-full px-4 py-1.5 text-sm font-medium transition-colors',
                 stack.id === active
-                  ? 'bg-[var(--rp-c-text-1)] text-[var(--rp-c-bg)]'
+                  ? 'bg-[var(--ze-violet)] text-white'
                   : 'text-[var(--rp-c-text-2)] hover:text-[var(--rp-c-text-1)]',
               )}
             >
@@ -525,7 +526,7 @@ function Ai() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/tools/api-mcp"
-                className="zc-button zc-button--light"
+                className="zc-button zc-button--primary"
               >
                 Connect your assistant
                 <ArrowRight size={16} />
@@ -548,8 +549,10 @@ function Ai() {
                 <span className="zc-ai__capability-icon">
                   <Icon size={18} />
                 </span>
-                <span className="font-semibold text-white">{title}</span>
-                <span className="text-sm leading-relaxed text-zinc-400">
+                <span className="font-semibold text-[var(--ze-ink)]">
+                  {title}
+                </span>
+                <span className="text-sm leading-relaxed text-[var(--ze-ink-muted)]">
                   {description}
                 </span>
               </Link>
@@ -558,7 +561,7 @@ function Ai() {
         </ul>
 
         <div className="mt-10">
-          <p className="mb-4 text-sm font-medium text-zinc-400">
+          <p className="mb-4 text-sm font-medium text-[var(--ze-ink-muted)]">
             Connect in one command
           </p>
           <McpPromo />

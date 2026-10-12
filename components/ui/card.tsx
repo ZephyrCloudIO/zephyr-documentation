@@ -18,7 +18,7 @@ export const Card = ({ item }: { item: CardItemProps }) => {
       >
         <div className="relative h-full min-h-[10rem] p-4 rounded-xl bg-[var(--zc-surface)] border border-[var(--zc-border)] hover:border-[color-mix(in_srgb,var(--rp-c-brand)_55%,transparent)] hover:bg-[var(--zc-surface-hover)] transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
           {/* Background glow effect */}
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-violet-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
           {/* Content */}
           <div className="relative z-10 flex flex-col h-full">
