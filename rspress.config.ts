@@ -118,7 +118,6 @@ const sidebar: Sidebar = {
     {
       text: 'Environment Overrides',
       link: '/features/environment-overrides',
-      tag: 'beta',
     },
     { text: 'Remote Dependencies', link: '/features/remote-dependencies' },
     { text: 'Deployment Hooks', link: '/features/deployment-hooks' },
