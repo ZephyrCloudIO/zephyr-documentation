@@ -4,7 +4,7 @@ import { useState } from 'react';
 const clients = {
   claude: {
     label: 'Claude Code',
-    shortLabel: 'Claude Code',
+    shortLabel: 'Claude',
     logo: '/ai-tools/claude.svg',
     description: 'Add Zephyr as a remote HTTP server for your user account.',
     format: 'shell',
@@ -77,7 +77,7 @@ export function McpPromo() {
       <div
         role="tablist"
         aria-label="Choose an AI client"
-        className="not-prose mb-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
+        className="not-prose mb-3 grid grid-cols-[repeat(auto-fit,minmax(5.5rem,1fr))] gap-2"
       >
         {(Object.keys(clients) as Client[]).map((clientName) => {
           const client = clients[clientName];
@@ -90,7 +90,7 @@ export function McpPromo() {
               role="tab"
               aria-selected={isSelected}
               aria-controls="mcp-client-panel"
-              className={`flex min-h-11 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)] ${
+              className={`flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)] ${
                 isSelected
                   ? 'border-[var(--rp-c-brand)] bg-zinc-800 text-white'
                   : 'border-zinc-800/70 bg-zinc-950/50 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900 hover:text-zinc-200'
@@ -106,7 +106,7 @@ export function McpPromo() {
                 aria-hidden="true"
                 className="h-5 w-5 shrink-0"
               />
-              <span>{client.shortLabel}</span>
+              <span className="whitespace-nowrap">{client.shortLabel}</span>
             </button>
           );
         })}

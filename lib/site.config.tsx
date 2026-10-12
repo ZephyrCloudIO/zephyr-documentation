@@ -4,26 +4,17 @@ import { CloudflareIcon } from '@/components/icons/cloudflare';
 import { FastlyIcon } from '@/components/icons/fastly';
 import { KubernetesIcon } from '@/components/icons/kubernetes';
 import type React from 'react';
-import { EmberIcon } from '../components/icons/ember';
-import { ModernjsIcon } from '../components/icons/modernjs';
 import ModuleFederationIcon from '../components/icons/module-federation';
 // import { QwikIcon } from '../components/icons/qwik';
 // import { AngularIcon } from '../components/icons/angular';
 // import { LernaIcon } from '../components/icons/lerna';
 import { NxIcon } from '../components/icons/nx';
-import { ParcelIcon } from '../components/icons/parcel';
 import { ReactIcon } from '../components/icons/react';
 import { RepackIcon } from '../components/icons/repack';
-import { RolldownIcon } from '../components/icons/rolldown';
-import { RollupIcon } from '../components/icons/rollup';
-import { RsbuildIcon } from '../components/icons/rsbuild';
-import { RslibIcon } from '../components/icons/rslib';
 import { RspackIcon } from '../components/icons/rspack';
 import { RspressIcon } from '../components/icons/rspress';
 import { ViteIcon } from '../components/icons/vite';
 import { WebpackIcon } from '../components/icons/webpack';
-
-export const version = '0.0.38';
 
 export interface CardItemProps {
   title: string;
@@ -45,34 +36,6 @@ export const Links = {
   discord: 'https://discord.gg/zephyrcloud',
 };
 export const SiteConfig: CardProps = {
-  start: [
-    {
-      title: 'Why Zephyr', // TODO: shouldn't introduction and "Why" be on the same page?
-      description:
-        "Have an overview of modern application's development complexity and how Zephyr can speed up the process.",
-      href: '/general/why-zephyr-cloud',
-    },
-    {
-      title: 'Get Started',
-      description:
-        'The quickest way to get you started with our chrome extension, dashboard and npm package. Use Webpack as an example. ',
-      href: '/general/get-started',
-      variant: 'small',
-    },
-    {
-      title: 'Adding Zephyr to existing application',
-      description:
-        'One line of code to add Zephyr to your existing application. Use Nx + React + Webpack as an example.',
-      href: '/integrations/existing-app',
-      variant: 'small',
-    },
-    // {
-    //     "title": "Module Federation Application",
-    //     "description": "Add Zephyr to applications built on module federation.",
-    //     "href": "/getting-started/create-mf-app",
-    //     "variant": "small"
-    // },
-  ] as CardItemProps[],
   getStarted: [
     {
       title: '🚀 Rsbuild (Recommended)',
@@ -107,43 +70,6 @@ export const SiteConfig: CardProps = {
       icons: [<ReactIcon />, <RspackIcon />, <NxIcon />],
     },
   ],
-  features: [
-    {
-      title: 'Version control',
-      description:
-        'Enable you to deploy unlimited versions (depends on your cloud usage) of your application ever deployed on chrome extension and dashboard.',
-      href: '/usage/versioning',
-      developed: true,
-    },
-    {
-      title: 'Rollback and forward',
-      description: 'Rollback and forward your application.',
-      href: '/usage/rollback-forward',
-      developed: false,
-    },
-    {
-      title: 'Sub-second deploy',
-      description:
-        'Deploy production and preview version of your application in sub-seconds.',
-      href: '/usage/sub-second-deploy',
-      developed: true,
-    },
-    {
-      title: 'Long-lived preview links',
-      description:
-        'Every versions that ever deployed will be live forever unless you delete the deployment.',
-      href: '/usage/long-live-preview',
-      developed: true,
-    },
-    {
-      title: 'Dependency management',
-      description:
-        'Monitor and visualize your dependency of your application - be it remote modules within a app utilizing module federation, or npm packages.',
-      href: '/usage/dependency-management',
-      developed: true,
-    },
-  ] as CardItemProps[],
-
   recipes: [
     {
       // react-vite-ts
@@ -255,84 +181,6 @@ export const SiteConfig: CardProps = {
     //     variant: "small"
     // },
   ] as CardItemProps[],
-  concepts: [
-    {
-      title: 'Module Federation',
-      description: 'Learn about module federation and how Zephyr enhances it.',
-      href: '/concepts/module-federation',
-      variant: 'small',
-    },
-    {
-      title: 'Edge',
-      description: 'What does edge mean? How does it benefit us?',
-      href: '/concepts/edge',
-      variant: 'small',
-    },
-    {
-      title: 'Micro Frontend',
-      description:
-        "What's Micro Frontend? What are the use cases? When is a good time to implement it?",
-      href: '/concepts/micro-frontend',
-    },
-  ] as CardItemProps[],
-  bundlers: [
-    {
-      title: 'Webpack',
-      description: 'Traditional setup with full ecosystem',
-      variant: 'small',
-      href: '/bundlers/webpack',
-      icons: [<WebpackIcon className="w-6 h-6" />],
-    },
-    {
-      title: 'Rspack',
-      description: 'Next-generation bundling performance',
-      variant: 'small',
-      href: '/bundlers/rspack',
-      icons: [<RspackIcon className="w-6 h-6" />],
-    },
-    {
-      title: 'Rsbuild',
-      description: 'Zero-config setup with Rspack',
-      variant: 'small',
-      href: '/bundlers/rsbuild',
-      icons: [<RsbuildIcon className="w-6 h-6" />],
-    },
-    {
-      title: 'Vite',
-      description: 'Fast development with instant HMR',
-      variant: 'small',
-      href: '/bundlers/vite',
-      icons: [<ViteIcon className="w-6 h-6" />],
-    },
-    {
-      title: 'Rolldown',
-      description: 'Vite-compatible bundler built in Rust',
-      variant: 'small',
-      href: '/bundlers/rolldown',
-      icons: [<RolldownIcon className="w-6 h-6" />],
-    },
-    {
-      title: 'Rollup',
-      description: 'ES module bundler for libraries',
-      variant: 'small',
-      href: '/bundlers/rollup',
-      icons: [<RollupIcon className="w-6 h-6" />],
-    },
-    {
-      title: 'Parcel',
-      description: 'Zero configuration build tool',
-      variant: 'small',
-      href: '/bundlers/parcel',
-      icons: [<ParcelIcon className="w-6 h-6" />],
-    },
-    {
-      title: 'Re.Pack',
-      description: 'React Native bundling with Rspack',
-      variant: 'small',
-      href: '/bundlers/repack',
-      icons: [<RepackIcon className="w-8 h-8" />],
-    },
-  ],
   cloud: [
     {
       title: 'Cloudflare',
@@ -372,49 +220,6 @@ export const SiteConfig: CardProps = {
       variant: 'small',
       href: '/cloud/kubernetes',
       icons: [<KubernetesIcon className="w-6 h-6" />],
-    },
-  ],
-  metaFrameworks: [
-    {
-      title: 'Ember.js',
-      description: 'Productive framework for ambitious web apps',
-      variant: 'small',
-      href: '/meta-frameworks/emberjs',
-      icons: [<EmberIcon className="w-8 h-8" />],
-    },
-    {
-      title: 'ModernJS',
-      description: 'Modern web engineering solution',
-      variant: 'small',
-      href: '/meta-frameworks/modernjs',
-      icons: [<ModernjsIcon className="w-8 h-8" />],
-    },
-    {
-      title: 'Nitro',
-      description: 'Nitro v3 with the built-in Zephyr deploy target',
-      variant: 'small',
-      href: '/meta-frameworks/nitro',
-    },
-    {
-      title: 'Nuxt',
-      description:
-        'Deploy Nuxt with zephyr-nuxt-module and Nitro output upload',
-      variant: 'small',
-      href: '/meta-frameworks/nuxt',
-    },
-    {
-      title: 'Rspress',
-      description: 'Fast static site generator powered by Rspack',
-      variant: 'small',
-      href: '/meta-frameworks/rspress',
-      icons: [<RspressIcon className="w-6 h-6" />],
-    },
-    {
-      title: 'Rslib',
-      description: 'Library build tool based on Rsbuild',
-      variant: 'small',
-      href: '/meta-frameworks/rslib',
-      icons: [<RslibIcon className="w-6 h-6" />],
     },
   ],
 };

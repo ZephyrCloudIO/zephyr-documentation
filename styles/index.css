@@ -1,11 +1,14 @@
 @import 'tailwindcss';
+@import './landing.css';
 @plugin "@tailwindcss/typography";
 
 /**
  * Some common css theme variables and they will be used in the tailwind theme as well.
  */
 
-@import url('./fonts.css');
+/* Rspress toggles appearance with a .dark class on <html>, not the media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /*--rp-nav-height: 72px;*/
   /*--rp-sidebar-width: 320px;*/
@@ -170,10 +173,6 @@ dd {
     @apply border-b-[0.4px] items-center w-full opacity-20 !py-4 flex;
   }
 
-  hr {
-    @apply border-b-[0.4px] items-center w-full opacity-20 !py-4 flex;
-  }
-
   ol {
     & a {
       & h2 {
@@ -242,18 +241,6 @@ dd {
   .dark sub::selection,
   .dark i::selection {
     @apply bg-white text-black;
-  }
-
-  #footer-copyright {
-    @apply container mx-auto flex flex-col lg:gap-2 gap-1 pb-6 items-center justify-center;
-
-    & p {
-      @apply text-xs tracking-tight;
-    }
-
-    & a {
-      @apply underline decoration-[var(--rp-c-brand)] hover:brightness-125 hover:text-[var(--rp-c-brand)] transition-all underline-offset-4 decoration-dashed;
-    }
   }
 
   .h1 {
