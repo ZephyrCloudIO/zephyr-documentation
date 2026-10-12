@@ -418,12 +418,160 @@
     color: var(--rp-c-text-2);
   }
 
-  .zc-mcp-panel {
-    padding: 16px;
+  /* AI / MCP band: always dark so it reads as a featured section in both themes. */
+
+  .zc-ai {
+    position: relative;
+    overflow: hidden;
+    padding: 88px 0;
+    border-block: 1px solid rgba(255, 255, 255, 0.06);
+    background: #070a0f;
+    color: #f4f4f5;
+  }
+
+  .zc-ai__glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse 50% 60% at 15% 10%,
+        rgba(88, 137, 213, 0.35),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 45% 55% at 90% 40%,
+        rgba(0, 170, 255, 0.18),
+        transparent 70%
+      );
+    pointer-events: none;
+  }
+
+  .zc-ai__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid rgba(88, 137, 213, 0.5);
+    border-radius: 999px;
+    background: rgba(88, 137, 213, 0.14);
+    color: #b9cff2;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .zc-ai__title {
+    margin-top: 20px;
+    font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    color: #fff;
+    text-wrap: balance;
+  }
+
+  .zc-ai__lead {
+    margin-top: 20px;
+    max-width: 34rem;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: #a1a1aa;
+  }
+
+  .zc-button--light {
+    background: #fff;
+    color: #09090b;
+    box-shadow: 0 10px 30px -12px rgba(88, 137, 213, 0.6);
+  }
+
+  .zc-button--outline-light {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #f4f4f5;
+  }
+
+  .zc-button--outline-light:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .zc-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
-    background: linear-gradient(180deg, #0d1117 0%, #070a0f 100%);
-    box-shadow: 0 40px 80px -40px rgba(15, 30, 60, 0.5);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .zc-chat__bubble {
+    max-width: 92%;
+    padding: 12px 16px;
+    border-radius: 14px;
+  }
+
+  .zc-chat__bubble--user {
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    background: #5889d5;
+    color: #fff;
+  }
+
+  .zc-chat__bubble--assistant {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: flex-start;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom-left-radius: 4px;
+    background: #10151d;
+    color: #d4d4d8;
+  }
+
+  .zc-chat__step {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .zc-chat__step svg {
+    flex: 0 0 auto;
+    margin-top: 3px;
+    color: #6ee7b7;
+  }
+
+  .zc-ai__capability {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    transition:
+      transform 0.2s,
+      border-color 0.2s,
+      background-color 0.2s;
+  }
+
+  .zc-ai__capability:hover {
+    transform: translateY(-2px);
+    border-color: rgba(88, 137, 213, 0.6);
+    background: rgba(88, 137, 213, 0.08);
+  }
+
+  .zc-ai__capability-icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    margin-bottom: 4px;
+    place-items: center;
+    border-radius: 10px;
+    background: rgba(88, 137, 213, 0.18);
+    color: #8fb3ea;
   }
 
   .zc-cta {
@@ -492,6 +640,17 @@
     color: var(--rp-c-text-1);
   }
 
+  @media (max-width: 480px) {
+    .zc-command {
+      flex-wrap: wrap;
+      row-gap: 4px;
+    }
+
+    .zc-command__label {
+      width: 100%;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .zc-caret {
       animation: none;
@@ -499,6 +658,7 @@
 
     .zc-feature,
     .zc-stack-tile,
+    .zc-ai__capability,
     .zc-button {
       transition: none;
     }

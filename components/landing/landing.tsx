@@ -3,14 +3,18 @@ import {
   ArrowRight,
   ArrowUpRight,
   Check,
+  CircleCheck,
   Copy,
+  Eye,
   GitBranch,
   History,
   Lock,
   Network,
+  Rocket,
   Smartphone,
   Sparkles,
   Tags,
+  Undo2,
 } from 'lucide-react';
 import { type ReactNode, useState } from 'react';
 
@@ -453,29 +457,110 @@ function Stack() {
   );
 }
 
+const aiCapabilities = [
+  {
+    icon: Eye,
+    title: 'Inspect',
+    description:
+      'Ask which version a tag serves, with its branch, commit, and URL.',
+    href: '/tools/api-mcp#inspect-a-deployment',
+  },
+  {
+    icon: Rocket,
+    title: 'Promote',
+    description: 'Move a tested version to production, then verify the result.',
+    href: '/tools/api-mcp#promote-or-roll-back-a-version',
+  },
+  {
+    icon: Undo2,
+    title: 'Roll back',
+    description: 'Point an environment back at a previous version in seconds.',
+    href: '/tools/api-mcp#promote-or-roll-back-a-version',
+  },
+];
+
+function AiConversation() {
+  return (
+    <div className="zc-chat" aria-hidden="true">
+      <div className="zc-chat__bubble zc-chat__bubble--user">
+        Production looks broken. Roll header-component.ecommerce.acme back to
+        version 124 and confirm.
+      </div>
+      <div className="zc-chat__bubble zc-chat__bubble--assistant">
+        <p className="zc-chat__step">
+          <CircleCheck size={15} /> Inspected versions 124 and 125 and the
+          “production” tag
+        </p>
+        <p className="zc-chat__step">
+          <CircleCheck size={15} /> Moved “production” from version 125 to 124
+        </p>
+        <p className="zc-chat__step">
+          <CircleCheck size={15} /> Read the tag again: production now serves
+          version 124
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function Ai() {
   return (
-    <section className="zc-section">
-      <div className="zc-container grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-        <div>
-          <p className="zc-eyebrow">Zephyr API MCP</p>
-          <h2 className="zc-section-title text-left">
-            Let your AI assistant deploy, promote, and roll back
-          </h2>
-          <p className="mt-4 text-base leading-relaxed text-[var(--rp-c-text-2)]">
-            Connect Claude Code, Codex, Cursor, Gemini, or VS Code to Zephyr.
-            Your assistant can inspect deployments and move versions between
-            environments, using the account and permissions you already have.
-          </p>
-          <Link
-            href="/tools/api-mcp"
-            className="zc-button zc-button--ghost mt-8"
-          >
-            Read the MCP guide
-            <ArrowRight size={16} />
-          </Link>
+    <section className="zc-ai">
+      <div className="zc-ai__glow" aria-hidden="true" />
+      <div className="zc-container relative">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
+          <div>
+            <Link href="/tools/api-mcp" className="zc-ai__pill">
+              <Sparkles size={14} />
+              New · Zephyr API MCP
+            </Link>
+            <h2 className="zc-ai__title">
+              Let your AI assistant deploy, promote, and roll back
+            </h2>
+            <p className="zc-ai__lead">
+              Connect Claude Code, Codex, Cursor, Gemini, or VS Code to Zephyr.
+              Your assistant can inspect deployments and move versions between
+              environments, using the account and permissions you already have.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/tools/api-mcp"
+                className="zc-button zc-button--light"
+              >
+                Connect your assistant
+                <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="/tools/api-mcp#explore-your-zephyr-account"
+                className="zc-button zc-button--outline-light"
+              >
+                Example prompts
+              </Link>
+            </div>
+          </div>
+          <AiConversation />
         </div>
-        <div className="zc-mcp-panel">
+
+        <ul className="mt-14 grid gap-4 sm:grid-cols-3">
+          {aiCapabilities.map(({ icon: Icon, title, description, href }) => (
+            <li key={title}>
+              <Link href={href} className="zc-ai__capability">
+                <span className="zc-ai__capability-icon">
+                  <Icon size={18} />
+                </span>
+                <span className="font-semibold text-white">{title}</span>
+                <span className="text-sm leading-relaxed text-zinc-400">
+                  {description}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-10">
+          <p className="mb-4 text-sm font-medium text-zinc-400">
+            Connect in one command
+          </p>
           <McpPromo />
         </div>
       </div>
@@ -525,9 +610,9 @@ export function Landing() {
   return (
     <div className="zc-landing">
       <Hero />
+      <Ai />
       <Features />
       <Stack />
-      <Ai />
       <CallToAction />
     </div>
   );
