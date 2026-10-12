@@ -35,7 +35,10 @@ import { WebpackIcon } from '../icons/webpack';
 import { McpPromo } from '../mcp-promo';
 import { cn } from '../../lib/cn';
 
-const INSTALL_COMMAND = 'npx with-zephyr';
+const commands = [
+  { label: 'Existing app', command: 'npx with-zephyr' },
+  { label: 'New app', command: 'npx create-zephyr-apps@latest' },
+];
 
 const features = [
   {
@@ -202,24 +205,25 @@ const stacks: { id: string; label: string; items: StackItem[] }[] = [
   },
 ];
 
-function CommandCopy() {
+function CommandCopy({ label, command }: { label: string; command: string }) {
   const [copied, setCopied] = useState(false);
 
   return (
     <button
       type="button"
       className="zc-command group"
-      aria-label={`Copy "${INSTALL_COMMAND}"`}
+      aria-label={`Copy "${command}"`}
       onClick={() => {
-        void navigator.clipboard.writeText(INSTALL_COMMAND);
+        void navigator.clipboard.writeText(command);
         setCopied(true);
         window.setTimeout(() => setCopied(false), 1400);
       }}
     >
+      <span className="zc-command__label">{label}</span>
       <span aria-hidden="true" className="text-[var(--rp-c-text-3)]">
         $
       </span>
-      <code>{INSTALL_COMMAND}</code>
+      <code>{command}</code>
       <span className="zc-command__icon" aria-hidden="true">
         {copied ? <Check size={15} /> : <Copy size={15} />}
       </span>
@@ -310,11 +314,10 @@ function Hero() {
             </Link>
           </div>
 
-          <div className="mt-6 flex flex-col gap-2">
-            <CommandCopy />
-            <p className="text-xs text-[var(--rp-c-text-3)]">
-              Adds Zephyr to an existing app in one step.
-            </p>
+          <div className="mt-6 flex w-full max-w-md flex-col gap-2">
+            {commands.map((item) => (
+              <CommandCopy key={item.command} {...item} />
+            ))}
           </div>
         </div>
 

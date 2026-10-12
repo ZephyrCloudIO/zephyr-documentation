@@ -177,7 +177,8 @@
   }
 
   .zc-command {
-    display: inline-flex;
+    display: flex;
+    width: 100%;
     align-items: center;
     gap: 12px;
     padding: 10px 14px;
@@ -200,8 +201,19 @@
     color: var(--rp-c-text-1);
   }
 
+  .zc-command__label {
+    min-width: 6.5rem;
+    padding-right: 4px;
+    font-family: var(--rp-font-family-base, inherit);
+    font-size: 12px;
+    font-weight: 500;
+    text-align: left;
+    color: var(--rp-c-text-3);
+  }
+
   .zc-command__icon {
-    margin-left: 8px;
+    margin-left: auto;
+    padding-left: 8px;
     color: var(--rp-c-text-3);
     transition: color 0.2s;
   }
