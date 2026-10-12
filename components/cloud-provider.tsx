@@ -16,11 +16,15 @@ export const CloudProviderCards = () => {
 
 const item = {
   title: 'Add Environments',
-  href: '/how-to/environments',
+  href: '/features/tags-environments',
   description:
     'Configure custom domain for your application with your deployment integration platform.',
   variant: 'default',
-  icons: [<CloudflareIcon />, <FastlyIcon />, <AkamaiIcon />],
+  icons: [
+    <CloudflareIcon key="cloudflare" />,
+    <FastlyIcon key="fastly" />,
+    <AkamaiIcon key="akamai" />,
+  ],
 } satisfies CardItemProps;
 
 export const CustomDomain = () => {

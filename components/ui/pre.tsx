@@ -24,8 +24,8 @@ export function PreCode({
   className?: string;
   children: React.ReactElement[] | React.ReactElement;
 }) {
-  const renderChildren = (children: React.ReactElement) => {
-    const { className: title, meta } = children.props as CodeProps;
+  const renderChildren = (child: React.ReactElement) => {
+    const { className: title, meta } = child.props as CodeProps;
     const codeTitle = parseTitleFromMeta(meta);
     return (
       <div
@@ -36,7 +36,7 @@ export function PreCode({
         )}
       >
         {codeTitle && <div>{codeTitle}</div>}
-        <div>{children}</div>
+        <div>{child}</div>
       </div>
     );
   };

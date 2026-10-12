@@ -1,4 +1,3 @@
-import React from 'react';
 import type { SVGProps } from 'react';
 
 export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
@@ -18,8 +17,8 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="50.4169361%"
           id="linearGradient-1"
         >
-          <stop stop-color="#000000" offset="0%"></stop>
-          <stop stop-color="#000000" stop-opacity="0" offset="100%"></stop>
+          <stop stopColor="#000000" offset="0%"></stop>
+          <stop stopColor="#000000" stopOpacity="0" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="50.1473165%"
@@ -28,8 +27,8 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="50.1421881%"
           id="linearGradient-2"
         >
-          <stop stop-color="#000000" offset="0%"></stop>
-          <stop stop-color="#000000" stop-opacity="0" offset="100%"></stop>
+          <stop stopColor="#000000" offset="0%"></stop>
+          <stop stopColor="#000000" stopOpacity="0" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="81.502757%"
@@ -38,10 +37,10 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="50.2023826%"
           id="linearGradient-3"
         >
-          <stop stop-color="#C37A44" offset="0%"></stop>
-          <stop stop-color="#BB713D" offset="44.42%"></stop>
-          <stop stop-color="#A05728" offset="64.06%"></stop>
-          <stop stop-color="#964E23" offset="100%"></stop>
+          <stop stopColor="#C37A44" offset="0%"></stop>
+          <stop stopColor="#BB713D" offset="44.42%"></stop>
+          <stop stopColor="#A05728" offset="64.06%"></stop>
+          <stop stopColor="#964E23" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="63.4752804%"
@@ -50,8 +49,8 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="43.4141742%"
           id="linearGradient-4"
         >
-          <stop stop-color="#E9B880" offset="0%"></stop>
-          <stop stop-color="#E4AF76" offset="100%"></stop>
+          <stop stopColor="#E9B880" offset="0%"></stop>
+          <stop stopColor="#E4AF76" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="50.8943679%"
@@ -60,13 +59,13 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="49.2735752%"
           id="linearGradient-5"
         >
-          <stop stop-color="#C37A45" stop-opacity="0" offset="0%"></stop>
-          <stop stop-color="#C37A45" offset="13.34%"></stop>
-          <stop stop-color="#D08D55" offset="29.45%"></stop>
-          <stop stop-color="#DEA167" offset="50.21%"></stop>
-          <stop stop-color="#E8AF73" offset="69.66%"></stop>
-          <stop stop-color="#ECB477" offset="86.31%"></stop>
-          <stop stop-color="#ECB477" stop-opacity="0" offset="100%"></stop>
+          <stop stopColor="#C37A45" stopOpacity="0" offset="0%"></stop>
+          <stop stopColor="#C37A45" offset="13.34%"></stop>
+          <stop stopColor="#D08D55" offset="29.45%"></stop>
+          <stop stopColor="#DEA167" offset="50.21%"></stop>
+          <stop stopColor="#E8AF73" offset="69.66%"></stop>
+          <stop stopColor="#ECB477" offset="86.31%"></stop>
+          <stop stopColor="#ECB477" stopOpacity="0" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="47.4226244%"
@@ -75,9 +74,9 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="77.4928036%"
           id="linearGradient-6"
         >
-          <stop stop-color="#AF6938" offset="8.81%"></stop>
-          <stop stop-color="#9A5227" offset="48.29%"></stop>
-          <stop stop-color="#8D4520" offset="77.92%"></stop>
+          <stop stopColor="#AF6938" offset="8.81%"></stop>
+          <stop stopColor="#9A5227" offset="48.29%"></stop>
+          <stop stopColor="#8D4520" offset="77.92%"></stop>
         </linearGradient>
         <linearGradient
           x1="41.1470316%"
@@ -86,8 +85,8 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="44.9502686%"
           id="linearGradient-7"
         >
-          <stop stop-color="#E4AF76" offset="3.27%"></stop>
-          <stop stop-color="#E9B880" offset="100%"></stop>
+          <stop stopColor="#E4AF76" offset="3.27%"></stop>
+          <stop stopColor="#E9B880" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="49.6244666%"
@@ -96,12 +95,12 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="49.2234974%"
           id="linearGradient-8"
         >
-          <stop stop-color="#AF6A38" stop-opacity="0" offset="0%"></stop>
-          <stop stop-color="#AF6A38" offset="8.6%"></stop>
-          <stop stop-color="#B87542" offset="19.77%"></stop>
-          <stop stop-color="#D59C66" offset="58.28%"></stop>
-          <stop stop-color="#E4AF76" offset="77.71%"></stop>
-          <stop stop-color="#E4AF76" stop-opacity="0" offset="92.39%"></stop>
+          <stop stopColor="#AF6A38" stopOpacity="0" offset="0%"></stop>
+          <stop stopColor="#AF6A38" offset="8.6%"></stop>
+          <stop stopColor="#B87542" offset="19.77%"></stop>
+          <stop stopColor="#D59C66" offset="58.28%"></stop>
+          <stop stopColor="#E4AF76" offset="77.71%"></stop>
+          <stop stopColor="#E4AF76" stopOpacity="0" offset="92.39%"></stop>
         </linearGradient>
         <linearGradient
           x1="8.2111437%"
@@ -110,19 +109,11 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="50.006371%"
           id="linearGradient-9"
         >
-          <stop stop-color="#743F1A" stop-opacity="0" offset="0%"></stop>
-          <stop
-            stop-color="#743F1A"
-            stop-opacity="0.8872"
-            offset="49.29%"
-          ></stop>
-          <stop stop-color="#743F1A" stop-opacity="0.9" offset="50%"></stop>
-          <stop
-            stop-color="#743F1A"
-            stop-opacity="0.8466"
-            offset="52.97%"
-          ></stop>
-          <stop stop-color="#743F1A" stop-opacity="0" offset="100%"></stop>
+          <stop stopColor="#743F1A" stopOpacity="0" offset="0%"></stop>
+          <stop stopColor="#743F1A" stopOpacity="0.8872" offset="49.29%"></stop>
+          <stop stopColor="#743F1A" stopOpacity="0.9" offset="50%"></stop>
+          <stop stopColor="#743F1A" stopOpacity="0.8466" offset="52.97%"></stop>
+          <stop stopColor="#743F1A" stopOpacity="0" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="49.9010615%"
@@ -131,13 +122,9 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="49.9936958%"
           id="linearGradient-10"
         >
-          <stop stop-color="#322214" offset="0%"></stop>
-          <stop
-            stop-color="#322314"
-            stop-opacity="0.9891"
-            offset="23.97%"
-          ></stop>
-          <stop stop-color="#322214" stop-opacity="0" offset="100%"></stop>
+          <stop stopColor="#322214" offset="0%"></stop>
+          <stop stopColor="#322314" stopOpacity="0.9891" offset="23.97%"></stop>
+          <stop stopColor="#322214" stopOpacity="0" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="51.3801612%"
@@ -146,9 +133,9 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="51.5684302%"
           id="linearGradient-11"
         >
-          <stop stop-color="#C69866" offset="4.76%"></stop>
-          <stop stop-color="#BA8C5E" offset="41.56%"></stop>
-          <stop stop-color="#B5875B" offset="81.35%"></stop>
+          <stop stopColor="#C69866" offset="4.76%"></stop>
+          <stop stopColor="#BA8C5E" offset="41.56%"></stop>
+          <stop stopColor="#B5875B" offset="81.35%"></stop>
         </linearGradient>
         <linearGradient
           x1="63.0385807%"
@@ -157,11 +144,11 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="8.90684578%"
           id="linearGradient-12"
         >
-          <stop stop-color="#845F35" offset="0%"></stop>
-          <stop stop-color="#91673C" offset="43.11%"></stop>
-          <stop stop-color="#976A40" offset="44.07%"></stop>
-          <stop stop-color="#986B40" offset="87.37%"></stop>
-          <stop stop-color="#AB8157" offset="100%"></stop>
+          <stop stopColor="#845F35" offset="0%"></stop>
+          <stop stopColor="#91673C" offset="43.11%"></stop>
+          <stop stopColor="#976A40" offset="44.07%"></stop>
+          <stop stopColor="#986B40" offset="87.37%"></stop>
+          <stop stopColor="#AB8157" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="49.9985955%"
@@ -170,8 +157,8 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="50.1142021%"
           id="linearGradient-13"
         >
-          <stop stop-color="#322214" stop-opacity="0" offset="0%"></stop>
-          <stop stop-color="#322214" offset="100%"></stop>
+          <stop stopColor="#322214" stopOpacity="0" offset="0%"></stop>
+          <stop stopColor="#322214" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="45.656315%"
@@ -180,11 +167,11 @@ export function ParcelIcon(props: SVGProps<SVGSVGElement>) {
           y2="33.5379615%"
           id="linearGradient-14"
         >
-          <stop stop-color="#A9794B" offset="0%"></stop>
-          <stop stop-color="#AE7F53" offset="38.57%"></stop>
-          <stop stop-color="#AC7D50" offset="45.57%"></stop>
-          <stop stop-color="#A9794B" offset="62.36%"></stop>
-          <stop stop-color="#B2875D" offset="100%"></stop>
+          <stop stopColor="#A9794B" offset="0%"></stop>
+          <stop stopColor="#AE7F53" offset="38.57%"></stop>
+          <stop stopColor="#AC7D50" offset="45.57%"></stop>
+          <stop stopColor="#A9794B" offset="62.36%"></stop>
+          <stop stopColor="#B2875D" offset="100%"></stop>
         </linearGradient>
       </defs>
       <g>

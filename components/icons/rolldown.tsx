@@ -1,4 +1,3 @@
-import React from 'react';
 import type { SVGProps } from 'react';
 
 export function RolldownIcon(props: SVGProps<SVGSVGElement>) {
@@ -32,8 +31,8 @@ export function RolldownIcon(props: SVGProps<SVGSVGElement>) {
           y2="300"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F0DB4F" />
-          <stop offset="0.92" stop-color="#FF5D13" />
+          <stop stopColor="#F0DB4F" />
+          <stop offset="0.92" stopColor="#FF5D13" />
         </linearGradient>
       </defs>
     </svg>

@@ -1,4 +1,3 @@
-import React from 'react';
 import type { SVGProps } from 'react';
 
 export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
@@ -9,7 +8,7 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 2500 2345"
       {...props}
     >
-      <g clip-path="url(#a)">
+      <g clipPath="url(#a)">
         <path
           d="M298 1807a4381 4381 0 0 0-180 84l-36 41c-14 37-11 96-17 135l17 36 21-8s9-33 64-89l51-43s181-108 207-120l-127-36Z"
           fill="#FF5A5A"
@@ -169,9 +168,9 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2354.9"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFBC9C" />
-          <stop offset=".7" stop-color="#FFBC9C" />
-          <stop offset="1" stop-color="#FFA67A" />
+          <stop stopColor="#FFBC9C" />
+          <stop offset=".7" stopColor="#FFBC9C" />
+          <stop offset="1" stopColor="#FFA67A" />
         </linearGradient>
         <linearGradient
           id="c"
@@ -181,9 +180,9 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2039.3"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F28773" />
-          <stop offset=".3" stop-color="#F28773" />
-          <stop offset="1" stop-color="#F6A66A" />
+          <stop stopColor="#F28773" />
+          <stop offset=".3" stopColor="#F28773" />
+          <stop offset="1" stopColor="#F6A66A" />
         </linearGradient>
         <linearGradient
           id="d"
@@ -193,9 +192,9 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2170.3"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F28773" />
-          <stop offset=".3" stop-color="#F28773" />
-          <stop offset="1" stop-color="#F6A66A" />
+          <stop stopColor="#F28773" />
+          <stop offset=".3" stopColor="#F28773" />
+          <stop offset="1" stopColor="#F6A66A" />
         </linearGradient>
         <linearGradient
           id="e"
@@ -205,9 +204,9 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2378.4"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F28773" />
-          <stop offset=".3" stop-color="#F28773" />
-          <stop offset="1" stop-color="#F6A66A" />
+          <stop stopColor="#F28773" />
+          <stop offset=".3" stopColor="#F28773" />
+          <stop offset="1" stopColor="#F6A66A" />
         </linearGradient>
         <linearGradient
           id="f"
@@ -217,9 +216,9 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2355.9"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F57A55" />
-          <stop offset=".4" stop-color="#F28773" />
-          <stop offset="1" stop-color="#FA9F6E" />
+          <stop stopColor="#F57A55" />
+          <stop offset=".4" stopColor="#F28773" />
+          <stop offset="1" stopColor="#FA9F6E" />
         </linearGradient>
         <linearGradient
           id="g"
@@ -229,9 +228,9 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2237.2"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F57A55" />
-          <stop offset=".4" stop-color="#F28773" />
-          <stop offset="1" stop-color="#FA9F6E" />
+          <stop stopColor="#F57A55" />
+          <stop offset=".4" stopColor="#F28773" />
+          <stop offset="1" stopColor="#FA9F6E" />
         </linearGradient>
         <linearGradient
           id="h"
@@ -241,9 +240,9 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2115.3"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#F57A55" />
-          <stop offset=".4" stop-color="#F28773" />
-          <stop offset="1" stop-color="#FA9F6E" />
+          <stop stopColor="#F57A55" />
+          <stop offset=".4" stopColor="#F28773" />
+          <stop offset="1" stopColor="#FA9F6E" />
         </linearGradient>
         <linearGradient
           id="i"
@@ -253,10 +252,10 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1070"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFE768" />
-          <stop offset=".4" stop-color="#FFE768" />
-          <stop offset=".7" stop-color="#FFBD4A" />
-          <stop offset="1" stop-color="#FFBD4A" />
+          <stop stopColor="#FFE768" />
+          <stop offset=".4" stopColor="#FFE768" />
+          <stop offset=".7" stopColor="#FFBD4A" />
+          <stop offset="1" stopColor="#FFBD4A" />
         </linearGradient>
         <linearGradient
           id="j"
@@ -266,9 +265,9 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1479.7"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#564341" />
-          <stop offset=".5" stop-color="#564341" />
-          <stop offset="1" stop-color="#845750" />
+          <stop stopColor="#564341" />
+          <stop offset=".5" stopColor="#564341" />
+          <stop offset="1" stopColor="#845750" />
         </linearGradient>
         <linearGradient
           id="k"
@@ -278,9 +277,9 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1427.7"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#564341" />
-          <stop offset=".5" stop-color="#564341" />
-          <stop offset="1" stop-color="#845750" />
+          <stop stopColor="#564341" />
+          <stop offset=".5" stopColor="#564341" />
+          <stop offset="1" stopColor="#845750" />
         </linearGradient>
         <linearGradient
           id="l"
@@ -290,8 +289,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2011.6"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#C35C45" />
-          <stop offset="1" stop-color="#B76455" />
+          <stop stopColor="#C35C45" />
+          <stop offset="1" stopColor="#B76455" />
         </linearGradient>
         <linearGradient
           id="m"
@@ -301,8 +300,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2128.2"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#C35C45" />
-          <stop offset="1" stop-color="#B76455" />
+          <stop stopColor="#C35C45" />
+          <stop offset="1" stopColor="#B76455" />
         </linearGradient>
         <linearGradient
           id="n"
@@ -312,8 +311,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2406.2"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#AA6160" />
-          <stop offset="1" stop-color="#B36F5F" />
+          <stop stopColor="#AA6160" />
+          <stop offset="1" stopColor="#B36F5F" />
         </linearGradient>
         <linearGradient
           id="o"
@@ -323,8 +322,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2265.9"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#C35C45" />
-          <stop offset="1" stop-color="#B76455" />
+          <stop stopColor="#C35C45" />
+          <stop offset="1" stopColor="#B76455" />
         </linearGradient>
         <linearGradient
           id="p"
@@ -334,8 +333,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2204.6"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#AA6160" />
-          <stop offset="1" stop-color="#B36F5F" />
+          <stop stopColor="#AA6160" />
+          <stop offset="1" stopColor="#B36F5F" />
         </linearGradient>
         <linearGradient
           id="q"
@@ -345,8 +344,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="2066"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#AA6160" />
-          <stop offset="1" stop-color="#B36F5F" />
+          <stop stopColor="#AA6160" />
+          <stop offset="1" stopColor="#B36F5F" />
         </linearGradient>
         <linearGradient
           id="r"
@@ -356,10 +355,10 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1704.8"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFCB87" />
-          <stop offset=".1" stop-color="#FFCB87" />
-          <stop offset=".4" stop-color="#FFBC9C" />
-          <stop offset="1" stop-color="#FFBC9C" />
+          <stop stopColor="#FFCB87" />
+          <stop offset=".1" stopColor="#FFCB87" />
+          <stop offset=".4" stopColor="#FFBC9C" />
+          <stop offset="1" stopColor="#FFBC9C" />
         </linearGradient>
         <linearGradient
           id="s"
@@ -369,10 +368,10 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1730.7"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FBC38C" />
-          <stop offset=".3" stop-color="#F19675" />
-          <stop offset=".7" stop-color="#F0876A" />
-          <stop offset="1" stop-color="#ED8870" />
+          <stop stopColor="#FBC38C" />
+          <stop offset=".3" stopColor="#F19675" />
+          <stop offset=".7" stopColor="#F0876A" />
+          <stop offset="1" stopColor="#ED8870" />
         </linearGradient>
         <linearGradient
           id="t"
@@ -382,8 +381,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1453.1"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFFFFE" />
-          <stop offset="1" stop-color="#fff" />
+          <stop stopColor="#FFFFFE" />
+          <stop offset="1" stopColor="#fff" />
         </linearGradient>
         <linearGradient
           id="u"
@@ -393,8 +392,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1456.3"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFFFFE" />
-          <stop offset="1" stop-color="#fff" />
+          <stop stopColor="#FFFFFE" />
+          <stop offset="1" stopColor="#fff" />
         </linearGradient>
         <linearGradient
           id="v"
@@ -404,10 +403,10 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1846.7"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFCB87" />
-          <stop offset=".2" stop-color="#FFCB87" />
-          <stop offset=".7" stop-color="#FFBC9C" />
-          <stop offset="1" stop-color="#FFBC9C" />
+          <stop stopColor="#FFCB87" />
+          <stop offset=".2" stopColor="#FFCB87" />
+          <stop offset=".7" stopColor="#FFBC9C" />
+          <stop offset="1" stopColor="#FFBC9C" />
         </linearGradient>
         <linearGradient
           id="w"
@@ -417,10 +416,10 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1632"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFCB87" />
-          <stop offset=".3" stop-color="#F79E75" />
-          <stop offset=".5" stop-color="#EF876D" />
-          <stop offset="1" stop-color="#ED8870" />
+          <stop stopColor="#FFCB87" />
+          <stop offset=".3" stopColor="#F79E75" />
+          <stop offset=".5" stopColor="#EF876D" />
+          <stop offset="1" stopColor="#ED8870" />
         </linearGradient>
         <linearGradient
           id="x"
@@ -430,8 +429,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1348.2"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFFFFE" />
-          <stop offset="1" stop-color="#fff" />
+          <stop stopColor="#FFFFFE" />
+          <stop offset="1" stopColor="#fff" />
         </linearGradient>
         <linearGradient
           id="y"
@@ -441,8 +440,8 @@ export function RsbuildIcon(props: SVGProps<SVGSVGElement>) {
           y2="1240.2"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFF9CE" />
-          <stop offset="1" stop-color="#fff" />
+          <stop stopColor="#FFF9CE" />
+          <stop offset="1" stopColor="#fff" />
         </linearGradient>
         <clipPath id="a">
           <path fill="#fff" d="M0 1h2500v2344H0z" />
