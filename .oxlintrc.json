@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "typescript",
+    "react",
+    "react-perf",
+    "jsx-a11y",
+    "import",
+    "unicorn",
+    "oxc"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "env": {
+    "browser": true,
+    "es2024": true
+  },
+  "overrides": [
+    {
+      "files": ["scripts/**/*.mjs", "rspress.config.ts"],
+      "env": {
+        "node": true
+      }
+    },
+    {
+      "files": ["lib/site.config.tsx"],
+      "rules": {
+        "react/jsx-key": "off"
+      }
+    }
+  ],
+  "ignorePatterns": ["doc_build/**", ".nx/**"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-key": "error",
+    "no-unused-vars": "error",
+    "import/no-named-as-default": "off",
+    "react/iframe-missing-sandbox": "off"
+  }
+}
