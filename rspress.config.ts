@@ -7,7 +7,26 @@ import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import pluginMermaid from 'rspress-plugin-mermaid';
 import { pluginSitemap } from '@rspress/plugin-sitemap';
-import { defineConfig } from '@rspress/core';
+import { defineConfig, type RspressPlugin } from '@rspress/core';
+import {
+  BookOpen,
+  Boxes,
+  Bug,
+  CircleHelp,
+  Cloud,
+  Compass,
+  GraduationCap,
+  Layers,
+  LifeBuoy,
+  ListChecks,
+  PanelRight,
+  Plug,
+  Puzzle,
+  Rocket,
+  Sparkles,
+  SquareTerminal,
+  Wand,
+} from 'lucide-static';
 import { withZephyr } from 'zephyr-rspress-plugin';
 
 import { Categories, Errors } from './lib/error-codes-messages';
@@ -33,283 +52,169 @@ const socialLinks: SocialLink[] = [
 
 const nav: Nav = [
   {
-    text: 'Zephyr Cloud →',
+    text: 'Zephyr Cloud',
     link: 'https://app.zephyr-cloud.io',
   },
 ];
 
+const errorGroups = Object.entries(Categories)
+  .filter(([category]) => category !== 'unknown')
+  .map(([category, value]) => ({
+    text: capitalizeFirstLetter(category),
+    collapsed: true,
+    collapsible: true,
+    items: Object.values(Errors)
+      .filter((error) => error.kind === category)
+      .map((error) => ({
+        text: `ZE${value}${error.id}`,
+        link: `/errors/ze${value}${error.id}`,
+      })),
+  }));
+
 const sidebar: Sidebar = {
   '/': [
+    { sectionHeaderText: 'Getting Started' },
     {
-      text: 'Getting Started',
-      items: [
-        {
-          text: 'Overview',
-          link: '/',
-        },
-        {
-          text: 'Prerequisites',
-          link: '/getting-started/installation',
-        },
-        {
-          text: 'Quick Start',
-          link: '/getting-started/quick-start',
-        },
-        {
-          text: 'Find Your SDK',
-          link: '/getting-started/find-your-sdk',
-        },
-        {
-          text: 'FAQ',
-          link: '/getting-started/faq',
-        },
-      ],
+      text: 'Introduction',
+      link: '/getting-started/introduction',
+      icon: BookOpen,
     },
     {
-      text: 'AI',
-      collapsed: false,
+      text: 'Quick Start',
+      link: '/getting-started/quick-start',
+      icon: Rocket,
+    },
+    {
+      text: 'Prerequisites',
+      link: '/getting-started/installation',
+      icon: ListChecks,
+    },
+    {
+      text: 'Find Your SDK',
+      link: '/getting-started/find-your-sdk',
+      icon: Compass,
+    },
+    {
+      text: 'Zephyr API MCP',
+      link: '/tools/api-mcp',
+      icon: Sparkles,
+      tag: 'new',
+    },
+    {
+      text: 'FAQ',
+      link: '/getting-started/faq',
+      icon: CircleHelp,
+    },
+
+    { sectionHeaderText: 'Deployments' },
+    { text: 'Versions', link: '/features/versions' },
+    { text: 'Version Statuses', link: '/features/version-statuses' },
+    { text: 'Tags & Environments', link: '/features/tags-environments' },
+    {
+      text: 'Locking Tags & Environments',
+      link: '/features/locking-tags-environments',
+    },
+    { text: 'Instant Rollbacks', link: '/features/instant-rollbacks' },
+    {
+      text: 'Environment Overrides',
+      link: '/features/environment-overrides',
+      tag: 'beta',
+    },
+    { text: 'Remote Dependencies', link: '/features/remote-dependencies' },
+    { text: 'Deployment Hooks', link: '/features/deployment-hooks' },
+    { text: 'Structured File Logs', link: '/features/file-logging' },
+    {
+      text: 'React Native OTA Updates',
+      link: '/features/react-native-ota-updates',
+      tag: 'beta',
+    },
+
+    { sectionHeaderText: 'CI/CD' },
+    { text: 'CI/CD Automation', link: '/features/automation' },
+    {
+      text: 'Migrate to CI tokens',
+      link: '/migrations/ci-token-migration',
+    },
+    {
+      text: 'Personal tokens',
+      link: '/features/ci-cd-personal-token',
+      tag: 'deprecated',
+    },
+    {
+      text: 'Server tokens',
+      link: '/features/ci-cd-server-token',
+      tag: 'deprecated',
+    },
+
+    { sectionHeaderText: 'Organization' },
+    {
+      text: 'Organization Structure',
+      link: '/features/organization-structure',
+    },
+    { text: 'Teams & Members', link: '/features/teams-members' },
+    { text: 'Subscriptions', link: '/features/subscriptions' },
+    {
+      text: 'Multi-Organization Subscriptions',
+      link: '/features/multi-organization-subscriptions',
+    },
+
+    { sectionHeaderText: 'Guides' },
+    {
+      text: 'Bundlers',
+      icon: Boxes,
       collapsible: true,
-      items: [
-        {
-          text: 'Zephyr API MCP',
-          link: '/tools/api-mcp',
-        },
-      ],
-    },
-    {
-      text: 'Features & Workflows',
-      collapsed: false,
-      collapsible: true,
-      items: [
-        {
-          text: 'Organization Structure',
-          link: '/features/organization-structure',
-        },
-        {
-          text: 'Versions',
-          link: '/features/versions',
-        },
-        {
-          text: 'Version Statuses',
-          link: '/features/version-statuses',
-        },
-        {
-          text: 'Tags & Environments',
-          link: '/features/tags-environments',
-        },
-        {
-          text: 'Locking Tags & Environments',
-          link: '/features/locking-tags-environments',
-        },
-        {
-          text: 'Instant Rollbacks',
-          link: '/features/instant-rollbacks',
-        },
-        {
-          text: 'React Native OTA Updates (Beta)',
-          link: '/features/react-native-ota-updates',
-        },
-        {
-          text: 'Remote Dependencies',
-          link: '/features/remote-dependencies',
-        },
-        {
-          text: 'Deployment Hooks',
-          link: '/features/deployment-hooks',
-        },
-        {
-          text: 'Structured File Logs',
-          link: '/features/file-logging',
-        },
-        {
-          text: 'Personal token deployments',
-          link: '/features/ci-cd-personal-token',
-        },
-        {
-          text: 'Server token deployments',
-          link: '/features/ci-cd-server-token',
-        },
-        {
-          text: 'Environment Overrides',
-          link: '/features/environment-overrides',
-        },
-        {
-          text: 'Teams & Members',
-          link: '/features/teams-members',
-        },
-        {
-          text: 'Subscriptions',
-          link: '/features/subscriptions',
-        },
-        {
-          text: 'Multi-Organization Subscriptions',
-          link: '/features/multi-organization-subscriptions',
-        },
-      ],
-    },
-    {
-      text: 'Migrations',
-      collapsed: false,
-      collapsible: true,
-      items: [
-        {
-          text: 'Server tokens to CI tokens',
-          link: '/migrations/ci-token-migration',
-        },
-      ],
-    },
-    {
-      text: 'Development Tools',
       collapsed: true,
-      collapsible: true,
       items: [
-        {
-          text: 'create-zephyr-apps',
-          link: '/tools/create-zephyr-apps',
-        },
-        {
-          text: 'Zephyr Codemod',
-          link: '/tools/zephyr-codemod',
-        },
-        {
-          text: 'Zephyr Sidepanel',
-          link: '/tools/browser-extension',
-        },
-        {
-          text: 'Zephyr Devtools',
-          link: '/tools/browser-devtools',
-        },
-        {
-          text: 'Module Federation Devtools',
-          link: '/tools/module-federation-devtools',
-        },
-      ],
-    },
-    {
-      text: 'Bundler Guides',
-      collapsible: true,
-      items: [
-        {
-          text: 'Webpack',
-          link: '/bundlers/webpack',
-        },
-        {
-          text: 'Rspack',
-          link: '/bundlers/rspack',
-        },
-        {
-          text: 'Rsbuild',
-          link: '/bundlers/rsbuild',
-        },
-        {
-          text: 'Vite',
-          link: '/bundlers/vite',
-        },
-        {
-          text: 'Rolldown',
-          link: '/bundlers/rolldown',
-        },
-        {
-          text: 'Rollup',
-          link: '/bundlers/rollup',
-        },
-        {
-          text: 'Parcel',
-          link: '/bundlers/parcel',
-        },
-        {
-          text: 'Re.Pack (React Native)',
-          link: '/bundlers/repack',
-        },
-        {
-          text: 'Metro (React Native)',
-          link: '/bundlers/metro',
-        },
+        { text: 'Webpack', link: '/bundlers/webpack' },
+        { text: 'Rspack', link: '/bundlers/rspack' },
+        { text: 'Rsbuild', link: '/bundlers/rsbuild' },
+        { text: 'Vite', link: '/bundlers/vite' },
+        { text: 'Rolldown', link: '/bundlers/rolldown' },
+        { text: 'Rollup', link: '/bundlers/rollup' },
+        { text: 'Parcel', link: '/bundlers/parcel' },
+        { text: 'Re.Pack (React Native)', link: '/bundlers/repack' },
+        { text: 'Metro (React Native)', link: '/bundlers/metro' },
       ],
     },
     {
       text: 'Meta Frameworks',
+      icon: Layers,
       collapsible: true,
+      collapsed: true,
       items: [
-        {
-          text: 'Astro',
-          link: '/meta-frameworks/astro',
-        },
-        {
-          text: 'Ember.js',
-          link: '/meta-frameworks/emberjs',
-        },
-        {
-          text: 'ModernJS',
-          link: '/meta-frameworks/modernjs',
-        },
-        {
-          text: 'Nitro',
-          link: '/meta-frameworks/nitro',
-        },
-        {
-          text: 'Nuxt',
-          link: '/meta-frameworks/nuxt',
-        },
-        {
-          text: 'Rspress',
-          link: '/meta-frameworks/rspress',
-        },
-        {
-          text: 'Rslib',
-          link: '/meta-frameworks/rslib',
-        },
-        {
-          text: 'TanStack Start',
-          link: '/meta-frameworks/tanstack-start',
-        },
+        { text: 'Astro', link: '/meta-frameworks/astro' },
+        { text: 'Ember.js', link: '/meta-frameworks/emberjs' },
+        { text: 'ModernJS', link: '/meta-frameworks/modernjs' },
+        { text: 'Nitro', link: '/meta-frameworks/nitro' },
+        { text: 'Nuxt', link: '/meta-frameworks/nuxt' },
+        { text: 'Rspress', link: '/meta-frameworks/rspress' },
+        { text: 'Rslib', link: '/meta-frameworks/rslib' },
+        { text: 'TanStack Start', link: '/meta-frameworks/tanstack-start' },
       ],
     },
     {
       text: 'Cloud Providers',
       link: '/cloud',
-      collapsed: true,
+      icon: Cloud,
       collapsible: true,
+      collapsed: true,
       items: [
-        {
-          text: 'Akamai',
-          link: '/cloud/akamai',
-        },
-        {
-          text: 'AWS',
-          link: '/cloud/aws',
-        },
-        {
-          text: 'Cloudflare',
-          link: '/cloud/cloudflare',
-        },
-        {
-          text: 'Fastly',
-          link: '/cloud/fastly',
-        },
-        {
-          text: 'Kubernetes',
-          link: '/cloud/kubernetes',
-        },
-        {
-          text: 'Updating Integrations',
-          link: '/cloud/updating-integrations',
-        },
+        { text: 'Akamai', link: '/cloud/akamai' },
+        { text: 'AWS', link: '/cloud/aws' },
+        { text: 'Cloudflare', link: '/cloud/cloudflare' },
+        { text: 'Fastly', link: '/cloud/fastly' },
+        { text: 'Kubernetes', link: '/cloud/kubernetes' },
+        { text: 'Updating Integrations', link: '/cloud/updating-integrations' },
       ],
     },
     {
       text: 'Integration Guides',
-      collapsed: true,
+      icon: Plug,
       collapsible: true,
+      collapsed: true,
       items: [
-        {
-          text: 'React + Vite',
-          link: '/integrations/react-vite',
-        },
-        {
-          text: 'React + Rsbuild',
-          link: '/integrations/react-rsbuild',
-        },
+        { text: 'React + Vite', link: '/integrations/react-vite' },
+        { text: 'React + Rsbuild', link: '/integrations/react-rsbuild' },
         {
           text: 'React + Rspack + Nx',
           link: '/integrations/react-rspack-nx',
@@ -330,86 +235,58 @@ const sidebar: Sidebar = {
     },
     {
       text: 'Tutorials',
-      collapsed: true,
+      icon: GraduationCap,
       collapsible: true,
+      collapsed: true,
       items: [
-        {
-          text: 'Your First App',
-          link: '/tutorials/first-app',
-        },
-        {
-          text: 'Adding Micro-Frontends',
-          link: '/tutorials/create-mf-app',
-        },
-        {
-          text: 'Complete MF Guide',
-          link: '/tutorials/mf-guide',
-        },
+        { text: 'Your First App', link: '/tutorials/first-app' },
+        { text: 'Adding Micro-Frontends', link: '/tutorials/create-mf-app' },
+        { text: 'Complete MF Guide', link: '/tutorials/mf-guide' },
         {
           text: 'Rsbuild MF Monorepo',
           link: '/tutorials/rsbuild-react-mf-monorepo',
         },
-        {
-          text: 'React Native with Metro',
-          link: '/tutorials/metro',
-        },
-        {
-          text: 'End-to-End Testing',
-          link: '/tutorials/e2e-testing',
-        },
+        { text: 'React Native with Metro', link: '/tutorials/metro' },
+        { text: 'End-to-End Testing', link: '/tutorials/e2e-testing' },
       ],
     },
+
+    { sectionHeaderText: 'Tools' },
     {
-      text: 'Reference',
-      collapsed: true,
-      collapsible: true,
-      items: [
-        {
-          text: 'Declarative Configuration',
-          link: '/reference/declarative-configuration',
-        },
-        {
-          text: 'Additional Resources',
-          link: '/reference/resources',
-        },
-        {
-          text: 'Why Zephyr Cloud',
-          link: '/reference/why-zephyr-cloud',
-        },
-        {
-          text: 'Architecture',
-          link: '/reference/architecture',
-        },
-        {
-          text: 'SSR Worker (beta)',
-          link: '/reference/ssr-worker',
-        },
-        {
-          text: 'IP Allowlists',
-          link: '/reference/allow-ip-addresses',
-        },
-      ],
+      text: 'create-zephyr-apps',
+      link: '/tools/create-zephyr-apps',
+      icon: SquareTerminal,
     },
+    { text: 'Zephyr Codemod', link: '/tools/zephyr-codemod', icon: Wand },
+    {
+      text: 'Zephyr Sidepanel',
+      link: '/tools/browser-extension',
+      icon: PanelRight,
+    },
+    { text: 'Zephyr Devtools', link: '/tools/browser-devtools', icon: Bug },
+    {
+      text: 'Module Federation Devtools',
+      link: '/tools/module-federation-devtools',
+      icon: Puzzle,
+    },
+
+    { sectionHeaderText: 'Reference' },
+    {
+      text: 'Declarative Configuration',
+      link: '/reference/declarative-configuration',
+    },
+    { text: 'Architecture', link: '/reference/architecture' },
+    { text: 'Why Zephyr Cloud', link: '/reference/why-zephyr-cloud' },
+    { text: 'SSR Worker', link: '/reference/ssr-worker', tag: 'beta' },
+    { text: 'IP Allowlists', link: '/reference/allow-ip-addresses' },
+    { text: 'Additional Resources', link: '/reference/resources' },
     {
       text: 'Troubleshooting',
       link: '/errors',
-      collapsed: true,
+      icon: LifeBuoy,
       collapsible: true,
-      items: Object.entries(Categories)
-        .filter(([category]) => category !== 'unknown')
-        .map(([category, value]) => ({
-          text: capitalizeFirstLetter(category),
-          collapsed: true,
-          collapsible: true,
-          items: Object.values(Errors)
-            .filter((error) => error.kind === category)
-            .map((error) => ({
-              text: `ZE${value}${error.id}`,
-              link: `/errors/ze${value}${error.id}`,
-              description: error.message,
-              label: error.message,
-            })),
-        })),
+      collapsed: true,
+      items: errorGroups,
     },
   ],
 };
@@ -438,7 +315,6 @@ export default defineConfig({
     editLink: {
       docRepoBaseUrl:
         'https://github.com/ZephyrCloudIO/zephyr-documentation/blob/main/docs',
-      text: 'Edit this page on GitHub',
     },
   },
 
@@ -529,18 +405,25 @@ export default defineConfig({
         { from: '/errors/ze40004', to: '/errors/ze00000' },
         { from: '^/errors/ZE40004$', to: '/errors/ze00000' },
         { from: '/how-to/cloud-providers', to: '/cloud' },
-        { from: '^/guide/general/get-started', to: '/general/get-started' },
+        {
+          from: '^/guide/general/get-started',
+          to: '/getting-started/quick-start',
+        },
+        { from: '^/general/get-started', to: '/getting-started/quick-start' },
+        { from: '^/general/architecture', to: '/reference/architecture' },
+        { from: '^/general/resources', to: '/reference/resources' },
+        { from: '^/how-to/existing-app', to: '/integrations/existing-app' },
         {
           from: '^/concepts/architecture',
-          to: '/general/architecture',
+          to: '/reference/architecture',
         },
         {
           from: '^/learning/concepts/architecture',
-          to: '/general/architecture',
+          to: '/reference/architecture',
         },
         {
           from: '^/learning/resources',
-          to: '/general/resources',
+          to: '/reference/resources',
         },
         {
           from: '/guide/integrations/cloudflare',
@@ -552,6 +435,8 @@ export default defineConfig({
         },
       ],
     }),
-    withZephyr(),
+    // zephyr-rspress-plugin types its config hook against its own copy of the
+    // Rspress config shape, so it does not structurally match @rspress/core.
+    withZephyr() as unknown as RspressPlugin,
   ],
 });
