@@ -316,33 +316,6 @@ function Hero() {
               Adds Zephyr to an existing app in one step.
             </p>
           </div>
-
-          <div className="mt-8 flex flex-wrap items-center gap-2">
-            <a
-              href="https://www.npmjs.com/package/zephyr-webpack-plugin"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img
-                src="https://img.shields.io/npm/v/zephyr-webpack-plugin?label=plugins&color=5889d5"
-                alt="Latest Zephyr plugin version on npm"
-                width="104"
-                height="20"
-              />
-            </a>
-            <a
-              href="https://discord.gg/zephyrcloud"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img
-                src="https://img.shields.io/badge/chat-discord-5865F2?logo=discord&logoColor=white"
-                alt="Chat with us on Discord"
-                width="104"
-                height="20"
-              />
-            </a>
-          </div>
         </div>
 
         <TerminalPreview />
