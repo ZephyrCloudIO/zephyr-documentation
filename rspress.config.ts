@@ -376,7 +376,7 @@ export default defineConfig({
         url: 'https://docs.zephyr-cloud.io/',
         image: 'https://docs.zephyr-cloud.io/dark-bg-logo.webp',
         description:
-          'Documentation for Zephyr Cloud - The developer-first SaaS platform for Module Federation, micro-frontends, and modern web applications.',
+          'Documentation for Zephyr Cloud: every build deployed, released when you are ready, on any bundler and any cloud. From the team behind Module Federation.',
         twitter: {
           site: '@ZephyrCloudIO',
           card: 'summary_large_image',

@@ -292,15 +292,17 @@ function Hero() {
           </Link>
 
           <h1 className="zc-hero__title">
-            Ship micro&#8209;frontends to the edge{' '}
-            <span className="zc-gradient-text">in seconds</span>
+            Always deployed.{' '}
+            <span className="zc-gradient-text">
+              Released when you&rsquo;re ready.
+            </span>
           </h1>
 
           <p className="zc-hero__lead">
-            Zephyr Cloud turns every build into an immutable version with its
-            own preview URL. It wires up Module Federation for you, resolves
-            remote dependencies, and rolls back instantly, with any bundler on
-            any cloud.
+            Add Zephyr to the bundler you already use and every build deploys to
+            its own live URL. Production only changes when you release, and
+            rolling back is instant, on any cloud. Built by the team behind
+            Module Federation.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -506,65 +508,72 @@ function AiConversation() {
 
 function Ai() {
   return (
-    <section className="zc-ai">
-      <div className="zc-ai__glow" aria-hidden="true" />
-      <div className="zc-container relative">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
-          <div>
-            <Link href="/tools/api-mcp" className="zc-ai__pill">
-              <Sparkles size={14} />
-              New · Zephyr API MCP
-            </Link>
-            <h2 className="zc-ai__title">
-              Let your AI assistant deploy, promote, and roll back
-            </h2>
-            <p className="zc-ai__lead">
-              Connect Claude Code, Codex, Cursor, Gemini, or VS Code to Zephyr.
-              Your assistant can inspect deployments and move versions between
-              environments, using the account and permissions you already have.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/tools/api-mcp"
-                className="zc-button zc-button--primary"
-              >
-                Connect your assistant
-                <ArrowRight size={16} />
-              </Link>
-              <Link
-                href="/tools/api-mcp#explore-your-zephyr-account"
-                className="zc-button zc-button--outline-light"
-              >
-                Example prompts
-              </Link>
+    <section className="zc-section">
+      <div className="zc-container">
+        <div className="zc-ai">
+          <div className="zc-ai__glow" aria-hidden="true" />
+          <div className="relative">
+            <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] [&>*]:min-w-0">
+              <div>
+                <Link href="/tools/api-mcp" className="zc-ai__pill">
+                  <Sparkles size={14} />
+                  New · Zephyr API MCP
+                </Link>
+                <h2 className="zc-ai__title">
+                  Let your AI assistant deploy, promote, and roll back
+                </h2>
+                <p className="zc-ai__lead">
+                  Connect Claude Code, Codex, Cursor, Gemini, or VS Code to
+                  Zephyr. Your assistant can inspect deployments and move
+                  versions between environments, using the account and
+                  permissions you already have.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Link
+                    href="/tools/api-mcp"
+                    className="zc-button zc-button--primary"
+                  >
+                    Connect your assistant
+                    <ArrowRight size={16} />
+                  </Link>
+                  <Link
+                    href="/tools/api-mcp#explore-your-zephyr-account"
+                    className="zc-button zc-button--outline-light"
+                  >
+                    Example prompts
+                  </Link>
+                </div>
+              </div>
+              <AiConversation />
+            </div>
+
+            <ul className="mt-14 grid gap-4 sm:grid-cols-3">
+              {aiCapabilities.map(
+                ({ icon: Icon, title, description, href }) => (
+                  <li key={title}>
+                    <Link href={href} className="zc-ai__capability">
+                      <span className="zc-ai__capability-icon">
+                        <Icon size={18} />
+                      </span>
+                      <span className="font-semibold text-[var(--ze-ink)]">
+                        {title}
+                      </span>
+                      <span className="text-sm leading-relaxed text-[var(--ze-ink-muted)]">
+                        {description}
+                      </span>
+                    </Link>
+                  </li>
+                ),
+              )}
+            </ul>
+
+            <div className="mt-10">
+              <p className="mb-4 text-sm font-medium text-[var(--ze-ink-muted)]">
+                Connect in one command
+              </p>
+              <McpPromo />
             </div>
           </div>
-          <AiConversation />
-        </div>
-
-        <ul className="mt-14 grid gap-4 sm:grid-cols-3">
-          {aiCapabilities.map(({ icon: Icon, title, description, href }) => (
-            <li key={title}>
-              <Link href={href} className="zc-ai__capability">
-                <span className="zc-ai__capability-icon">
-                  <Icon size={18} />
-                </span>
-                <span className="font-semibold text-[var(--ze-ink)]">
-                  {title}
-                </span>
-                <span className="text-sm leading-relaxed text-[var(--ze-ink-muted)]">
-                  {description}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-10">
-          <p className="mb-4 text-sm font-medium text-[var(--ze-ink-muted)]">
-            Connect in one command
-          </p>
-          <McpPromo />
         </div>
       </div>
     </section>

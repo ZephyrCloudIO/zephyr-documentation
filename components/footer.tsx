@@ -67,8 +67,8 @@ export const Footer = () => (
           </span>
         </Link>
         <p className="max-w-xs text-sm leading-relaxed text-[var(--rp-c-text-3)]">
-          The Module Federation platform for shipping micro-frontends to any
-          cloud.
+          Every build deployed, released when you&rsquo;re ready. From the team
+          behind Module Federation.
         </p>
       </div>
       {columns.map((column) => (

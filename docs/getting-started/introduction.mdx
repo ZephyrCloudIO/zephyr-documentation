@@ -1,27 +1,27 @@
 ---
 title: Introduction
-description: Cloud-agnostic platform for deploying and managing micro-frontend applications with Module Federation, instant previews, and edge deployment
+description: Deploy every build from the bundler you already use, with preview URLs, controlled releases, and instant rollbacks on any cloud. From the team behind Module Federation.
 head:
   - - meta
     - property: og:description
-      content: Cloud-agnostic platform for deploying and managing micro-frontend applications with Module Federation, instant previews, and edge deployment
+      content: Deploy every build from the bundler you already use, with preview URLs, controlled releases, and instant rollbacks on any cloud. From the team behind Module Federation.
 ---
 
 import { McpPromo } from '../../components/mcp-promo';
 
 # Introduction
 
-**Zephyr Cloud** is a Module Federation platform that accelerates micro-frontend development by providing instant deployment, intelligent dependency resolution, and seamless version management—all while remaining cloud agnostic, framework agnostic, and bundler agnostic.
+**Zephyr Cloud** is a deployment platform from the team behind Module Federation. It plugs into the bundler you already use and turns every build into an immutable version with its own preview URL, so releasing and rolling back are instant. It works for a single app as well as for micro-frontends, and stays cloud agnostic, framework agnostic, and bundler agnostic.
 
 ## How It Works
 
 Zephyr captures every build as an immutable version and deploys it to the global edge network in seconds. Each version receives its own preview URL, allowing you to test in a real-world environment before promoting to production. When you're ready, deploy to production with a single click—and roll back just as quickly if needed.
 
-Behind the scenes, Zephyr automatically resolves dependencies between your micro-frontends, eliminates duplicate assets through content-addressed storage, and handles Module Federation configuration across multiple bundlers (Webpack, Vite, Rspack, Rollup, and more).
+Behind the scenes, Zephyr eliminates duplicate assets through content-addressed storage, and works across bundlers (Webpack, Vite, Rspack, Rollup, and more). If you use Module Federation, it also resolves dependencies between your remotes and handles the federation configuration for you.
 
 ## Built for Speed and Freedom
 
-Whether you're a small team shipping features fast or a large enterprise coordinating multiple micro-frontends across teams, Zephyr Cloud removes the complexity of cloud provider configuration and deployment orchestration—letting you focus on building great applications.
+Whether you're a small team shipping features fast or a large enterprise coordinating many applications across teams, Zephyr Cloud removes the complexity of cloud provider configuration and deployment orchestration—letting you focus on building great applications.
 
 Deploy to Cloudflare, AWS, Fastly, Akamai, or your own Kubernetes cluster without changing a single line of code. Switch providers anytime without vendor lock-in.
 

@@ -44,12 +44,12 @@
 
   .zc-hero {
     position: relative;
-    padding: 64px 0 56px;
+    padding: 64px 0 24px;
   }
 
   @media (min-width: 1024px) {
     .zc-hero {
-      padding: 104px 0 80px;
+      padding: 104px 0 40px;
     }
   }
 
@@ -182,6 +182,7 @@
   }
 
   .zc-command {
+    position: relative;
     display: flex;
     width: 100%;
     align-items: center;
@@ -423,15 +424,24 @@
     color: var(--rp-c-text-2);
   }
 
-  /* AI / MCP band: always dark so it reads as a featured section in both themes. */
+  /* AI / MCP panel: a contained dark card in both themes, so it never creates a
+   * full-width seam against the hero glow above it. */
 
   .zc-ai {
     position: relative;
     overflow: hidden;
-    padding: 88px 0;
-    border-block: 1px solid var(--ze-line);
-    background: var(--ze-night);
+    padding: 28px 20px;
+    border: 1px solid var(--ze-line-strong);
+    border-radius: 24px;
+    background: #0a0c11;
     color: var(--ze-ink);
+    box-shadow: 0 50px 100px -60px rgba(124, 58, 237, 0.45);
+  }
+
+  @media (min-width: 1024px) {
+    .zc-ai {
+      padding: 56px;
+    }
   }
 
   .zc-ai__glow {
@@ -439,13 +449,13 @@
     inset: 0;
     background:
       radial-gradient(
-        ellipse 50% 60% at 15% 10%,
-        rgba(124, 58, 237, 0.32),
+        ellipse 55% 45% at 10% 0%,
+        rgba(124, 58, 237, 0.24),
         transparent 70%
       ),
       radial-gradient(
-        ellipse 45% 55% at 90% 40%,
-        rgba(34, 211, 238, 0.1),
+        ellipse 45% 55% at 95% 45%,
+        rgba(34, 211, 238, 0.06),
         transparent 70%
       );
     pointer-events: none;
@@ -466,7 +476,7 @@
 
   .zc-ai__title {
     margin-top: 20px;
-    font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+    font-size: clamp(2rem, 4.5vw, 3.25rem);
     font-weight: 700;
     line-height: 1.06;
     letter-spacing: -0.03em;
@@ -647,6 +657,12 @@
 
     .zc-command__label {
       width: 100%;
+    }
+
+    .zc-command__icon {
+      position: absolute;
+      top: 12px;
+      right: 14px;
     }
   }
 
