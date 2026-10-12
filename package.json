@@ -9,7 +9,7 @@
   "scripts": {
     "build": "rspress build",
     "dev": "rspress dev --port 3030",
-    "lint": "eslint .",
+    "lint": "oxlint",
     "format": "prettier --write .",
     "prepare": "husky",
     "preview": "rspress preview",
@@ -23,9 +23,9 @@
     ]
   },
   "lint-staged": {
-    "*.{ts,tsx,js}": [
+    "*.{ts,tsx,js,mjs}": [
       "prettier --write",
-      "eslint --max-warnings 0 ."
+      "oxlint"
     ]
   },
   "engines": {
@@ -33,71 +33,42 @@
     "pnpm": "10.x"
   },
   "dependencies": {
-    "@intercom/messenger-js-sdk": "^0.0.18",
+    "@intercom/messenger-js-sdk": "^0.0.20",
     "@radix-ui/react-icons": "^1.3.2",
-    "@radix-ui/react-progress": "^1.1.7",
-    "@radix-ui/react-slot": "^1.2.3",
-    "@radix-ui/react-tabs": "^1.1.13",
-    "@radix-ui/react-tooltip": "^1.2.8",
-    "@rspress/core": "^2.0.1",
-    "@rspress/plugin-client-redirects": "^2.0.1",
-    "@rspress/plugin-preview": "^2.0.1",
-    "@rspress/plugin-sitemap": "2.0.1",
-    "@rspress/runtime": "^2.0.0-beta.34",
-    "@rspress/shared": "^2.0.1",
+    "@radix-ui/react-progress": "^1.1.17",
+    "@radix-ui/react-slot": "^1.4.0",
+    "@radix-ui/react-tabs": "^1.1.22",
+    "@radix-ui/react-tooltip": "^1.3.0",
+    "@rspress/core": "^2.0.23",
+    "@rspress/plugin-client-redirects": "^2.0.23",
+    "@rspress/plugin-sitemap": "2.0.23",
+    "@rspress/shared": "^2.0.23",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "commitlint": "^20.0.0",
     "husky": "^9.1.7",
-    "lucide-react": "^0.544.0",
-    "posthog-js": "^1.272.0",
-    "react-wrap-balancer": "^1.1.1",
-    "rspress-plugin-file-tree": "^0.4.0",
-    "rspress-plugin-mermaid": "^1.0.0",
-    "rspress-plugin-reading-time": "^1.0.0",
-    "tailwind-merge": "^3.3.1"
+    "lucide-react": "^1.55.0",
+    "posthog-js": "^1.438.7",
+    "rspress-plugin-mermaid": "^1.0.3",
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.0.0",
-    "@commitlint/config-conventional": "^20.0.0",
-    "@eslint/js": "^9.36.0",
-    "@rspress/plugin-algolia": "^2.0.1",
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "@rspress/plugin-algolia": "^2.0.23",
     "@rspress/plugin-llms": "2.0.23",
-    "@tailwindcss/postcss": "^4.1.13",
-    "@tailwindcss/typography": "^0.5.19",
-    "@types/node": "^24.5.2",
-    "@types/react": "19.1.13",
-    "autoprefixer": "^10.4.21",
-    "eslint": "^9.36.0",
-    "globals": "^16.4.0",
-    "lint-staged": "^16.2.1",
-    "postcss": "^8.5.23",
-    "postcss-loader": "^8.2.0",
-    "prettier": "^3.6.2",
-    "rsbuild-plugin-open-graph": "^1.1.0",
-    "semantic-release": "^25.0.0",
-    "tailwindcss": "^4.1.13",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.1",
-    "zephyr-rspress-plugin": "^0.1.10"
-  },
-  "pnpm": {
-    "overrides": {
-      "protobufjs": ">=7.6.1 <8",
-      "handlebars": ">=4.7.9",
-      "tar@>=7.0.0 <7.5.11": "^7.5.11",
-      "@isaacs/brace-expansion@<5.0.1": "^5.0.1",
-      "axios@>=1.0.0 <1.20.0": "^1.20.0",
-      "minimatch@>=10.0.0 <10.2.3": "^10.2.3",
-      "minimatch@>=9.0.0 <9.0.7": "^9.0.7",
-      "minimatch@<3.1.3": "^3.1.3",
-      "undici@>=7.0.0 <7.29.1": "^7.29.1",
-      "flatted@<3.4.2": "^3.4.2",
-      "picomatch@>=4.0.0 <4.0.4": "^4.0.4",
-      "picomatch@<2.3.2": "^2.3.2",
-      "lodash-es@<4.18.0": "^4.18.1"
-    },
-    "patchedDependencies": {}
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/typography": "^0.5.20",
+    "@types/node": "^24.19.2",
+    "@types/react": "19.3.0",
+    "lint-staged": "^17.6.0",
+    "lucide-static": "^1.55.0",
+    "oxlint": "^1.87.0",
+    "postcss": "^8.5.29",
+    "prettier": "^3.9.10",
+    "rsbuild-plugin-open-graph": "^1.1.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "zephyr-rspress-plugin": "^1.6.0"
   },
   "packageManager": "pnpm@10.33.0"
 }

@@ -68,9 +68,9 @@ export function ErrorInfo({
         {related && (
           <li>
             Similar errors:
-            {related.split(',').map((code) => (
-              <span className="ml-2" key={code}>
-                <ErrorLink code={code} />
+            {related.split(',').map((relatedCode) => (
+              <span className="ml-2" key={relatedCode}>
+                <ErrorLink code={relatedCode} />
               </span>
             ))}
           </li>

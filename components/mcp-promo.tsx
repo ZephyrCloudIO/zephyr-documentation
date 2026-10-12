@@ -4,7 +4,7 @@ import { useState } from 'react';
 const clients = {
   claude: {
     label: 'Claude Code',
-    shortLabel: 'Claude Code',
+    shortLabel: 'Claude',
     logo: '/ai-tools/claude.svg',
     description: 'Add Zephyr as a remote HTTP server for your user account.',
     format: 'shell',
@@ -77,7 +77,7 @@ export function McpPromo() {
       <div
         role="tablist"
         aria-label="Choose an AI client"
-        className="not-prose mb-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
+        className="not-prose mb-3 grid grid-cols-[repeat(auto-fit,minmax(5.5rem,1fr))] gap-2"
       >
         {(Object.keys(clients) as Client[]).map((clientName) => {
           const client = clients[clientName];
@@ -90,10 +90,10 @@ export function McpPromo() {
               role="tab"
               aria-selected={isSelected}
               aria-controls="mcp-client-panel"
-              className={`flex min-h-11 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)] ${
+              className={`flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)] ${
                 isSelected
-                  ? 'border-[var(--rp-c-brand)] bg-zinc-800 text-white'
-                  : 'border-zinc-800/70 bg-zinc-950/50 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-900 hover:text-zinc-200'
+                  ? 'border-[var(--ze-violet)] bg-[var(--ze-surface-3)] text-[var(--ze-ink)]'
+                  : 'border-[var(--ze-line)] bg-[var(--ze-surface)] text-[var(--ze-ink-muted)] hover:border-[var(--ze-line-strong)] hover:bg-[var(--ze-surface-2)] hover:text-[var(--ze-ink)]'
               }`}
               onClick={() => {
                 setSelected(clientName);
@@ -106,7 +106,7 @@ export function McpPromo() {
                 aria-hidden="true"
                 className="h-5 w-5 shrink-0"
               />
-              <span>{client.shortLabel}</span>
+              <span className="whitespace-nowrap">{client.shortLabel}</span>
             </button>
           );
         })}
@@ -115,18 +115,22 @@ export function McpPromo() {
       <div
         id="mcp-client-panel"
         role="tabpanel"
-        className="relative overflow-hidden rounded-xl border border-zinc-800/50 bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 p-4"
+        className="relative overflow-hidden rounded-xl border border-[var(--ze-line)] bg-[var(--ze-surface)] p-4"
       >
-        <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
+        <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-violet-600/10 to-transparent" />
 
         <button
           type="button"
           aria-label={`Copy ${selectedClient.label} install commands`}
-          className="absolute top-4 right-4 z-20 rounded p-1.5 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)]"
+          className="absolute top-4 right-4 z-20 rounded p-1.5 text-[var(--ze-ink-faint)] transition-colors hover:bg-[var(--ze-surface-3)] hover:text-[var(--ze-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)]"
           onClick={() => copyInstallCommand(selected)}
         >
           {copied === selected ? (
-            <Check aria-hidden="true" className="text-blue-300" size={16} />
+            <Check
+              aria-hidden="true"
+              className="text-[var(--ze-live)]"
+              size={16}
+            />
           ) : (
             <Copy aria-hidden="true" size={16} />
           )}
@@ -136,19 +140,22 @@ export function McpPromo() {
           <h3 className="!m-0 !pr-10 !text-xl !leading-tight !font-semibold !text-white">
             {selectedClient.label}
           </h3>
-          <p className="!mt-2 !mb-3 !text-sm !leading-snug !text-zinc-400">
+          <p className="!mt-2 !mb-3 !text-sm !leading-snug !text-[var(--ze-ink-muted)]">
             {selectedClient.description}
           </p>
 
-          <div className="mt-auto rounded-lg border border-zinc-800 bg-zinc-950/70 px-3 py-2.5 font-mono text-sm leading-6">
+          <div className="mt-auto rounded-lg border border-[var(--ze-line)] bg-[var(--ze-night)] px-3 py-2.5 font-mono text-sm leading-6">
             {selectedClient.commands.map((command, index) => (
               <div key={`${selected}-${index}`} className="flex min-w-0 gap-2">
                 {selectedClient.format === 'shell' && (
-                  <span aria-hidden="true" className="shrink-0 text-zinc-600">
+                  <span
+                    aria-hidden="true"
+                    className="shrink-0 text-[var(--ze-ink-faint)]"
+                  >
                     $
                   </span>
                 )}
-                <code className="min-w-0 break-words whitespace-pre-wrap !bg-transparent !p-0 !text-zinc-300">
+                <code className="min-w-0 break-words whitespace-pre-wrap !bg-transparent !p-0 !text-[var(--ze-ink)]">
                   {command}
                 </code>
               </div>

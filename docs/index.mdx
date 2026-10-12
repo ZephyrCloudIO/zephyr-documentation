@@ -1,87 +1,13 @@
 ---
-title: Zephyr Cloud
-description: Cloud-agnostic platform for deploying and managing micro-frontend applications with Module Federation, instant previews, and edge deployment
+pageType: custom
+title: Zephyr Cloud Docs
+description: Deploy every build from the bundler you already use, with preview URLs, controlled releases, and instant rollbacks on any cloud. From the team behind Module Federation.
 head:
   - - meta
     - property: og:description
-      content: Cloud-agnostic platform for deploying and managing micro-frontend applications with Module Federation, instant previews, and edge deployment
+      content: Deploy every build from the bundler you already use, with preview URLs, controlled releases, and instant rollbacks on any cloud. From the team behind Module Federation.
 ---
 
-import {
-  HomeStart,
-  HomeConcept,
-  HomeRecipes,
-  HomeBundlers,
-  HomeCloud,
-  HomeMetaFrameworks,
-} from '../components/home';
-import { CardLayout } from '../components/ui/card-layout';
-import { Separator } from '../components/ui/separator';
-import { InvertImage } from '../components/ui/invert-image';
-import { McpPromo } from '../components/mcp-promo';
+import { Landing } from '../components/landing/landing';
 
-<InvertImage />
-<Separator />
-
-**Zephyr Cloud** is a Module Federation platform that accelerates micro-frontend development by providing instant deployment, intelligent dependency resolution, and seamless version management—all while remaining cloud agnostic, framework agnostic, and bundler agnostic.
-
-## How It Works
-
-Zephyr captures every build as an immutable version and deploys it to the global edge network in seconds. Each version receives its own preview URL, allowing you to test in a real-world environment before promoting to production. When you're ready, deploy to production with a single click—and roll back just as quickly if needed.
-
-Behind the scenes, Zephyr automatically resolves dependencies between your micro-frontends, eliminates duplicate assets through content-addressed storage, and handles Module Federation configuration across multiple bundlers (Webpack, Vite, Rspack, Rollup, and more).
-
-## Built for Speed and Freedom
-
-Whether you're a small team shipping features fast or a large enterprise coordinating multiple micro-frontends across teams, Zephyr Cloud removes the complexity of cloud provider configuration and deployment orchestration—letting you focus on building great applications.
-
-Deploy to Cloudflare, AWS, Fastly, or Vercel without changing a single line of code. Switch providers anytime without vendor lock-in.
-
-**Need help?** Join our [Discord community](https://discord.gg/zephyrcloud)—we're always here to help!
-
-## AI
-
-Connect your AI assistant to inspect deployments, promote versions, and roll back through your existing Zephyr account and permissions.
-
-<McpPromo />
-
-[Read the full MCP setup and usage guide](/tools/api-mcp)
-
-## Main Features
-
-- **[Organization Structure](/features/organization-structure)** - Advanced org setup, multi-team management, and enterprise features
-- **[Versions](/features/versions)** - Advanced versioning patterns and semantic versioning workflows
-- **[Tags & Environments](/features/tags-environments)** - Detailed environment configuration and custom domains
-- **[Instant Rollbacks](/features/instant-rollbacks)** - Complex rollback scenarios and automated rollback triggers
-- **[Remote Dependencies](/features/remote-dependencies)** - Advanced dependency resolution and micro-frontend orchestration
-- **[CI/CD Automation](/features/automation)** - Configure deployments from build pipelines with CI tokens
-- **[Deployment auth migration](/migrations/ci-token-migration)** - Move server-token and personal-token deployments to CI tokens
-- **[Teams & Members](/features/teams-members)** - Team management, permissions, and collaboration features
-- **[Subscriptions](/features/subscriptions)** - Billing, usage monitoring, and plan management
-- **[Multi-Organization Subscriptions](/features/multi-organization-subscriptions)** - Link child organizations to an Enterprise subscription
-
-## Bundlers
-
-<CardLayout>
-  <HomeBundlers />
-</CardLayout>
-
-## Meta Frameworks
-
-<CardLayout>
-  <HomeMetaFrameworks />
-</CardLayout>
-
-## Cloud Providers
-
-<CardLayout>
-  <HomeCloud />
-</CardLayout>
-
-## Tutorials
-
-<CardLayout>
-  <HomeRecipes />
-</CardLayout>
-
-[See more integration guides](/integrations/existing-app)
+<Landing />

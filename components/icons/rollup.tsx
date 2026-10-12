@@ -1,4 +1,3 @@
-import React from 'react';
 import type { SVGProps } from 'react';
 
 export function RollupIcon(props: SVGProps<SVGSVGElement>) {
@@ -18,11 +17,11 @@ export function RollupIcon(props: SVGProps<SVGSVGElement>) {
           y2="55.339338%"
           id="linearGradient-1"
         >
-          <stop stop-color="#FF6533" offset="0%"></stop>
-          <stop stop-color="#FF5633" offset="15.7%"></stop>
-          <stop stop-color="#FF4333" offset="43.4%"></stop>
-          <stop stop-color="#FF3733" offset="71.4%"></stop>
-          <stop stop-color="#FF3333" offset="100%"></stop>
+          <stop stopColor="#FF6533" offset="0%"></stop>
+          <stop stopColor="#FF5633" offset="15.7%"></stop>
+          <stop stopColor="#FF4333" offset="43.4%"></stop>
+          <stop stopColor="#FF3733" offset="71.4%"></stop>
+          <stop stopColor="#FF3333" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="20.4503837%"
@@ -31,8 +30,8 @@ export function RollupIcon(props: SVGProps<SVGSVGElement>) {
           y2="80.4322382%"
           id="linearGradient-2"
         >
-          <stop stop-color="#BF3338" offset="0%"></stop>
-          <stop stop-color="#FF3333" offset="100%"></stop>
+          <stop stopColor="#BF3338" offset="0%"></stop>
+          <stop stopColor="#FF3333" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="32.2926113%"
@@ -41,11 +40,11 @@ export function RollupIcon(props: SVGProps<SVGSVGElement>) {
           y2="48.9139013%"
           id="linearGradient-3"
         >
-          <stop stop-color="#FF6533" offset="0%"></stop>
-          <stop stop-color="#FF5633" offset="15.7%"></stop>
-          <stop stop-color="#FF4333" offset="43.4%"></stop>
-          <stop stop-color="#FF3733" offset="71.4%"></stop>
-          <stop stop-color="#FF3333" offset="100%"></stop>
+          <stop stopColor="#FF6533" offset="0%"></stop>
+          <stop stopColor="#FF5633" offset="15.7%"></stop>
+          <stop stopColor="#FF4333" offset="43.4%"></stop>
+          <stop stopColor="#FF3733" offset="71.4%"></stop>
+          <stop stopColor="#FF3333" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="51.5641026%"
@@ -54,11 +53,11 @@ export function RollupIcon(props: SVGProps<SVGSVGElement>) {
           y2="41.6628279%"
           id="linearGradient-4"
         >
-          <stop stop-color="#FF6533" offset="0%"></stop>
-          <stop stop-color="#FF5633" offset="15.7%"></stop>
-          <stop stop-color="#FF4333" offset="43.4%"></stop>
-          <stop stop-color="#FF3733" offset="71.4%"></stop>
-          <stop stop-color="#FF3333" offset="100%"></stop>
+          <stop stopColor="#FF6533" offset="0%"></stop>
+          <stop stopColor="#FF5633" offset="15.7%"></stop>
+          <stop stopColor="#FF4333" offset="43.4%"></stop>
+          <stop stopColor="#FF3733" offset="71.4%"></stop>
+          <stop stopColor="#FF3333" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="40.2012262%"
@@ -67,8 +66,8 @@ export function RollupIcon(props: SVGProps<SVGSVGElement>) {
           y2="54.5349876%"
           id="linearGradient-5"
         >
-          <stop stop-color="#FBB040" offset="0%"></stop>
-          <stop stop-color="#FB8840" offset="100%"></stop>
+          <stop stopColor="#FBB040" offset="0%"></stop>
+          <stop stopColor="#FB8840" offset="100%"></stop>
         </linearGradient>
         <linearGradient
           x1="55.2222794%"
@@ -77,8 +76,8 @@ export function RollupIcon(props: SVGProps<SVGSVGElement>) {
           y2="128.016462%"
           id="linearGradient-6"
         >
-          <stop stop-color="#FFFFFF" offset="0%"></stop>
-          <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+          <stop stopColor="#FFFFFF" offset="0%"></stop>
+          <stop stopColor="#FFFFFF" stopOpacity="0" offset="100%"></stop>
         </linearGradient>
       </defs>
       <g>
