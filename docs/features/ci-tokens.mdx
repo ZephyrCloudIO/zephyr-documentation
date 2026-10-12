@@ -1,0 +1,144 @@
+---
+title: CI Tokens
+description: Authenticate Zephyr deployments from GitHub Actions, GitLab CI/CD, and EAS Build with organization-scoped CI tokens and the ZE_CI_TOKEN environment variable.
+head:
+  - - meta
+    - property: og:description
+      content: Authenticate Zephyr deployments from GitHub Actions, GitLab CI/CD, and EAS Build with organization-scoped CI tokens and the ZE_CI_TOKEN environment variable.
+---
+
+import { Steps } from '@rspress/core/theme';
+
+# CI Tokens
+
+CI tokens are organization-scoped credentials built for deployment pipelines. Add one to your CI provider as `ZE_CI_TOKEN`, and every Zephyr build in that pipeline authenticates without an interactive login, a shared personal token, or a server token.
+
+CI tokens replace the older deployment-auth methods. If a pipeline still uses `ZE_SERVER_TOKEN` or `ZE_SECRET_TOKEN`, follow the [migration guide](/migrations/ci-token-migration).
+
+## How CI tokens work
+
+When a Zephyr plugin finds `ZE_CI_TOKEN` in the environment, it:
+
+1. Detects which CI provider is running the build.
+2. Reads who triggered the pipeline from that provider's own CI metadata.
+3. Exchanges the CI token for a short-lived Zephyr access token tied to that person.
+4. Builds and deploys as usual.
+
+The CI token is the credential, but each deployment is attributed to the person who triggered it rather than to a shared service account, so version history shows who actually shipped each build.
+
+### Supported CI providers
+
+| Provider       | Detected when         | How the actor is identified                                       |
+| -------------- | --------------------- | ----------------------------------------------------------------- |
+| GitHub Actions | `GITHUB_ACTIONS=true` | The workflow actor's GitHub user ID and the event payload         |
+| GitLab CI/CD   | `GITLAB_CI=true`      | The GitLab user who started the job (user ID, username, or email) |
+| EAS Build      | `EAS_BUILD=true`      | The author or committer email of the commit being built           |
+
+If `ZE_CI_TOKEN` is set but none of these providers is detected, the build stops with an authentication error instead of deploying anonymously.
+
+:::tip Link your Git provider account
+Zephyr maps GitHub and GitLab actors to Zephyr users through linked Git provider accounts. Make sure everyone who triggers deployments has linked their GitHub or GitLab account in Zephyr Cloud. For EAS builds, the commit author or committer email must belong to an active member of the organization.
+:::
+
+## Create a CI token
+
+<Steps>
+
+### Open your organization settings
+
+In [Zephyr Cloud](https://app.zephyr-cloud.io), go to **Organization Settings** and open **CI tokens**.
+
+### Generate a token
+
+Generate a new CI token and copy its value right away. The value is only shown once, when the token is created.
+
+### Store it in your CI provider
+
+Save the value as a secret in your CI provider and expose it to the build job as `ZE_CI_TOKEN`.
+
+</Steps>
+
+## Use the token in your pipeline
+
+### GitHub Actions
+
+Add the token as a repository or organization secret, for example `ZEPHYR_CI_TOKEN`, then map it to `ZE_CI_TOKEN`:
+
+```yml title=".github/workflows/deploy.yml"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ZE_CI_TOKEN: ${{ secrets.ZEPHYR_CI_TOKEN }}
+      ZE_FAIL_BUILD: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run build
+```
+
+### GitLab CI/CD
+
+Add `ZE_CI_TOKEN` as a masked, protected CI/CD variable under **Settings** → **CI/CD** → **Variables**, then reference it in the job:
+
+```yml title=".gitlab-ci.yml"
+build:
+  stage: build
+  script:
+    - npm ci
+    - npm run build
+  variables:
+    ZE_CI_TOKEN: $ZE_CI_TOKEN
+    ZE_FAIL_BUILD: 'true'
+```
+
+### EAS Build
+
+Add `ZE_CI_TOKEN` as a secret environment variable in your EAS project so it is available to the build. No extra configuration is needed: Zephyr detects EAS from the build environment.
+
+## Token precedence
+
+Zephyr checks deployment credentials in this order and uses the first one it finds:
+
+1. `ZE_SECRET_TOKEN` (personal token)
+2. `ZE_CI_TOKEN` (CI token)
+3. `ZE_SERVER_TOKEN` (server token)
+
+A leftover `ZE_SECRET_TOKEN` in the same job silently wins over your CI token. Remove the old variables once the CI token works.
+
+:::tip Fail the pipeline on Zephyr errors
+Set `ZE_FAIL_BUILD=true` in CI so authentication or upload problems fail the job instead of only being logged. See [CI/CD Automation](/features/automation#fail-the-build-on-zephyr-errors).
+:::
+
+## Troubleshooting
+
+### No supported CI identity detected
+
+```shell
+ZE_CI_TOKEN was provided, but no supported CI identity was detected.
+```
+
+The build is not running on GitHub Actions, GitLab CI/CD, or EAS Build, or the provider's standard environment variables were removed from the job. Run the build on a supported provider, or keep the provider's default environment intact.
+
+### Token exchange failed
+
+```shell
+ZE_CI_TOKEN could not be exchanged for a Zephyr access token.
+```
+
+Zephyr found the CI actor but couldn't map it to an active organization member. The error message lists the detected provider, username, and actor type. Check the following:
+
+- **GitHub or GitLab users:** link that Git provider account in Zephyr Cloud, then rerun the workflow.
+- **Bots** (for example Dependabot or Renovate): bot runs are authorized by the person who created the CI token. Make sure the token creator is still an active member of the organization.
+- **EAS builds:** make sure the commit author or committer email belongs to an active organization member.
+- **Revoked or lost tokens:** confirm the token still exists under **Organization Settings** → **CI tokens**, or generate a new one.
+
+## Related docs
+
+- [CI/CD Automation](/features/automation): complete GitHub Actions and GitLab pipeline examples
+- [Migrate to CI tokens](/migrations/ci-token-migration): move from server tokens or personal tokens
+- [Server token deployments](/features/ci-cd-server-token) (deprecated)
+- [Personal token deployments](/features/ci-cd-personal-token) (deprecated)
