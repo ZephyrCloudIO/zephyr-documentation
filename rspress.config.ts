@@ -52,7 +52,43 @@ const socialLinks: SocialLink[] = [
 
 const nav: Nav = [
   {
-    text: 'Zephyr Cloud',
+    text: 'Guide',
+    link: '/getting-started/introduction',
+    activeMatch: '^/(getting-started|features|migrations|tools)/',
+  },
+  {
+    text: 'Integrations',
+    items: [
+      { text: 'Bundlers', link: '/bundlers/webpack' },
+      { text: 'Meta Frameworks', link: '/meta-frameworks/astro' },
+      { text: 'Cloud Providers', link: '/cloud' },
+      { text: 'Integration Guides', link: '/integrations/react-vite' },
+    ],
+  },
+  {
+    text: 'Tutorials',
+    link: '/tutorials/first-app',
+    activeMatch: '^/tutorials/',
+  },
+  {
+    text: 'Reference',
+    link: '/reference/declarative-configuration',
+    activeMatch: '^/(reference|errors)',
+  },
+  {
+    text: 'Resources',
+    items: [
+      {
+        text: 'Changelog',
+        link: 'https://github.com/ZephyrCloudIO/zephyr-packages/releases',
+      },
+      { text: 'Blog', link: 'https://zephyr-cloud.io/blog' },
+      { text: 'Pricing', link: 'https://zephyr-cloud.io/pricing' },
+      { text: 'System status', link: 'https://status.zephyr-cloud.io/' },
+    ],
+  },
+  {
+    text: 'Dashboard',
     link: 'https://app.zephyr-cloud.io',
   },
 ];
@@ -129,6 +165,7 @@ const sidebar: Sidebar = {
     },
 
     { sectionHeaderText: 'CI/CD' },
+    { text: 'CI Tokens', link: '/features/ci-tokens', tag: 'new' },
     { text: 'CI/CD Automation', link: '/features/automation' },
     {
       text: 'Migrate to CI tokens',
