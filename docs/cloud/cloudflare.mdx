@@ -16,7 +16,7 @@ import { CustomDomain } from '../../components/cloud-provider.tsx';
 
 Originally launched as an email spam tracker, Cloudflare today offers extensive capabilities for users to register, manage domains as a registrar, and monitor, secure, and configure an entire IT infrastructure.
 
-In this guide, we'll walk you through configuring Cloudflare as your default cloud provider for deploying and versioning applications with Zephyr Cloud. This setup leverages Cloudflare's global edge network, KV namespaces, Workers, and Pages to deliver your content at the edge.
+In this guide, we'll walk you through configuring Cloudflare as your default cloud provider for deploying and versioning applications with Zephyr Cloud. This setup uses Cloudflare Workers, KV namespaces, exact Worker Custom Domains, and generated-host Worker Routes to deliver your content at the edge.
 
 ## Prerequisites
 
@@ -61,44 +61,22 @@ After signing in, select your organization.
 
 ### Complete Basic Info
 
-Enter the integration name and display name in **Basic Info**, then continue to DNS configuration.
-
-### Configure Your DNS Record
-
-- Return to your domain’s home page (the **Overview** page should still be open) and click on **DNS** on the left sidebar.
-- Click **Add record** on the _Records_ page and enter the following details:
-
-![dns](../public/cf-dns-entry-cname.webp)
-
-<details>
-<summary>Click to view DNS record details</summary>
-
-| Type  | Name |       Content        | Proxy Status | TTL  |
-| :---: | :--: | :------------------: | :----------: | :--: |
-| CNAME | `*`  | `ze.zephyrcloud.app` |   Proxied    | Auto |
-
-</details>
-
-This customer-configured proxied wildcard CNAME supplies DNS coverage for Zephyr-generated hostnames and the base upload endpoint. Zephyr does not create this wildcard record. Its target is Zephyr's documented setup convention, not a Cloudflare requirement; Worker Routes still require proxied DNS coverage.
+Enter the integration name and display name in **1. Basic Info**, then click **Continue** to open **2. Configure Cloudflare**. There is no DNS acknowledgment step.
 
 ### Connect with Cloudflare (recommended)
 
 Zephyr Cloud now supports Cloudflare OAuth for deployment integrations. This is the recommended setup path because you authorize Zephyr in Cloudflare instead of manually copying a Cloudflare API token and Zone ID into Zephyr.
 
-![Cloudflare integration form with Connect with Cloudflare selected](../public/cloudflare-oauth-setup-mode.webp)
+After completing **Basic Info**:
 
-After completing **Basic Info** and confirming the DNS record:
+1. In **2. Configure Cloudflare**, choose **Automatic Setup** and click **Connect with Cloudflare**.
+2. In Cloudflare, select the account that owns the zone you want Zephyr to use, review the requested permissions, and select **Authorize**.
+3. Return to **Configure Cloudflare** in Zephyr and wait for the authorized zones to load.
+4. Select the **Cloudflare Zone**, then click **Continue**. Loading, empty, expired, or unselected zones cannot continue.
+5. In **3. Configure Worker**, choose the Worker name, delimiter, and three KV namespace names.
+6. Click **Finish** to provision and activate the integration using the selected zone and your latest configuration.
 
-- In **Configure Cloudflare**, choose **Connect with Cloudflare**.
-- Click **Connect with Cloudflare**.
-- In Cloudflare, select the Cloudflare account that owns the zone you want Zephyr to use.
-- Review the requested permissions, then select **Authorize**.
-- After Cloudflare redirects back to Zephyr, wait for Zephyr to load your Cloudflare zones.
-- Select the **Cloudflare Zone** for this integration.
-- Choose the delimiter for generated deployment URLs.
-- Click **Finish**.
-
-![Cloudflare zone selection after authorizing Zephyr](../public/cloudflare-oauth-zone-select.webp)
+Authorization connects your Cloudflare account; it does not provision the integration. Worker and KV configuration is entered after authorization and zone selection.
 
 :::info
 
@@ -112,9 +90,12 @@ You can review or revoke authorized OAuth applications from your Cloudflare prof
 
 Manual setup remains available if OAuth is unavailable for your account, blocked by your Cloudflare account settings, or your organization requires manually managed Cloudflare API tokens.
 
-For manual setup, you will need your Cloudflare **Zone ID** and an **API Token**.
+For manual setup, you will need your Cloudflare **Zone ID** and an **API Token**:
 
-![Cloudflare integration form with Manual setup selected](../public/cloudflare-manual-setup-mode.webp)
+1. Complete **1. Basic Info** and click **Continue**.
+2. In **2. Configure Cloudflare**, choose **Manual setup** and enter the API token and Zone ID.
+3. Click **Continue** to open **3. Configure Worker**.
+4. Choose the Worker name, delimiter, and three KV namespace names, then click **Finish** to provision the integration. Entering credentials or continuing does not provision resources.
 
 #### 1. Zone ID
 
@@ -156,8 +137,8 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 
 <dt>Setup Method</dt>
 <dd>
-  Choose **Connect with Cloudflare** for OAuth setup, or **Manual setup** to
-  paste a Cloudflare API token and Zone ID.
+  Choose **Automatic Setup** to authorize with Cloudflare, or **Manual setup**
+  to paste a Cloudflare API token and Zone ID in **Configure Cloudflare**.
 </dd>
 
 <dt>Integration Name</dt>
@@ -168,8 +149,9 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 
 <dt>Delimiter</dt>
 <dd>
-  Choose the delimiter for application subdomains: `-` (your deploy URL will be
-  `*-ze.your.domain`) or `.` (your deploy URL will be `*.ze.your.domain`){' '}
+  In **Configure Worker**, choose `-` for `*-ze.your.domain` or `.` for
+  `*.ze.your.domain`. The dot delimiter requires TLS coverage for the deeper
+  generated hostnames.
 </dd>
 
 <dt>API Token</dt>
@@ -186,9 +168,10 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 
 <dt>Worker and KV Names</dt>
 <dd>
-  Worker and KV namespace names are configurable. The defaults are
-  `ze-worker-for-static-upload`, `ze_envs`, `ze_snapshots`, and `ze_files`. Use
-  your configured names when inspecting or removing resources.
+  In **Configure Worker**, configure the Worker and three KV namespace names.
+  Defaults: `ze-worker-for-static-upload`, `ze_envs`, `ze_snapshots`, and
+  `ze_files`. Worker names are saved with the `ze-` prefix. Use your configured
+  names when inspecting or removing resources.
 </dd>
 
 <dt>Set Integration as Default</dt>
@@ -199,24 +182,26 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 
 ### Worker Setup and Domains
 
-After you finish the connection, Zephyr creates or updates the configured public/static Worker, its KV namespaces, and the two base Worker Routes. For a zone named `example.com`:
+Only **Finish** provisions the configured public/static Worker, its KV namespaces, the exact base production Custom Domain, and the generated-host Route pair. For a zone named `example.com`, all connections target that same Worker:
 
-| Connection                                                   | Cloudflare object                         | Value                |
-| :----------------------------------------------------------- | :---------------------------------------- | :------------------- |
-| Base upload/control endpoint                                 | Worker Route                              | `ze.example.com/*`   |
-| Generated version, tag, and environment URLs (`-` delimiter) | Worker Route                              | `*-ze.example.com/*` |
-| Generated URLs with the existing `.` delimiter               | Worker Route (instead of the `-` pattern) | `*.ze.example.com/*` |
-| Optional environment alias                                   | Worker Custom Domain                      | `app.example.com`    |
+| Connection                                                   | Cloudflare object                       | Value                                                         |
+| :----------------------------------------------------------- | :-------------------------------------- | :------------------------------------------------------------ |
+| Base upload/control endpoint                                 | Worker Custom Domain                    | `ze.example.com`, `enabled: true`, `previews_enabled: false`  |
+| Generated version, tag, and environment URLs (`-` delimiter) | Worker Routes                           | `*-ze.example.com/*` and `*-ze.example.com`                   |
+| Generated URLs with the `.` delimiter                        | Worker Routes (instead of the `-` pair) | `*.ze.example.com/*` and `*.ze.example.com`                   |
+| Optional exact environment alias                             | Worker Custom Domain                    | `app.example.com`, `enabled: true`, `previews_enabled: false` |
 
-Both base Routes include `/*` so all paths and query strings reach the Worker. The dot-delimiter alternative requires DNS coverage and a wildcard certificate for `*.ze.example.com`; the zone's usual `*.example.com` certificate does not cover these deeper hostnames.
+The generated Route ending in `/*` covers paths and query strings; the bare-host Route alone does not cover assets at arbitrary paths. Zephyr does not provision a new `ze.example.com/*` base Route.
 
-Environment aliases are separate from those base Routes. In the environment's settings, enter an exact hostname from the selected integration's zone, without a URL, wildcard, or `/*`. Cloudflare manages DNS and TLS for the attached Custom Domain and sends all paths to the Worker. Zephyr enables normal hostname routing (`enabled: true`) and disables native Cloudflare Worker-version previews (`previews_enabled: false`). This is production hostname traffic, not a requirement to name the Zephyr environment “production.”
+Generated hosts need suitable existing proxied DNS coverage, as required by [Cloudflare's Routes contract](https://developers.cloudflare.com/workers/configuration/routing/routes/). Routes do not create DNS, and the exact base Custom Domain does not supply wildcard coverage. No prescribed DNS record target or DNS-write permission is required by this setup flow. The dot delimiter also requires a wildcard certificate for `*.ze.example.com`; the zone's usual `*.example.com` certificate does not cover those deeper hostnames.
+
+Cloudflare manages DNS and TLS for the exact base and environment Custom Domains and sends all paths to the Worker. In the environment's settings, enter an exact alias from the selected integration's zone, without a URL, wildcard, or `/*`. Normal hostname routing is enabled and native Cloudflare Worker-version previews are disabled. “Production” describes hostname traffic, not a requirement to name the Zephyr environment “production.”
 
 Zephyr publishes the hostname's environment-to-snapshot mapping through the normal deployment flow. An environment with no deployed version will not serve an application until its first deployment. DNS, TLS, and deployment changes may take time to propagate.
 
 Inspect these connections in the [Cloudflare dashboard's Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages): choose your Worker, then **Domains**. Cloudflare also documents the alternate **Settings → Domains & Routes** navigation. See [Routes](https://developers.cloudflare.com/workers/configuration/routing/routes/) and [Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/) for the provider's routing details.
 
-An existing exact CNAME can prevent Custom Domain attachment. Explicitly resolve or migrate the conflicting record before retrying; Zephyr does not automatically remove customer DNS. Existing Route-based aliases migrate when reconnected, not through an automatic bulk migration. Keep the base Routes and wildcard DNS coverage intact.
+An existing exact CNAME can prevent Custom Domain attachment. Explicitly resolve or migrate the conflicting record before retrying; Zephyr does not automatically remove customer DNS. Existing integrations converge on the base Custom Domain and generated Route pair during normal retry, redeployment, or Worker update. An owned legacy base Route is removed only after successful base attachment. Existing Route-based environment aliases migrate when reconnected, not through an automatic bulk migration. Preserve suitable generated-host DNS coverage.
 
 <br />
 <br />
@@ -241,11 +226,9 @@ If Zephyr says Cloudflare authorization was not completed, reconnect and try aga
 
 If Zephyr cannot find any Cloudflare zones after authorization, the Cloudflare account you selected may not have access to a zone. Add a zone in Cloudflare, ask an account administrator for access, or reconnect with a different Cloudflare account.
 
-![Cloudflare OAuth setup showing no zones found](../public/cloudflare-oauth-no-zones.webp)
-
 #### Zones keep loading or OAuth is temporarily unavailable
 
-Reconnect with Cloudflare and try again. If OAuth remains unavailable, you can use **Manual setup** as a fallback or contact us on [Discord](https://discord.gg/zephyrcloud).
+Reconnect with Cloudflare and try again; authorization returns to **Configure Cloudflare**, where you must select a zone again before continuing. Your entered basic and Worker settings remain editable for retry. To use **Manual setup** while an authorized setup session exists, reconnect first to clear that session. Contact us on [Discord](https://discord.gg/zephyrcloud) if OAuth remains unavailable.
 
 #### Revoke Zephyr access in Cloudflare
 
@@ -267,14 +250,9 @@ The default namespace names are:
 
 - The configured public/static Worker, defaulting to `ze-worker-for-static-upload`, uploads and serves assets.
 
-#### 3. Worker Routes
+#### 3. Worker Custom Domains and Generated Routes
 
-- `ze.<zone>/*` on the configured public/static Worker.
-- `*-ze.<zone>/*` on the same Worker, or `*.ze.<zone>/*` for the existing dot delimiter.
-
-#### 4. DNS and Environment Custom Domains
-
-The proxied wildcard CNAME described above is configured by you, not provisioned by Zephyr. Optional exact environment aliases are attached separately as Worker Custom Domains, for which Cloudflare creates DNS records and certificates automatically. No Cloudflare Pages project is provisioned.
+The exact base production Custom Domain and both generated Routes are listed in [Worker Setup and Domains](#worker-setup-and-domains). Optional exact environment aliases are attached separately to the same Worker. Cloudflare creates DNS and TLS for exact Custom Domains; generated Routes rely on existing proxied DNS coverage. No Cloudflare Pages project is provisioned.
 
 ### Deployment and Inspecting Assets
 
@@ -306,8 +284,8 @@ To delete an existing Cloudflare integration, follow these steps:
 
 ### Delete the Worker and Environment Connections
 
-1. Disconnect environment custom domains in Zephyr before deleting the integration. This detaches their owned Custom Domains without removing the base Routes.
-2. In Cloudflare, open **Workers & Pages**, select the configured public/static Worker (default `ze-worker-for-static-upload`), and review **Domains** (or **Settings → Domains & Routes**) for remaining connections.
+1. Disconnect environment custom domains in Zephyr before deleting the integration. This detaches their owned Custom Domains without removing the base production Custom Domain or generated Routes.
+2. In Cloudflare, open **Workers & Pages**, select the configured public/static Worker (default `ze-worker-for-static-upload`), and review **Domains** (or **Settings → Domains & Routes**) for the exact base and environment Custom Domains and both generated Routes.
 3. Delete the Worker using its settings. Do not delete a shared Worker still used by another integration.
 
 There is no Cloudflare Pages project to delete. Review unused DNS records and certificates separately; detaching a Custom Domain does not automatically delete its certificate.
@@ -318,11 +296,11 @@ There is no Cloudflare Pages project to delete. Review unused DNS records and ce
 
 2. Locate the configured namespaces (defaults: `ze_envs`, `ze_snapshots`, `ze_files`) and delete them only if they are no longer shared by other integrations.
 
-### Delete Worker Routes
+### Review Worker Domains and Routes
 
-1. On the dashboard, select the domain used for the integration.
-
-2. In **Workers Routes**, review `ze.<zone>/*` and `*-ze.<zone>/*` (or `*.ze.<zone>/*` for the dot delimiter). Remove them only if they are no longer used; review customer-configured wildcard DNS separately.
+1. On the configured Worker's **Domains** page, review the exact `ze.<zone>` base production Custom Domain and any remaining exact environment aliases.
+2. In the zone's **Workers Routes**, review both `*-ze.<zone>/*` and `*-ze.<zone>` (or `*.ze.<zone>/*` and `*.ze.<zone>` for the dot delimiter), plus any remaining legacy base Route.
+3. Remove only connections owned by the integration that are no longer used. Review customer DNS and certificates separately; do not blindly delete shared resources or DNS records.
 
 ### Delete Deployment Integration
 

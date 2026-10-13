@@ -38,30 +38,28 @@ Check the configured KV namespaces on your Cloudflare account. Their defaults ar
 
 Check that the configured public/static Worker exists. Its default name is `ze-worker-for-static-upload`.
 
-#### c. Worker Routes
+#### c. Base Production Domain and Generated Routes
 
-For generated URLs and the base upload endpoint, check that both base Routes target the configured public/static Worker:
+For the base upload/control endpoint, inspect the configured public/static Worker's **Domains** in **Workers & Pages** (alternate **Settings → Domains & Routes**). The exact `ze.<zone>` hostname must be an owned Worker Custom Domain targeting that Worker, with `enabled: true` and `previews_enabled: false`, not a newly provisioned `ze.<zone>/*` Route.
 
-- `ze.<zone>/*`
-- `*-ze.<zone>/*`, or `*.ze.<zone>/*` for the existing dot delimiter
+For generated URLs, check both Routes target the same configured Worker:
 
-The `/*` covers all paths. Dot-delimiter hostnames also require wildcard TLS coverage for `*.ze.<zone>`.
+- `*-ze.<zone>/*` and `*-ze.<zone>` for the `-` delimiter
+- `*.ze.<zone>/*` and `*.ze.<zone>` for the `.` delimiter
 
-#### d. DNS Records
+The Route ending in `/*` covers paths and query strings; a bare-host Route alone does not cover arbitrary asset paths. Retry, redeploy, or update the Worker to converge an existing integration; Zephyr removes an owned legacy base Route only after successful base Custom Domain attachment.
 
-Check proxied DNS coverage for the base and generated hostnames. The documented customer-configured wildcard CNAME convention is shown below; Zephyr does not create it, and its target is not a Cloudflare requirement. Do not confuse this coverage with an exact environment Custom Domain.
+#### d. Generated-host DNS and TLS
 
-##### Example
+Check that generated hostnames resolve and have suitable proxied DNS coverage, that their Route pair targets the configured public/static Worker, and that TLS covers the chosen delimiter's hostnames. The dot delimiter needs wildcard TLS coverage for `*.ze.<zone>`, which a usual `*.<zone>` certificate does not supply.
 
-| Type  | Name |       Content        | Proxy Status | TTL  |
-| :---: | :--: | :------------------: | :----------: | :--: |
-| CNAME | `*`  | `ze.zephyrcloud.app` |   Proxied    | Auto |
+Worker Routes do not create DNS, and the exact base Custom Domain does not supply wildcard coverage. See [Cloudflare's Routes requirements](https://developers.cloudflare.com/workers/configuration/routing/routes/); no particular CNAME target is prescribed by Zephyr's setup flow.
 
 #### e. Environment Custom Domains
 
 For an exact environment alias, check the configured public/static Worker's **Domains** in **Workers & Pages** (alternate **Settings → Domains & Routes**). The exact hostname, with no `/*`, must have an enabled Custom Domain targeting that Worker, with native Worker-version previews disabled.
 
-Cloudflare provisions the alias's DNS and TLS; it does not need a manual CNAME pointing to `ze.zephyrcloud.app`. An existing exact CNAME can block attachment: explicitly resolve or migrate the conflicting record and retry. Zephyr does not automatically delete customer DNS records.
+Cloudflare provisions the alias's DNS and TLS; no manual CNAME to Zephyr's managed domain is needed. An existing exact CNAME can block attachment: explicitly resolve or migrate the conflicting record and retry. Zephyr does not automatically delete customer DNS records.
 
 The hostname must also have a published environment-to-snapshot mapping. An environment without a deployed version cannot serve an application yet. Allow DNS, TLS, and deployment changes to propagate, and check that subsequent deployments include the alias.
 
