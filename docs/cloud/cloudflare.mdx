@@ -182,16 +182,17 @@ Details for each input after clicking **Add Integration** under **Cloudflare**:
 
 ### Worker Setup and Domains
 
-Only **Finish** provisions the configured public/static Worker, its KV namespaces, the exact base production Custom Domain, and the generated-host Route pair. For a zone named `example.com`, all connections target that same Worker:
+Only **Finish** provisions the configured public/static Worker, its KV namespaces, the exact base production Custom Domain, the base Worker Route, and the selected delimiter's generated-host Route. For a zone named `example.com`, all connections target that same Worker:
 
-| Connection                                                   | Cloudflare object                       | Value                                                         |
-| :----------------------------------------------------------- | :-------------------------------------- | :------------------------------------------------------------ |
-| Base upload/control endpoint                                 | Worker Custom Domain                    | `ze.example.com`, `enabled: true`, `previews_enabled: false`  |
-| Generated version, tag, and environment URLs (`-` delimiter) | Worker Routes                           | `*-ze.example.com/*` and `*-ze.example.com`                   |
-| Generated URLs with the `.` delimiter                        | Worker Routes (instead of the `-` pair) | `*.ze.example.com/*` and `*.ze.example.com`                   |
-| Optional exact environment alias                             | Worker Custom Domain                    | `app.example.com`, `enabled: true`, `previews_enabled: false` |
+| Connection                                                   | Cloudflare object                         | Value                                                         |
+| :----------------------------------------------------------- | :---------------------------------------- | :------------------------------------------------------------ |
+| Base upload/control endpoint                                 | Worker Custom Domain                      | `ze.example.com`, `enabled: true`, `previews_enabled: false`  |
+| Base upload/control endpoint Route                           | Worker Route                              | `ze.example.com/*`                                            |
+| Generated version, tag, and environment URLs (`-` delimiter) | Worker Route                              | `*-ze.example.com/*`                                          |
+| Generated URLs with the `.` delimiter                        | Worker Route (instead of the `-` pattern) | `*.ze.example.com/*`                                          |
+| Optional exact environment alias                             | Worker Custom Domain                      | `app.example.com`, `enabled: true`, `previews_enabled: false` |
 
-The generated Route ending in `/*` covers paths and query strings; the bare-host Route alone does not cover assets at arbitrary paths. Zephyr does not provision a new `ze.example.com/*` base Route.
+Both Routes end in `/*`, which covers the root path, asset paths, and query strings. Setup does not create additional pathless generated-host Routes.
 
 Generated hosts need suitable existing proxied DNS coverage, as required by [Cloudflare's Routes contract](https://developers.cloudflare.com/workers/configuration/routing/routes/). Routes do not create DNS, and the exact base Custom Domain does not supply wildcard coverage. No prescribed DNS record target or DNS-write permission is required by this setup flow. The dot delimiter also requires a wildcard certificate for `*.ze.example.com`; the zone's usual `*.example.com` certificate does not cover those deeper hostnames.
 
@@ -201,7 +202,7 @@ Zephyr publishes the hostname's environment-to-snapshot mapping through the norm
 
 Inspect these connections in the [Cloudflare dashboard's Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages): choose your Worker, then **Domains**. Cloudflare also documents the alternate **Settings → Domains & Routes** navigation. See [Routes](https://developers.cloudflare.com/workers/configuration/routing/routes/) and [Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/) for the provider's routing details.
 
-An existing exact CNAME can prevent Custom Domain attachment. Explicitly resolve or migrate the conflicting record before retrying; Zephyr does not automatically remove customer DNS. Existing integrations converge on the base Custom Domain and generated Route pair during normal retry, redeployment, or Worker update. An owned legacy base Route is removed only after successful base attachment. Existing Route-based environment aliases migrate when reconnected, not through an automatic bulk migration. Preserve suitable generated-host DNS coverage.
+An existing exact CNAME can prevent Custom Domain attachment. Explicitly resolve or migrate the conflicting record before retrying; Zephyr does not automatically remove customer DNS. Normal retry, redeployment, or Worker update creates or updates the base Custom Domain, base Route, and selected delimiter's generated-host Route. Existing Route-based environment aliases migrate when reconnected, not through an automatic bulk migration. Preserve suitable generated-host DNS coverage.
 
 <br />
 <br />
@@ -252,7 +253,7 @@ The default namespace names are:
 
 #### 3. Worker Custom Domains and Generated Routes
 
-The exact base production Custom Domain and both generated Routes are listed in [Worker Setup and Domains](#worker-setup-and-domains). Optional exact environment aliases are attached separately to the same Worker. Cloudflare creates DNS and TLS for exact Custom Domains; generated Routes rely on existing proxied DNS coverage. No Cloudflare Pages project is provisioned.
+The exact base production Custom Domain, base Route, and selected delimiter's generated-host Route are listed in [Worker Setup and Domains](#worker-setup-and-domains). Optional exact environment aliases are attached separately to the same Worker. Cloudflare creates DNS and TLS for exact Custom Domains; generated Routes rely on existing proxied DNS coverage. No Cloudflare Pages project is provisioned.
 
 ### Deployment and Inspecting Assets
 
@@ -285,7 +286,7 @@ To delete an existing Cloudflare integration, follow these steps:
 ### Delete the Worker and Environment Connections
 
 1. Disconnect environment custom domains in Zephyr before deleting the integration. This detaches their owned Custom Domains without removing the base production Custom Domain or generated Routes.
-2. In Cloudflare, open **Workers & Pages**, select the configured public/static Worker (default `ze-worker-for-static-upload`), and review **Domains** (or **Settings → Domains & Routes**) for the exact base and environment Custom Domains and both generated Routes.
+2. In Cloudflare, open **Workers & Pages**, select the configured public/static Worker (default `ze-worker-for-static-upload`), and review **Domains** (or **Settings → Domains & Routes**) for the exact base and environment Custom Domains, base Route, and selected delimiter's generated-host Route.
 3. Delete the Worker using its settings. Do not delete a shared Worker still used by another integration.
 
 There is no Cloudflare Pages project to delete. Review unused DNS records and certificates separately; detaching a Custom Domain does not automatically delete its certificate.
@@ -299,7 +300,7 @@ There is no Cloudflare Pages project to delete. Review unused DNS records and ce
 ### Review Worker Domains and Routes
 
 1. On the configured Worker's **Domains** page, review the exact `ze.<zone>` base production Custom Domain and any remaining exact environment aliases.
-2. In the zone's **Workers Routes**, review both `*-ze.<zone>/*` and `*-ze.<zone>` (or `*.ze.<zone>/*` and `*.ze.<zone>` for the dot delimiter), plus any remaining legacy base Route.
+2. In the zone's **Workers Routes**, review `ze.<zone>/*` and `*-ze.<zone>/*` (or `*.ze.<zone>/*` for the dot delimiter).
 3. Remove only connections owned by the integration that are no longer used. Review customer DNS and certificates separately; do not blindly delete shared resources or DNS records.
 
 ### Delete Deployment Integration
