@@ -223,13 +223,22 @@ const stacks: { id: string; label: string; items: StackItem[] }[] = [
         name: 'TanStack Start',
         href: '/meta-frameworks/tanstack-start',
         icon: (
-          <img
-            src="https://tanstack.com/images/logos/logo-color-100.png"
-            alt=""
-            className={iconClass}
-            width={24}
-            height={24}
-          />
+          <>
+            <img
+              src="https://tanstack.com/favicon-light.svg"
+              alt=""
+              className={`${iconClass} dark:hidden`}
+              width={24}
+              height={24}
+            />
+            <img
+              src="https://tanstack.com/favicon-dark.svg"
+              alt=""
+              className={`${iconClass} hidden dark:block`}
+              width={24}
+              height={24}
+            />
+          </>
         ),
       },
     ],
