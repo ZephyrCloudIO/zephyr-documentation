@@ -294,6 +294,7 @@ const sidebar: Sidebar = {
       icon: SquareTerminal,
     },
     { text: 'Zephyr Codemod', link: '/tools/zephyr-codemod', icon: Wand },
+    { text: 'Zephyr CLI', link: '/tools/zephyr-cli', icon: SquareTerminal },
     {
       text: 'Zephyr Sidepanel',
       link: '/tools/browser-extension',
