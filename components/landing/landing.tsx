@@ -151,7 +151,28 @@ const stacks: { id: string; label: string; items: StackItem[] }[] = [
     id: 'frameworks',
     label: 'Frameworks',
     items: [
-      { name: 'Astro', href: '/meta-frameworks/astro' },
+      {
+        name: 'Astro',
+        href: '/meta-frameworks/astro',
+        icon: (
+          <>
+            <img
+              src="https://astro.build/assets/press/astro-icon-dark.svg"
+              alt=""
+              className={`${iconClass} dark:hidden`}
+              width={24}
+              height={24}
+            />
+            <img
+              src="https://astro.build/assets/press/astro-icon-light-gradient.svg"
+              alt=""
+              className={`${iconClass} hidden dark:block`}
+              width={24}
+              height={24}
+            />
+          </>
+        ),
+      },
       {
         name: 'Ember.js',
         href: '/meta-frameworks/emberjs',
@@ -162,8 +183,32 @@ const stacks: { id: string; label: string; items: StackItem[] }[] = [
         href: '/meta-frameworks/modernjs',
         icon: <ModernjsIcon className={iconClass} />,
       },
-      { name: 'Nitro', href: '/meta-frameworks/nitro' },
-      { name: 'Nuxt', href: '/meta-frameworks/nuxt' },
+      {
+        name: 'Nitro',
+        href: '/meta-frameworks/nitro',
+        icon: (
+          <img
+            src="https://nitro.build/icon.svg"
+            alt=""
+            className={iconClass}
+            width={24}
+            height={24}
+          />
+        ),
+      },
+      {
+        name: 'Nuxt',
+        href: '/meta-frameworks/nuxt',
+        icon: (
+          <img
+            src="https://nuxt.com/assets/design-kit/icon-green.svg"
+            alt=""
+            className={iconClass}
+            width={24}
+            height={24}
+          />
+        ),
+      },
       {
         name: 'Rspress',
         href: '/meta-frameworks/rspress',
@@ -174,7 +219,28 @@ const stacks: { id: string; label: string; items: StackItem[] }[] = [
         href: '/meta-frameworks/rslib',
         icon: <RslibIcon className={iconClass} />,
       },
-      { name: 'TanStack Start', href: '/meta-frameworks/tanstack-start' },
+      {
+        name: 'TanStack Start',
+        href: '/meta-frameworks/tanstack-start',
+        icon: (
+          <>
+            <img
+              src="https://tanstack.com/favicon-light.svg"
+              alt=""
+              className={`${iconClass} dark:hidden`}
+              width={24}
+              height={24}
+            />
+            <img
+              src="https://tanstack.com/favicon-dark.svg"
+              alt=""
+              className={`${iconClass} hidden dark:block`}
+              width={24}
+              height={24}
+            />
+          </>
+        ),
+      },
     ],
   },
   {
