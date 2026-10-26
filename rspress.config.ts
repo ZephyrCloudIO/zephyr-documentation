@@ -174,12 +174,12 @@ const sidebar: Sidebar = {
     {
       text: 'Personal tokens',
       link: '/features/ci-cd-personal-token',
-      tag: 'deprecated',
+      tag: 'planned deprecation',
     },
     {
       text: 'Server tokens',
       link: '/features/ci-cd-server-token',
-      tag: 'deprecated',
+      tag: 'planned deprecation',
     },
 
     { sectionHeaderText: 'Organization' },
