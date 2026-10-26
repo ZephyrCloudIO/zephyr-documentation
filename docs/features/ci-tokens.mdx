@@ -13,7 +13,13 @@ import { Steps } from '@rspress/core/theme';
 
 CI tokens are organization-scoped credentials built for deployment pipelines. Add one to your CI provider as `ZE_CI_TOKEN`, and every Zephyr build in that pipeline authenticates without an interactive login, a shared personal token, or a server token.
 
-CI tokens replace the older deployment-auth methods. If a pipeline still uses `ZE_SERVER_TOKEN` or `ZE_SECRET_TOKEN`, follow the [migration guide](/migrations/ci-token-migration).
+CI tokens are the recommended way to authenticate deployments from CI. Server tokens (`ZE_SERVER_TOKEN`) and personal tokens (`ZE_SECRET_TOKEN`) still work. Using them for deployments is planned for deprecation, and no removal date has been announced. See the [migration guide](/migrations/ci-token-migration) to move a pipeline.
+
+| Method         | Variable          | Status                         | Recommendation          |
+| -------------- | ----------------- | ------------------------------ | ----------------------- |
+| CI token       | `ZE_CI_TOKEN`     | Recommended                    | Use for CI deployments  |
+| Server token   | `ZE_SERVER_TOKEN` | Works; planned for deprecation | Migrate when convenient |
+| Personal token | `ZE_SECRET_TOKEN` | Works; planned for deprecation | Migrate when convenient |
 
 ## How CI tokens work
 
@@ -140,5 +146,5 @@ Zephyr found the CI actor but couldn't map it to an active organization member. 
 
 - [CI/CD Automation](/features/automation): complete GitHub Actions and GitLab pipeline examples
 - [Migrate to CI tokens](/migrations/ci-token-migration): move from server tokens or personal tokens
-- [Server token deployments](/features/ci-cd-server-token) (deprecated)
-- [Personal token deployments](/features/ci-cd-personal-token) (deprecated)
+- [Server token deployments](/features/ci-cd-server-token) (planned for deprecation)
+- [Personal token deployments](/features/ci-cd-personal-token) (planned for deprecation)

@@ -19,7 +19,7 @@ Tags are smart pointers that automatically find and serve the right version of y
 
 When you create a tag, you define conditions that describe which version it should point to. Every time someone visits your tag's URL, Zephyr looks through all your versions, finds the ones that match your conditions, and serves the most recent match.
 
-For example, you might create a "production" tag that always points to the latest [version](/features/versions) built from your main branch by your [CI system](/features/ci-cd-personal-token). When you push new code to main and your CI deploys it, the production tag automatically switches to that new version without you doing anything.
+For example, you might create a "production" tag that always points to the latest [version](/features/versions) built from your main branch by your [CI system](/features/automation). When you push new code to main and your CI deploys it, the production tag automatically switches to that new version without you doing anything.
 
 ### Tag Conditions
 
@@ -353,7 +353,7 @@ Both tags and environments maintain full audit logs, so you can always see who c
 
 ## Integration with CI/CD
 
-Tags and environments integrate seamlessly with your existing [CI/CD pipelines](/features/ci-cd-personal-token). Your build systems can automatically create tags, deploy to environments, or trigger promotions based on your workflow needs.
+Tags and environments integrate seamlessly with your existing [CI/CD pipelines](/features/automation). Your build systems can automatically create tags, deploy to environments, or trigger promotions based on your workflow needs.
 
 Many teams configure their CI to automatically update a "latest" tag when tests pass, trigger staging deployments when code merges to main, and provide promotion tools for moving releases to production.
 

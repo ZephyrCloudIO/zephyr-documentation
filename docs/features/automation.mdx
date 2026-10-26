@@ -11,8 +11,8 @@ head:
 
 Zephyr requires authenticated CI/CD pipelines to publish updates. Use CI tokens for deployment authentication.
 
-:::warning Deployment authentication has changed
-Do not use personal tokens with `ZE_SECRET_TOKEN` for deployments. Existing pipelines that use personal tokens or server tokens should migrate to CI tokens.
+:::info Deployment auth recommendation
+CI tokens are the recommended way to authenticate deployments. Pipelines that use personal tokens or server tokens still work, but using them for deployments is planned for deprecation. See the [migration guide](/migrations/ci-token-migration).
 :::
 
 ## Creating a CI Token

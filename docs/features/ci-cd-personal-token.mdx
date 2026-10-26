@@ -1,37 +1,24 @@
 ---
 title: Personal token deployments
-description: Personal tokens remain available, but they are no longer the supported authentication method for Zephyr deployments from CI/CD.
-head:
-  - - meta
-    - property: og:description
-      content: Personal tokens remain available, but they are no longer the supported authentication method for Zephyr deployments from CI/CD.
+description: Personal tokens work today. Using them for CI deployments is planned for deprecation, and CI tokens are recommended instead.
 ---
 
 # Personal token deployments
 
-Personal tokens are no longer the supported way to authenticate Zephyr deployments from CI/CD pipelines.
+Personal tokens work today, including for deployments that set `ZE_SECRET_TOKEN`.
 
-Personal tokens still exist for user-scoped access where supported, but deployment authentication is moving to CI tokens. CI tokens are organization-scoped credentials designed for build pipelines and use the `ZE_CI_TOKEN` environment variable.
+:::info Planned for deprecation
+Using personal tokens for deployments is planned for deprecation. No removal date has been announced.
 
-:::warning Deployment authentication is changing
-Do not add `ZE_SECRET_TOKEN` to new deployment pipelines. Existing deployment pipelines that use personal tokens should migrate to CI tokens.
+For deployments, we recommend [CI tokens](/features/ci-tokens) (`ZE_CI_TOKEN`). Personal tokens remain available for user-scoped access where the product supports it.
 :::
 
-## What to use instead
-
-Use CI tokens for deployments from GitHub Actions, GitLab CI/CD, and other build pipelines.
+## Move deployments to CI tokens
 
 Follow the [deployment auth migration guide](/migrations/ci-token-migration) to replace `ZE_SECRET_TOKEN` with `ZE_CI_TOKEN`.
 
-## What changes for personal tokens
-
-- Personal tokens are not being removed.
-- Personal-token deployment authentication is going away.
-- Existing deployment jobs should stop using `ZE_SECRET_TOKEN`.
-- User-scoped token use outside deployments should continue only where the product supports it.
-
-## Related Documentation
+## Related docs
 
 - [Migrate deployment auth to CI tokens](/migrations/ci-token-migration)
-- [CI/CD server token guide](/features/ci-cd-server-token)
-- [Automation](/features/automation)
+- [CI Tokens](/features/ci-tokens)
+- [CI/CD Automation](/features/automation)
