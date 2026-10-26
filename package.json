@@ -52,8 +52,8 @@
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "21.2.3",
-    "@commitlint/config-conventional": "21.2.3",
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4",
     "@rspress/plugin-algolia": "2.0.23",
     "@rspress/plugin-llms": "2.0.23",
     "@tailwindcss/postcss": "4.3.3",
