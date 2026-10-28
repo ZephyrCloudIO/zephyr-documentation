@@ -33,7 +33,6 @@
     "pnpm": "10.x"
   },
   "dependencies": {
-    "@intercom/messenger-js-sdk": "^0.0.20",
     "@radix-ui/react-icons": "^1.3.2",
     "@radix-ui/react-progress": "^1.1.17",
     "@radix-ui/react-slot": "^1.4.0",
