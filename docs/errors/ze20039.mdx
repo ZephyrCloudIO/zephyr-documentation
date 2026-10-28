@@ -19,9 +19,9 @@ The fastest way to resolve this error is to [join our Discord](https://discord.g
 
 <ErrorInfo code="ZE20039" terminal related="ZE20040" />
 
-Zephyr build retention removes files from your edge provider when no remaining build uses them. When a new build references one of those files, the edge rejects the snapshot upload and lists the missing files. The Zephyr plugin then re-uploads them and retries the snapshot upload once.
+Zephyr build retention removes files from your edge provider when no remaining build uses them. When a new build references one of those files, the edge rejects the snapshot upload and lists the missing files. The Zephyr plugin then re-uploads them and retries the snapshot upload up to three times, a few seconds apart.
 
-This error means the edge still reported files as missing after that re-upload.
+This error means the edge still reported files as missing after those retries.
 
 ## Debugging the error
 
@@ -29,7 +29,7 @@ This error means the edge still reported files as missing after that re-upload.
 
 ### Rebuild your application
 
-Run your build again. The new build uploads all of its files again.
+Wait a minute, then run your build again. The plugin has already dropped the missing files from its local list of uploaded files, so the next build uploads them again.
 
 ```bash
 npm run build

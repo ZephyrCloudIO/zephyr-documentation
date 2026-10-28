@@ -27,9 +27,9 @@ This error means some of the missing files are not part of the current build out
 
 <Steps>
 
-### Rebuild without the cache
+### Run the build again
 
-Clear your bundler's build cache (for example `node_modules/.cache`) and any build cache your CI restores, then run a full build.
+Run your build once more. If the edge still lists files your build doesn't produce, the snapshot and the build output disagree, which points to a problem on Zephyr's side rather than in your project.
 
 ```bash
 npm run build
@@ -37,6 +37,6 @@ npm run build
 
 ### Contact support if it persists
 
-If the error comes back after a clean build, [contact us on Discord](https://discord.gg/zephyrcloud) with the build id and the full error output.
+If the error comes back, [contact us on Discord](https://discord.gg/zephyrcloud) with the build id and the full error output.
 
 </Steps>
