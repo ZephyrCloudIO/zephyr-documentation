@@ -1,0 +1,42 @@
+---
+title: 'ZE20039: Build files still missing after re-upload'
+description: 'ZE20039: The edge still reports build files as missing after the plugin re-uploaded them'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE20039: The edge still reports build files as missing after the plugin re-uploaded them'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE20039')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE20039" terminal related="ZE20040" />
+
+Zephyr build retention removes files from your edge provider when no remaining build uses them. When a new build references one of those files, the edge rejects the snapshot upload and lists the missing files. The Zephyr plugin then re-uploads them and retries the snapshot upload once.
+
+This error means the edge still reported files as missing after that re-upload.
+
+## Debugging the error
+
+<Steps>
+
+### Rebuild your application
+
+Run your build again. The new build uploads all of its files again.
+
+```bash
+npm run build
+```
+
+### Contact support if it persists
+
+If the error comes back after a rebuild, [contact us on Discord](https://discord.gg/zephyrcloud) with the build id and the full error output.
+
+</Steps>

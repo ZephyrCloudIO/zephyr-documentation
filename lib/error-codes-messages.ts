@@ -178,6 +178,18 @@ export const Errors = {
     message: 'Max payload size exceeded.',
     kind: 'deploy',
   },
+  /** Edge still reports build files as missing after they were re-uploaded */
+  ERR_SNAPSHOT_MISSING_ASSETS: {
+    id: '039',
+    message: 'Build files still missing after re-upload.',
+    kind: 'deploy',
+  },
+  /** Edge reports missing files that are not in the current build output */
+  ERR_SNAPSHOT_MISSING_ASSETS_NOT_IN_BUILD: {
+    id: '040',
+    message: 'Missing build files are not in the build output.',
+    kind: 'deploy',
+  },
   /** Resolve remotes error */
   ERR_RESOLVE_REMOTES: {
     id: '001',
