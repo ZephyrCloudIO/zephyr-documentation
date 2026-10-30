@@ -104,6 +104,19 @@ const config = {
 module.exports = withZephyr()(config);
 ```
 
+### Runtime Manifest
+
+For a native shell whose JavaScript bundle ships in the store binary, set `runtimeManifest` so the shell picks its host from its own Zephyr environment's `zephyr-manifest.json` at runtime, controlled from the dashboard:
+
+```javascript
+// rspack.config.js (shell; package.json has "zephyr:dependencies": { "host": "host@production" })
+module.exports = withZephyr({
+  runtimeManifest: '@production-${target}',
+})(config);
+```
+
+`${target}` is replaced with `ios` or `android`; use plain quotes, not a template literal. Selector syntax, build-time checks, runtime behavior, and the `zephyr-native-cache` requirement are the same as for Metro; see [Metro: Runtime Manifest](/bundlers/metro#runtime-manifest).
+
 ## Shared Dependencies
 
 Configure shared dependencies to ensure single instances of critical modules like React and React Native:

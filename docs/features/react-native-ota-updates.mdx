@@ -274,6 +274,8 @@ To deploy an OTA update:
 
 To roll back, use the Zephyr dashboard to roll the remote environment back or move the tag back to a previous version. The next update check downloads the rolled-back bundle and applies it through the same reload flow.
 
+If a native shell loads the host itself as a remote, set the `runtimeManifest` plugin option so the shell's Zephyr environment, controlled from the dashboard, decides which host it loads. See [Runtime Manifest](/bundlers/metro#runtime-manifest).
+
 ## Example Repository
 
 Use [`zephyr-native-cache-test`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test) as the implementation reference. Start with these files:
