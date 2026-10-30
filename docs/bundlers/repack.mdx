@@ -115,7 +115,7 @@ module.exports = withZephyr({
 })(config);
 ```
 
-`${target}` is replaced with `ios` or `android`; use plain quotes, not a template literal. Selector syntax, build-time checks, runtime behavior, and the `zephyr-native-cache` requirement are the same as for Metro; see [Metro: Runtime Manifest](/bundlers/metro#runtime-manifest).
+`${target}` is replaced with `ios` or `android`; use plain quotes, not a template literal. Selector syntax, build-time checks, runtime behavior, and the `zephyr-native-cache` requirement are the same as for Metro; see [Metro: Runtime Manifest](/bundlers/metro#runtime-manifest). In Re.Pack, a `runtimeManifest` that fails to resolve is reported like other Zephyr configuration errors: it fails the build in CI (with `ZE_CI_TOKEN`) or with `ZE_FAIL_BUILD=true`, and otherwise logs the error and builds without Zephyr.
 
 ## Shared Dependencies
 
