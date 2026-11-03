@@ -1,0 +1,153 @@
+---
+title: Git Providers
+description: Link your GitHub, GitLab.com, or self-hosted GitLab account to Zephyr Cloud so CI token deployments are attributed to you.
+head:
+  - - meta
+    - property: og:description
+      content: Link your GitHub, GitLab.com, or self-hosted GitLab account to Zephyr Cloud so CI token deployments are attributed to you.
+---
+
+import { Steps } from '@rspress/core/theme';
+
+# Git Providers
+
+Linking a Git provider account connects your GitHub or GitLab identity to your Zephyr user. Zephyr uses that link to work out who triggered a pipeline that deploys with a [CI token](/features/ci-tokens).
+
+When a build runs with `ZE_CI_TOKEN`, Zephyr reads the person who started the job from the CI provider's metadata, such as the GitHub actor or the GitLab user. It then looks for a Zephyr user with a matching linked account. If it finds one, the deployment runs as that user and shows up under their name in version history. If it can't find one, the token exchange fails and the build does not deploy.
+
+You manage linked accounts in **Profile settings → Git Providers**, at [app.zephyr-cloud.io/profile/settings/git-providers](https://app.zephyr-cloud.io/profile/settings/git-providers).
+
+:::tip Who needs to link an account
+Everyone who triggers deployments from GitHub Actions or GitLab CI/CD should link the matching account. Bot runs (for example Dependabot or Renovate) don't need a linked account. They are authorized by the person who created the CI token. EAS builds match on the commit author or committer email instead.
+:::
+
+## Supported providers
+
+| Provider           | How linking works                                              | Setup required                                      |
+| ------------------ | -------------------------------------------------------------- | --------------------------------------------------- |
+| GitHub             | Sign in to GitHub and approve the link                         | None                                                |
+| GitLab.com         | Sign in to GitLab.com and authorize Zephyr                     | None                                                |
+| Self-hosted GitLab | Authorize through an OAuth application in your GitLab instance | Create an OAuth application in your GitLab instance |
+
+Each provider card on the page shows **Linked** or **Not linked**. A linked card also shows the account username.
+
+## Link GitHub
+
+<Steps>
+
+### Open Git Providers
+
+Go to [Profile settings → Git Providers](https://app.zephyr-cloud.io/profile/settings/git-providers).
+
+### Start the link
+
+On the **GitHub** card, click **Link GitHub**.
+
+### Sign in to GitHub
+
+GitHub always asks you to sign in, even if you already have a session open. Sign in with the GitHub account that triggers your workflows, then approve the request.
+
+### Confirm
+
+You return to the Git Providers page with a **Git provider linked.** message, and the GitHub card shows **Linked** with your username.
+
+</Steps>
+
+## Link GitLab.com
+
+<Steps>
+
+### Open Git Providers
+
+Go to [Profile settings → Git Providers](https://app.zephyr-cloud.io/profile/settings/git-providers).
+
+### Start the link
+
+On the **GitLab** card, click **Link GitLab**.
+
+### Authorize Zephyr
+
+Sign in to GitLab.com if prompted and authorize the application. Zephyr only asks for the `read_user` scope, which lets it read your GitLab user ID and username.
+
+### Confirm
+
+You return to the Git Providers page and the GitLab card shows **Linked**.
+
+</Steps>
+
+## Link a self-hosted GitLab instance
+
+Zephyr can't use a shared OAuth application for a GitLab instance it doesn't know about. To link a self-managed GitLab (or GitLab Dedicated) account, create an OAuth application in that instance and give Zephyr its credentials.
+
+<Steps>
+
+### Create an OAuth application in GitLab
+
+In your GitLab instance, go to **User settings → Applications** (or create the application at the group or instance level if your administrator prefers that). Create a new application with these settings:
+
+| Field        | Value                                                                          |
+| ------------ | ------------------------------------------------------------------------------ |
+| Name         | `Zephyr Cloud` (any name works)                                                |
+| Redirect URI | `https://api.zephyr-cloud.io/v2/user/me/git-provider-identities/link/callback` |
+| Confidential | Enabled                                                                        |
+| Scopes       | `read_user`                                                                    |
+
+Save the application, then copy the **Application ID** and **Secret**.
+
+### Enter the instance details in Zephyr
+
+On the **Self-hosted GitLab** card in [Git Providers](https://app.zephyr-cloud.io/profile/settings/git-providers), fill in:
+
+- **Self-hosted GitLab URL**: the base URL of your instance, for example `https://gitlab.example.com`. Zephyr strips any path, query, or fragment.
+- **OAuth client ID**: the GitLab **Application ID**.
+- **OAuth client secret**: the GitLab **Secret**.
+
+### Authorize
+
+Click **Link**. Zephyr sends you to your GitLab instance to sign in and authorize the application, then brings you back to the Git Providers page.
+
+</Steps>
+
+Zephyr encrypts the client secret before storing it. The OAuth configuration belongs to your Zephyr user and that instance URL, so each teammate on the same instance enters credentials when they link. If your GitLab administrator creates one group- or instance-level application for Zephyr, distribute its credentials through your usual secret-sharing tool rather than chat or email.
+
+You can link more than one self-hosted instance. The **Self-hosted GitLab** card stays editable after you link one and lists each account as **Account 1**, **Account 2**, and so on.
+
+## Unlink an account
+
+On the provider card, click **Unlink** next to the account. Zephyr removes the link right away. For self-hosted GitLab, it also deletes the OAuth configuration stored for that instance.
+
+After you unlink, CI token deployments triggered by that account fail with an authentication error until you link an account again.
+
+If the page doesn't show a recent change, for example after you linked an account in another tab, click **Refresh**.
+
+## Troubleshooting
+
+### CI token exchange fails for a linked user
+
+```shell
+ZE_CI_TOKEN could not be exchanged for a Zephyr access token.
+```
+
+The error message lists the provider, username, and actor type Zephyr detected. Check that:
+
+- The account listed in the error is the one linked on the Git Providers page. Personal and work GitHub accounts are a common mix-up.
+- For self-hosted GitLab, the linked instance URL matches the instance that runs the pipeline.
+- The linked Zephyr user is still an active member of the organization that owns the CI token.
+
+### "Enter a valid GitLab instance URL."
+
+The **Self-hosted GitLab URL** field must be a full URL that includes the scheme, for example `https://gitlab.example.com`.
+
+### GitLab shows "The redirect URI included is not valid."
+
+The OAuth application in your GitLab instance doesn't list the Zephyr callback. Set its redirect URI to exactly `https://api.zephyr-cloud.io/v2/user/me/git-provider-identities/link/callback`, then try again.
+
+### Linking fails with another error
+
+Zephyr shows the provider's error message when the authorization doesn't complete. Try again, and if it keeps failing, contact [support](https://discord.gg/zephyrcloud) with the message you saw.
+
+## Related
+
+- [CI Tokens](/features/ci-tokens): how Zephyr detects the CI actor and exchanges the token
+- [Migrate to CI tokens](/migrations/ci-token-migration): move a pipeline from server or personal tokens
+- [CI/CD Automation](/features/automation): GitHub Actions and GitLab pipeline examples
