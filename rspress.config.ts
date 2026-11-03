@@ -166,6 +166,7 @@ const sidebar: Sidebar = {
 
     { sectionHeaderText: 'CI/CD' },
     { text: 'CI Tokens', link: '/features/ci-tokens', tag: 'new' },
+    { text: 'Git Providers', link: '/features/git-providers', tag: 'new' },
     { text: 'CI/CD Automation', link: '/features/automation' },
     {
       text: 'Migrate to CI tokens',
