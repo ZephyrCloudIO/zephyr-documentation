@@ -15,7 +15,7 @@ Linking a Git provider account connects your GitHub or GitLab identity to your Z
 
 When a build runs with `ZE_CI_TOKEN`, Zephyr reads the person who started the job from the CI provider's metadata, such as the GitHub actor or the GitLab user. It then looks for a Zephyr user with a matching linked account. If it finds one, the deployment runs as that user and shows up under their name in version history. If it can't find one, the token exchange fails and the build does not deploy.
 
-You manage linked accounts in **Profile settings → Git Providers**, at [app.zephyr-cloud.io/profile/settings/git-providers](https://app.zephyr-cloud.io/profile/settings/git-providers).
+Open linked accounts from the account menu: **My Profile → Settings → Git Providers**, at [app.zephyr-cloud.io/profile/settings/git-providers](https://app.zephyr-cloud.io/profile/settings/git-providers). The card title on that page is **Git providers**.
 
 :::tip Who needs to link an account
 Everyone who triggers deployments from GitHub Actions or GitLab CI/CD should link the matching account. Bot runs (for example Dependabot or Renovate) don't need a linked account. They are authorized by the person who created the CI token. EAS builds match on the commit author or committer email instead.
@@ -37,7 +37,7 @@ Each provider card on the page shows **Linked** or **Not linked**. A linked card
 
 ### Open Git Providers
 
-Go to [Profile settings → Git Providers](https://app.zephyr-cloud.io/profile/settings/git-providers).
+Open the account menu, choose **My Profile**, then **Settings**, then **Git Providers**: [app.zephyr-cloud.io/profile/settings/git-providers](https://app.zephyr-cloud.io/profile/settings/git-providers).
 
 ### Start the link
 
@@ -59,7 +59,7 @@ You return to the Git Providers page with a **Git provider linked.** message, an
 
 ### Open Git Providers
 
-Go to [Profile settings → Git Providers](https://app.zephyr-cloud.io/profile/settings/git-providers).
+Open the account menu, choose **My Profile**, then **Settings**, then **Git Providers**: [app.zephyr-cloud.io/profile/settings/git-providers](https://app.zephyr-cloud.io/profile/settings/git-providers).
 
 ### Start the link
 

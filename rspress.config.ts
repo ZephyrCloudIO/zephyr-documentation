@@ -470,6 +470,22 @@ export default defineConfig({
           from: '/recipes/react-vite',
           to: '/bundlers/vite',
         },
+        {
+          from: '/features/versioning-tags',
+          to: '/features/tags-environments',
+        },
+        {
+          from: '^/features/versioning-tags$',
+          to: '/features/tags-environments',
+        },
+        {
+          from: '/reference/faq',
+          to: '/getting-started/faq',
+        },
+        {
+          from: '^/reference/faq$',
+          to: '/getting-started/faq',
+        },
       ],
     }),
     // zephyr-rspress-plugin types its config hook against its own copy of the
