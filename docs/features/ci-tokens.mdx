@@ -50,9 +50,9 @@ Zephyr maps GitHub and GitLab actors to Zephyr users through linked Git provider
 
 <Steps>
 
-### Open your organization settings
+### Open CI Tokens
 
-In [Zephyr Cloud](https://app.zephyr-cloud.io), go to **Organization Settings** and open **CI tokens**.
+In [Zephyr Cloud](https://app.zephyr-cloud.io), go to **Settings → Tokens → CI Tokens**.
 
 ### Generate a token
 
@@ -140,7 +140,7 @@ Zephyr found the CI actor but couldn't map it to an active organization member. 
 - **GitHub or GitLab users:** [link that Git provider account](/features/git-providers) in Zephyr Cloud, then rerun the workflow.
 - **Bots** (for example Dependabot or Renovate): bot runs are authorized by the person who created the CI token. Make sure the token creator is still an active member of the organization.
 - **EAS builds:** make sure the commit author or committer email belongs to an active organization member.
-- **Revoked or lost tokens:** confirm the token still exists under **Organization Settings** → **CI tokens**, or generate a new one.
+- **Revoked or lost tokens:** confirm the token still exists under **Settings → Tokens → CI Tokens**, or generate a new one.
 
 ## Related docs
 

@@ -27,10 +27,9 @@ Use this guide if a pipeline authenticates Zephyr with `ZE_SERVER_TOKEN` and `ZE
 ## Create a CI token
 
 1. Open Zephyr Cloud.
-2. Go to **Organization Settings**.
-3. Open **CI tokens**.
-4. Generate a CI token.
-5. Copy the token value. It is only shown when the token is created.
+2. Go to **Settings → Tokens → CI Tokens**.
+3. Generate a CI token.
+4. Copy the token value. It is only shown when the token is created.
 
 ## Update GitHub Actions
 
@@ -78,9 +77,9 @@ If the build fails:
 
 ## Clean up old tokens
 
-Once every pipeline for the repository uses `ZE_CI_TOKEN`, you can revoke the server token under **Organization Settings** > **Server Tokens**.
+Once every pipeline for the repository uses `ZE_CI_TOKEN`, you can revoke the server token under **Settings → Tokens → Server Tokens**.
 
-If a personal token was used only for deployments, you can revoke it from your profile settings. If it is used for other workflows, keep it and remove it only from deployment jobs.
+If a personal token was used only for deployments, revoke it from profile **Settings → API Tokens**. If it is used for other workflows, keep it and remove it only from deployment jobs.
 
 ## Related docs
 

@@ -70,7 +70,7 @@ const notFoundSuggestions = [
     title: 'Cloudflare Integration',
     href: '/cloud/cloudflare',
     description:
-      'Add Cloudflare as your Deployment Integration on Zephyr Cloud.',
+      'Add Cloudflare under Deployment Integrations on Zephyr Cloud.',
     variant: 'small',
   },
 ] satisfies CardItemProps[];
