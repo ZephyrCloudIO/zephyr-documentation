@@ -42,16 +42,20 @@ Rolling back works the same way: when the environment serves an older version, t
 
 ## Create The Remote
 
-Create a Vite app for the feature, next to the Electron app. Install the Zephyr plugin:
+Create a Vite app for the feature, next to the Electron app. Install the Module Federation and Zephyr plugins:
 
-<PackageManagerTabs command="add --dev vite-plugin-zephyr cross-env" />
+<PackageManagerTabs command="add --dev @module-federation/vite vite-plugin-zephyr cross-env" />
 
 Expose the feature's component and share React as a singleton, so the remote renders with the app's React instead of its own copy:
 
 ```ts title="apps/usage-remote/vite.config.ts"
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { withZephyr, type ModuleFederationOptions } from 'vite-plugin-zephyr';
+import {
+  federation,
+  type ModuleFederationOptions,
+} from '@module-federation/vite';
+import { withZephyr } from 'vite-plugin-zephyr';
 
 const mfConfig: ModuleFederationOptions = {
   name: 'usage',
@@ -66,7 +70,7 @@ const mfConfig: ModuleFederationOptions = {
 };
 
 export default defineConfig({
-  plugins: [react(), withZephyr({ mfConfig })],
+  plugins: [react(), federation(mfConfig), withZephyr()],
   build: { target: 'esnext' },
 });
 ```
