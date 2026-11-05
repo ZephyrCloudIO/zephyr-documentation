@@ -142,185 +142,79 @@ export default defineConfig({
 });
 ```
 
-Track releases in a small store outside React. It polls the environment's `remoteEntry.js`, fingerprints its contents, and records when the live release differs from the one on screen:
+Two small functions cover the Zephyr side. `loadRelease` loads whatever the environment serves now, and `hasNewRelease` tells you when that has changed:
 
-```ts title="apps/desktop/src/ota/release.ts"
+```ts title="apps/desktop/src/ota/usage-remote.ts"
 import { loadRemote, registerRemotes } from '@module-federation/runtime';
-import { useSyncExternalStore, type ComponentType } from 'react';
+import type { ComponentType } from 'react';
 
 const REMOTE_ENTRY =
   'https://production-usage-desktop-acme-ze.zephyrcloud.app/remoteEntry.js';
 
-interface ReleaseState {
-  Page?: ComponentType;
-  /** The release on screen. */
-  current?: string;
-  /** The release the environment serves now. */
-  latest?: string;
-  applying?: boolean;
+let loadedEntry: string | undefined;
+
+async function fetchEntry() {
+  const response = await fetch(REMOTE_ENTRY, { cache: 'no-store' });
+  if (!response.ok)
+    throw new Error(`remoteEntry.js returned ${response.status}`);
+  return response.text();
 }
 
-let state: ReleaseState = {};
-const listeners = new Set<() => void>();
-const setState = (next: Partial<ReleaseState>) => {
-  state = { ...state, ...next };
-  listeners.forEach((listener) => listener());
-};
-
-export const useRelease = () =>
-  useSyncExternalStore(
-    (listener) => {
-      listeners.add(listener);
-      return () => listeners.delete(listener);
-    },
-    () => state,
-  );
-
-export const isUpdateReady = (release: ReleaseState) =>
-  release.latest !== undefined && release.latest !== release.current;
-
-/** FNV-1a. Each release lists different chunk hashes, so its entry hashes differently. */
-function hash(text: string) {
-  let value = 0x811c9dc5;
-  for (let i = 0; i < text.length; i++) {
-    value = Math.imul(value ^ text.charCodeAt(i), 0x01000193);
-  }
-  return (value >>> 0).toString(16);
-}
-
-async function fetchFingerprint() {
-  try {
-    const response = await fetch(REMOTE_ENTRY, { cache: 'no-store' });
-    return response.ok ? hash(await response.text()) : undefined;
-  } catch {
-    return undefined; // Offline or mid-deploy; the next poll tries again.
-  }
-}
-
-async function loadRelease(fingerprint: string) {
-  // Browsers cache ES modules by URL, and the environment URL never changes.
-  // A per-release query string makes the runtime fetch the new entry.
-  const entry = new URL(REMOTE_ENTRY);
-  entry.searchParams.set('release', fingerprint);
-  registerRemotes([{ name: 'usage', entry: entry.href, type: 'module' }], {
+/** Loads the release the environment serves now. Call it again to apply an update. */
+export async function loadRelease() {
+  const entry = await fetchEntry();
+  const url = new URL(REMOTE_ENTRY);
+  url.searchParams.set('release', String(Date.now()));
+  registerRemotes([{ name: 'usage', entry: url.href, type: 'module' }], {
     force: true,
   });
   const module = await loadRemote<{ UsagePage: ComponentType }>(
     'usage/UsagePage',
   );
   if (!module) throw new Error('usage/UsagePage did not load');
+  loadedEntry = entry;
   return module.UsagePage;
 }
 
-export async function loadInitialRelease() {
-  const fingerprint = await fetchFingerprint();
-  if (!fingerprint) throw new Error('The usage remote is unreachable');
-  const Page = await loadRelease(fingerprint);
-  setState({ Page, current: fingerprint, latest: fingerprint });
-}
-
-export async function checkForRelease() {
-  const fingerprint = await fetchFingerprint();
-  if (fingerprint && fingerprint !== state.latest)
-    setState({ latest: fingerprint });
-}
-
-export async function applyRelease() {
-  const { latest, current, applying } = state;
-  if (!latest || latest === current || applying) return;
-  setState({ applying: true });
-  try {
-    setState({
-      Page: await loadRelease(latest),
-      current: latest,
-      applying: false,
-    });
-  } catch (error) {
-    // Keep the current release on screen; the prompt stays so the user can retry.
-    console.error('Could not apply the new release', error);
-    setState({ applying: false });
-  }
+/** True when the environment serves a different release than the one loaded. */
+export async function hasNewRelease() {
+  const entry = await fetchEntry().catch(() => undefined);
+  return (
+    loadedEntry !== undefined && entry !== undefined && entry !== loadedEntry
+  );
 }
 ```
 
-`force: true` replaces the registered remote and clears its cached module, so the next `loadRemote` call evaluates the new release instead of returning the old one.
+Two details make the in-place update work:
 
-Start polling once, in the app shell, so the update prompt can appear on any screen and not only on the federated one:
+- **The query string.** Browsers cache ES modules by URL, and the environment URL never changes. Without a new URL per load, the browser returns the module it already evaluated.
+- **`force: true`.** It replaces the registered remote and clears the runtime's cached module, so `loadRemote` evaluates the new release instead of returning the old one.
 
-```tsx title="apps/desktop/src/App.tsx"
-import { useEffect } from 'react';
-import { checkForRelease } from './ota/release';
-
-const POLL_MS = 30_000;
-
-export function App() {
-  useEffect(() => {
-    void checkForRelease();
-    const timer = setInterval(() => void checkForRelease(), POLL_MS);
-    return () => clearInterval(timer);
-  }, []);
-
-  return <Shell />;
-}
-```
+Polling compares the text of `remoteEntry.js`. Each release lists different chunk hashes, so a new release always changes the file.
 
 ## Render The Feature And Offer Updates
 
-Render the remote where the feature used to be. The example uses `react-error-boundary`; any error boundary that supports resetting works. Keep a copy of the feature bundled with the app, and fall back to it when the remote can't load: the user is offline, the edge is unreachable, or a release throws while rendering.
+Keep the loaded component in your app's state, and render it where the feature used to be. Keep a copy of the feature bundled with the app as the fallback for when the remote can't load: the user is offline, the edge is unreachable, or a release throws while rendering.
 
 ```tsx title="apps/desktop/src/routes/UsageRoute.tsx"
-import { useEffect, useState } from 'react';
+import type { ComponentType } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BundledUsagePage } from '../usage/UsagePage';
-import { loadInitialRelease, useRelease } from '../ota/release';
 
-export function UsageRoute() {
-  const release = useRelease();
-  const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    if (!release.Page) loadInitialRelease().catch(() => setFailed(true));
-  }, []);
-
-  if (failed) return <BundledUsagePage />;
-  if (!release.Page) return null;
-
-  const { Page } = release;
+// `Page` comes from loadRelease(), or is undefined if it failed.
+export function UsageRoute({ Page }: { Page?: ComponentType }) {
+  if (!Page) return <BundledUsagePage />;
   return (
-    <ErrorBoundary
-      resetKeys={[release.current]}
-      fallback={<BundledUsagePage />}
-    >
+    <ErrorBoundary resetKeys={[Page]} fallback={<BundledUsagePage />}>
       <Page />
     </ErrorBoundary>
   );
 }
 ```
 
-`resetKeys` clears the error boundary when a new release is applied, so a fixed release replaces the fallback.
+`resetKeys` clears the error boundary when a new release is applied, so a fixed release replaces the fallback. The example uses `react-error-boundary`, but any error boundary that supports resetting works.
 
-Show the update wherever your app already reports updates, such as a status bar item or the auto-updater's indicator:
-
-```tsx title="apps/desktop/src/components/UpdateButton.tsx"
-import { applyRelease, isUpdateReady, useRelease } from '../ota/release';
-
-export function UpdateButton() {
-  const release = useRelease();
-  if (!isUpdateReady(release)) return null;
-
-  return (
-    <button
-      disabled={release.applying}
-      title="An OTA update is ready to install"
-      onClick={() => void applyRelease()}
-    >
-      {release.applying ? 'Installing…' : 'Update'}
-    </button>
-  );
-}
-```
-
-Applying an update doesn't navigate anywhere. If the federated screen is open, it re-renders with the new release. If it isn't, the user sees the new release the next time they open it.
+Call `hasNewRelease()` on an interval from the app shell, so the update can be offered on any screen, not only the federated one. Show it wherever your app already reports updates, such as a status bar item or the auto-updater's indicator. When the user applies it, call `loadRelease()` again and store the new component. If the federated screen is open, it re-renders with the new release. If it isn't, the user sees the new release the next time they open it. Nothing has to navigate or reload.
 
 ## Allow The Remote In The Content Security Policy
 
@@ -353,7 +247,7 @@ To roll back, deploy the previous version to the `production` environment from t
 
 **The remote's styles break the app layout.** If the remote ships its own utility CSS (for example, Tailwind), its rules can land after the host's and override them. A remote `.hidden` that comes after the host's `md:block` hides host elements at every width. Put the remote's utilities in a lower cascade layer than the host's, such as `@import "tailwindcss/utilities" layer(components)`, or scope them to the remote's root element.
 
-**The app retries a broken release on every poll.** Remember the fingerprint of a release that failed to load, and retry only when the environment serves a different one.
+**The app retries a broken release on every poll.** `hasNewRelease()` keeps returning `true` after `loadRelease()` fails, because the loaded release hasn't changed. Remember the `remoteEntry.js` text of the release that failed, and offer the update again only when the environment serves a different one.
 
 **React hooks throw "Invalid hook call".** The remote is running its own copy of React. Make sure both the host and the remote declare `react` and `react-dom` as `singleton` shared dependencies.
 
