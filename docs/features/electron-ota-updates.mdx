@@ -1,0 +1,356 @@
+---
+title: Electron OTA Updates (Beta)
+description: Ship beta over-the-air updates to installed Electron apps by loading a Module Federation remote from a Zephyr environment.
+head:
+  - - meta
+    - property: og:description
+      content: Ship beta over-the-air updates to installed Electron apps by loading a Module Federation remote from a Zephyr environment.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+# Electron OTA Updates (Beta)
+
+An Electron app usually ships every change through a new installer and an auto-updater. With Zephyr, you can move part of the renderer into a [Module Federation](https://module-federation.io/) remote, deploy that remote to Zephyr Cloud, and have the installed app pick up new releases from a Zephyr [environment](/features/tags-environments#understanding-environments). Users get the update in seconds, without a download or a restart, and a rollback is just as fast.
+
+This guide builds that flow with Vite. One feature of the app (a settings page, a dashboard, a usage view) becomes a remote. The app loads it from an environment URL, watches that URL for new releases, and offers an in-place update when one appears.
+
+:::warning Beta
+Electron OTA support is currently in beta. APIs and recommended wiring may change while the Electron integration continues to stabilize.
+:::
+
+:::warning Renderer code only
+OTA updates replace JavaScript and CSS that the renderer loads through Module Federation. Changes to the main process, preload scripts, native modules, the Electron version, and the app shell still need a normal release through your installer or auto-updater.
+:::
+
+## How It Works
+
+1. The feature lives in its own Vite app that exposes a component through Module Federation.
+2. A release build sets `ZE_ENV=production`. Zephyr uploads it as a new immutable [version](/features/versions) labeled with that environment.
+3. A [tag](/features/tags-environments#understanding-tags) with an **Environment** condition matches the newest version labeled `production`. The `production` environment follows that tag, so every release build goes live automatically.
+4. The Electron renderer loads `remoteEntry.js` from the `production` environment URL with the Module Federation runtime.
+5. While the app runs, it polls the environment's `remoteEntry.js`. When the file changes, a new release is live, and the app shows an update prompt.
+6. Applying the update loads the new release and swaps the component in place. No reload, no restart.
+
+Rolling back works the same way: when the environment serves an older version, the app sees a different entry and offers it as the next update.
+
+## Prerequisites
+
+- An Electron app whose renderer is built with Vite
+- A Zephyr account and the [Prerequisites](/getting-started/installation) setup
+- A feature you can render as a single React component
+
+## Create The Remote
+
+Create a Vite app for the feature, next to the Electron app. Install the Zephyr plugin:
+
+<PackageManagerTabs command="add --dev vite-plugin-zephyr cross-env" />
+
+Expose the feature's component and share React as a singleton, so the remote renders with the app's React instead of its own copy:
+
+```ts title="apps/usage-remote/vite.config.ts"
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { withZephyr, type ModuleFederationOptions } from 'vite-plugin-zephyr';
+
+const mfConfig: ModuleFederationOptions = {
+  name: 'usage',
+  filename: 'remoteEntry.js',
+  exposes: {
+    './UsagePage': './src/UsagePage.tsx',
+  },
+  shared: {
+    react: { singleton: true },
+    'react-dom': { singleton: true },
+  },
+};
+
+export default defineConfig({
+  plugins: [react(), withZephyr({ mfConfig })],
+  build: { target: 'esnext' },
+});
+```
+
+Pin the Zephyr organization and project with a [declarative configuration](/reference/declarative-configuration) file, so release builds land in the same place no matter which Git remote the checkout uses:
+
+```ts title="apps/usage-remote/zephyr.config.ts"
+export default {
+  org: 'acme',
+  project: 'desktop',
+};
+```
+
+Add a release script. `ZE_ENV` labels the build with the environment it is meant for. On its own, it doesn't deploy anything; the tag in the next step turns that label into a release.
+
+```json title="apps/usage-remote/package.json"
+{
+  "name": "usage",
+  "scripts": {
+    "build": "vite build",
+    "release": "cross-env ZE_ENV=production vite build"
+  }
+}
+```
+
+Run `release` once now. Zephyr needs one version of the app before you can create its tag and environment.
+
+## Release Through A Tag
+
+In the Zephyr dashboard, open the remote's application and set up two things:
+
+1. **A tag** named, for example, `env-production`, with one condition: **Environment** is `production`. It resolves to the newest version built with `ZE_ENV=production`.
+2. **An environment** named `production` that follows the `env-production` tag. See [Environment Configuration](/features/tags-environments#environment-configuration) for tag-based environments.
+
+Copy the environment URL from the environment's page. It has the form `https://production-{app-uid}-{hash}.{domain}`, and the remote entry is at `/remoteEntry.js` under it.
+
+From now on, `pnpm release` is the whole release process: the build uploads, the tag picks it up, and the environment serves it. Builds without `ZE_ENV=production`, such as local or preview builds, still upload as versions but never reach users.
+
+:::tip Gate releases on CI
+To release only from CI, add a **CI** condition to the tag next to the **Environment** condition. Local builds labeled `production` then stay out of the environment. See [Tag Conditions](/features/tags-environments#tag-conditions).
+:::
+
+## Load The Remote In The App
+
+The Electron renderer is the Module Federation host. It shares React with the same singleton settings as the remote and registers the remote at runtime, because the URL it loads changes with every release:
+
+<PackageManagerTabs command="add --dev @module-federation/vite" />
+
+<PackageManagerTabs command="add @module-federation/runtime" />
+
+```ts title="apps/desktop/vite.config.ts"
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { federation } from '@module-federation/vite';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    federation({
+      name: 'desktop',
+      remotes: {},
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+    }),
+  ],
+  build: { target: 'esnext' },
+});
+```
+
+Track releases in a small store outside React. It polls the environment's `remoteEntry.js`, fingerprints its contents, and records when the live release differs from the one on screen:
+
+```ts title="apps/desktop/src/ota/release.ts"
+import { loadRemote, registerRemotes } from '@module-federation/runtime';
+import { useSyncExternalStore, type ComponentType } from 'react';
+
+const REMOTE_ENTRY =
+  'https://production-usage-desktop-acme-ze.zephyrcloud.app/remoteEntry.js';
+
+interface ReleaseState {
+  Page?: ComponentType;
+  /** The release on screen. */
+  current?: string;
+  /** The release the environment serves now. */
+  latest?: string;
+  applying?: boolean;
+}
+
+let state: ReleaseState = {};
+const listeners = new Set<() => void>();
+const setState = (next: Partial<ReleaseState>) => {
+  state = { ...state, ...next };
+  listeners.forEach((listener) => listener());
+};
+
+export const useRelease = () =>
+  useSyncExternalStore(
+    (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+    () => state,
+  );
+
+export const isUpdateReady = (release: ReleaseState) =>
+  release.latest !== undefined && release.latest !== release.current;
+
+/** FNV-1a. Each release lists different chunk hashes, so its entry hashes differently. */
+function hash(text: string) {
+  let value = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    value = Math.imul(value ^ text.charCodeAt(i), 0x01000193);
+  }
+  return (value >>> 0).toString(16);
+}
+
+async function fetchFingerprint() {
+  try {
+    const response = await fetch(REMOTE_ENTRY, { cache: 'no-store' });
+    return response.ok ? hash(await response.text()) : undefined;
+  } catch {
+    return undefined; // Offline or mid-deploy; the next poll tries again.
+  }
+}
+
+async function loadRelease(fingerprint: string) {
+  // Browsers cache ES modules by URL, and the environment URL never changes.
+  // A per-release query string makes the runtime fetch the new entry.
+  const entry = new URL(REMOTE_ENTRY);
+  entry.searchParams.set('release', fingerprint);
+  registerRemotes([{ name: 'usage', entry: entry.href, type: 'module' }], {
+    force: true,
+  });
+  const module = await loadRemote<{ UsagePage: ComponentType }>(
+    'usage/UsagePage',
+  );
+  if (!module) throw new Error('usage/UsagePage did not load');
+  return module.UsagePage;
+}
+
+export async function loadInitialRelease() {
+  const fingerprint = await fetchFingerprint();
+  if (!fingerprint) throw new Error('The usage remote is unreachable');
+  const Page = await loadRelease(fingerprint);
+  setState({ Page, current: fingerprint, latest: fingerprint });
+}
+
+export async function checkForRelease() {
+  const fingerprint = await fetchFingerprint();
+  if (fingerprint && fingerprint !== state.latest)
+    setState({ latest: fingerprint });
+}
+
+export async function applyRelease() {
+  const { latest, current, applying } = state;
+  if (!latest || latest === current || applying) return;
+  setState({ applying: true });
+  try {
+    setState({
+      Page: await loadRelease(latest),
+      current: latest,
+      applying: false,
+    });
+  } catch (error) {
+    // Keep the current release on screen; the prompt stays so the user can retry.
+    console.error('Could not apply the new release', error);
+    setState({ applying: false });
+  }
+}
+```
+
+`force: true` replaces the registered remote and clears its cached module, so the next `loadRemote` call evaluates the new release instead of returning the old one.
+
+Start polling once, in the app shell, so the update prompt can appear on any screen and not only on the federated one:
+
+```tsx title="apps/desktop/src/App.tsx"
+import { useEffect } from 'react';
+import { checkForRelease } from './ota/release';
+
+const POLL_MS = 30_000;
+
+export function App() {
+  useEffect(() => {
+    void checkForRelease();
+    const timer = setInterval(() => void checkForRelease(), POLL_MS);
+    return () => clearInterval(timer);
+  }, []);
+
+  return <Shell />;
+}
+```
+
+## Render The Feature And Offer Updates
+
+Render the remote where the feature used to be. The example uses `react-error-boundary`; any error boundary that supports resetting works. Keep a copy of the feature bundled with the app, and fall back to it when the remote can't load: the user is offline, the edge is unreachable, or a release throws while rendering.
+
+```tsx title="apps/desktop/src/routes/UsageRoute.tsx"
+import { useEffect, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { BundledUsagePage } from '../usage/UsagePage';
+import { loadInitialRelease, useRelease } from '../ota/release';
+
+export function UsageRoute() {
+  const release = useRelease();
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    if (!release.Page) loadInitialRelease().catch(() => setFailed(true));
+  }, []);
+
+  if (failed) return <BundledUsagePage />;
+  if (!release.Page) return null;
+
+  const { Page } = release;
+  return (
+    <ErrorBoundary
+      resetKeys={[release.current]}
+      fallback={<BundledUsagePage />}
+    >
+      <Page />
+    </ErrorBoundary>
+  );
+}
+```
+
+`resetKeys` clears the error boundary when a new release is applied, so a fixed release replaces the fallback.
+
+Show the update wherever your app already reports updates, such as a status bar item or the auto-updater's indicator:
+
+```tsx title="apps/desktop/src/components/UpdateButton.tsx"
+import { applyRelease, isUpdateReady, useRelease } from '../ota/release';
+
+export function UpdateButton() {
+  const release = useRelease();
+  if (!isUpdateReady(release)) return null;
+
+  return (
+    <button
+      disabled={release.applying}
+      title="An OTA update is ready to install"
+      onClick={() => void applyRelease()}
+    >
+      {release.applying ? 'Installing…' : 'Update'}
+    </button>
+  );
+}
+```
+
+Applying an update doesn't navigate anywhere. If the federated screen is open, it re-renders with the new release. If it isn't, the user sees the new release the next time they open it.
+
+## Allow The Remote In The Content Security Policy
+
+Electron apps usually ship a strict Content Security Policy. Allow the Zephyr edge origin for scripts (the remote entry and its chunks) and for `fetch` (polling):
+
+```text
+script-src 'self' https://*.zephyrcloud.app;
+connect-src 'self' https://*.zephyrcloud.app;
+```
+
+Set it wherever your app defines its policy: a `<meta http-equiv="Content-Security-Policy">` tag in `index.html`, the headers of a custom protocol handler, or `session.webRequest.onHeadersReceived`. If you serve Zephyr from a [custom domain](/features/tags-environments#custom-domains-and-dns) or your own cloud integration, allow that origin instead.
+
+## Ship And Roll Back
+
+With the app installed and running:
+
+1. Change the feature and run `pnpm release` in the remote.
+2. Within one poll interval, the update prompt appears in the app.
+3. Apply it. The feature re-renders with the new release, and app state outside it is untouched.
+
+To roll back, deploy the previous version to the `production` environment from the dashboard ([Instant Rollbacks](/features/instant-rollbacks)), or run `pnpm release` again from the previous commit. Either way, the environment serves a different entry, and the app offers it as the next update.
+
+:::tip Lock production during an incident
+[Lock the environment](/features/locking-tags-environments) after a rollback so a new release build can't replace it until you unlock it.
+:::
+
+## Troubleshooting
+
+**The update applies, but the old release keeps rendering.** The runtime is reusing the module it already evaluated. Register the remote with a URL that changes per release (the `release` query string above) and pass `force: true` to `registerRemotes`.
+
+**The remote's styles break the app layout.** If the remote ships its own utility CSS (for example, Tailwind), its rules can land after the host's and override them. A remote `.hidden` that comes after the host's `md:block` hides host elements at every width. Put the remote's utilities in a lower cascade layer than the host's, such as `@import "tailwindcss/utilities" layer(components)`, or scope them to the remote's root element.
+
+**The app retries a broken release on every poll.** Remember the fingerprint of a release that failed to load, and retry only when the environment serves a different one.
+
+**React hooks throw "Invalid hook call".** The remote is running its own copy of React. Make sure both the host and the remote declare `react` and `react-dom` as `singleton` shared dependencies.
+
+**Nothing updates after a release build.** Check that the build ran with `ZE_ENV=production`, that the new version appears under the `env-production` tag, and that the `production` environment follows that tag rather than a fixed version.
