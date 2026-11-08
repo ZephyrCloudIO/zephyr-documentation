@@ -12,6 +12,8 @@ blockExoticSubdeps: true
 minimumReleaseAgeExclude:
   # Renovate security update: postcss@8.5.23
   - postcss@8.5.23
+  # Renovate security update: minimatch@11.0.5
+  - minimatch@11.0.5
 
 # Security overrides for vulnerable transitive dependencies
 overrides:
@@ -20,9 +22,9 @@ overrides:
   'tar@>=7.0.0 <7.5.11': '^7.5.11'
   '@isaacs/brace-expansion@<5.0.1': '^5.0.1'
   'axios@>=1.0.0 <1.20.0': '^1.20.0'
-  'minimatch@>=10.0.0 <10.2.3': '^10.2.3'
-  'minimatch@>=9.0.0 <9.0.7': '^9.0.7'
-  'minimatch@<3.1.3': '^3.1.3'
+  'minimatch@>=10.0.0 <10.2.3': '^11.0.0'
+  'minimatch@>=9.0.0 <9.0.7': '^11.0.0'
+  'minimatch@<3.1.3': '^11.0.0'
   'undici@>=7.0.0 <7.29.1': '^7.29.1'
   'flatted@<3.4.2': '^3.4.2'
   'picomatch@>=4.0.0 <4.0.4': '^4.0.4'

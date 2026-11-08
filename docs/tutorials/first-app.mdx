@@ -21,9 +21,9 @@ import { Separator } from '../../components/ui/separator';
 
 ## Start from scratch
 
-In this section we will walk you through what you will need to start using Zephyr and enjoy its benefits by deploying an application through Zephyr and modifying configuration. We will start with installing and creating your account, then create a standalone React app. At the end of this guide, you will have your first [React](https://react.dev/) app deployed to Zephyr's managed cloud with [Rspack](https://rspress.dev/) as bundler and use our [version control](/features/versioning-tags) feature to preview all versions that's deployed.
+In this section we will walk you through what you will need to start using Zephyr and enjoy its benefits by deploying an application through Zephyr and modifying configuration. We will start with installing and creating your account, then create a standalone React app. At the end of this guide, you will have your first [React](https://react.dev/) app deployed to Zephyr's managed cloud with [Rspack](https://rspress.dev/) as bundler and use our [version control](/features/versions) feature to preview all versions that's deployed.
 
-If you are curious to read more about us, you can dive into our [architecture](/reference/architecture), [recipes](/recipes) (for more frameworks and bundlers) and [features](/usage). Below guide is written based on Google Chrome thus other browser's behavior might differ (see a list of [supported browsers](/tutorials/first-app#browser-support))
+If you are curious to read more about us, you can dive into our [architecture](/reference/architecture), [recipes](/recipes) (for more frameworks and bundlers) and [features](/usage). This guide is written for Google Chrome. Other browsers can behave differently.
 
 <Separator />
 
@@ -219,7 +219,7 @@ Once you click on <img src="/dark-bg-icon.webp" className="inline h-5 w-5 bright
 While we are loggin you in, we are storing your authorization information locally under `~/.zephyr` in your root directly. Whenever you want to clean up your local profile information (they are JWT claims for each of the project you deployed through Zephyr), you can enter your root directory in terminal and run:
 
 ```bash
-rm rf ~/.zephyr
+rm -rf ~/.zephyr
 ```
 
 :::

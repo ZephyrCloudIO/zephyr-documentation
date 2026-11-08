@@ -163,9 +163,15 @@ const sidebar: Sidebar = {
       link: '/features/react-native-ota-updates',
       tag: 'beta',
     },
+    {
+      text: 'Electron OTA Updates',
+      link: '/features/electron-ota-updates',
+      tag: 'beta',
+    },
 
     { sectionHeaderText: 'CI/CD' },
     { text: 'CI Tokens', link: '/features/ci-tokens', tag: 'new' },
+    { text: 'Git Providers', link: '/features/git-providers', tag: 'new' },
     { text: 'CI/CD Automation', link: '/features/automation' },
     {
       text: 'Migrate to CI tokens',
@@ -468,6 +474,22 @@ export default defineConfig({
         {
           from: '/recipes/react-vite',
           to: '/bundlers/vite',
+        },
+        {
+          from: '/features/versioning-tags',
+          to: '/features/tags-environments',
+        },
+        {
+          from: '^/features/versioning-tags$',
+          to: '/features/tags-environments',
+        },
+        {
+          from: '/reference/faq',
+          to: '/getting-started/faq',
+        },
+        {
+          from: '^/reference/faq$',
+          to: '/getting-started/faq',
         },
       ],
     }),
