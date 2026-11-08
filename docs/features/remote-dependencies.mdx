@@ -360,6 +360,22 @@ The platform resolution follows a hierarchical approach:
 
 The resolution engine implements automatic fallback to the 'web' platform when platform-specific versions are unavailable, ensuring build reliability while maintaining platform optimization when available.
 
+#### Per-Platform Labels with the `${target}` Placeholder
+
+An environment or tag points to a single version, so React Native remotes usually keep one environment per platform, such as `dev-ios` and `dev-android`. A selector can contain the `${target}` placeholder, which Zephyr replaces with the build target (`web`, `ios`, `android`, or `tap-app`) before resolving the dependency:
+
+```json title="package.json"
+{
+  "zephyr:dependencies": {
+    "mobile-cart": "zephyr:mobile-cart.super-app.acme@dev-${target}"
+  }
+}
+```
+
+An iOS host build resolves `dev-ios` and an Android host build resolves `dev-android`, so one `package.json` serves both platforms. Each label must exist; for example, `dev-ios` can follow a tag whose conditions include `target is ios`. In a JavaScript `zephyr.config.*` file, write the selector in plain quotes, not a template literal, so JavaScript does not interpolate it.
+
+Requires `zephyr-agent` with build target placeholder support ([zephyr-packages#711](https://github.com/ZephyrCloudIO/zephyr-packages/pull/711)).
+
 ### Label-Based Resolution (Environments and Tags)
 
 Dependencies can be resolved using labels that correspond to environments, tags, or version numbers. When using label-based selectors, Zephyr follows a specific priority order:
