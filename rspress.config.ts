@@ -163,6 +163,11 @@ const sidebar: Sidebar = {
       link: '/features/react-native-ota-updates',
       tag: 'beta',
     },
+    {
+      text: 'Electron OTA Updates',
+      link: '/features/electron-ota-updates',
+      tag: 'beta',
+    },
 
     { sectionHeaderText: 'CI/CD' },
     { text: 'CI Tokens', link: '/features/ci-tokens', tag: 'new' },
