@@ -179,9 +179,8 @@ export async function loadRelease() {
 /** True when the environment serves a different release than the one loaded. */
 export async function hasNewRelease() {
   const entry = await fetchEntry().catch(() => undefined);
-  return (
-    loadedEntry !== undefined && entry !== undefined && entry !== loadedEntry
-  );
+  // Nothing loaded yet (for example, the app started offline) counts as new.
+  return entry !== undefined && entry !== loadedEntry;
 }
 ```
 
@@ -218,12 +217,14 @@ Call `hasNewRelease()` on an interval from the app shell, so the update can be o
 
 ## Allow The Remote In The Content Security Policy
 
-Electron apps usually ship a strict Content Security Policy. Allow the Zephyr edge origin for scripts (the remote entry and its chunks) and for `fetch` (polling):
+Electron apps usually ship a strict Content Security Policy. Allow the origin of the environment URL you copied from the dashboard for scripts (the remote entry and its chunks) and for `fetch` (polling). Zephyr environment URLs end in `zephyrcloud.app` or `zephyr-cloud.io`, so use whichever domain yours ends in:
 
 ```text
 script-src 'self' https://*.zephyrcloud.app;
 connect-src 'self' https://*.zephyrcloud.app;
 ```
+
+If the remote ships CSS, Vite loads it with a `<link rel="stylesheet">` tag, so add the same origin to `style-src`. Add it to `font-src` and `img-src` too if the remote ships fonts or images.
 
 Set it wherever your app defines its policy: a `<meta http-equiv="Content-Security-Policy">` tag in `index.html`, the headers of a custom protocol handler, or `session.webRequest.onHeadersReceived`. If you serve Zephyr from a [custom domain](/features/tags-environments#custom-domains-and-dns) or your own cloud integration, allow that origin instead.
 
