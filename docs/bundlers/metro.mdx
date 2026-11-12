@@ -300,6 +300,58 @@ For more details, see [Remote Dependencies](/features/remote-dependencies).
 
 When building a host for Zephyr-resolved remotes, use the same selector in `mfConfig.remotes` and `zephyr:dependencies` so the Metro plugin can replace the selector with the resolved manifest URL.
 
+### Runtime Manifest
+
+A native shell app ships its JavaScript bundle inside the store binary, so the host selector in its `zephyr:dependencies` is fixed at build time. Set `runtimeManifest` to let the shell fetch its own environment's `zephyr-manifest.json` at runtime. Remote overrides and environment variables you set on that tag or environment in the Zephyr dashboard then control which host the shell loads, without a store release.
+
+In the shell's `package.json`:
+
+```json
+{
+  "zephyr:dependencies": {
+    "host": "host@production"
+  }
+}
+```
+
+```javascript
+// metro.config.js (shell)
+const zephyrConfig = await withZephyr({
+  name: mfConfig.name,
+  remotes: mfConfig.remotes,
+  target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
+  runtimeManifest: '@production-${target}',
+})(baseConfig);
+```
+
+The value uses `zephyr:dependencies` selector syntax:
+
+- `'@<label>'`: this app's own tag or environment.
+- `'<app>@<label>'` or `'<app>.<project>.<org>@<label>'`: another app's tag or environment.
+- An optional `zephyr:` prefix is accepted.
+- `${target}` is replaced with the build target (`ios` or `android`). Use plain quotes, not a JavaScript template literal.
+
+The label must be a tag or environment; semver ranges and `workspace:` are rejected. At build time the selector is resolved to the label's mutable URL (regardless of `dependencyUrlMode`) and `<url>/zephyr-manifest.json` is baked into the bundle. The build fails when the label does not resolve, resolves to a tag or environment with a different name (for example, a fallback to the app's default environment), resolves to a version instead of a label, or resolves to another platform. If the Zephyr API cannot report the name or platform, the build logs a warning that it could not verify them.
+
+At runtime, on the first remote request from the shell's container:
+
+1. The last persisted copy of the manifest is applied: its `dependencies` replace the remote entries, and its `zeVars` apply to the shell's `ZE_PUBLIC_*` lookups.
+2. A fresh copy is fetched in the background and persisted. It applies on the next launch or after `ZephyrNativeCache.reloadApp()`; the host is never swapped mid-session.
+
+On first launch, nothing is persisted yet, so build-time remotes and values are used. `ZE_PUBLIC_*` values read in shell code before the first remote request also use build-time values.
+
+:::warning
+Persistence requires `zephyr-native-cache` registered with `ZephyrNativeCache.register()`. Without it, a console warning is logged and every launch uses build-time values.
+:::
+
+:::tip
+
+- Use separate labels per platform, for example `'@production-${target}'`. Environments are not platform-checked on assignment, so a shared label can mix iOS and Android hosts.
+- The dashboard is the source of truth. Once the environment exists, editing the selector in `package.json` does not change that environment's dependency; change it from the dashboard instead. Dashboard changes to remote overrides or environment variables republish the shell's `zephyr-manifest.json`.
+- With `dependencyUrlMode: 'version'`, the build logs a warning: manifest dependencies are pinned version URLs, so only explicit dashboard overrides move them.
+
+:::
+
 ## Next Steps
 
 - Check out our [Metro Tutorial](/tutorials/metro) for a complete walkthrough
