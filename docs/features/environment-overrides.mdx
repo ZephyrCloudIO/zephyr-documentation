@@ -20,6 +20,8 @@ Environment-level overrides enable two key capabilities:
 
 Both features work through the same underlying system: Zephyr captures configuration at build time in a manifest, then dynamically applies environment-specific overrides at runtime based on which environment serves your application.
 
+React Native apps built with Metro or Re.Pack are not served from an environment URL; they apply the same overrides on the device. See [React Native Apps](#react-native-apps).
+
 ## The Manifest System
 
 Behind the scenes, Zephyr generates a `zephyr-manifest.json` file at build time that records:
@@ -262,7 +264,7 @@ export const config = {
 };
 ```
 
-Zephyr's bundler integration handles all the complexity behind the scenes through an importmap injected into your HTML. Simply prefix your variables with `ZE_PUBLIC_` and access them normally in your code.
+On the web, Zephyr's bundler integration handles all the complexity behind the scenes through an importmap injected into your HTML. React Native apps use a runtime plugin instead; see [React Native Apps](#react-native-apps). Simply prefix your variables with `ZE_PUBLIC_` and access them normally in your code.
 
 **What happens**:
 
@@ -355,13 +357,43 @@ Staging Environment Configuration:
 
 The same built application adapts both its module dependencies and configuration based on which environment serves it.
 
+## React Native Apps
+
+A React Native app is not served from an environment URL. Its own bundle ships inside the binary, and it downloads its remotes at runtime. The Metro and Re.Pack integrations inject a Module Federation runtime plugin that applies environment-level overrides on the device instead.
+
+### Environment Variables On Device
+
+`withZephyr()` rewrites `process.env.ZE_PUBLIC_*` and `import.meta.env.ZE_PUBLIC_*` reads in each app's own sources, not `node_modules`, into lookups scoped by that app's application UID. Each lookup falls back to the value the variable had at build time.
+
+Before a remote's code runs, the runtime plugin fetches the `zephyr-manifest.json` next to the remote's entry and applies its values to that remote. When the remote is loaded from an environment URL, those are the environment's values. Values belong to one application: an override on a remote's environment changes only that remote.
+
+### Remote Overrides On Device
+
+When an app loads a remote from an environment URL, the runtime plugin points that remote's own remote requests at the entries the environment's `zephyr-manifest.json` lists. Nested remotes therefore follow the overrides of the environment their parent was loaded from.
+
+The app inside the binary follows overrides on its own environment only when it sets [`runtimeManifest`](/reference/declarative-configuration#runtimemanifest). It then applies the manifest stored by the previous launch and refreshes the stored copy in the background, so its remotes never change in the middle of a session.
+
+Overrides repoint remotes that the app already declares. They cannot add a remote the build did not include.
+
+### When Changes Reach Installed Apps
+
+| Override set on                                             | Changes                                                | Applies                                                                  |
+| ----------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------ |
+| The environment a remote is loaded from                     | That remote's `ZE_PUBLIC_*` values and its own remotes | The next time the app loads that remote: next launch or reload           |
+| The environment named by the binary app's `runtimeManifest` | The binary app's remotes and its `ZE_PUBLIC_*` values  | Fetched during one launch; applied on the next launch or reload          |
+| The binary app's environment, without `runtimeManifest`     | Nothing on installed binaries                          | The app keeps its build-time remotes and values until a new binary ships |
+
+The runtime plugin gives each manifest request three seconds. With [`zephyr-native-cache`](/features/react-native-ota-updates) registered, it stores every manifest it loads and uses the stored copy when a request fails, so offline starts keep the last known values. Without it, failed requests fall back to build-time values, and `runtimeManifest` has no effect.
+
+See [React Native OTA Updates](/features/react-native-ota-updates#environment-values-and-remote-overrides) for setup, and the [Native Shell + Host architecture](/features/react-native-native-shell) for controlling installed apps from one environment.
+
 ## Relationship to Other Features
 
 Environment-level overrides integrate seamlessly with Zephyr's other features:
 
 - **[Versions](/features/versions)**: Overrides can point to specific immutable version numbers
-- **[Tags](/features/tags-environments#tags)**: Overrides can reference tags that automatically resolve to the latest matching version
-- **[Environments](/features/tags-environments#environments)**: Each environment has its own override configuration
+- **[Tags](/features/tags-environments#understanding-tags)**: Overrides can reference tags that automatically resolve to the latest matching version
+- **[Environments](/features/tags-environments#understanding-environments)**: Each environment has its own override configuration
 - **[Remote Dependencies](/features/remote-dependencies)**: Build-time dependency declarations that can be overridden per environment
 
 This creates a powerful composition model where your application's behavior is defined at build time but can be customized at deployment time without rebuilding.

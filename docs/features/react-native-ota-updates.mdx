@@ -1,20 +1,20 @@
 ---
 title: React Native OTA Updates (Beta)
-description: Ship beta over-the-air updates for React Native Metro Module Federation remotes with Zephyr Cloud.
+description: Ship beta over-the-air updates, environment values, and remote overrides to React Native Metro Module Federation apps with Zephyr Cloud.
 head:
   - - meta
     - property: og:description
-      content: Ship beta over-the-air updates for React Native Metro Module Federation remotes with Zephyr Cloud.
+      content: Ship beta over-the-air updates, environment values, and remote overrides to React Native Metro Module Federation apps with Zephyr Cloud.
 ---
 
 import { PackageManagerTabs } from '@rspress/core/theme';
 
 # React Native OTA Updates (Beta)
 
-React Native OTA updates let an installed host app load newer Metro Module Federation remote bundles without releasing a new binary through the App Store or Play Store. Zephyr supports this flow with two packages:
+React Native OTA updates let an installed app load newer Metro Module Federation remote bundles, environment values, and remote selections without releasing a new binary through the App Store or Play Store. Zephyr supports this flow with two packages:
 
-- `zephyr-metro-plugin` publishes Metro Module Federation bundles to Zephyr Cloud and resolves remote manifests for `ios` and `android` builds.
-- `zephyr-native-cache` runs in the host app, verifies remote bundle hashes, stores valid bundles on device, polls remote manifests for changes, and exposes APIs to apply downloaded updates.
+- `zephyr-metro-plugin` publishes Metro Module Federation bundles to Zephyr Cloud, resolves remote manifests for `ios` and `android` builds, rewrites `ZE_PUBLIC_*` reads into runtime lookups, and injects the runtime plugin that applies each environment's values and remote overrides on the device.
+- `zephyr-native-cache` runs in the host app, verifies remote bundle hashes, stores valid bundles on device, polls remote manifests for changes, exposes APIs to apply downloaded updates, and stores the last environment manifests for offline starts.
 
 :::warning Beta
 React Native OTA support for Metro is currently in beta. APIs and recommended wiring may change while the native cache and Metro integration continue to stabilize.
@@ -24,17 +24,27 @@ React Native OTA support for Metro is currently in beta. APIs and recommended wi
 OTA updates only update JavaScript bundles loaded through Metro Module Federation. Native code changes, new native modules, native dependency linking changes, permission changes, and host-shell changes still require a normal app-store release.
 :::
 
-For a complete working reference, see the [`zephyr-native-cache-test` example](https://github.com/ZephyrCloudIO/zephyr-native-cache-test). The example includes a host app, two remotes, local OTA fixtures, Zephyr-backed OTA scripts, update prompts, cache status UI, and rollback coverage.
+For a complete working reference, see the [`zephyr-native-cache-test` example](https://github.com/ZephyrCloudIO/zephyr-native-cache-test). The example includes a host app, two remotes, local OTA fixtures, Zephyr-backed OTA scripts, update prompts, cache status UI, and rollback coverage. To control every installed app from one environment, see the [Native Shell + Host architecture](/features/react-native-native-shell).
+
+## What Changes Without A Store Release
+
+| Dashboard change                                                    | Mechanism                                                                                | Reaches installed apps                                                         |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| New remote version, environment move, or rollback                   | `zephyr-native-cache` polls the remote's `mf-manifest.json` and pre-downloads new hashes | In the background; applied on the next reload or launch                        |
+| `ZE_PUBLIC_*` value on a remote's environment                       | The `zephyr-manifest.json` next to the remote's entry                                    | The next time the remote loads: next launch or `ZephyrNativeCache.reloadApp()` |
+| Remote override on a remote's environment                           | The same manifest repoints that remote's own remotes                                     | The next time the remote loads                                                 |
+| `ZE_PUBLIC_*` value or remote override on the app inside the binary | [`runtimeManifest`](#follow-an-environment-from-the-binary)                              | Fetched during one launch; applied on the next launch or reload                |
 
 ## How It Works
 
-1. You run a Zephyr-wrapped React Native CLI or RNEF `bundle-mf-remote` command.
-2. The command uploads the Metro Module Federation artifacts, and Zephyr Cloud creates an immutable version with platform-specific artifacts and an `mf-manifest.json`.
-3. Your released host app resolves a remote manifest through a Zephyr dependency such as `zephyr:profile@production`.
-4. `zephyr-native-cache` reads bundle hashes from the manifest through its Module Federation runtime plugin.
-5. When a remote is loaded, the cache layer downloads the bundle natively, verifies its SHA-256 hash, caches it on device, and evaluates it.
-6. Background polling or a manual update check fetches known manifests again. If hashes changed, the cache layer pre-downloads the new bundles.
-7. Your app decides when to apply the update by reloading the React Native JavaScript context.
+1. You run a Zephyr-wrapped React Native CLI or RNEF `bundle-mf-remote` command for each platform.
+2. The command uploads the Metro Module Federation artifacts, and Zephyr Cloud creates an immutable version with platform-specific artifacts, an `mf-manifest.json`, and a `zephyr-manifest.json`.
+3. Your released host app resolves the remote through a Zephyr dependency such as `zephyr:profile@production-${target}`, which becomes `production-ios` or `production-android` for the platform being built.
+4. When the host resolves the remote at runtime, the Zephyr runtime plugin loads the environment's `zephyr-manifest.json` and applies its `ZE_PUBLIC_*` values and remote overrides before the remote's code runs.
+5. `zephyr-native-cache` reads bundle hashes from the `mf-manifest.json` through its Module Federation runtime plugin.
+6. When a remote is loaded, the cache layer downloads the bundle natively, verifies its SHA-256 hash, caches it on device, and evaluates it.
+7. Background polling or a manual update check fetches known manifests again. If hashes changed, the cache layer pre-downloads the new bundles.
+8. Your app decides when to apply the update by reloading the React Native JavaScript context.
 
 Rollbacks use the same mechanism. If you roll back a Zephyr environment or move a tag back to an older remote version, manifest polling sees the older bundle hash as the active target, downloads it, and the host can apply it on the next reload.
 
@@ -57,26 +67,26 @@ cd ios
 pod install
 ```
 
+## Use One Environment Per Platform
+
+A Zephyr environment serves a single version, and each Metro version is built for one platform. If iOS and Android builds share one `production` environment, the platform published last replaces the other, and installed apps on the other platform load a bundle built for the wrong platform.
+
+Create one environment per platform on every app that installed devices load, for example `production-ios` and `production-android`, and select them with the `${target}` placeholder. Zephyr replaces `${target}` with the platform being bundled. See [Per-platform selectors](/features/remote-dependencies#per-platform-selectors-with-target).
+
 ## Configure The Host
 
-Add the native cache runtime plugin to the host's Module Federation config. The plugin extracts bundle hashes from remote manifests and registers the manifest URLs that polling will check later.
+Add the native cache runtime plugin to the host's Module Federation config. The plugin extracts bundle hashes from remote manifests and registers the manifest URLs that polling will check later. Keep a local manifest URL in `remotes` for development:
 
 ```js title="apps/host/metro.config.js"
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withModuleFederation } = require('@module-federation/metro');
 const { withZephyr } = require('zephyr-metro-plugin');
 
-const useZephyrRemotes = process.env.ZEPHYR_REMOTE_RESOLUTION === '1';
-
-const remotes = {
-  profile: useZephyrRemotes
-    ? 'zephyr:profile@production'
-    : 'profile@http://localhost:8082/mf-manifest.json',
-};
-
 const mfConfig = {
   name: 'mobileHost',
-  remotes,
+  remotes: {
+    profile: 'profile@http://localhost:8082/mf-manifest.json',
+  },
   shared: {
     react: {
       singleton: true,
@@ -120,18 +130,20 @@ async function getConfig() {
 module.exports = getConfig();
 ```
 
-Use local HTTP manifest URLs during local development. Use Zephyr selectors such as `zephyr:profile@production`, `zephyr:profile@staging`, or `zephyr:profile@latest` for builds that should resolve through Zephyr Cloud and receive OTA changes from the corresponding environment or tag.
-
-You can also declare the same dependency in the host `package.json` so Zephyr dependency relationships are visible in the dashboard:
+Declare where Zephyr builds load the remote from, under the same key:
 
 ```json title="apps/host/package.json"
 {
   "name": "mobile-host",
   "zephyr:dependencies": {
-    "profile": "zephyr:profile@production"
+    "profile": "zephyr:profile@production-${target}"
   }
 }
 ```
+
+`start` keeps loading the remote from `localhost`. When `bundle-mf-host` or `bundle-mf-remote` runs, Zephyr resolves the selector for the bundled platform and replaces the `profile` entry in `remotes` with that environment's `mf-manifest.json` URL. The dependency also makes the relationship visible in the dashboard. You can declare it as `remoteDependencies` in [`zephyr.config.*`](/reference/declarative-configuration#remotedependencies) instead.
+
+Use environment or tag selectors such as `@production-${target}` or `@staging-${target}` for builds that should receive OTA changes. The default `selector` URL mode embeds the environment or tag URL, so the installed host follows whatever that label serves. With [`dependencyUrlMode: 'version'`](/reference/declarative-configuration#dependencyurlmode), the host embeds immutable version URLs; a newer remote then needs a new host build or a remote override delivered through [`runtimeManifest`](#follow-an-environment-from-the-binary).
 
 For more dependency selector options, see [Remote Dependencies](/features/remote-dependencies).
 
@@ -160,7 +172,11 @@ AppRegistry.registerComponent(
 );
 ```
 
+`register()` returns the cache layer. Calling it again returns the same instance without applying the new options.
+
 Production builds enable the cache automatically. Development builds keep the cache disabled by default so normal Metro development behavior is preserved. Set `forceCacheInDev: true` only when you intentionally want to debug OTA behavior against Metro dev servers.
+
+Registration also gives the Zephyr runtime plugin a file-backed store for environment manifests, whether or not the bundle cache is enabled. Without it, environment values and remote overrides still apply while the device is online, but offline starts fall back to build-time values, and [`runtimeManifest`](#follow-an-environment-from-the-binary) has no effect.
 
 ## Configure Remote Builds
 
@@ -182,19 +198,69 @@ export default {
 };
 ```
 
-Then publish a remote for each platform you support:
+Then publish a remote for each platform you support. `ZE_ENV` labels each build with its platform's environment; see [Deploying to Specific Environments](/features/tags-environments#deploying-to-specific-environments):
 
 ```bash
 # iOS remote build and upload
-rnef bundle-mf-remote --platform ios --dev false
+ZE_ENV=production-ios rnef bundle-mf-remote --platform ios --dev false
 
 # Android remote build and upload
-rnef bundle-mf-remote --platform android --dev false
+ZE_ENV=production-android rnef bundle-mf-remote --platform android --dev false
 ```
 
-Running `start`, `run-ios`, or `run-android` is not publication. After the first `bundle-mf-remote` upload completes, verify in the Zephyr dashboard that the remote application exists and has a version before configuring an OTA environment or tag.
+Running `start` or a debug `run-ios` / `run-android` build is not publication. After the first `bundle-mf-remote` upload completes, verify in the Zephyr dashboard that the remote application exists and has a version before configuring an OTA environment or tag.
 
-The host must resolve the same platform that the remote was published for. `withZephyr({ target: 'ios' })` resolves iOS remote artifacts, and `withZephyr({ target: 'android' })` resolves Android remote artifacts.
+The host must resolve the same platform that the remote was published for. The publication commands resolve remotes for their `--platform`, and `withZephyr({ target })` should match it.
+
+## Build The Host Binary
+
+The host's own bundle ships inside the binary, so the release build's native bundle step must run the Zephyr `bundle-mf-host` command. Otherwise the binary keeps the local URLs from `remotes`. See [Release builds](/bundlers/metro#release-builds) for the Android and Xcode settings.
+
+## Environment Values And Remote Overrides
+
+The publication commands inject a Zephyr runtime plugin into apps that consume Zephyr-resolved remotes. It applies [environment-level overrides](/features/environment-overrides#react-native-apps) on the device.
+
+### `ZE_PUBLIC_*` Values
+
+`withZephyr()` rewrites `process.env.ZE_PUBLIC_*` and `import.meta.env.ZE_PUBLIC_*` reads in each app's own sources into lookups scoped by that app's application UID, with the build-time value as the fallback. Read them as usual:
+
+```tsx title="apps/profile/src/ProfileCard.tsx"
+const apiUrl = process.env.ZE_PUBLIC_API_URL;
+```
+
+Before a remote's code runs, the runtime plugin fetches the `zephyr-manifest.json` next to the remote's entry and applies that environment's values to that remote only. Setting `ZE_PUBLIC_API_URL` on the `profile` environment does not change the host's value.
+
+### Remote Overrides
+
+A remote override set on a remote's environment changes which deployment that remote loads for its own remotes. When the host loads `profile` from `production-ios`, the runtime plugin points `profile`'s requests for its remotes at the entries that environment's `zephyr-manifest.json` lists. Nested remotes follow the environment their parent was loaded from.
+
+Overrides repoint remotes the app already declares. They cannot add a remote that the build did not include.
+
+### Offline Starts
+
+The runtime plugin gives each manifest request three seconds. If the request fails or times out, it uses the copy stored by the last successful load. Without a stored copy, the app keeps the build-time values.
+
+### Follow An Environment From The Binary
+
+The app inside the binary is not loaded from an environment URL, so overrides set on its own environment do not reach it by default. Set `runtimeManifest` to make it follow a tag or environment:
+
+```js title="apps/host/zephyr.config.cjs"
+module.exports = {
+  runtimeManifest: '@production-${target}',
+};
+```
+
+`@label` selects the app's own tag or environment, and `app@label` another app's. Write the selector in plain quotes, not a template literal. You can also pass `runtimeManifest` to `withZephyr()`, which wins over the config file.
+
+At runtime:
+
+1. The first remote request applies the `zephyr-manifest.json` stored by the previous launch: its remote overrides for the app's remotes and its `ZE_PUBLIC_*` values.
+2. The plugin then fetches a fresh copy in the background and stores it for the next launch. Remotes never change in the middle of a session.
+3. A change made in the dashboard applies on the second launch after it, or on `ZephyrNativeCache.reloadApp()` once a launch has fetched it.
+
+Until a launch has stored a copy, as on the first launch after installing, the app keeps its build-time remotes and values. Apps without `zephyr-native-cache` registered always keep them. The stored copy lives in the app's documents (iOS) or files (Android) directory, so it survives app updates that keep the same `runtimeManifest` label. Native cache polling does not watch this manifest; the launch-time refresh does.
+
+The publication commands resolve the label's alias URL, never a version URL, and fail when the label has no version for the bundled platform. Publish the app to that environment once before you add `runtimeManifest`. With `dependencyUrlMode: 'version'`, the manifest lists pinned version URLs, so only remote overrides change the loaded remotes.
 
 ## Apply Updates In The App
 
@@ -239,6 +305,20 @@ await ZephyrNativeCache.checkForUpdates({ policy: 'downloadAndApply' });
 
 `downloadAndApply` downloads updated bundles and triggers the native React Native reload path. Persist any critical UI state before using it.
 
+`checkForUpdates()` resolves to `{ checked, updated, applied }`. It returns zeros when the native module is unavailable or another check is already running.
+
+To observe individual cache events, subscribe on the instance that `register()` returns:
+
+```ts
+const cache = ZephyrNativeCache.register();
+
+cache.events.on('update:available', (event) => {
+  console.log('[cache] update available', event.remoteName);
+});
+```
+
+The events are `bundle:load`, `poll:start`, `update:available`, `update:downloaded`, and `poll:complete`.
+
 ## Runtime Behavior
 
 When a remote bundle loads, the cache layer returns one of these statuses:
@@ -251,15 +331,17 @@ When a remote bundle loads, the cache layer returns one of these statuses:
 
 The cache skips safely when a bundle has no manifest hash, a hash verification fails, a native file operation fails, or the native module is unavailable. Hash mismatches are not cached.
 
-The default cache limits are:
+`register()` accepts these options:
 
-| Option              | Default     |
-| ------------------- | ----------- |
-| `enablePolling`     | `true`      |
-| `pollIntervalMs`    | `5 minutes` |
-| `maxCacheSizeBytes` | `20 MB`     |
-| `maxAgeMs`          | `7 days`    |
-| `forceCacheInDev`   | `false`     |
+| Option              | Default                                                                 | Purpose                                                    |
+| ------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `enablePolling`     | `true`                                                                  | Start manifest polling after registration.                 |
+| `pollIntervalMs`    | `5 minutes`                                                             | Polling interval.                                          |
+| `maxCacheSizeBytes` | `20 MB`                                                                 | Cache size above which stale bundles are evicted.          |
+| `maxAgeMs`          | `7 days`                                                                | Age after which an unused bundle is stale.                 |
+| `minCacheSizeBytes` | `0`                                                                     | Size eviction never goes below.                            |
+| `bundleDir`         | `mfe-bundles` in the app's documents (iOS) or files (Android) directory | Storage directory for cached bundles.                      |
+| `forceCacheInDev`   | `false`                                                                 | Enable the bundle cache and polling in development builds. |
 
 The cache evicts stale bundles with an LRU policy on cold start. Fresh bundles are preserved even if the cache is temporarily over the size limit.
 
@@ -267,16 +349,18 @@ The cache evicts stale bundles with an LRU policy on cold start. Fresh bundles a
 
 To deploy an OTA update:
 
-1. Publish a new remote version for `ios` and `android`.
-2. Move the Zephyr environment or tag that the host depends on to the new version.
+1. Publish a new remote version for `ios` and `android`, each to its platform's environment.
+2. Move the Zephyr environment or tag that the host depends on to the new version, for each platform.
 3. Wait for polling or call `ZephyrNativeCache.checkForUpdates()`.
 4. Prompt the user or call `ZephyrNativeCache.reloadApp()` when your app is ready to apply the downloaded update.
 
 To roll back, use the Zephyr dashboard to roll the remote environment back or move the tag back to a previous version. The next update check downloads the rolled-back bundle and applies it through the same reload flow.
 
+`ZE_PUBLIC_*` values and remote overrides do not need a new version. Edit them on the environment in the dashboard; they apply as described in [What Changes Without A Store Release](#what-changes-without-a-store-release).
+
 ## Example Repository
 
-Use [`zephyr-native-cache-test`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test) as the implementation reference. Start with these files:
+Use [`zephyr-native-cache-test`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test) as the implementation reference for bundle caching, polling, update prompts, and rollback. Start with these files:
 
 - [`apps/host/index.js`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test/blob/main/apps/host/index.js) for cache registration.
 - [`apps/host/metro.config.js`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test/blob/main/apps/host/metro.config.js) for host runtime plugin wiring.

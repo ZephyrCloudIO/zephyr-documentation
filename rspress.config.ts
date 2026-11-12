@@ -164,6 +164,11 @@ const sidebar: Sidebar = {
       tag: 'beta',
     },
     {
+      text: 'React Native Shell + Host',
+      link: '/features/react-native-native-shell',
+      tag: 'beta',
+    },
+    {
       text: 'Electron OTA Updates',
       link: '/features/electron-ota-updates',
       tag: 'beta',

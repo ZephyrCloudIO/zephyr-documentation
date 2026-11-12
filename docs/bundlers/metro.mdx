@@ -21,6 +21,7 @@ Deploy your React Native applications with Module Federation to Zephyr Cloud usi
 - npm >=10
 - node >=18
 - ruby >= 3.3.2
+- React 19 and React Native 0.79 or newer
 
 :::
 
@@ -32,6 +33,8 @@ Install the Metro plugin and required Module Federation dependencies in your pro
 
 <PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro@^2.9.0 @module-federation/runtime" />
 
+The `bundle-mf-host` and `bundle-mf-remote` publication commands require React 19, React Native 0.79 or newer, `@module-federation/metro@^2.9.0`, `@babel/types` `>=7.25.0 <8.0.0`, and `metro`, `metro-config`, `metro-file-map`, `metro-resolver`, and `metro-source-map` at `>=0.82.1 <0.83.0`. The configuration-only `withZephyr()` wrapper does not need these minimums.
+
 To enable React Native OTA updates in a host app, also install the native cache runtime:
 
 <PackageManagerTabs command="add zephyr-native-cache" />
@@ -40,14 +43,16 @@ To enable React Native OTA updates in a host app, also install the native cache 
 
 Metro configuration and publication are separate stages:
 
-| Stage                                 | Purpose                                                                                     | Creates dashboard records |
-| ------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------- |
-| `withZephyr()`                        | Resolves remotes and generates the local Zephyr manifest when Metro loads its configuration | No                        |
-| `bundle-mf-remote` / `bundle-mf-host` | Builds and uploads artifacts to Zephyr Cloud                                                | Yes                       |
+| Stage                                 | Purpose                                                                                                                    | Creates dashboard records |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `withZephyr()`                        | Resolves remotes, generates the local Zephyr manifest, and rewrites `ZE_PUBLIC_*` reads when Metro loads its configuration | No                        |
+| `bundle-mf-remote` / `bundle-mf-host` | Resolves remotes for the bundled platform, rewrites matching Module Federation remotes, and uploads the artifacts          | Yes                       |
 
 Loading `withZephyr()` can request `/application-config` and `/build-id`, but those requests do not persist an organization membership, project, application, or application version. Publication reaches `/build-stats`; the first successful upload creates the dashboard entities for that application identity. A token claim of `can_write: true` grants permission to create that identity. It does not mean the records already exist.
 
-You must register the publication commands through either the React Native CLI configuration or the RNEF plugin below, then run the appropriate `bundle-mf-*` command. `start`, `run-ios`, and `run-android` load Metro configuration but do not publish artifacts.
+You must register the publication commands through either the React Native CLI configuration or the RNEF plugin below, then run the appropriate `bundle-mf-*` command. `start` and debug `run-ios` / `run-android` builds load Metro configuration but do not publish artifacts. A release build runs a publication command only when its native bundle step is configured to call `bundle-mf-host`; see [Release builds](#release-builds).
+
+Set `ZE_DISABLED=true` to build without Zephyr. `withZephyr()` then returns Metro's configuration unchanged, and the `bundle-mf-*` commands bundle like the stock Module Federation commands: no token, no Git reads, no remote resolution, and no upload.
 
 ### Application Identity
 
@@ -62,6 +67,12 @@ export default {
 ```
 
 The resulting application UID is `mini-app.mobile.acme`. See [Declarative Configuration](/reference/declarative-configuration) for file discovery, precedence, and other options.
+
+### Platform Targets
+
+Metro builds only `ios` and `android` artifacts. Set `withZephyr({ target })` to the platform you bundle; the publication commands resolve remotes for the `--platform` they run with. `target: 'tap-app'` and any other value are rejected before Metro resolves remotes or uploads assets.
+
+Each published version belongs to one platform, and a Zephyr [environment](/features/tags-environments#understanding-environments) serves a single version. Use separate iOS and Android environments or tags, such as `production-ios` and `production-android`, and select them with the [`${target}` placeholder](/features/remote-dependencies#per-platform-selectors-with-target).
 
 ## Module Federation with Metro
 
@@ -166,6 +177,8 @@ export default {
 };
 ```
 
+`zephyrMetroRNEFPlugin` loads `@module-federation/metro` from your project, so install it there. It replaces `pluginMetroModuleFederation()` from `@module-federation/metro-plugin-rnef`; register one or the other, not both. Projects that want Zephyr only in some builds can pick the plugin with an environment variable, as the [Native Shell + Host example](/features/react-native-native-shell#build-modes) does.
+
 ### Bundle Mini Application
 
 Bundle your mini application for different platforms:
@@ -183,9 +196,11 @@ rnef bundle-mf-remote --platform ios --dev false
 
 After the first command completes, open the Zephyr dashboard and verify that the inferred or configured application appears with a new version. If no version appears, publication did not complete; Metro configuration logs alone are not deployment confirmation.
 
+To label a build for an environment, set `ZE_ENV` when you publish, for example `ZE_ENV=production-ios npx react-native bundle-mf-remote --platform ios --dev false`. See [Deploying to Specific Environments](/features/tags-environments#deploying-to-specific-environments).
+
 ### Host Application (Consumer)
 
-Host applications load and orchestrate mini-applications:
+Host applications load and orchestrate mini-applications. Keep a local manifest URL in `remotes` so `start` serves the remote from its dev server:
 
 ```javascript
 // metro.config.js
@@ -194,7 +209,6 @@ const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
 
 const miniAppPort = process.env.MINI_APP_PORT ?? '8082';
-const useZephyrRemotes = process.env.ZEPHYR_REMOTE_RESOLUTION === '1';
 
 const config = {
   resolver: { useWatchman: false },
@@ -203,9 +217,7 @@ const config = {
 const mfConfig = {
   name: 'hostApp',
   remotes: {
-    miniApp: useZephyrRemotes
-      ? 'zephyr:miniApp@yourEnvironment'
-      : `miniApp@http://localhost:${miniAppPort}/mf-manifest.json`,
+    miniApp: `miniApp@http://localhost:${miniAppPort}/mf-manifest.json`,
   },
   shared: {
     react: {
@@ -245,7 +257,7 @@ const getConfig = async () => {
 module.exports = getConfig();
 ```
 
-Use local HTTP manifest URLs during local development. Use Zephyr selectors such as `zephyr:miniApp@yourEnvironment` for builds that should resolve remotes from Zephyr Cloud.
+Then declare where Zephyr builds should load the remote from, under the same key, in [Zephyr Dependencies](#zephyr-dependencies). When `bundle-mf-host` or `bundle-mf-remote` runs, Zephyr resolves that selector for the bundled platform and replaces the matching `remotes` entry with the resolved `mf-manifest.json` URL. Remotes without a Zephyr dependency keep the URL written in `remotes`.
 
 To publish the host itself, run its registered host command. Zephyr discovers Metro artifacts under `dist/<platform>`, so keep `--bundle-output` in that directory:
 
@@ -284,26 +296,105 @@ For full OTA behavior, update policies, cache status APIs, and rollback behavior
 
 ### Zephyr Dependencies
 
-Configure Zephyr dependencies in your host application's `package.json`:
+Configure Zephyr dependencies in your host application's `package.json`. The key must match the remote's key in `mfConfig.remotes`:
 
 ```json
 {
   "name": "hostApp",
   "version": "1.0.0",
   "zephyr:dependencies": {
-    "miniApp": "zephyr:miniApp@yourEnvironment"
+    "miniApp": "zephyr:miniApp@production-${target}"
   }
 }
 ```
 
+Zephyr replaces `${target}` with the platform being bundled, so an iOS build resolves the `production-ios` environment or tag and an Android build resolves `production-android`. You can declare the same entries as `remoteDependencies` in [`zephyr.config.*`](/reference/declarative-configuration#remotedependencies); write the selector in plain quotes there, not in a template literal.
+
 For more details, see [Remote Dependencies](/features/remote-dependencies).
 
-When building a host for Zephyr-resolved remotes, use the same selector in `mfConfig.remotes` and `zephyr:dependencies` so the Metro plugin can replace the selector with the resolved manifest URL.
+### Release Builds
+
+A release build bundles the host's JavaScript into the app binary. For that bundle to contain the Zephyr-resolved remote URLs, the native bundle step must run the Zephyr `bundle-mf-host` command instead of the default `bundle`. The Zephyr host command accepts the `--config-cmd` argument that Xcode passes to it.
+
+For an RNEF project, point both platforms at the RNEF CLI, which has the Zephyr plugin registered:
+
+```groovy title="android/app/build.gradle"
+react {
+    cliFile = file("../../node_modules/@rnef/cli/dist/src/bin.js")
+    bundleCommand = "bundle-mf-host"
+}
+```
+
+```bash title="ios: Bundle React Native code and images build phase"
+set -e
+if [[ -f "$PODS_ROOT/../.xcode.env" ]]; then
+  source "$PODS_ROOT/../.xcode.env"
+fi
+if [[ -f "$PODS_ROOT/../.xcode.env.local" ]]; then
+  source "$PODS_ROOT/../.xcode.env.local"
+fi
+export BUNDLE_COMMAND="bundle-mf-host"
+export CONFIG_CMD="dummy-workaround-value"
+export CLI_PATH="$("$NODE_BINARY" --print "require('path').dirname(require.resolve('@rnef/cli/package.json')) + '/dist/src/bin.js'")"
+WITH_ENVIRONMENT="$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh"
+REACT_NATIVE_XCODE="$REACT_NATIVE_PATH/scripts/react-native-xcode.sh"
+
+/bin/sh -c "$WITH_ENVIRONMENT $REACT_NATIVE_XCODE"
+```
+
+For a React Native CLI project, keep the default Android `cliFile`, set `bundleCommand = "bundle-mf-host"`, and point the Xcode phase's `CLI_PATH` at `react-native/cli.js` so the commands from `react-native.config.js` load. The [Module Federation Metro example host](https://github.com/module-federation/core/tree/main/apps/metro-example-host) uses the same wiring.
+
+## Environment Variables
+
+`withZephyr()` rewrites `process.env.ZE_PUBLIC_*` and `import.meta.env.ZE_PUBLIC_*` reads in your application sources (not `node_modules`) into runtime lookups scoped by application UID. Each lookup falls back to the value of that variable when Metro bundled the code:
+
+```tsx
+<Text>{process.env.ZE_PUBLIC_API_URL}</Text>
+```
+
+When an app consumes Zephyr-resolved remotes or sets [`runtimeManifest`](#runtime-manifest), the `bundle-mf-host` and `bundle-mf-remote` commands inject a Module Federation runtime plugin into it. Before a resolved remote's code runs, the plugin loads the `zephyr-manifest.json` next to that remote's entry and applies its `ZE_PUBLIC_*` values; when the remote is loaded from an environment URL, those are the environment's values. It also points the remote's own remotes at the entries that manifest lists, so [remote dependency overrides](/features/environment-overrides#remote-dependency-overrides) apply to nested remotes. No setup is needed. With `zephyr-native-cache` registered, the last values loaded for each manifest are stored on the device and used when the manifest cannot be fetched.
+
+Without `withZephyr()` in `metro.config.js`, Zephyr does not rewrite `ZE_PUBLIC_*` reads, and they cannot receive environment overrides.
+
+An app whose bundle ships in the binary is not loaded from an environment URL. To let its own environment change its remotes and `ZE_PUBLIC_*` values, set `runtimeManifest`. See [Environment-Level Overrides on mobile](/features/environment-overrides#react-native-apps) for when each change reaches installed apps.
+
+## Runtime Manifest
+
+`runtimeManifest` makes an app in the binary follow a Zephyr tag or environment at runtime. The selector uses [`zephyr:dependencies`](/features/remote-dependencies) syntax: `@label` selects this app's own tag or environment, `app@label` another app's, and `${target}` is replaced with the platform:
+
+```js title="metro.config.js"
+withZephyr({ target: 'ios', runtimeManifest: '@production-${target}' });
+```
+
+You can also set it in `zephyr.config.*`. The `withZephyr()` option wins when both set it:
+
+```js title="zephyr.config.cjs"
+module.exports = {
+  appName: 'mobile-shell',
+  runtimeManifest: '@production-${target}',
+};
+```
+
+The publication commands resolve the label's alias URL, never a version URL, and fail when the label does not exist for the bundled platform. Each launch applies the `zephyr-manifest.json` stored by the previous launch, then refreshes the stored copy in the background. Until a launch has stored a copy, as on the first launch after installing, the app keeps its build-time remotes and values. Apps without `zephyr-native-cache` registered always keep them.
+
+The [Native Shell + Host architecture](/features/react-native-native-shell) builds on this option to control installed apps from one environment.
+
+## `withZephyr` Options
+
+| Option                | Type                     | Default                 | Description                                                                 |
+| --------------------- | ------------------------ | ----------------------- | --------------------------------------------------------------------------- |
+| `name`                | `string`                 | None                    | Application name.                                                           |
+| `target`              | `'ios' \| 'android'`     | None                    | Platform used for configuration-time remote resolution.                     |
+| `remotes`             | `Record<string, string>` | None                    | Module Federation remotes to resolve when Metro loads its configuration.    |
+| `manifestPath`        | `string`                 | `/zephyr-manifest.json` | Path the Metro dev server serves the local Zephyr manifest on.              |
+| `failOnManifestError` | `boolean`                | `false`                 | Throws instead of logging when the local manifest cannot be written.        |
+| `runtimeManifest`     | `string`                 | `zephyr.config.*` value | Tag or environment whose `zephyr-manifest.json` the app follows at runtime. |
 
 ## Next Steps
 
 - Check out our [Metro Tutorial](/tutorials/metro) for a complete walkthrough
 - Configure [React Native OTA Updates](/features/react-native-ota-updates) with `zephyr-native-cache`
+- Review the [Native Shell + Host architecture](/features/react-native-native-shell) for central control of installed apps
 - Explore the [example repository](https://github.com/ZephyrCloudIO/zephyr-metro-example/) for working examples
 - Explore the [OTA example repository](https://github.com/ZephyrCloudIO/zephyr-native-cache-test) for native cache behavior
 - Learn about [Tags & Environments](/features/tags-environments) for managing deployment stages
