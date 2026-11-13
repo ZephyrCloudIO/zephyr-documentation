@@ -1,0 +1,68 @@
+---
+title: Expo and Metro OTA Prerequisites
+description: Check Expo native-build and Metro publication prerequisites before integrating Zephyr OTA remotes, including current verification limits.
+head:
+  - - meta
+    - property: og:description
+      content: Check Expo native-build and Metro publication prerequisites before integrating Zephyr OTA remotes, including current verification limits.
+---
+
+# Expo and Metro OTA Prerequisites
+
+Expo uses React Native and Metro, but an Expo project still needs the Module Federation build and native cache integration.
+An Expo dependency alone does not configure Zephyr OTA updates.
+
+## Current Implementation Evidence
+
+The current Metro runtime uses `@expo/metro-runtime` to load asynchronous bundles.
+The Zephyr cache intercepts full remote bundle URLs and leaves relative host bundle paths to the existing loader.
+The Zephyr environment transformer also delegates to the original Metro transformer.
+
+These integration points support work on an Expo host. They do not establish compatibility with every Expo SDK, Expo Router configuration, or Expo export pipeline.
+The inspected repositories contain no Expo-specific Zephyr publication adapter or tested Expo host fixture for this complete OTA flow.
+This is an explicit verification gap. It is not a conclusion that Expo cannot use federated remotes.
+
+See the [Metro async loader](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/packages/metro-core/src/modules/asyncRequire.ts), [cache registration](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-native-cache/src/register.ts), and [transformer tests](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-metro-plugin/src/lib/__test__/env-transformer.spec.ts).
+
+## Native Host Prerequisites
+
+Use a custom native build that links `zephyr-native-cache` before loading remote bundles.
+Adding the package to JavaScript cannot add its native module to an already installed binary.
+Expo Go cannot acquire that module through an OTA JavaScript update. Use a custom development or release binary for this cache integration.
+See [Expo development builds](https://docs.expo.dev/develop/development-builds/introduction/) for native library requirements.
+
+Register the cache and its runtime plugin before the first remote load, as described in [React Native OTA Updates](/features/react-native-ota-updates).
+Match the installed host's React, React Native, and native dependencies with the remotes.
+Changes to native modules, permissions, entitlements, or the host shell require another native build.
+
+The cache includes [iOS](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-native-cache/ios/MFECacheModule.mm) and [Android](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-native-cache/android/src/main/java/com/modulefederation/metrocache/MFECacheModule.kt) implementations.
+
+## Publication Prerequisites
+
+The existing publication adapters expose `bundle-mf-host` and `bundle-mf-remote` through React Native CLI or RNEF.
+The Metro integration recognizes those bundle commands. It does not recognize `export` as a federated bundle command.
+Running `expo export` alone therefore does not establish that the build produced or uploaded the Zephyr federation artifacts.
+
+For an Expo integration, first establish a build path that produces and publishes all required artifacts:
+
+1. Configure Metro Module Federation for the host and each remote.
+2. Preserve the Expo transformer and serializer behavior your application requires.
+3. Integrate the Zephyr publication commands with the native build pipeline.
+4. Build separate iOS and Android artifacts.
+5. Check each remote's `mf-manifest.json`, container bundle, exposed bundles, and hashes.
+6. Check startup, update application, offline behavior, and rollback in a release binary.
+
+Use the [Metro publication guide](/bundlers/metro#configuration-and-publication) for the existing CLI adapters.
+The [command gate](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/packages/metro-core/src/plugin/helpers.ts), [host bundle command](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/packages/metro-core/src/commands/bundle-host/index.ts), and [serializer setup](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/packages/metro-core/src/plugin/index.ts) identify the integration boundary.
+This guide does not substitute an untested `expo export` command for those adapters.
+
+## Timing And Release Policy
+
+When the host uses `zephyr-native-cache`, follow the [React Native timing policies](/features/react-native-ota-updates#apply-updates-in-the-app).
+The cache can download changes without applying them, or request a JavaScript reload after a check downloads changed bundles.
+The optional host `runtimeManifest` applies stored configuration on a later launch or JavaScript reload.
+
+Choose [manual or automatic environment release](/features/ota-updates#choose-the-release-policy) separately.
+These Zephyr APIs control federated remotes. They do not configure Expo Updates channels or replace the installed application's root bundle.
+
+For the package versions and remaining maturity decisions, see [OTA Runtime Support and Timing](/features/ota-updates).

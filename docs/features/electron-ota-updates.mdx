@@ -1,22 +1,24 @@
 ---
 title: Electron OTA Updates (Beta)
-description: Ship beta over-the-air updates to installed Electron apps by loading a Module Federation remote from a Zephyr environment.
+description: Configure Electron renderer OTA updates with Module Federation, in-place application, rollback propagation, and environment release policies.
 head:
   - - meta
     - property: og:description
-      content: Ship beta over-the-air updates to installed Electron apps by loading a Module Federation remote from a Zephyr environment.
+      content: Configure Electron renderer OTA updates with Module Federation, in-place application, rollback propagation, and environment release policies.
 ---
 
 import { PackageManagerTabs } from '@rspress/core/theme';
 
 # Electron OTA Updates (Beta)
 
-An Electron app usually ships every change through a new installer and an auto-updater. With Zephyr, you can move part of the renderer into a [Module Federation](https://module-federation.io/) remote, deploy that remote to Zephyr Cloud, and have the installed app pick up new releases from a Zephyr [environment](/features/tags-environments#understanding-environments). Users get the update in seconds, without a download or a restart, and a rollback is just as fast.
+An Electron renderer can load a [Module Federation](https://module-federation.io/) remote from a Zephyr [environment](/features/tags-environments#understanding-environments).
+The renderer downloads the remote assets without a new installer. Your application can apply them in place or wait for a later launch.
 
 This guide builds that flow with Vite. One feature of the app (a settings page, a dashboard, a usage view) becomes a remote. The app loads it from an environment URL, watches that URL for new releases, and offers an in-place update when one appears.
 
 :::warning Beta
-Electron OTA support is currently in beta. APIs and recommended wiring may change while the Electron integration continues to stabilize.
+This guide retains its beta designation. It demonstrates application-level polling and renderer replacement with the published Module Federation and Zephyr packages.
+It does not provide a separate Electron OTA SDK or establish general availability. See [runtime support and evidence](/features/ota-updates).
 :::
 
 :::warning Renderer code only
@@ -32,7 +34,8 @@ OTA updates replace JavaScript and CSS that the renderer loads through Module Fe
 5. While the app runs, it polls the environment's `remoteEntry.js`. When the file changes, a new release is live, and the app shows an update prompt.
 6. Applying the update loads the new release and swaps the component in place. No reload, no restart.
 
-Rolling back works the same way: when the environment serves an older version, the app sees a different entry and offers it as the next update.
+Rolling back follows the same check and application flow. An older, different remote entry becomes an update candidate after the next successful check.
+Offline clients must reconnect before they can detect that change.
 
 ## Prerequisites
 
@@ -98,6 +101,16 @@ Add a release script. `ZE_ENV` labels the build with the environment it is meant
 
 Run `release` once now. Zephyr needs one version of the app before you can create its tag and environment.
 
+## Choose A Release Policy
+
+For an explicit approval step, use a version-based environment. Upload the build, then deploy the selected version to the environment when approved.
+Later builds remain unreleased to that environment until another explicit deployment.
+
+For automatic release, configure a tag-based environment as shown below. A matching build then advances the environment without a separate deployment action.
+`ZE_ENV=production` is a build label. The tag and environment policy turn that label into a release signal.
+
+See [Environment Configuration](/features/tags-environments#environment-configuration) for both policies.
+
 ## Release Through A Tag
 
 In the Zephyr dashboard, open the remote's application and set up two things:
@@ -107,7 +120,8 @@ In the Zephyr dashboard, open the remote's application and set up two things:
 
 Copy the environment URL from the environment's page. It has the form `https://production-{app-uid}-{hash}.{domain}`, and the remote entry is at `/remoteEntry.js` under it.
 
-From now on, `pnpm release` is the whole release process: the build uploads, the tag picks it up, and the environment serves it. Builds without `ZE_ENV=production`, such as local or preview builds, still upload as versions but never reach users.
+With this automatic policy, `pnpm release` uploads the build and advances the matching tag and environment.
+Builds without `ZE_ENV=production` do not reach users through this environment policy. Other environments can have different conditions.
 
 :::tip Gate releases on CI
 To release only from CI, add a **CI** condition to the tag next to the **Environment** condition. Local builds labeled `production` then stay out of the environment. See [Tag Conditions](/features/tags-environments#tag-conditions).
@@ -115,7 +129,8 @@ To release only from CI, add a **CI** condition to the tag next to the **Environ
 
 ## Load The Remote In The App
 
-The Electron renderer is the Module Federation host. It shares React with the same singleton settings as the remote and registers the remote at runtime, because the URL it loads changes with every release:
+The Electron renderer is the Module Federation host. It shares React with the same singleton settings as the remote.
+It registers the remote at runtime so it can replace that registration when the selected release changes:
 
 <PackageManagerTabs command="add --dev @module-federation/vite" />
 
@@ -189,7 +204,9 @@ Two details make the in-place update work:
 - **The query string.** Browsers cache ES modules by URL, and the environment URL never changes. Without a new URL per load, the browser returns the module it already evaluated.
 - **`force: true`.** It replaces the registered remote and clears the runtime's cached module, so `loadRemote` evaluates the new release instead of returning the old one.
 
-Polling compares the text of `remoteEntry.js`. Each release lists different chunk hashes, so a new release always changes the file.
+Polling compares the text of `remoteEntry.js`. Changed entry contents trigger an update signal, including when a rollback selects an older entry.
+Two versions with identical entry contents do not produce a different signal.
+This polling is application code, not a background service installed by the Zephyr build plugin.
 
 ## Render The Feature And Offer Updates
 
@@ -214,6 +231,20 @@ export function UsageRoute({ Page }: { Page?: ComponentType }) {
 `resetKeys` clears the error boundary when a new release is applied, so a fixed release replaces the fallback. The example uses `react-error-boundary`, but any error boundary that supports resetting works.
 
 Call `hasNewRelease()` on an interval from the app shell, so the update can be offered on any screen, not only the federated one. Show it wherever your app already reports updates, such as a status bar item or the auto-updater's indicator. When the user applies it, call `loadRelease()` again and store the new component. If the federated screen is open, it re-renders with the new release. If it isn't, the user sees the new release the next time they open it. Nothing has to navigate or reload.
+
+## Choose When To Apply
+
+The example supports three application policies:
+
+- **Next launch:** Call `loadRelease()` only during startup.
+- **User confirmation:** Poll while running, show a prompt, and call `loadRelease()` after approval.
+- **Automatic in-session update:** Poll while running and call `loadRelease()` when the application reaches an approved point.
+
+The last two policies replace the remote component without restarting Electron. Replacing the component can reset state inside that component.
+Persist required feature state before replacement. Application state outside that component can remain intact.
+
+These policies are separate from the environment release policy. An automatic environment release does not force an already running renderer to apply it immediately.
+For the related native webview integration, see [Tauri OTA Updates](/features/tauri-ota-updates).
 
 ## Allow The Remote In The Content Security Policy
 
@@ -252,4 +283,7 @@ To roll back, deploy the previous version to the `production` environment from t
 
 **React hooks throw "Invalid hook call".** The remote is running its own copy of React. Make sure both the host and the remote declare `react` and `react-dom` as `singleton` shared dependencies.
 
-**Nothing updates after a release build.** Check that the build ran with `ZE_ENV=production`, that the new version appears under the `env-production` tag, and that the `production` environment follows that tag rather than a fixed version.
+**Nothing updates after a release build.** For the automatic policy, check that the build ran with `ZE_ENV=production`, that the new version appears under the `env-production` tag, and that the `production` environment follows that tag rather than a fixed version.
+
+The [runtime source](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/packages/runtime-core/src/remote/index.ts) implements forced remote replacement and cache removal.
+See [OTA source evidence](/features/ota-updates#release-and-implementation-evidence) for package and implementation references.
