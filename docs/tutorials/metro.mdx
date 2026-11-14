@@ -1,6 +1,10 @@
 ---
-- title: React Native Module Federation with Metro
-- description: Complete guide to building a React Native app with Module Federation using Metro bundler
+title: React Native Module Federation with Metro
+description: Complete guide to building a React Native app with Module Federation using Metro bundler
+head:
+  - - meta
+    - property: og:description
+      content: Complete guide to building a React Native app with Module Federation using Metro bundler
 ---
 
 import { PackageManagerTabs } from '@rspress/core/theme';
@@ -18,6 +22,7 @@ This guide will explain how to build a React Native app with Metro bundler that 
 - npm >=10
 - node >=18
 - ruby >= 3.3.2
+- React 19 and React Native 0.79 or newer
 
 :::
 
@@ -87,7 +92,7 @@ cd MiniApp
 
 If you have existing React Native applications, you can convert them to use Module Federation. Install the required dependencies in both host and mini applications:
 
-<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro@^2.9.0 @module-federation/runtime" />
+<PackageManagerTabs command="add --dev zephyr-metro-plugin@^1.8.0 @module-federation/metro@^2.9.0 @module-federation/runtime" />
 
 <Separator />
 
@@ -240,19 +245,19 @@ const styles = StyleSheet.create({
 
 ### Step 4: Bundle Your Mini Application
 
-Once configured, bundle your mini application for different platforms:
+Once configured, bundle your mini application for each platform. A Zephyr environment serves a single version, and each version is built for one platform, so label the iOS and Android builds with separate environments:
 
 ```bash
 # Bundle for iOS
-npx react-native bundle-mf-remote --platform ios --dev false
+ZE_ENV=yourEnvironment-ios npx react-native bundle-mf-remote --platform ios --dev false
 
 # Bundle for Android
-npx react-native bundle-mf-remote --platform android --dev false
+ZE_ENV=yourEnvironment-android npx react-native bundle-mf-remote --platform android --dev false
 ```
 
 :::tip
 
-After the first bundle finishes, open the Zephyr Cloud dashboard and verify that the mini application exists with a new version. Then configure its environments and tags in [Tags & Environments](/features/tags-environments).
+After the first bundle finishes, open the Zephyr Cloud dashboard and verify that the mini application exists with a new version. Then create the `yourEnvironment-ios` and `yourEnvironment-android` environments as described in [Deploying to Specific Environments](/features/tags-environments#deploying-to-specific-environments).
 
 :::
 
@@ -277,7 +282,6 @@ Create or modify your `metro.config.js` file in the host application:
 
 ```javascript
 // HostApp/metro.config.js
-const path = require('node:path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const { withZephyr } = require('zephyr-metro-plugin');
 const { withModuleFederation } = require('@module-federation/metro');
@@ -290,7 +294,6 @@ const { withModuleFederation } = require('@module-federation/metro');
  */
 
 const miniAppPort = process.env.MINI_APP_PORT ?? '8082';
-const useZephyrRemotes = process.env.ZEPHYR_REMOTE_RESOLUTION === '1';
 
 const config = {
   resolver: { useWatchman: false },
@@ -299,9 +302,7 @@ const config = {
 const mfConfig = {
   name: 'hostApp',
   remotes: {
-    miniApp: useZephyrRemotes
-      ? 'zephyr:miniApp@yourEnvironment'
-      : `miniApp@http://localhost:${miniAppPort}/mf-manifest.json`,
+    miniApp: `miniApp@http://localhost:${miniAppPort}/mf-manifest.json`,
   },
   shared: {
     react: {
@@ -318,7 +319,6 @@ const mfConfig = {
     },
   },
   shareStrategy: 'loaded-first',
-  runtimePlugins: [path.resolve(__dirname, './runtime-plugin.ts')],
 };
 
 const getConfig = async () => {
@@ -346,17 +346,17 @@ module.exports = getConfig();
 - **name**: Unique identifier for your host application
 - **remotes**: Mini-applications to load
   - Key is the local name you'll use to import
-  - Value is a local manifest URL for development or a Zephyr selector such as `zephyr:miniApp@yourEnvironment` for cloud resolution
+  - Value is the local manifest URL used during development. Zephyr builds replace it with the URL resolved from the matching `zephyr:dependencies` entry in the next step
 - **shared**: Dependencies shared with mini-applications
   - **eager: true**: Host loads these dependencies immediately
 - **shareStrategy**: `'loaded-first'` prioritizes already loaded dependencies
-- **runtimePlugins**: Optional Module Federation runtime plugins for custom logic
+- **runtimePlugins**: Optional Module Federation runtime plugins for custom logic, such as `zephyr-native-cache/runtime-plugin` for [OTA updates](/features/react-native-ota-updates)
 
 :::
 
 ### Step 2: Configure Zephyr Dependencies
 
-To enable Zephyr Cloud integration, add the `zephyr:dependencies` field to your `package.json`:
+To enable Zephyr Cloud integration, add the `zephyr:dependencies` field to your `package.json`. Use the same key as in `mfConfig.remotes`:
 
 ```json
 // HostApp/package.json
@@ -368,16 +368,16 @@ To enable Zephyr Cloud integration, add the `zephyr:dependencies` field to your 
     "react-native": "0.80.0"
   },
   "zephyr:dependencies": {
-    "miniApp": "zephyr:miniApp@yourEnvironment"
+    "miniApp": "zephyr:miniApp@yourEnvironment-${target}"
   }
 }
 ```
 
 :::details{title="Environment Configuration"}
 
-- **miniApp**: The name of the mini-application (must match the name in metro.config.js)
-- **zephyr:miniApp@yourEnvironment**: References the mini-app from a specific Zephyr environment
-- Replace `yourEnvironment` with your actual environment name (e.g., `staging`, `production`)
+- **miniApp**: The key of the remote in `mfConfig.remotes`. When `bundle-mf-host` or `bundle-mf-remote` runs, Zephyr replaces that remote's local URL with the resolved one
+- **`zephyr:miniApp@yourEnvironment-${target}`**: References the mini-app from a Zephyr environment. Zephyr replaces `${target}` with the platform being bundled, so iOS builds load `yourEnvironment-ios` and Android builds load `yourEnvironment-android`
+- Replace `yourEnvironment` with your actual environment name prefix (e.g., `staging`, `production`)
 
 For more information about managing dependencies, see [Remote Dependencies](/features/remote-dependencies).
 
@@ -392,6 +392,8 @@ npx react-native bundle-mf-host --platform ios --dev false --entry-file index.js
 ```
 
 Verify the first host version in the dashboard just as you did for the mini application. For RNEF projects, use the required plugin and commands in the [Metro bundler guide](/bundlers/metro#rnef-publication-commands).
+
+A release build bundles the host's JavaScript into the app binary. To embed the Zephyr-resolved remote URLs in it, configure the native bundle step to run `bundle-mf-host`, as described in [Release builds](/bundlers/metro#release-builds).
 
 ### Step 4: Load Mini Application in Your Code
 
@@ -471,7 +473,7 @@ npx react-native run-android
 
 :::info
 
-During development, the host will load mini-applications from the URLs specified in your Metro configuration. In production, Zephyr will automatically resolve these to your deployed versions based on your environment configuration. `start`, `run-ios`, and `run-android` do not publish an application version; run `bundle-mf-remote` or `bundle-mf-host` explicitly to build and upload one.
+During development, the host loads mini-applications from the URLs specified in your Metro configuration. `bundle-mf-host` and `bundle-mf-remote` replace those URLs with the ones Zephyr resolves for the platform being bundled. `start` and debug `run-ios` / `run-android` builds do not publish an application version; run `bundle-mf-remote` or `bundle-mf-host` explicitly to build and upload one, or configure your [release builds](/bundlers/metro#release-builds) to run `bundle-mf-host`.
 
 :::
 
@@ -620,6 +622,7 @@ Now that you have Module Federation working with Metro, explore these advanced t
 - Explore our [example repository](https://github.com/ZephyrCloudIO/zephyr-metro-example/) for complete working examples
 - Add [React Native OTA Updates](/features/react-native-ota-updates) with `zephyr-native-cache`
 - Review the [OTA example repository](https://github.com/ZephyrCloudIO/zephyr-native-cache-test) for a full host/remotes setup
+- Explore the [Native Shell + Host architecture](/features/react-native-native-shell) to control installed apps from one Zephyr environment
 - Learn about [Tags & Environments](/features/tags-environments) for managing different deployment stages
 - Check out [Remote Dependencies](/features/remote-dependencies) for advanced dependency configuration
 - Review [End-to-End Testing](/tutorials/e2e-testing) for testing federated applications

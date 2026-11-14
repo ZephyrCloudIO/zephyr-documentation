@@ -87,7 +87,6 @@ const features = [
     description:
       'Ship Metro Module Federation bundles to installed apps without another App Store or Play Store release.',
     href: '/features/react-native-ota-updates',
-    tag: 'Beta',
   },
 ];
 

@@ -9,8 +9,10 @@ Run:
 
 ```bash
 pnpm install
-pnpm build
+ZE_DISABLED=true pnpm build
 ```
+
+`ZE_DISABLED=true` builds the docs without uploading them to Zephyr. Omit it only when you intend to publish a build.
 
 ## Analytics
 

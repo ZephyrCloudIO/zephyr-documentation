@@ -1,0 +1,154 @@
+---
+title: React Native + Expo
+description: Use Zephyr with Metro Module Federation in an Expo project, from Metro configuration and publication commands to release builds, OTA updates, and EAS Build.
+head:
+  - - meta
+    - property: og:description
+      content: Use Zephyr with Metro Module Federation in an Expo project, from Metro configuration and publication commands to release builds, OTA updates, and EAS Build.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+# React Native + Expo
+
+Expo apps bundle with Metro, so they use the same `zephyr-metro-plugin` and `zephyr-native-cache` packages as any other React Native app. Read the [Metro guide](/bundlers/metro) and [React Native OTA Updates](/features/react-native-ota-updates) first. This page covers what is different in an Expo project.
+
+## Requirements
+
+- **Expo SDK 53.** It ships React Native 0.79 and Metro 0.82. The Zephyr publication commands and `@module-federation/metro` 2.9 require Metro `>=0.82.1 <0.83.0`. Expo SDK 54 and newer use Metro 0.83.
+- **A development build or a release build.** `zephyr-native-cache` contains a native module, which Expo Go cannot load. Build the app with `npx expo run:ios`, `npx expo run:android`, or EAS Build.
+- **Native projects you can edit.** The release bundle step must run a Zephyr command, so generate `ios/` and `android/` with `npx expo prebuild`. If you regenerate them with `npx expo prebuild --clean`, apply the changes from [Release Builds](#release-builds) in a [config plugin](https://docs.expo.dev/config-plugins/introduction/), or they are overwritten.
+
+## Install
+
+Install the Zephyr and Module Federation packages. Expo projects don't include the React Native Community CLI, which runs the Zephyr publication commands, so add the version that matches React Native 0.79:
+
+<PackageManagerTabs command="add --dev zephyr-metro-plugin@^1.8.0 @module-federation/metro@^2.9.0 @module-federation/runtime @react-native-community/cli@18" />
+
+In a host that receives OTA updates, also install the native cache:
+
+<PackageManagerTabs command="add zephyr-native-cache@^1.8.0" />
+
+## Configure Metro
+
+Start from Expo's Metro configuration, then apply `withZephyr()` and `withModuleFederation()`:
+
+```js title="metro.config.js"
+const { getDefaultConfig } = require('expo/metro-config');
+const { withModuleFederation } = require('@module-federation/metro');
+const { withZephyr } = require('zephyr-metro-plugin');
+
+const mfConfig = {
+  name: 'expoHost',
+  remotes: {
+    profile: 'profile@http://localhost:8082/mf-manifest.json',
+  },
+  shared: {
+    react: {
+      singleton: true,
+      eager: true,
+      requiredVersion: '19.0.0',
+      version: '19.0.0',
+    },
+    'react-native': {
+      singleton: true,
+      eager: true,
+      requiredVersion: '0.79.6',
+      version: '0.79.6',
+    },
+  },
+  shareStrategy: 'loaded-first',
+  runtimePlugins: [require.resolve('zephyr-native-cache/runtime-plugin')],
+};
+
+async function getConfig() {
+  const zephyrConfig = await withZephyr({
+    name: mfConfig.name,
+    remotes: mfConfig.remotes,
+    target: process.env.ZEPHYR_TARGET === 'android' ? 'android' : 'ios',
+  })(getDefaultConfig(__dirname));
+
+  return withModuleFederation(zephyrConfig, mfConfig, {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
+    },
+  });
+}
+
+module.exports = getConfig();
+```
+
+Match the `shared` versions to the `react` and `react-native` versions your Expo SDK installs. Declare the Zephyr selector for each remote in `zephyr:dependencies` under the same key, as described in [Zephyr Dependencies](/bundlers/metro#zephyr-dependencies).
+
+`withZephyr()` wraps the Babel transformer that `expo/metro-config` configures and delegates to it, so Expo's Babel setup keeps working. `withModuleFederation()` replaces Metro's custom serializer, including the one Expo installs, so features that rely on Expo's serializer don't apply to federated bundles.
+
+## Environment Variables
+
+Expo inlines `EXPO_PUBLIC_*` variables when it bundles, so Zephyr cannot change them afterward. Use `ZE_PUBLIC_*` for values that should change per Zephyr environment. See [Environment-Level Overrides](/features/environment-overrides#react-native-apps).
+
+## Develop Locally
+
+`@module-federation/metro` enables Module Federation only when the CLI command is `start`, `bundle-mf-host`, or `bundle-mf-remote`. For any other command, such as `run:ios` or `export`, it prints a warning and bundles without federation.
+
+Start Metro on its own, then build and install the development build without starting a second bundler:
+
+```bash
+npx expo start
+npx expo run:ios --no-bundler
+```
+
+Register the native cache in the host's entry file before any remote loads, as in [Register The Cache At Startup](/features/react-native-ota-updates#register-the-cache-at-startup).
+
+## Publish Remotes And The Host
+
+Register the Zephyr publication commands in `react-native.config.js`, as in [React Native CLI Publication Commands](/bundlers/metro#react-native-cli-publication-commands). Then publish each remote for each platform:
+
+```bash
+ZE_ENV=production-ios npx react-native bundle-mf-remote --platform ios --dev false
+ZE_ENV=production-android npx react-native bundle-mf-remote --platform android --dev false
+```
+
+`npx expo export` is not a publication command. Module Federation is disabled for it, so it produces no federated artifacts and uploads nothing to Zephyr.
+
+## Release Builds
+
+Expo's native projects bundle release builds with `expo export:embed`, for which Module Federation is disabled. A release binary built that way contains a host bundle that cannot load remotes. Point the bundle step at the Zephyr `bundle-mf-host` command instead.
+
+On iOS, Expo's "Bundle React Native code and images" build phase keeps `CLI_PATH` and `BUNDLE_COMMAND` when they are already set, so set them in `ios/.xcode.env`:
+
+```bash title="ios/.xcode.env"
+export NODE_BINARY=$(command -v node)
+export CLI_PATH="$("$NODE_BINARY" --print "require.resolve('react-native/cli.js')")"
+export BUNDLE_COMMAND="bundle-mf-host"
+```
+
+On Android, replace Expo's `cliFile` and `bundleCommand`:
+
+```groovy title="android/app/build.gradle"
+react {
+    cliFile = file("../../node_modules/react-native/cli.js")
+    bundleCommand = "bundle-mf-host"
+}
+```
+
+The bundle step then resolves the host's remotes through Zephyr and embeds their URLs in the binary. See [Release Builds](/bundlers/metro#release-builds) in the Metro guide.
+
+## EAS Build
+
+EAS Build runs the same native release build, so the bundle step above runs on EAS too. Add a [CI token](/features/ci-tokens) to the project's EAS environment variables as `ZE_CI_TOKEN`. Zephyr detects EAS Build and identifies who deployed from the built commit; see [CI Tokens: EAS Build](/features/ci-tokens#eas-build).
+
+## OTA Updates And EAS Update
+
+Zephyr OTA updates replace federated remotes. They do not replace the host bundle in the binary, and they don't use Expo Updates channels.
+
+EAS Update publishes bundles with `expo export`, which builds without Module Federation. Publishing an EAS Update for a federated host would replace its host bundle with one that cannot load remotes. Ship host changes in a new binary, and ship remote changes through Zephyr. To change the host itself without a store release, move it into a remote with the [Native Shell + Host architecture](/features/react-native-native-shell).
+
+## Related Documentation
+
+- [Metro (React Native)](/bundlers/metro)
+- [React Native OTA Updates](/features/react-native-ota-updates)
+- [Environment-Level Overrides](/features/environment-overrides#react-native-apps)
+- [CI Tokens](/features/ci-tokens)
+- [Expo development builds](https://docs.expo.dev/develop/development-builds/introduction/)
