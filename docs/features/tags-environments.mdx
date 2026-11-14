@@ -162,6 +162,10 @@ Environments can be configured to deploy in two ways:
 
 **Version-based environments** point to a specific locked version that doesn't change until you manually deploy a different version. This gives you complete control over exactly what's running in that environment, with no automatic updates.
 
+For installed applications, environment selection and update application are separate.
+A matching tag can release automatically, while the application applies it on its configured check, reload, or next launch.
+See [OTA Runtime Support and Timing](/features/ota-updates).
+
 ### Custom Domains and DNS
 
 Each environment can have multiple custom domains pointing to it. This is perfect for:
