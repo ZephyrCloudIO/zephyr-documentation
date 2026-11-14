@@ -269,7 +269,6 @@ const sidebar: Sidebar = {
           text: 'React Native + Re.Pack',
           link: '/integrations/react-native-repack',
         },
-        { text: 'React Native + Expo', link: '/integrations/expo' },
         {
           text: 'Multi-bundler Setup',
           link: '/integrations/vite-rspack-webpack-mf',

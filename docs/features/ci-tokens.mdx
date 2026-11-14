@@ -103,7 +103,9 @@ build:
 
 ### EAS Build
 
-Add `ZE_CI_TOKEN` as a secret environment variable in your EAS project so it is available to the build. No extra configuration is needed: Zephyr detects EAS from the build environment.
+Add `ZE_CI_TOKEN` as a secret environment variable in your EAS project so it is available to the build. Zephyr detects EAS from the build environment.
+
+A build started with `eas build` runs in a copy of the repository cloned from a local `file://` path, so its Git `origin` names neither your organization nor your project, and the build fails with [ZE10016](/errors/ze10016). Set [`org` and `project`](/reference/declarative-configuration#org-and-project) in `zephyr.config.*`. Zephyr still reads the branch and commit from Git.
 
 ## Token precedence
 
