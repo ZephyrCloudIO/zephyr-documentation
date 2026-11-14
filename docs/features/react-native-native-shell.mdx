@@ -11,12 +11,12 @@ import { PackageManagerTabs } from '@rspress/core/theme';
 
 # React Native Shell + Host Architecture (Beta)
 
-In the usual Metro Module Federation setup, the host app ships inside the store binary and loads remotes from Zephyr. The remotes can change over the air, but the host cannot: changing its code, or the remotes it loads, takes a new store release.
+In the usual Metro Module Federation setup, the host app ships inside the store binary and loads remotes from Zephyr. The remotes can change over the air, but the host's own code cannot: changing it takes a new store release.
 
 The Native Shell + Host architecture moves the host out of the binary. The binary contains only a **Native Shell**: native code plus a small JavaScript bundle that loads a **Host** from Zephyr and owns recovery controls. The Host composes the product UI from **remotes**. Because the shell follows its own Zephyr environment, that environment becomes the central point of control for every installed app: it decides which Host they load and which `ZE_PUBLIC_*` values the shell sees.
 
-:::warning Beta
-This is a suggested architecture, built on the beta [React Native OTA](/features/react-native-ota-updates) support and on `runtimeManifest` from `zephyr-metro-plugin` 1.8.0. The wiring may change as the Metro integration stabilizes. It also depends on `@module-federation/metro` 2.9 behavior with [known issues](#known-issues).
+:::warning Beta architecture
+This page describes a recommended architecture that is in beta. It uses the same packages and APIs as [React Native OTA Updates](/features/react-native-ota-updates), including `runtimeManifest` from version 1.8.0. The recommended project layout and wiring may change as we collect feedback. The architecture also depends on `@module-federation/metro` 2.9 behavior with [known issues](#known-issues).
 :::
 
 :::warning Native Code Boundary

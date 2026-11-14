@@ -27,17 +27,19 @@ Deploy your React Native applications with Module Federation to Zephyr Cloud usi
 
 <CodemodDisclaimer />
 
+Using Expo? Read this guide, then [React Native + Expo](/integrations/expo) for the Expo-specific setup.
+
 ## Installation
 
 Install the Metro plugin and required Module Federation dependencies in your project:
 
-<PackageManagerTabs command="add --dev zephyr-metro-plugin @module-federation/metro@^2.9.0 @module-federation/runtime" />
+<PackageManagerTabs command="add --dev zephyr-metro-plugin@^1.8.0 @module-federation/metro@^2.9.0 @module-federation/runtime" />
 
 The `bundle-mf-host` and `bundle-mf-remote` publication commands require React 19, React Native 0.79 or newer, `@module-federation/metro@^2.9.0`, `@babel/types` `>=7.25.0 <8.0.0`, and `metro`, `metro-config`, `metro-file-map`, `metro-resolver`, and `metro-source-map` at `>=0.82.1 <0.83.0`. The configuration-only `withZephyr()` wrapper does not need these minimums.
 
 To enable React Native OTA updates in a host app, also install the native cache runtime:
 
-<PackageManagerTabs command="add zephyr-native-cache" />
+<PackageManagerTabs command="add zephyr-native-cache@^1.8.0" />
 
 ## Configuration and Publication
 
