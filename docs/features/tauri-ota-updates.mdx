@@ -1,0 +1,133 @@
+---
+title: Tauri OTA Updates
+description: Configure Tauri Module Federation remotes with Zephyr, offline caching, release timing, native-code boundaries, and rollback behavior.
+head:
+  - - meta
+    - property: og:description
+      content: Configure Tauri Module Federation remotes with Zephyr, offline caching, release timing, native-code boundaries, and rollback behavior.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+# Tauri OTA Updates
+
+A Tauri webview can load federated JavaScript from a Zephyr environment without replacing the installed native binary.
+`@module-federation/tauri` routes remote entries through the companion Rust plugin for network loading, offline caching, and recovery from failed releases.
+
+See [OTA Runtime Support and Timing](/features/ota-updates) for package evidence, maturity limits, and release policies.
+The upstream examples cover Rsbuild and Vite hosts, including remotes from different bundlers.
+
+:::warning Native release boundary
+Rust code, native plugins, capabilities, permissions, Tauri upgrades, and the bundled application shell require a normal native release.
+An OTA remote must use the interfaces already available in the installed binary.
+:::
+
+## Install Both Packages
+
+Install the runtime plugin in the host:
+
+<PackageManagerTabs command="add @module-federation/tauri@1.0.2" />
+
+Add the released Rust crate to the host's native dependencies:
+
+```toml title="src-tauri/Cargo.toml"
+[dependencies]
+tauri-plugin-module-federation = "=1.0.0"
+```
+
+These are the registry releases checked on November 13, 2026. The Rust source manifest has a newer version number than the published crate.
+The published 1.0.0 crate contains the protocol caching and rollback implementation described here.
+
+Register the Rust plugin before building the installed host:
+
+```rust title="src-tauri/src/lib.rs"
+tauri::Builder::default()
+    .plugin(tauri_plugin_module_federation::init(None))
+    .run(tauri::generate_context!())
+    .expect("error while running tauri application");
+```
+
+Installing the JavaScript package alone does not register the native protocol handler.
+
+## Publish A Remote
+
+Publish a Module Federation remote with the [Vite](/bundlers/vite) or [Rsbuild](/bundlers/rsbuild) Zephyr integration.
+Expose the feature and share framework dependencies such as React as singletons with the host.
+Copy the intended environment's URL from the dashboard. Use its direct `/remoteEntry.js` URL in the host.
+
+For Vite remotes, use `base: './'` so relative chunks also pass through the native protocol.
+The remote server must return CORS headers that allow the Tauri webview origin.
+The [upstream Vite guide](https://github.com/module-federation/tauri/blob/30e083a24c88ece9d09c84d0b19ff7847c89564f/docs/vite.md) lists origins and configuration details.
+
+## Configure A Vite Host
+
+Add `@module-federation/tauri` to the host's runtime plugins:
+
+```ts title="vite.config.ts"
+import { defineConfig } from 'vite';
+import { federation } from '@module-federation/vite';
+
+export default defineConfig({
+  plugins: [
+    federation({
+      name: 'desktop',
+      remotes: {
+        usage: {
+          type: 'module',
+          name: 'usage',
+          entry: 'https://YOUR-ENVIRONMENT-HOST/remoteEntry.js',
+        },
+      },
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+      runtimePlugins: ['@module-federation/tauri'],
+    }),
+  ],
+});
+```
+
+Replace the placeholder with your remote's actual environment URL. Configure the host's Content Security Policy for the protocol and remote assets it loads.
+The [Vite host example](https://github.com/module-federation/tauri/tree/30e083a24c88ece9d09c84d0b19ff7847c89564f/example/vite-host) provides the complete native and frontend setup.
+
+Rsbuild and webpack hosts use the same runtime plugin. For ES module remotes, register the remote at runtime as described [upstream](https://github.com/module-federation/tauri/blob/30e083a24c88ece9d09c84d0b19ff7847c89564f/docs/vite.md#rsbuild-or-webpack-host-with-a-vite-remote).
+Declaring those remotes as bundler externals can bypass the runtime plugin and its cache.
+
+## Update Timing
+
+The native protocol uses network-first loading for requested files. It does not poll for releases or replace already evaluated modules automatically.
+An application that loads remotes only at startup receives later releases on a subsequent launch.
+An application can instead reload its webview at an approved point during the session. Save required application state before reloading.
+
+Select a [manual or automatic environment policy](/features/ota-updates#choose-the-release-policy) independently from this application timing.
+A version-based environment requires an explicit deployment. A tag-based environment can advance after a matching build.
+
+## Offline Loading And Rollback
+
+The Rust plugin caches successful `GET` responses on disk. It serves cached responses when the network fails, times out, or returns an error status.
+A first launch without a cached remote can fail to load that feature. Provide a bundled fallback or an error boundary in the host.
+
+An environment rollback selects an older remote version for a later load. It does not replace code already running in the webview.
+
+The plugin also provides local recovery from failed releases:
+
+1. A successfully loaded remote entry becomes the last-known-good entry.
+2. A new entry receives a trial when it differs from the last-known-good entry.
+3. A remote load failure rejects uncommitted trials and reloads the page.
+4. The reload uses the last-known-good entry when one exists.
+
+Release builds enable this recovery by default. Debug builds disable it by default.
+The plugin caps rollback attempts at three per launch. It skips a rejected entry for 24 hours unless another version replaces it.
+
+## Coverage Limits
+
+- Use direct remote entries for native caching and rollback. `mf-manifest.json` requests bypass the native protocol and have no corresponding coverage.
+- Keep content-hashed chunk names. Older entries require their original chunks on the server or in the cache.
+- Recovery detects remote load errors. It does not detect every later render failure, crash, or hang.
+- A load failure can reject every uncommitted remote trial in that launch, including a trial that did not cause the failure.
+- Upstream reports testing on macOS. It does not claim an end-to-end test of the Windows `http://mf.localhost/...` protocol form.
+
+These limits come from the [protocol implementation and tests](https://github.com/module-federation/tauri/blob/30e083a24c88ece9d09c84d0b19ff7847c89564f/packages/tauri-plugin/src/protocol.rs), [runtime hooks](https://github.com/module-federation/tauri/blob/30e083a24c88ece9d09c84d0b19ff7847c89564f/packages/tauri/index.js), and [offline and rollback guide](https://github.com/module-federation/tauri/blob/30e083a24c88ece9d09c84d0b19ff7847c89564f/docs/offline-and-rollback.md).
+
+For related renderer timing patterns, see [Electron OTA Updates](/features/electron-ota-updates).

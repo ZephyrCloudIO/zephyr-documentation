@@ -11,6 +11,9 @@ head:
 
 Instant rollbacks let you immediately revert to a previous [version](/features/versions) of your application when something goes wrong. Whether you discover a bug in production or need to quickly undo a problematic deployment, rollbacks get your application back to a working state in seconds.
 
+For installed React Native, Electron, and Tauri applications, rollback propagation also depends on the next remote check or load.
+A rollback does not replace JavaScript already running on a device. See [OTA rollback propagation](/features/ota-updates#rollback-propagation).
+
 ## Understanding Instant Rollbacks
 
 Rollbacks in Zephyr are different from traditional deployment systems. Instead of rebuilding and redeploying your previous code, Zephyr simply switches your application's traffic back to an earlier version that's already running on the edge network.

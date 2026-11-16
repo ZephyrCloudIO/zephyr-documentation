@@ -1,0 +1,98 @@
+---
+title: OTA Runtime Support and Timing
+description: Compare Zephyr OTA runtimes, integration status, update timing, native-code boundaries, rollback propagation, and release policies.
+head:
+  - - meta
+    - property: og:description
+      content: Compare Zephyr OTA runtimes, integration status, update timing, native-code boundaries, rollback propagation, and release policies.
+---
+
+# OTA Runtime Support and Timing
+
+Zephyr can deliver remote JavaScript to installed applications through Module Federation. The installed host determines when it loads that code.
+An environment determines which version the host can receive. These are separate controls.
+
+## Runtime Support
+
+This reference describes registry releases and source checked on **November 13, 2026**.
+
+| Runtime                                                       | Integration and prerequisites                                                                                                                                        | Status and scope                                                                                                                                                                                                                    |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [React Native with Metro](/features/react-native-ota-updates) | `zephyr-metro-plugin`, `@module-federation/metro`, and a host binary with `zephyr-native-cache` linked. Publish through the Zephyr React Native CLI or RNEF adapter. | Published packages provide remote publication, hash-checked caching, polling, and JavaScript reload controls. This integration retains its beta designation. Upstream Metro documentation still marks the integration experimental. |
+| [Expo with Metro](/integrations/expo)                         | A custom native host must contain the cache module. The Metro runtime contains Expo loading hooks.                                                                   | This is an integration path with prerequisites, not a verified Expo export recipe. The inspected sources have no Expo-specific publication adapter or tested Expo host fixture.                                                     |
+| [Electron](/features/electron-ota-updates)                    | A Module Federation renderer, a Zephyr remote, shared React dependencies, and an appropriate Content Security Policy.                                                | The beta guide provides application code for polling and replacing a renderer component. It does not provide a separate Electron OTA SDK.                                                                                           |
+| [Tauri](/features/tauri-ota-updates)                          | `@module-federation/tauri`, the companion Rust plugin, and a federated webview. Use direct remote entries for cache and rollback coverage.                           | Released packages support Rsbuild, webpack, and Vite integrations. Upstream reports macOS testing. The Windows protocol form has no end-to-end test claim.                                                                          |
+
+React Native and Electron OTA support remain in beta.
+
+## Choose When Updates Apply
+
+“Next launch” is a supported application policy. It is not a fixed requirement across these runtimes.
+
+| Runtime or configuration        | Detection and application                                                                                                                                 |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| React Native cache polling      | Checks known remote manifests and downloads changed bundles. It does not replace modules already evaluated in the current JavaScript context.             |
+| React Native `downloadOnly`     | Downloads changed bundles. Apply them at a later JavaScript reload or application launch that resolves the selected release.                              |
+| React Native `downloadAndApply` | Requests a native JavaScript reload when that check downloads at least one updated bundle. Persist required application state first.                      |
+| React Native `runtimeManifest`  | Applies the host manifest stored by a previous session. Refreshes the stored manifest in the background for a later launch or JavaScript reload.          |
+| Electron component replacement  | Application code can check while running and replace the loaded renderer component immediately or after user confirmation.                                |
+| Electron startup-only loading   | An application can load its remote only at startup, which makes the next launch its update boundary.                                                      |
+| Tauri remote loading            | The protocol fetches remote files when requested. Already evaluated modules remain in the current webview until the application reloads or replaces them. |
+
+React Native polling covers manifests registered during remote resolution. It does not discover every application in your Zephyr project.
+It also does not refresh the host's `runtimeManifest`. That manifest has its own session-based refresh flow.
+
+A fixed version URL stays fixed. Use the intended environment or tag URL when the installed application must follow later releases.
+For Metro selectors, see [Remote Dependencies](/features/remote-dependencies) and the [`runtimeManifest` setup](/features/react-native-ota-updates#follow-the-host-environment).
+
+## Choose The Release Policy
+
+Publishing creates an immutable version. Whether that version becomes available to installed applications depends on the environment policy.
+
+- **Manual release:** A version-based environment stays on its selected version. Deploy another version explicitly when you approve the release.
+- **Automatic release:** A tag-based environment follows the version selected by its tag conditions. A matching build can change the environment automatically.
+- **Locked environment:** Use an [environment lock](/features/locking-tags-environments) to prevent later deployments during a rollback or release freeze.
+
+`ZE_ENV=production` labels a build. It becomes an automatic release signal only when a tag condition selects that label and the environment follows that tag.
+“Nothing goes live until explicit release” describes a manually controlled environment. It must not be used as a promise for an automatically advancing environment.
+
+See [Environment Configuration](/features/tags-environments#environment-configuration) for both policies.
+
+## Rollback Propagation
+
+A Zephyr rollback changes the version served by an environment. It does not remove code already running on a device.
+The application must check or load that environment again and apply the selected version through its runtime's update flow.
+
+- **React Native:** Known manifest checks can download the older selected bundles. JavaScript reload applies them. Host manifest overrides require the stored-manifest refresh described above.
+- **Electron:** The guide compares remote entry contents. A different older entry becomes an update candidate and follows the same component replacement flow.
+- **Tauri:** An environment rollback takes effect on a subsequent remote load. Separately, the Rust plugin can reject a failed entry and reload a cached last-known-good entry.
+
+Offline clients cannot observe a new environment target until they reconnect. Cached content and fixed version URLs can delay or prevent propagation.
+Tauri's automatic recovery detects remote load errors. It does not detect every rendering error, webview crash, or hang after a successful load.
+
+## Native-Code Boundaries
+
+OTA changes the remote JavaScript and associated assets that the installed host can load.
+Native modules, permissions, entitlements, native dependency changes, and application-shell changes require a normal native release.
+Electron main and preload processes and Electron upgrades require the normal installer or auto-updater flow.
+Tauri Rust code, plugins, capabilities, and Tauri upgrades require the normal native release flow.
+
+## Release And Implementation Evidence
+
+These references identify the source behind the behavior above. Test references describe coverage, not a claim that every device configuration passed.
+
+| Claim                                            | Evidence                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Current Metro and native cache packages          | [`zephyr-metro-plugin` 1.8.0](https://www.npmjs.com/package/zephyr-metro-plugin/v/1.8.0), [`zephyr-native-cache` 1.8.0](https://www.npmjs.com/package/zephyr-native-cache/v/1.8.0), and [`@module-federation/metro` 2.9.3](https://www.npmjs.com/package/@module-federation/metro/v/2.9.3).                                                                                                                                                                                                                                                                    |
+| Metro maturity and command boundary              | [Current upstream Metro guide](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/apps/website-new/docs/en/integrations/bundler/metro.mdx), [command detection](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/packages/metro-core/src/plugin/helpers.ts), and [Zephyr command wrapper](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-metro-plugin/src/lib/zephyr-metro-command-wrapper.ts).                        |
+| Cache checks, policies, and reload               | [BundleCacheLayer](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-native-cache/src/BundleCacheLayer.ts), [registration defaults](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-native-cache/src/register.ts), and [cache isolation tests](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-native-cache/__tests__/cache-manager.test.ts).                                   |
+| Host manifest timing and first-launch behavior   | [Environment runtime implementation](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-native-internal/src/runtime/env-runtime-plugin.ts) and [root manifest tests](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-native-internal/src/runtime/env-runtime-plugin.test.ts).                                                                                                                                                               |
+| Expo loading hooks and publication gap           | [Metro async loader](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/packages/metro-core/src/modules/asyncRequire.ts), [host bundling through the community CLI](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/packages/metro-core/src/commands/bundle-host/index.ts), and [transformer delegation tests](https://github.com/ZephyrCloudIO/zephyr-packages/blob/40bfde766fe5acfda517a988931649627b936eaf/libs/zephyr-metro-plugin/src/lib/__test__/env-transformer.spec.ts). |
+| React Native host and rollback examples          | [Host startup](https://github.com/ZephyrCloudIO/zephyr-native-cache-test/blob/57a871bf8b694ece6cfdb3a7fa5a21d1f29c39d8/apps/host/index.js) and [local OTA scenarios](https://github.com/ZephyrCloudIO/zephyr-native-cache-test/blob/57a871bf8b694ece6cfdb3a7fa5a21d1f29c39d8/scripts/e2e-ota.tsx).                                                                                                                                                                                                                                                             |
+| Electron update example and runtime invalidation | [Electron guide source](https://github.com/ZephyrCloudIO/zephyr-documentation/blob/d95b63761cbd3b5f0352909b712b0551ca8b78c6/docs/features/electron-ota-updates.mdx) and [runtime remote replacement](https://github.com/module-federation/core/blob/d4a31960d20a717626af43be59aab0881c7b6cc0/packages/runtime-core/src/remote/index.ts).                                                                                                                                                                                                                       |
+| Tauri released implementation                    | [`@module-federation/tauri` 1.0.2](https://www.npmjs.com/package/@module-federation/tauri/v/1.0.2), [Rust crate 1.0.0](https://crates.io/crates/tauri-plugin-module-federation/1.0.0), and [release history](https://github.com/module-federation/tauri/blob/30e083a24c88ece9d09c84d0b19ff7847c89564f/packages/tauri/CHANGELOG.md). The registry's current Rust release is 1.0.0, although the source manifest says 1.0.2.                                                                                                                                     |
+| Tauri caching, rollback, and platform limits     | [Protocol implementation and tests](https://github.com/module-federation/tauri/blob/30e083a24c88ece9d09c84d0b19ff7847c89564f/packages/tauri-plugin/src/protocol.rs), [runtime hooks](https://github.com/module-federation/tauri/blob/30e083a24c88ece9d09c84d0b19ff7847c89564f/packages/tauri/index.js), and [upstream limitations](https://github.com/module-federation/tauri/blob/30e083a24c88ece9d09c84d0b19ff7847c89564f/docs/offline-and-rollback.md#limitations).                                                                                         |
+
+The React Native guide originally shipped in [August 2026](https://github.com/ZephyrCloudIO/zephyr-documentation/commit/4b2bd2e7ad56e12373cb8281a86fbe8e6f3e8a7f).
+The `runtimeManifest` implementation arrived later in [the native environment feature](https://github.com/ZephyrCloudIO/zephyr-packages/commit/0f3270f).
+The earlier guide therefore omitted this supported configuration.

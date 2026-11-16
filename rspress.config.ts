@@ -168,6 +168,8 @@ const sidebar: Sidebar = {
       link: '/features/electron-ota-updates',
       tag: 'beta',
     },
+    { text: 'OTA Runtime Support & Timing', link: '/features/ota-updates' },
+    { text: 'Tauri OTA Updates', link: '/features/tauri-ota-updates' },
 
     { sectionHeaderText: 'CI/CD' },
     { text: 'CI Tokens', link: '/features/ci-tokens', tag: 'new' },
@@ -265,6 +267,7 @@ const sidebar: Sidebar = {
           text: 'React Native + Re.Pack',
           link: '/integrations/react-native-repack',
         },
+        { text: 'Expo + Metro OTA Prerequisites', link: '/integrations/expo' },
         {
           text: 'Multi-bundler Setup',
           link: '/integrations/vite-rspack-webpack-mf',
@@ -493,8 +496,11 @@ export default defineConfig({
         },
       ],
     }),
+    // ZE_DISABLED permits local checks without initializing the deployment plugin.
     // zephyr-rspress-plugin types its config hook against its own copy of the
     // Rspress config shape, so it does not structurally match @rspress/core.
-    withZephyr() as unknown as RspressPlugin,
+    ...(process.env.ZE_DISABLED === 'true'
+      ? []
+      : [withZephyr() as unknown as RspressPlugin]),
   ],
 });

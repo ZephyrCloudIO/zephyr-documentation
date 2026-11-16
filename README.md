@@ -9,8 +9,11 @@ Run:
 
 ```bash
 pnpm install
-pnpm build
+ZE_DISABLED=true pnpm build
 ```
+
+`ZE_DISABLED=true` builds the documentation without initializing the Zephyr deployment plugin.
+Omit this variable only when you intend to publish a build.
 
 ## Analytics
 
