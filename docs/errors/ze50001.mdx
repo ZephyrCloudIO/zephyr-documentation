@@ -1,0 +1,64 @@
+---
+title: 'ZE50001: Zephyr cannot be reached'
+description: 'ZE50001: Zephyr could not be reached or answered with a server error'
+head:
+  - - meta
+    - property: og:description
+      content: 'ZE50001: Zephyr could not be reached or answered with a server error'
+---
+
+import { getErrorMessage } from '../../lib/error-helpers.ts';
+import { ErrorInfo } from '../../components/errors/info.tsx';
+import { Steps } from '@rspress/core/theme';
+
+# {getErrorMessage('ZE50001')}
+
+::: tip Quick Help
+The fastest way to resolve this error is to [join our Discord](https://discord.gg/zephyrcloud) and leave a message - our team is ready to help!
+:::
+
+<ErrorInfo code="ZE50001" terminal />
+
+The Zephyr plugin or `ze-cli` could not reach Zephyr, or Zephyr answered with a server error. This covers network errors, DNS failures, timeouts, HTTP 5xx, 408 and 425 responses, and rate limiting (HTTP 429). Your project configuration and credentials are not the cause.
+
+The message names the request and what failed, for example:
+
+```shell
+Zephyr cannot be reached: HTTP 503.
+Zephyr cannot be reached: The request failed after retries (ECONNREFUSED).
+```
+
+This error can also appear as the `Reason` of another code. For example, `ZE20014` with `Reason: ZE50001` means Zephyr could not be reached while it loaded the application configuration. Treat it as this error.
+
+## What happens to your build
+
+By default, the bundle is built and not deployed. The build fails instead in CI when `ZE_CI_TOKEN` is set, or when `ZE_FAIL_BUILD=true` or the `failBuild` option is set. See [Fail the build on Zephyr errors](/features/automation#fail-the-build-on-zephyr-errors).
+
+If you need the bundle during an outage and do not need a deploy, set `ZE_DISABLED=true`. See [Build without Zephyr](/features/automation#build-without-zephyr).
+
+## Debugging the error
+
+<Steps>
+
+### Check the Zephyr status page
+
+Visit [status.zephyr-cloud.io](https://status.zephyr-cloud.io) for ongoing incidents.
+
+### Try again later
+
+Zephyr already retries read requests with backoff, so a second run right away often fails the same way. Wait, then run the build again.
+
+### Wait on HTTP 429
+
+`HTTP 429 (too many requests)` means that Zephyr is limiting requests. Wait before you run the build again.
+
+### Check your network, proxy and DNS
+
+For a network or DNS failure, make sure the machine can reach Zephyr. If you use a proxy, check `HTTPS_PROXY` and `NO_PROXY`. A DNS failure names the hostname that did not resolve.
+
+</Steps>
+
+## For automation
+
+- Do not change configuration or credentials for this error. Retry later with backoff.
+- `ze-cli deploy <dir> --format json` prints one JSON document on stdout and exits with code 1. The error has `"kind": "unreachable"`, and `reason` is `ZE50001` when another code wraps it.

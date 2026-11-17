@@ -1,10 +1,10 @@
 ---
 title: 'ZE40035: HTTP error'
-description: 'ZE40035: An HTTP error occurred during configuration operations'
+description: 'ZE40035: Zephyr rejected a request with an HTTP error'
 head:
   - - meta
     - property: og:description
-      content: 'ZE40035: An HTTP error occurred during configuration operations'
+      content: 'ZE40035: Zephyr rejected a request with an HTTP error'
 ---
 
 import { getErrorMessage } from '../../lib/error-helpers.ts';
@@ -19,30 +19,26 @@ The fastest way to resolve this error is to [join our Discord](https://discord.g
 
 <ErrorInfo code="ZE40035" terminal />
 
-This error occurs when an HTTP request fails during configuration-related operations. This can be due to network issues, server errors, or connectivity problems.
+Zephyr answered a request with an HTTP error status that a retry will not fix, such as `400`, `404` or `409`. The message shows the method, the URL with query values redacted, the status code, and the response.
+
+Other failures have their own codes:
+
+- Network errors, DNS failures, timeouts, and HTTP 5xx, 408, 425 or 429 responses: [ZE50001](/errors/ze50001).
+- HTTP 401: [ZE10018](/errors/ze10018).
+- HTTP 403: [ZE10022](/errors/ze10022).
+
+Older plugin versions also reported network errors, 5xx responses and rate limits as `ZE40035`, with the advice to check your network connection. If you see that advice, follow [ZE50001](/errors/ze50001).
 
 ## Debugging the error
 
 <Steps>
 
-### Check your network connection
+### Read the status code and the response
 
-Ensure your internet connection is stable and you can reach external services.
+The response usually says which value Zephyr rejected. A `404` can mean that Zephyr does not know the application, version, tag, or environment in the request.
 
-### Retry the operation
+### Update the Zephyr plugin
 
-HTTP errors can be transient. Try running the build again:
-
-```bash
-npm run build
-```
-
-### Check firewall and proxy settings
-
-If you're behind a corporate firewall or proxy, ensure it's not blocking requests to Zephyr's servers.
-
-### Check server status
-
-Visit the [Zephyr status page](https://status.zephyr-cloud.io) to check for any ongoing service issues.
+Make sure you use the latest version of your Zephyr plugin.
 
 </Steps>

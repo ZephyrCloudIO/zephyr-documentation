@@ -21,6 +21,10 @@ The fastest way to resolve this error is to [join our Discord](https://discord.g
 
 This error happens during deployment when the Zephyr plugin requests your application configuration from the Zephyr API (using your `application_uid`), but the request fails or returns no configuration. It is most often caused by a stale local cache in `~/.zephyr`, an expired authentication token, or a temporary network/API issue.
 
+::: tip Check the reason line first
+If the error output shows `Reason: ZE50001`, Zephyr could not be reached. Your cache and credentials are not the cause, so do not clear them. Follow [ZE50001](/errors/ze50001) instead.
+:::
+
 <Steps>
 
 ### Clear the local Zephyr cache
