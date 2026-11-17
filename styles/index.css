@@ -21,21 +21,21 @@
  * page share one color system.
  */
 :root {
-  --ze-night: #07080c;
-  --ze-surface: #0d0f15;
-  --ze-surface-2: #131620;
-  --ze-surface-3: #1a1e2a;
-  --ze-ink: #edeef3;
-  --ze-ink-muted: #a1a6b8;
-  --ze-ink-faint: #7f8498;
-  --ze-line: rgba(237, 238, 243, 0.08);
-  --ze-line-strong: rgba(237, 238, 243, 0.16);
-  --ze-violet: #7c3aed;
-  --ze-violet-bright: #8b4df5;
-  --ze-violet-ink: #b69dff;
-  --ze-violet-soft: #ebe9f8;
-  --ze-live: #34d399;
-  --ze-log: #22d3ee;
+  --ze-night: #07070b;
+  --ze-surface: #101017;
+  --ze-surface-2: #1b1b26;
+  --ze-surface-3: #1b1b26;
+  --ze-ink: #f4f4f7;
+  --ze-ink-muted: #b4b4c3;
+  --ze-ink-faint: #9a9aab;
+  --ze-line: #23232e;
+  --ze-line-strong: #3a3a48;
+  --ze-green: #08703f;
+  --ze-green-dark: #065a32;
+  --ze-mint: #3dffa8;
+  --ze-on-mint: #07070b;
+  --ze-live: #3dffa8;
+  --ze-log: #3dffa8;
   --ze-fault: #fb7185;
 }
 
@@ -50,13 +50,13 @@
   --rp-c-text-2: #525252;
   --rp-c-text-3: #737373;
 
-  --rp-c-brand: var(--ze-violet);
-  --rp-c-brand-light: var(--ze-violet-bright);
-  --rp-c-brand-lighter: var(--ze-violet-soft);
-  --rp-c-brand-dark: #6d28d9;
-  --rp-c-brand-darker: #5b21b6;
-  --rp-c-brand-tint: rgba(124, 58, 237, 0.1);
-  --rp-c-link: var(--ze-violet);
+  --rp-c-brand: var(--ze-green);
+  --rp-c-brand-light: #0b8a4c;
+  --rp-c-brand-lighter: #d8f5e6;
+  --rp-c-brand-dark: var(--ze-green-dark);
+  --rp-c-brand-darker: #044526;
+  --rp-c-brand-tint: rgba(8, 112, 63, 0.12);
+  --rp-c-link: var(--ze-green);
 
   --rp-c-gray-light-1: #aeaeae;
   --rp-c-gray-light-2: #c7c7c7;
@@ -86,15 +86,15 @@
   --rp-c-text-3: var(--ze-ink-faint);
   --rp-c-text-4: rgba(237, 238, 243, 0.2);
 
-  /* Lighter violet so links and active items stay readable on the night background. */
-  --rp-c-brand: #a685ff;
-  --rp-c-brand-light: var(--ze-violet-ink);
-  --rp-c-brand-dark: #8d54ff;
-  --rp-c-brand-darker: var(--ze-violet);
-  --rp-c-brand-tint: rgba(141, 84, 255, 0.16);
-  --rp-c-link: var(--ze-violet-ink);
+  /* Mint is the link and live color. Green is the fill behind white button text. */
+  --rp-c-brand: var(--ze-mint);
+  --rp-c-brand-light: var(--ze-mint);
+  --rp-c-brand-dark: var(--ze-green);
+  --rp-c-brand-darker: var(--ze-green-dark);
+  --rp-c-brand-tint: rgba(61, 255, 168, 0.14);
+  --rp-c-link: var(--ze-mint);
 
-  --rp-c-text-code: #d4ccff;
+  --rp-c-text-code: #d7d7e2;
 }
 
 :root {
@@ -280,4 +280,10 @@ dd {
   .link {
     @apply underline decoration-[var(--rp-c-brand)] hover:brightness-125 hover:text-[var(--rp-c-brand)] transition-all underline-offset-4 decoration-dashed;
   }
+}
+
+/* The selected search row paints white text on --rp-c-brand. Mint needs dark text. */
+.dark .rp-suggest-item--current .rp-suggest-item__link,
+.dark .rp-suggest-item--current .rp-suggest-item__link * {
+  color: var(--ze-on-mint);
 }
