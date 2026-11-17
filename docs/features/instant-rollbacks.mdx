@@ -23,6 +23,10 @@ When you deploy a new version of your application, Zephyr doesn't replace your p
 
 This means rolling back is just updating the routing again - switching the pointer back to the previous version. Since both versions are already running, the change happens immediately with zero downtime.
 
+:::info Installed apps
+React Native and Electron apps already running on a device keep the JavaScript they loaded. They pick up a rollback the next time they load or check the rolled-back remote, through the same flow as any update. See [React Native OTA Updates](/features/react-native-ota-updates#deploy-and-roll-back) and [Electron OTA Updates](/features/electron-ota-updates).
+:::
+
 ## When to Use Rollbacks
 
 Rollbacks are perfect for situations where you need to quickly undo a recent deployment:
@@ -51,9 +55,9 @@ The rollback typically completes in seconds. You'll see real-time updates in the
 
 You can roll back different types of deployments:
 
-**Environment rollbacks**: Roll back a specific [environment](/features/tags-environments#environments) like production or staging. This affects only that environment while leaving others unchanged.
+**Environment rollbacks**: Roll back a specific [environment](/features/tags-environments#understanding-environments) like production or staging. This affects only that environment while leaving others unchanged.
 
-**Tag rollbacks**: Roll back a [tag](/features/tags-environments#tags) like "latest" or "stable". This may affect multiple environments that use that tag, depending on your configuration.
+**Tag rollbacks**: Roll back a [tag](/features/tags-environments#understanding-tags) like "latest" or "stable". This may affect multiple environments that use that tag, depending on your configuration.
 
 ## What Happens During a Rollback
 

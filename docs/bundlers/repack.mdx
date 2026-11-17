@@ -127,3 +127,24 @@ remotes: {
   MobileCart: `MobileCart@http://localhost:9000/${platform}/MobileCart.container.js.bundle`,
 }
 ```
+
+Each Zephyr version is built for one platform, and an environment serves a single version. When a host consumes per-platform environments or tags, use the `${target}` selector placeholder, for example `"MobileCart": "zephyr:MobileCart@production-${target}"` in `zephyr:dependencies`. An iOS build resolves `production-ios`, and an Android build resolves `production-android`. See [Per-platform selectors](/features/remote-dependencies#per-platform-selectors-with-target).
+
+## Environment Variables
+
+`withZephyr()` rewrites `process.env.ZE_PUBLIC_*` and `import.meta.env.ZE_PUBLIC_*` reads in your application sources, not `node_modules`, into runtime lookups that fall back to the build-time value. It also injects a Module Federation runtime plugin that loads the `zephyr-manifest.json` next to each resolved remote and applies its values before the remote's code runs. With [`zephyr-native-cache`](/features/react-native-ota-updates#register-the-cache-at-startup) registered, the last loaded values are kept for offline starts.
+
+See [Environment-Level Overrides](/features/environment-overrides#react-native-apps) for when dashboard changes reach installed apps.
+
+## Runtime Manifest
+
+For an app whose bundle ships inside the store binary, set `runtimeManifest` so the app follows a Zephyr tag or environment at runtime instead of only its build-time remotes:
+
+```javascript
+// rspack.config.js
+module.exports = withZephyr({
+  runtimeManifest: '@production-${target}',
+})(config);
+```
+
+Write the selector in plain quotes, not a template literal. Selector syntax, runtime behavior, and the `zephyr-native-cache` requirement are the same as for Metro; see [Metro: Runtime Manifest](/bundlers/metro#runtime-manifest). In Re.Pack, a `runtimeManifest` that cannot be resolved is reported like other Zephyr configuration errors: it fails the build with `ZE_FAIL_BUILD=true` or in CI with `ZE_CI_TOKEN`, and is logged otherwise.

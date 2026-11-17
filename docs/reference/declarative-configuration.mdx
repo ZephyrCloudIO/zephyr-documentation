@@ -1,17 +1,17 @@
 ---
 title: Declarative Configuration
-description: Configure Zephyr application identity, remote dependencies, and dependency URL behavior with zephyr.config files.
+description: Configure Zephyr application identity, remote dependencies, dependency URL behavior, and React Native runtime manifests with zephyr.config files.
 head:
   - - meta
     - property: og:description
-      content: Configure Zephyr application identity, remote dependencies, and dependency URL behavior with zephyr.config files.
+      content: Configure Zephyr application identity, remote dependencies, dependency URL behavior, and React Native runtime manifests with zephyr.config files.
 ---
 
 # Declarative Configuration
 
 Zephyr normally infers application identity from Git and `package.json`. Add an
 optional `zephyr.config` file when an application needs explicit identity, remote
-dependency declarations, or immutable dependency URLs.
+dependency declarations, immutable dependency URLs, or a React Native runtime manifest.
 
 ## Create a Configuration File
 
@@ -77,13 +77,14 @@ after changing the file.
 
 ## Configuration Reference
 
-| Field                | Type                      | Default source or value              | Purpose                                                           |
-| -------------------- | ------------------------- | ------------------------------------ | ----------------------------------------------------------------- |
-| `org`                | `string`                  | Inferred from the Git `origin`       | Overrides the organization portion of the application identity.   |
-| `project`            | `string`                  | Inferred from the Git `origin`       | Overrides the project portion of the application identity.        |
-| `appName`            | `string`                  | Nearest `package.json` `name`        | Overrides the application name.                                   |
-| `remoteDependencies` | `Record<string, string>`  | `package.json` `zephyr:dependencies` | Adds entries and overrides matching aliases.                      |
-| `dependencyUrlMode`  | `'selector' \| 'version'` | `'selector'`                         | Chooses mutable selector URLs or immutable resolved-version URLs. |
+| Field                | Type                      | Default source or value              | Purpose                                                                  |
+| -------------------- | ------------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `org`                | `string`                  | Inferred from the Git `origin`       | Overrides the organization portion of the application identity.          |
+| `project`            | `string`                  | Inferred from the Git `origin`       | Overrides the project portion of the application identity.               |
+| `appName`            | `string`                  | Nearest `package.json` `name`        | Overrides the application name.                                          |
+| `remoteDependencies` | `Record<string, string>`  | `package.json` `zephyr:dependencies` | Adds entries and overrides matching aliases.                             |
+| `dependencyUrlMode`  | `'selector' \| 'version'` | `'selector'`                         | Chooses mutable selector URLs or immutable resolved-version URLs.        |
+| `runtimeManifest`    | `string`                  | None                                 | Tag or environment whose manifest a React Native app follows at runtime. |
 
 The configuration is strict. Unknown fields, empty strings, non-string dependency
 references, and unsupported `dependencyUrlMode` values cause the build to fail.
@@ -138,6 +139,18 @@ You can use both locations. Zephyr merges them by alias: entries from
 `remoteDependencies` override same-named entries in `package.json`, while package-only
 entries remain.
 
+A selector may contain `${target}`, which Zephyr replaces with the build target, such as
+`ios` or `android`, when it resolves the dependency. Write such selectors in plain quotes,
+not template literals, so JavaScript does not interpolate them:
+
+```js title="zephyr.config.cjs"
+module.exports = {
+  remoteDependencies: {
+    profile: 'zephyr:profile@production-${target}',
+  },
+};
+```
+
 See [Remote Dependencies](/features/remote-dependencies) for application UID and version
 selector syntax.
 
@@ -159,6 +172,30 @@ The selector still determines which deployment Zephyr resolves. The mode changes
 the deployment root, remote entry, and Module Federation manifest URLs written into the
 host. Rebuild the host to adopt a newer dependency version.
 
+### `runtimeManifest`
+
+`runtimeManifest` makes a React Native app whose bundle ships inside the native binary
+follow a Zephyr tag or environment at runtime. The selector uses `zephyr:dependencies`
+syntax: `@label` selects this application's own tag or environment, `app@label` another
+application's, and `${target}` is replaced with the build platform:
+
+```js title="zephyr.config.cjs"
+module.exports = {
+  appName: 'mobile-shell',
+  runtimeManifest: '@production-${target}',
+};
+```
+
+Every integration accepts the field, but only the Metro and Re.Pack plugins act on it.
+Their `withZephyr({ runtimeManifest })` option wins over the config file. The build
+resolves the label's alias URL, never a version URL, and reports an error when the label
+has no deployment for the build platform. Use separate labels per platform.
+
+At runtime, the app applies the label's `zephyr-manifest.json` stored by the previous
+launch, with its remote overrides and `ZE_PUBLIC_*` values, then refreshes the stored
+copy in the background. It needs `zephyr-native-cache` registered. See
+[React Native OTA Updates](/features/react-native-ota-updates#follow-an-environment-from-the-binary).
+
 ## Alternatives and Precedence
 
 You do not need a `zephyr.config` file when Zephyr's inferred values and defaults are
@@ -171,6 +208,7 @@ correct.
 | Application name    | Read from the nearest `package.json`                   | `appName` overrides the package name.                  |
 | Remote dependencies | Declared in `package.json` under `zephyr:dependencies` | `remoteDependencies` adds entries and wins by alias.   |
 | Dependency URLs     | Mutable selector URLs                                  | `dependencyUrlMode: 'version'` enables immutable URLs. |
+| Runtime manifest    | Build-time remotes and values in the native binary     | `runtimeManifest` follows a tag or environment.        |
 
 Environment variables are not an alternative configuration source for these fields.
 Zephyr does not read identity or remote dependency overrides from the environment, and

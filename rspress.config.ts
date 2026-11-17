@@ -161,6 +161,10 @@ const sidebar: Sidebar = {
     {
       text: 'React Native OTA Updates',
       link: '/features/react-native-ota-updates',
+    },
+    {
+      text: 'React Native Shell + Host',
+      link: '/features/react-native-native-shell',
       tag: 'beta',
     },
     {
@@ -495,6 +499,9 @@ export default defineConfig({
     }),
     // zephyr-rspress-plugin types its config hook against its own copy of the
     // Rspress config shape, so it does not structurally match @rspress/core.
-    withZephyr() as unknown as RspressPlugin,
+    // ZE_DISABLED=true builds the docs without uploading them to Zephyr.
+    ...(process.env.ZE_DISABLED === 'true'
+      ? []
+      : [withZephyr() as unknown as RspressPlugin]),
   ],
 });

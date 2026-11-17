@@ -84,7 +84,7 @@ There is also a third solution: using a single NavigationContainer in the host a
 
 When you are using Zephyr with Re.Pack, the HostApp auto-loads MiniApps' bundles from Zephyr. To run the app in production/release mode with Zephyr, the process involves configuring your Zephyr environment - and `zephyr-repack-plugin` will auto-retrieving the latest deployed remote URLs as well as updating the HostApp’s module federation configuration during the bundling. Once completed, you can build and launch the app in release mode normally (e.g. via Xcode or react-native release build), and it will load MiniApps from the Zephyr Cloud URLs instead of localhost.
 
-We will soon launch `react-native-zephyr-sdk` to auto-rollback, roll-forward MiniApps during runtime. To use `react-native-zephyr-sdk`, you must use `zephyr-repack-plugin` during build time.
+Resolved remote URLs default to environment and tag URLs. Deploying to a remote's environment, moving its tag, or rolling it back changes the deployment those URLs serve to installed hosts, without a new host build. Zephyr also applies `ZE_PUBLIC_*` values and remote overrides on the device; see [Environment-Level Overrides](/features/environment-overrides#react-native-apps).
 
 ### Steps
 

@@ -85,7 +85,7 @@ Add a `zephyr:dependencies` field to your `package.json` to specify remote appli
 }
 ```
 
-You will see more examples [later in this guide](#standard-version-selectors)
+You will see more examples [later in this guide](#supported-declaration-formats)
 
 ### Understanding Dependency Mapping
 
@@ -352,13 +352,29 @@ The resolution engine implements platform-aware dependency selection, allowing a
 }
 ```
 
-The platform resolution follows a hierarchical approach:
+Every build has a target: `web`, `ios`, `android`, or `tap-app`. The resolver looks for a version built for the requesting build's target:
 
-- **Web platform**: Default target, optimized for browser environments
-- **React Native platform**: Mobile-specific implementations with native module support
-- **Node.js platform**: Server-side implementations without browser dependencies
+- **Web**: The default target, for browser builds
+- **iOS and Android**: React Native builds from the Metro and Re.Pack plugins, one artifact per platform
+- **TAP apps**: Generic ESM artifacts for `tap-app` builds
 
 The resolution engine implements automatic fallback to the 'web' platform when platform-specific versions are unavailable, ensuring build reliability while maintaining platform optimization when available.
+
+### Per-Platform Selectors with `${target}`
+
+A selector may contain `${target}`, which Zephyr replaces with the build target when it resolves the dependency. One declaration then selects a per-platform tag or environment:
+
+```json title="package.json"
+{
+  "zephyr:dependencies": {
+    "profile": "zephyr:profile.mobile.acme@production-${target}"
+  }
+}
+```
+
+An iOS build resolves `production-ios`, and an Android build resolves `production-android`. Those tags or environments must exist on the remote.
+
+React Native apps need this pattern: an environment serves a single version, and each React Native version is built for one platform. In a JavaScript `zephyr.config.*` file, write the selector in plain quotes, not a template literal, so JavaScript does not interpolate `${target}`.
 
 ### Label-Based Resolution (Environments and Tags)
 
