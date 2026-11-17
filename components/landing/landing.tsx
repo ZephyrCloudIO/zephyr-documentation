@@ -686,7 +686,7 @@ function Opener() {
           <br />
           permissions you already have.
         </p>
-        <hr className="zc-rule" />
+        <div className="zc-rule" aria-hidden="true" />
         <div className="zc-opener-grid">
           <div>
             <Step n="01" title="Add the Zephyr MCP server" />
@@ -763,7 +763,7 @@ function CommandSection() {
             live URL. You do not write a pipeline.
           </p>
         </div>
-        <hr className="zc-rule" />
+        <div className="zc-rule" aria-hidden="true" />
         <div className="zc-cols">
           <div>
             <Step n="01" title="Run the codemod" />
@@ -1003,7 +1003,7 @@ function Close() {
   return (
     <section className="zc-close" aria-labelledby="close-title">
       <div className="zc-wrap">
-        <hr className="zc-rule" />
+        <div className="zc-rule" aria-hidden="true" />
         <div className="zc-close-row">
           <div>
             <h2 className="zc-h2" id="close-title">

@@ -47,10 +47,9 @@
   background: #07070b;
 }
 
-.zc-home h1,
-.zc-home h2,
-.zc-home h3,
-.zc-home p {
+/* :where() keeps these resets at class specificity, so the component rules
+ * below can set margins and link colors. */
+.zc-home :where(h1, h2, h3, p) {
   margin: 0;
 }
 
@@ -62,7 +61,7 @@
   line-height: 1.05;
 }
 
-.zc-home a {
+.zc-home :where(a) {
   color: inherit;
   text-decoration: none;
 }
@@ -151,6 +150,7 @@
   }
 }
 
+/* A div, not an hr: the site base layer styles hr with !important padding. */
 .zc-rule {
   height: 1px;
   margin: 36px 0 0;
@@ -195,6 +195,10 @@
 
 .zc-step-head .zc-step {
   margin-top: 24px;
+}
+
+.zc-opener-grid .zc-step:not(:first-child) {
+  margin-top: 36px;
 }
 
 .zc-sign-in {
@@ -516,7 +520,8 @@
 .zc-new-app {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 12px;
+  align-items: baseline;
+  gap: 8px;
   margin-top: 16px;
   color: var(--zc-muted);
   font-size: 14.5px;
@@ -544,6 +549,10 @@
   .zc-bundler-row {
     gap: 12px 30px;
     margin-top: 28px;
+  }
+
+  .zc-bundler-row .zc-text-link {
+    margin-left: auto;
   }
 }
 
@@ -743,6 +752,7 @@
 .zc-build--production .zc-dot {
   width: 20px;
   height: 20px;
+  margin: -2px 0;
   border: 0;
   background: var(--zc-mint);
 }
