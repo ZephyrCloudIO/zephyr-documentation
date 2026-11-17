@@ -1,10 +1,10 @@
 ---
-title: 'ZE20024: Error not yet documented'
-description: 'ZE20024: Error code not yet documented'
+title: 'ZE20024: Failed to deploy local build'
+description: 'ZE20024: Zephyr found a problem with the local build output and did not deploy it'
 head:
   - - meta
     - property: og:description
-      content: 'ZE20024: Error code not yet documented'
+      content: 'ZE20024: Zephyr found a problem with the local build output and did not deploy it'
 ---
 
 import { getErrorMessage } from '../../lib/error-helpers.ts';
@@ -18,6 +18,32 @@ The fastest way to resolve this error is to [join our Discord](https://discord.g
 
 <ErrorInfo code="ZE20024" terminal />
 
-::: warning
-This error is not yet documented. Please contact us on Discord for assistance.
-:::
+Zephyr checks the local build output before it uploads it. This error means it found a problem and did not deploy the build. The line after `Failed to deploy local build.` names the problem.
+
+## Common causes
+
+### The compilation has errors
+
+`Zephyr will not upload ... output because the compilation contains errors.` Fix the build errors first. Zephyr does not deploy a failed compilation.
+
+### `ze-cli run` could not detect the output directory
+
+`ze-cli run` reads your build configuration to find the output directory. When the configuration is too dynamic to read, `ze-cli run` builds your project, skips the upload, and exits with code 1. Upload the output yourself:
+
+```bash
+ze-cli deploy ./dist
+```
+
+You can also use the Zephyr plugin for your bundler instead of `ze-cli run`.
+
+### An output path or entrypoint is missing or outside the output directory
+
+The message names the path. Check the output directory and the entrypoint in your build configuration.
+
+### Module Federation metadata is invalid or conflicting
+
+The message names the remote or the field. Make sure every Module Federation name and filename is unique, and that every configuration declares the same values for the same remote.
+
+### A multi-compiler or multi-environment build is incomplete
+
+Zephyr deploys a coordinated build only when every compiler or environment produces its output. The message names the one that did not.

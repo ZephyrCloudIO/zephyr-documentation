@@ -7,6 +7,7 @@ export const Categories = {
   deploy: '20',
   browser: '30',
   config: '40',
+  unreachable: '50',
 } as const satisfies {
   [name: string]: `${Digit}${Digit}`;
 };
@@ -207,6 +208,11 @@ export const Errors = {
     id: '035',
     message: 'HTTP error.',
     kind: 'config',
+  },
+  ERR_ZEPHYR_UNREACHABLE: {
+    id: '001',
+    message: 'Zephyr cannot be reached.',
+    kind: 'unreachable',
   },
 } as const satisfies {
   [name: string]: {
