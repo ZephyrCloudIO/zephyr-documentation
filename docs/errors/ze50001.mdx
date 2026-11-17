@@ -19,7 +19,7 @@ The fastest way to resolve this error is to [join our Discord](https://discord.g
 
 <ErrorInfo code="ZE50001" terminal />
 
-The Zephyr plugin or `ze-cli` could not reach Zephyr, or Zephyr answered with a server error. This covers network errors, DNS failures, timeouts, and HTTP 5xx and 408 responses. Your project configuration and credentials are not the cause.
+The Zephyr plugin or `ze-cli` could not reach Zephyr, or Zephyr answered with a server error. This covers network errors, DNS failures, timeouts, HTTP 5xx, 408 and 425 responses, and rate limiting (HTTP 429). Your project configuration and credentials are not the cause.
 
 The message names the request and what failed, for example:
 
@@ -47,6 +47,10 @@ Visit [status.zephyr-cloud.io](https://status.zephyr-cloud.io) for ongoing incid
 ### Try again later
 
 Zephyr already retries read requests with backoff, so a second run right away often fails the same way. Wait, then run the build again.
+
+### Wait on HTTP 429
+
+`HTTP 429 (too many requests)` means that Zephyr is limiting requests. Wait before you run the build again.
 
 ### Check your network, proxy and DNS
 

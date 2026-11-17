@@ -23,11 +23,11 @@ Zephyr answered a request with an HTTP error status that a retry will not fix, s
 
 Other failures have their own codes:
 
-- Network errors, DNS failures, timeouts, and HTTP 5xx or 408 responses: [ZE50001](/errors/ze50001).
+- Network errors, DNS failures, timeouts, and HTTP 5xx, 408, 425 or 429 responses: [ZE50001](/errors/ze50001).
 - HTTP 401: [ZE10018](/errors/ze10018).
 - HTTP 403: [ZE10022](/errors/ze10022).
 
-Older plugin versions also reported network errors and 5xx responses as `ZE40035`, with the advice to check your network connection. If you see that advice, follow [ZE50001](/errors/ze50001).
+Older plugin versions also reported network errors, 5xx responses and rate limits as `ZE40035`, with the advice to check your network connection. If you see that advice, follow [ZE50001](/errors/ze50001).
 
 ## Debugging the error
 
@@ -36,10 +36,6 @@ Older plugin versions also reported network errors and 5xx responses as `ZE40035
 ### Read the status code and the response
 
 The response usually says which value Zephyr rejected. A `404` can mean that Zephyr does not know the application, version, tag, or environment in the request.
-
-### Wait on HTTP 429
-
-`429` means too many requests. Wait, then run the build again.
 
 ### Update the Zephyr plugin
 
