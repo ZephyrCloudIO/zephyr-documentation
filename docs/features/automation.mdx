@@ -152,6 +152,22 @@ This applies to single configurations, compiler arrays, coordinated multi-compil
 
 If Zephyr cannot be reached (network, DNS, timeout, or an HTTP 5xx response), the error is [ZE50001](/errors/ze50001). It can also appear as the `Reason` of another code, such as `ZE20014`.
 
+## Build without Zephyr
+
+Set `ZE_DISABLED=true` to build without Zephyr, for example during a Zephyr outage or in a fork that has no token:
+
+```bash
+ZE_DISABLED=true npm run build
+```
+
+The plugins and `ze-cli` then skip every Zephyr step. They make no network requests and need no token. The bundle is built, and the output ends with this line:
+
+```shell
+The bundle is built. The bundle is not deployed. Zephyr is disabled (ZE_DISABLED).
+```
+
+Only the value `true` enables this mode. Nothing turns it on automatically.
+
 ## Plugin Behavior
 
 When the Zephyr plugin detects the `ZE_CI_TOKEN` environment variable, it will:

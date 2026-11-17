@@ -34,6 +34,8 @@ This error can also appear as the `Reason` of another code. For example, `ZE2001
 
 By default, the bundle is built and not deployed. The build fails instead in CI when `ZE_CI_TOKEN` is set, or when `ZE_FAIL_BUILD=true` or the `failBuild` option is set. See [Fail the build on Zephyr errors](/features/automation#fail-the-build-on-zephyr-errors).
 
+If you need the bundle during an outage and do not need a deploy, set `ZE_DISABLED=true`. See [Build without Zephyr](/features/automation#build-without-zephyr).
+
 ## Debugging the error
 
 <Steps>
