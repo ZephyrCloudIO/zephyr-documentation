@@ -1,7 +1,7 @@
 import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
 
-const clients = {
+export const mcpClients = {
   claude: {
     label: 'Claude Code',
     shortLabel: 'Claude',
@@ -59,15 +59,15 @@ const clients = {
   },
 } as const;
 
-type Client = keyof typeof clients;
+type Client = keyof typeof mcpClients;
 
 export function McpPromo() {
   const [selected, setSelected] = useState<Client>('claude');
   const [copied, setCopied] = useState<Client | null>(null);
-  const selectedClient = clients[selected];
+  const selectedClient = mcpClients[selected];
 
   const copyInstallCommand = (client: Client) => {
-    void navigator.clipboard.writeText(clients[client].commands.join('\n'));
+    void navigator.clipboard.writeText(mcpClients[client].commands.join('\n'));
     setCopied(client);
     window.setTimeout(() => setCopied(null), 1400);
   };
@@ -79,8 +79,8 @@ export function McpPromo() {
         aria-label="Choose an AI client"
         className="not-prose mb-3 grid grid-cols-[repeat(auto-fit,minmax(5.5rem,1fr))] gap-2"
       >
-        {(Object.keys(clients) as Client[]).map((clientName) => {
-          const client = clients[clientName];
+        {(Object.keys(mcpClients) as Client[]).map((clientName) => {
+          const client = mcpClients[clientName];
           const isSelected = selected === clientName;
 
           return (
@@ -92,7 +92,7 @@ export function McpPromo() {
               aria-controls="mcp-client-panel"
               className={`flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--rp-c-brand)] ${
                 isSelected
-                  ? 'border-[var(--ze-violet)] bg-[var(--ze-surface-3)] text-[var(--ze-ink)]'
+                  ? 'border-[var(--rp-c-brand)] bg-[var(--ze-surface-3)] text-[var(--ze-ink)]'
                   : 'border-[var(--ze-line)] bg-[var(--ze-surface)] text-[var(--ze-ink-muted)] hover:border-[var(--ze-line-strong)] hover:bg-[var(--ze-surface-2)] hover:text-[var(--ze-ink)]'
               }`}
               onClick={() => {
@@ -117,8 +117,6 @@ export function McpPromo() {
         role="tabpanel"
         className="relative overflow-hidden rounded-xl border border-[var(--ze-line)] bg-[var(--ze-surface)] p-4"
       >
-        <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-violet-600/10 to-transparent" />
-
         <button
           type="button"
           aria-label={`Copy ${selectedClient.label} install commands`}
