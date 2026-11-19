@@ -1,6 +1,20 @@
 /* Home page and site footer. Colors come from the tokens below and from
  * styles/index.css, so the light appearance and the dark appearance match. */
 
+/* Site-wide card tokens. components/ui/card.tsx reads them on the documentation
+ * pages. The home page sets its own --zc-surface on .zc-home. */
+:root {
+  --zc-surface: color-mix(in srgb, var(--rp-c-bg-soft) 70%, transparent);
+  --zc-surface-hover: var(--rp-c-bg-soft);
+  --zc-border: color-mix(in srgb, var(--rp-c-text-1) 10%, transparent);
+}
+
+.dark {
+  --zc-surface: color-mix(in srgb, var(--rp-c-bg-soft) 80%, transparent);
+  --zc-surface-hover: var(--rp-c-bg-mute);
+  --zc-border: var(--ze-line);
+}
+
 .zc-container {
   width: min(1200px, calc(100% - 40px));
   margin-inline: auto;
@@ -53,8 +67,7 @@
   margin: 0;
 }
 
-.zc-home h1,
-.zc-home h2 {
+.zc-home :where(h1, h2) {
   color: var(--zc-ink);
   font-weight: 800;
   letter-spacing: -0.028em;

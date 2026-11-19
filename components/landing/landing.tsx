@@ -1,12 +1,12 @@
 import { Link } from '@rspress/core/theme';
 import {
-  CodeBlockRuntime,
+  getCustomMDXComponent,
   PackageManagerTabs,
   Tab,
   Tabs,
 } from '@rspress/core/theme';
 import { ArrowRight, ArrowUpRight, Check, Copy } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ParcelIcon } from '../icons/parcel';
 import { ReactIcon } from '../icons/react';
@@ -73,57 +73,146 @@ Deployed to edge:
 https://ana-142-cart-shop-acme-ze
 .zephyr-cloud.io`;
 
-type LineTransformer = {
-  name: string;
-  pre?: (
-    this: { addClassToHast: (node: unknown, name: string) => void },
-    node: unknown,
-  ) => void;
-  line?: (
-    this: { addClassToHast: (node: unknown, name: string) => void },
-    node: unknown,
-    line: number,
-  ) => void;
+type Lang = 'bash' | 'json' | 'text' | 'ts';
+type TokenKind = 'expr' | 'fn' | 'kw' | 'punct' | 'str';
+type Token = [text: string, kind?: TokenKind];
+type LineClasses = Record<number, string>;
+
+/* The snippets on this page are static. The page renders them at build time
+ * with the theme code block and the Shiki CSS variables. It does not load the
+ * Shiki highlighter in the browser. */
+const TOKEN_COLOR: Record<TokenKind, string> = {
+  expr: 'var(--shiki-token-string-expression)',
+  fn: 'var(--shiki-token-function)',
+  kw: 'var(--shiki-token-keyword)',
+  punct: 'var(--shiki-token-punctuation)',
+  str: 'var(--shiki-token-string)',
 };
 
-function lineClasses(
-  classes: Record<number, string>,
-  markDiff = false,
-): LineTransformer {
-  return {
-    name: 'zephyr-line-classes',
-    pre(node) {
-      if (markDiff) this.addClassToHast(node, 'has-diff');
-    },
-    line(node, line) {
-      const className = classes[line];
-      if (className) this.addClassToHast(node, className);
-    },
-  };
+const TS_TOKENS =
+  /(\b(?:import|from|export|default)\b)|('[^']*')|([A-Za-z_]\w*(?=\())|([,:])/g;
+const TS_KINDS: TokenKind[] = ['kw', 'expr', 'fn', 'punct'];
+const JSON_TOKENS = /("[^"]*"(?=\s*:))|("[^"]*")|(:)/g;
+const JSON_KINDS: TokenKind[] = ['kw', 'expr', 'punct'];
+const SHELL_TOKENS = /('[^']*')/g;
+const SHELL_KINDS: TokenKind[] = ['expr'];
+
+function splitTokens(
+  text: string,
+  pattern: RegExp,
+  kinds: TokenKind[],
+  base?: TokenKind,
+): Token[] {
+  const tokens: Token[] = [];
+  let last = 0;
+  for (const match of text.matchAll(pattern)) {
+    if (match.index > last) tokens.push([text.slice(last, match.index), base]);
+    const group = match.slice(1).findIndex((value) => value !== undefined);
+    tokens.push([match[0], kinds[group]]);
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) tokens.push([text.slice(last), base]);
+  return tokens;
 }
 
-const diffDesktop = lineClasses(
-  { 3: 'diff add', 6: 'diff remove', 7: 'diff add' },
-  true,
-);
-const diffMobile = lineClasses(
-  { 2: 'diff add', 3: 'diff add', 5: 'diff remove', 6: 'diff add' },
-  true,
-);
-const sessionDesktop = lineClasses({
+function tokenize(line: string, lang: Lang): Token[] {
+  if (lang === 'ts') return splitTokens(line, TS_TOKENS, TS_KINDS);
+  if (lang === 'json') return splitTokens(line, JSON_TOKENS, JSON_KINDS);
+  if (lang === 'bash') {
+    const command = line.match(/^\S+/)?.[0] ?? '';
+    return [
+      [command, 'fn'],
+      ...splitTokens(
+        line.slice(command.length),
+        SHELL_TOKENS,
+        SHELL_KINDS,
+        'str',
+      ),
+    ];
+  }
+  return [[line]];
+}
+
+function StaticCode({
+  lang,
+  code,
+  title,
+  lineClasses = {},
+  hasDiff = false,
+  wrapCode = false,
+}: {
+  lang: Lang;
+  code: string;
+  title?: string;
+  /** Class names by line number. The first line is line 1. */
+  lineClasses?: LineClasses;
+  hasDiff?: boolean;
+  wrapCode?: boolean;
+}) {
+  const Pre = useMemo(() => getCustomMDXComponent().pre, []);
+  return (
+    <Pre
+      lang={lang}
+      title={title}
+      wrapCode={wrapCode}
+      className={
+        hasDiff ? 'shiki css-variables has-diff' : 'shiki css-variables'
+      }
+      style={{
+        backgroundColor: 'var(--shiki-background)',
+        color: 'var(--shiki-foreground)',
+      }}
+      tabIndex={0}
+    >
+      <code>
+        {code.split('\n').map((line, index) => {
+          const extra = lineClasses[index + 1];
+          return (
+            <Fragment key={index}>
+              {index > 0 ? '\n' : null}
+              <span className={extra ? `line ${extra}` : 'line'}>
+                {tokenize(line, lang).map(([text, kind], tokenIndex) => (
+                  <span
+                    key={tokenIndex}
+                    style={kind ? { color: TOKEN_COLOR[kind] } : undefined}
+                  >
+                    {text}
+                  </span>
+                ))}
+              </span>
+            </Fragment>
+          );
+        })}
+      </code>
+    </Pre>
+  );
+}
+
+const diffDesktop: LineClasses = {
+  3: 'diff add',
+  6: 'diff remove',
+  7: 'diff add',
+};
+const diffMobile: LineClasses = {
+  2: 'diff add',
+  3: 'diff add',
+  5: 'diff remove',
+  6: 'diff add',
+};
+const sessionDesktop: LineClasses = {
   1: 'zc-prompt',
   2: 'zc-prompt',
   3: 'zc-prompt',
   5: 'zc-ok',
   6: 'zc-ok',
   7: 'zc-ok-last',
-});
-const sessionMobile = lineClasses({
+};
+const sessionMobile: LineClasses = {
   1: 'zc-prompt',
   3: 'zc-ok',
   4: 'zc-ok-last',
-});
-const buildDesktop = lineClasses({
+};
+const buildDesktop: LineClasses = {
   1: 'zc-prompt',
   2: 'zc-faint',
   3: 'zc-ze',
@@ -132,15 +221,15 @@ const buildDesktop = lineClasses({
   6: 'zc-ze',
   7: 'zc-ze',
   8: 'zc-url',
-});
-const buildMobile = lineClasses({
+};
+const buildMobile: LineClasses = {
   1: 'zc-prompt',
   2: 'zc-ze',
   3: 'zc-ze',
   4: 'zc-ze',
   5: 'zc-url',
   6: 'zc-url',
-});
+};
 
 function useKeyboardTabs(rootRef: { current: HTMLElement | null }) {
   useEffect(() => {
@@ -294,20 +383,21 @@ function TitledBlock({
 }: {
   title: string;
   aside?: string;
-  lang: string;
+  lang: Lang;
   code: string;
-  lines: LineTransformer;
+  lines: LineClasses;
   wrapCode?: boolean;
 }) {
   return (
     <div className="zc-titled">
       {aside ? <span className="zc-aside">{aside}</span> : null}
-      <CodeBlockRuntime
+      <StaticCode
         lang={lang}
         title={title}
         code={code}
+        lineClasses={lines}
+        hasDiff={lang === 'ts'}
         wrapCode={wrapCode}
-        shikiOptions={{ transformers: [lines] }}
       />
     </div>
   );
@@ -326,7 +416,7 @@ function AssistantTabs() {
                 : client.label;
             return (
               <Tab key={name} label={label}>
-                <CodeBlockRuntime
+                <StaticCode
                   lang={client.format === 'config' ? 'json' : 'bash'}
                   code={client.commands.join('\n')}
                   wrapCode
