@@ -366,6 +366,8 @@ New versions and rollbacks reach installed hosts only through environment or tag
 
 `ZE_PUBLIC_*` values and remote overrides do not need a new version. Edit them on the environment in the dashboard; they apply as described in [What Changes Without A Store Release](#what-changes-without-a-store-release).
 
+If a native shell loads the host itself as a remote, set the `runtimeManifest` plugin option so the shell's Zephyr environment, controlled from the dashboard, decides which host it loads. See [Runtime Manifest](/bundlers/metro#runtime-manifest).
+
 ## Example Repository
 
 Use [`zephyr-native-cache-test`](https://github.com/ZephyrCloudIO/zephyr-native-cache-test) as the implementation reference for bundle caching, polling, update prompts, and rollback. Start with these files:
