@@ -59,7 +59,7 @@
     "@tailwindcss/typography": "0.5.20",
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
-    "lint-staged": "17.6.0",
+    "lint-staged": "17.6.1",
     "lucide-static": "1.55.0",
     "oxlint": "1.87.0",
     "postcss": "8.5.32",
