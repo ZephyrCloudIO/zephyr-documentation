@@ -24,6 +24,7 @@ With this integration, you can leverage your existing Akamai infrastructure to r
 - A registered Zephyr account
 - A registered domain
 - EdgeKV enabled for the Akamai account before the first deployment. Zephyr checks this during setup and initializes EdgeKV when Akamai reports the account as uninitialized.
+- Optional: an Akamai Object Storage bucket you own, for files too large for EdgeKV. See [Large-asset storage](#large-asset-storage).
 
 :::
 
@@ -61,6 +62,9 @@ Before proceeding, you will need some data from Akamai:
 | EdgeKV                            |  READ-WRITE  |
 | EdgeWorkers                       |  READ-WRITE  |
 | Property Manager (PAPI)           |  READ-WRITE  |
+| Cloud Access Manager              |  READ-WRITE  |
+
+The **Cloud Access Manager** permission is needed only if you turn on [large-asset storage](#large-asset-storage) and let Zephyr create the Cloud Access Manager key. Leave it out otherwise.
 
 - Copy or download token and add `[default]` as a header, so token will look like:
 - If your Akamai account uses account switching, include `account_key` in the same section.
@@ -101,6 +105,18 @@ Zephyr provisions your EdgeWorker on the **Basic Compute** resource tier (`resou
 - Or, with the [EdgeWorkers CLI](https://github.com/akamai/cli-edgeworkers) installed, run `akamai edgeworkers list-restiers --contractId <your-contract-id>` and confirm `resourceTierId: 100` (`Basic Compute`) is in the response.
 
 If your contract is only entitled for Dynamic Compute or Enterprise Compute, EdgeWorker creation fails with an Akamai `403 Forbidden` error (`errorCode: EW0401`, `detail: Permission Invalid`), even when your API token has the correct EdgeWorkers permission.
+
+#### 6. Object Storage bucket and keys (optional)
+
+Only needed for [large-asset storage](#large-asset-storage). Skip this step to keep every file in EdgeKV.
+
+- Create a new Akamai Object Storage bucket on a standard (E2 or E3) endpoint and use it only for Zephyr. Its hostname has the form `<bucket>.<region>.linodeobjects.com`, for example `my-bucket.us-iad-10.linodeobjects.com`.
+- Create two access keys limited to this bucket:
+  - an **upload key** with read/write access. The Zephyr worker signs uploads with it.
+  - a **read-only key**. The Akamai edge reads the bucket with it, through a Cloud Access Manager key.
+- Decide who creates the Cloud Access Manager key:
+  - **Zephyr creates it** from the read-only key. Your API client needs the **Cloud Access Manager** READ-WRITE permission (see [API Token](#1-api-token)), and you give Zephyr the read-only key.
+  - **You create it** in Akamai Control Center under **Cloud Access Manager**: create an access key from the read-only key with the AWS SigV4 authentication method on the Standard TLS network, wait until its version is active (about 10 minutes), and copy the version GUID. Your API client needs no Cloud Access Manager permission, and the read-only key is never given to Zephyr.
 
 ### Configuration Inputs
 
@@ -143,6 +159,58 @@ Details for each input after clicking **Add Integration** under **Akamai**:
 <dd>
   Optional. Required only when your API client authenticates through an Akamai
   account-switching context.
+</dd>
+
+<dt>Large assets (optional)</dt>
+<dd>
+  Fields for [large-asset storage](#large-asset-storage). Leave **Bucket
+  hostname** empty to keep every file in EdgeKV. When you set it, the other
+  fields of this section are required. See [Object Storage bucket and
+  keys](#6-object-storage-bucket-and-keys-optional) for creating the bucket and
+  keys.
+</dd>
+
+<dt>Bucket hostname</dt>
+<dd>
+  Your bucket's hostname, for example `my-bucket.us-iad-10.linodeobjects.com`.
+  Only Akamai Object Storage bucket hostnames are accepted. It cannot be changed
+  once saved.
+</dd>
+
+<dt>Region</dt>
+<dd>
+  Optional. Derived from the hostname (`us-iad-10` in the example above) when
+  left empty. It cannot be changed once saved.
+</dd>
+
+<dt>Cloud Access Manager key</dt>
+<dd>
+  Who creates the key the Akamai edge reads the bucket with. Choose **Zephyr
+  creates it from a read-only key (API client needs Cloud Access Manager
+  READ-WRITE)** if your API client can have the Cloud Access Manager permission,
+  and enter the read-only key below. Choose **I created it in Control Center
+  (enter its version GUID)** if your API client must not have that permission,
+  and enter the version GUID of the key you created.
+</dd>
+
+<dt>Read-only access key ID / Read-only secret key</dt>
+<dd>
+  Shown when Zephyr creates the Cloud Access Manager key. The read-only key of
+  your bucket. It must be a different key from the upload key, and Zephyr
+  rejects a key that can write to the bucket.
+</dd>
+
+<dt>Access key version GUID</dt>
+<dd>
+  Shown when you created the Cloud Access Manager key yourself. The GUID of an
+  active version of that key, for example
+  `00000000-0000-0000-0000-000000000000`.
+</dd>
+
+<dt>Upload access key ID / Upload secret key</dt>
+<dd>
+  The read/write key limited to your bucket. It is saved as a hidden variable on
+  the Akamai property; see [Security notes](#security-notes).
 </dd>
 
 <dt>Set Integration as Default</dt>
@@ -188,6 +256,14 @@ requests. Verify entitlement with your Akamai account team or the [Resource
 tier](#5-resource-tier) check above, then retry the same integration from
 Zephyr. Retry reuses the saved Akamai configuration.
 
+### Retry after a Cloud Access Manager key error
+
+If you turned on large-asset storage and Zephyr creates the Cloud Access Manager key:
+
+- **"The Akamai API client has no Cloud Access Manager access"**: grant the API client **Cloud Access Manager** READ-WRITE, or create the key yourself and switch **Cloud Access Manager key** to **I created it in Control Center (enter its version GUID)**. Then retry.
+- **"The Cloud Access Manager key is still activating"**: a new key takes about 10 minutes to become active. Save the integration again, or retry it, in a few minutes. Zephyr finds the key it already created and continues.
+- **Property activation fails because the access key version is not active**: Akamai can refuse a new key version for a few minutes after reporting it as active. When adding storage to an existing integration, save it again a few minutes later. When creating an integration, contact us on [Discord](https://discord.gg/zephyrcloud) before retrying.
+
 </Steps>
 
 ### What Will Be Created on Your Akamai Account?
@@ -210,11 +286,76 @@ When Akamai is added as your provider on Zephyr, these properties will be create
 
 - `ze.yourdomain.com`
 
+#### 5. Cloud Access Manager access key
+
+Only with [large-asset storage](#large-asset-storage), when Zephyr creates the Cloud Access Manager key:
+
+- `ze-object-storage-ze-yourdomain-com`, created from your read-only bucket key
+
+When you replace the read-only key, Zephyr adds a version to this access key. A key holds at most two versions, so Zephyr deletes the older version the property no longer uses.
+
+#### 6. Large-asset storage settings on the property
+
+Only with [large-asset storage](#large-asset-storage), on the `ze.yourdomain.com` property:
+
+- Property variables `PMUSER_ZE_OS_HOSTNAME` and `PMUSER_ZE_OS_REGION` (your bucket), and the hidden variables `PMUSER_ZE_OS_UPLOAD_KEY_ID` and `PMUSER_ZE_OS_UPLOAD_SECRET` (your upload key)
+- A **Stored objects** rule (with a **Stored object errors** child rule) that serves paths whose last segment starts with `__ze_o~` from your bucket, signed with the Cloud Access Manager key. The EdgeWorker, applied by the **Route traffic** rule, does not run on these paths.
+
+## Large-asset storage
+
+Akamai EdgeKV holds at most 999,999 bytes per value, and the Zephyr worker stores binary files there as text in which every byte from `0x80` up takes two bytes. A binary file of about 500 KB can already be too large for EdgeKV. Large-asset storage keeps such files in an Akamai Object Storage bucket you own instead.
+
+### How it works
+
+- Files over 500 KB (500,000 bytes) are uploaded to your bucket during the build. Smaller files stay in EdgeKV.
+- These files are never stored in the bucket and always go to EdgeKV: HTML files, documents the worker would serve as HTML or XML (such as SVG and XML files), `zephyr-manifest.json`, and `.gz` files.
+- Images, fonts, audio, video, archives and PDFs are stored as they are. Other files are stored gzip-compressed.
+- A request for a stored file is answered with a `307` redirect to a path in the same directory, `__ze_o~<application>~<hash>`, which the edge serves straight from the bucket. Browsers follow it; other HTTP clients must follow redirects too.
+- The edge caches a stored object for 7 days, then checks it against the bucket again. Error responses for these paths are not cached by clients.
+- Without a bucket, or with a worker or build plugin that does not support large-asset storage, every file goes to EdgeKV as before.
+
+To turn it on when you add the integration, fill in the **Large assets (optional)** section of the form (see [Configuration Inputs](#configuration-inputs)) after preparing the [bucket and keys](#6-object-storage-bucket-and-keys-optional).
+
+Before creating anything, Zephyr checks the keys against the bucket: it writes and deletes a small test object under `__ze_probe/` with the upload key and, when Zephyr creates the Cloud Access Manager key, checks that the read-only key can read the bucket but cannot write to it.
+
+### Add or change storage on an existing integration
+
+Open the integration's edit screen (see [Updating Deployment Integrations](/cloud/updating-integrations)) and fill in or change the **Large assets (optional)** section.
+
+- **Worker version**: the integration must run a worker version that supports large-asset storage. If it does not, saving fails with "Akamai worker version … does not support large-asset storage". Update the worker first with **Update Version**, as described in [Updating Deployment Integrations](/cloud/updating-integrations#apply-the-worker-update).
+- **Bucket**: **Bucket hostname** and **Region** cannot be changed once set, because deployed versions keep their large files in that bucket.
+- **Keys**: stored keys are never shown again. Leave a key's ID and secret empty to keep it, or enter both to replace it. You can also switch the **Cloud Access Manager key** mode.
+- **Save storage changes on their own**: an edit that changes storage together with the domain, contract, group, product or delimiter is rejected.
+- Saving puts the new settings on a new property version and activates it, which takes a few minutes. The EdgeWorker is not redeployed. If the settings change nothing on the property, no new version is activated.
+- After replacing the upload key, revoke the old one in Object Storage (see [Security notes](#security-notes)).
+
+If the integration's setup never finished, saving retries the setup with the storage settings included.
+
+### Security notes
+
+:::warning Upload key visibility
+The upload key is saved on your Akamai property as the hidden property variables `PMUSER_ZE_OS_UPLOAD_KEY_ID` and `PMUSER_ZE_OS_UPLOAD_SECRET`. Hidden only keeps the values out of Akamai's debug headers: anyone who can view the property can read the key, in every property version that carried it.
+
+- Limit the upload key to the Zephyr bucket.
+- After replacing the upload key, revoke the old key in Object Storage. Earlier property versions still contain it.
+
+:::
+
+- Use a bucket only for Zephyr. The property serves objects named `<application>/<hash>` publicly, on every hostname of the property.
+- Give the edge a read-only key. When Zephyr creates the Cloud Access Manager key, it refuses a read-only key that can write to the bucket, or that is the same as the upload key.
+- Zephyr never returns the stored keys; the edit screen shows them as hidden.
+
+### Limits
+
+- Zephyr never deletes objects from your bucket, including objects of old or deleted versions, and each build uploads its large files again. Objects that a deployed version still uses must stay in the bucket.
+- A file that cannot go to the bucket (HTML, SVG, XML, `zephyr-manifest.json`, `.gz`) and is too large for EdgeKV fails the deploy with [ZE20017](/errors/ze20017), naming the file and its size.
+- Large files are stored only in the bucket of the integration the build uploads to. Environments that deploy to another Akamai integration receive every file through EdgeKV, so a file too large for EdgeKV fails the deploy there.
+
 ## Clean Uninstall and Reset
 
 :::danger Warning
 
-- Zephyr Cloud does not manage deletion of API tokens or any Akamai account properties.
+- Zephyr Cloud does not manage deletion of API tokens or any Akamai account properties, and never deletes your Object Storage bucket, its objects or its keys.
 - Assets and information on your Akamai account are immutable by default. During a **clean uninstall**, previously deployed assets and information are unrecoverable.
 
 :::
@@ -330,3 +471,11 @@ send()
     process.exit(1);
   });
 ```
+
+### Remove large-asset storage resources
+
+If you used [large-asset storage](#large-asset-storage), after deleting the property:
+
+1. In Akamai Control Center, open **Cloud Access Manager** and delete the access key `ze-object-storage-ze-yourdomain-com` (or the key you created yourself).
+2. In Object Storage, revoke the upload key and the read-only key.
+3. Delete the bucket's objects, then the bucket. Zephyr never deletes them.
